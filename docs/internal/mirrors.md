@@ -1,4 +1,3 @@
-| Name | Sponsor | HTTPS | HTTP | Rsync |
+| Name | Sponsor | HTTPS | HTTP | RSYNC |
 | --- | --- | --- | --- | --- |
-| CloudLinux mirror | [CloudLinux](https://cloudlinux.com) | [Link](https://repo.cloudlinux.com/almalinux) | | |
-| Eugene's mirror | [Eugene]() | | [Link]() | |
+|repo.almalinux.org|[AlmaLinux](https://www.almalinux.org)|[Link](https://repo.almalinux.org/almalinux/)|[Link](http://repo.almalinux.org/almalinux/)|[Link](rsync://repo.almalinux.org/almalinux/)|

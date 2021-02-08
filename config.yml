@@ -1,0 +1,32 @@
+---
+mirrorlist_dir: docs/.vuepress/public/mirrorlist
+mirrors_dir: mirrors.d
+mirrors_table: docs/internal/mirrors.md
+version:
+  - 8.3-beta
+repos:
+  - name: baseos
+    path: BaseOS/$basearch/os/
+  - name: appstream
+    path: AppStream/$basearch/os/
+  - name: powertools
+    path: PowerTools/$basearch/os/
+  - name: extras
+    path: extras/$basearch/os/
+  - name: baseos-source
+    path: BaseOS/Source/
+  - name: appstream-source
+    path: AppStream/Source/
+  - name: powertools-source
+    path: PowerTools/Source/
+  - name: extras-source
+    path: extras/Source/
+  - name: baseos-debuginfo
+    path: BaseOS/debug/$basearch/
+  - name: appstream-debuginfo
+    path: AppStream/debug/$basearch/
+  - name: powertools-debuginfo
+    path: PowerTools/debug/$basearch/
+  - name: extras-debuginfo
+    path: extras/debug/$basearch/
+...
