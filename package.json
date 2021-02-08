@@ -1,0 +1,14 @@
+{
+  "name": "mirrors.almalinux.org",
+  "version": "0.1.0",
+  "description": "List of AlmaLinux official mirrors.",
+  "main": "index.js",
+  "license": "GPLv3",
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
+  },
+  "devDependencies": {
+    "vuepress": "^1.8.0"
+  }
+}
