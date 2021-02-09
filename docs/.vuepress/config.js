@@ -3,8 +3,7 @@ module.exports = {
   head: [
     ['link', { rel: "shortcut icon", type: 'image/png', href: "/images/logo.png"}],
   ],
-  // TODO: change it to '/' for production deployment on https://mirrors.almalinux.org/
-  base: '/mirrors/',
+  base: '/',
   themeConfig: {
     logo: '/images/logo.png',
     nav: [
