@@ -3,7 +3,7 @@ name: repo.almalinux.org
 address:
   http: http://repo.almalinux.org/almalinux/
   https: https://repo.almalinux.org/almalinux/
-  rsync: rsync://repo.almalinux.org/almalinux
+  rsync: rsync://rsync.repo.almalinux.org/almalinux
 update_frequency: 1h
 sponsor: AlmaLinux
 sponsor_url: https://www.almalinux.org
