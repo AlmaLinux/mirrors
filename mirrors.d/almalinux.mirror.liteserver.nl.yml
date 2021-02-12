@@ -1,0 +1,11 @@
+---
+name: almalinux.mirror.liteserver.nl
+address:
+  http: http://almalinux.mirror.liteserver.nl/
+  https: https://almalinux.mirror.liteserver.nl/
+  rsync: rsync://mirror.liteserver.nl/almalinux
+update_frequency: 3h
+sponsor: LiteServer
+sponsor_url: https://www.liteserver.nl/
+email: info@liteserver.nl
+...
