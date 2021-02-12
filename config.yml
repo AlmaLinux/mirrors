@@ -4,6 +4,7 @@ mirrors_dir: mirrors.d
 mirrors_table: docs/internal/mirrors.md
 version:
   - 8.3-beta
+  - 8
 repos:
   - name: baseos
     path: BaseOS/$basearch/os/

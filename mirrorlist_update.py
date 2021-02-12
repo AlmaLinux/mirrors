@@ -8,14 +8,17 @@ import sys
 
 def mirror_available(mirror):
     """Check mirror availability."""
-    try:
-        mirror['address']['https']
-    except:
-        print('No https address for mirror ' + mirror['name'])
-        return False
     for version in config['version']:
         for repo in config['repos']:
-            check_url = ("%s%s/%srepodata/repomd.xml" % (mirror['address']['https'], version, repo['path'])).replace('$basearch', 'x86_64')
+            try:
+                if 'https' in mirror['address']:
+                    mirror_url = mirror['address']['https']
+                elif 'http' in mirror['address']:
+                    mirror_url = mirror['address']['http']
+            except:
+                print('No http or https address for ' + mirror['name'])
+                return False
+            check_url = ("%s%s/%srepodata/repomd.xml" % (mirror_url, str(version), repo['path'])).replace('$basearch', 'x86_64')
             request = requests.get(check_url)
             if request.status_code != 200:
                 print('Mirror ' + mirror['name'] + ' is NOT available')
@@ -40,6 +43,7 @@ for mirror_file in os.listdir(mirrors_dir):
         try:
             mirror = yaml.safe_load(f)
             mirror['name']
+            mirror['address']
         except:
             print('Cannot load mirror data from file ' + mirror_file)
             continue
@@ -55,6 +59,10 @@ for mirror in verified_mirrors:
     for version in config['version']:
         os.makedirs(mirrorlist_dir + '/' + str(version), exist_ok=True)
         for repo in config['repos']:
-            path = mirror['address']['https'] + str(version) + '/' + repo['path']
+            if 'https' in mirror['address']:
+                mirror_url = mirror['address']['https']
+            else:
+                mirror_url = mirror['address']['http']
+            path = mirror_url + str(version) + '/' + repo['path']
             with open(mirrorlist_dir + '/' + str(version) + '/' + repo['name'], 'a') as f:
                 print(path, file=f)

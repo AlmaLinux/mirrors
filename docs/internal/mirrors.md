@@ -1,3 +1,3 @@
-| Name | Sponsor | HTTPS | HTTP | RSYNC |
+| Name | Sponsor | HTTP | HTTPS | RSYNC |
 | --- | --- | --- | --- | --- |
-|repo.almalinux.org|[AlmaLinux](https://www.almalinux.org)|[Link](https://repo.almalinux.org/almalinux/)|[Link](http://repo.almalinux.org/almalinux/)|[Link](rsync://repo.almalinux.org/almalinux)|
+|repo.almalinux.org|[AlmaLinux](https://www.almalinux.org)|[Mirror](http://repo.almalinux.org/almalinux/)|[Mirror](https://repo.almalinux.org/almalinux/)|[Link](rsync://repo.almalinux.org/almalinux)|
