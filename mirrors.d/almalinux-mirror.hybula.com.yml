@@ -1,0 +1,11 @@
+---
+name: almalinux-mirror.hybula.com
+address:
+  http: http://almalinux-mirror.hybula.com/
+  https: https://almalinux-mirror.hybula.com/
+  rsync: rsync://almalinux-mirror.hybula.com/almalinux
+update_frequency: 3h
+sponsor: Hybula B.V.
+sponsor_url: https://www.hybula.com/
+email: hello@hybula.com
+...
