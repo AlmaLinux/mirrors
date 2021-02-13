@@ -1,0 +1,11 @@
+---
+name: almalinux.mirror.katapult.io
+address:
+  http: http://almalinux.mirror.katapult.io/
+  https: https://almalinux.mirror.katapult.io/
+  rsync: rsync://almalinux.mirror.katapult.io/almalinux
+update_frequency: 3h
+sponsor: Katapult
+sponsor_url: https://katapult.io
+email: team@katapult.io
+...
