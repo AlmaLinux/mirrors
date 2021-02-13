@@ -1,5 +1,5 @@
 ---
-name: mirror.hosting.com.tr/almalinux
+name: mirror.hosting.com.tr
 address:
   http: http://mirror.hosting.com.tr/almalinux/
 update_frequency: 3h
