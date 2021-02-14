@@ -1,0 +1,9 @@
+---
+name: mirror.veriteknik.net.tr
+address:
+  http: http://mirror.veriteknik.net.tr/AlmaLinux/
+update_frequency: 3h
+sponsor: VeriTeknik
+sponsor_url: https://www.veriteknik.net.tr
+email: webmaster@veriteknik.com
+...
