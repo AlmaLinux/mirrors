@@ -1,0 +1,12 @@
+---
+name: mirrors.pt
+address:
+  http: http://mirrors.pt/almalinux/
+  https: https://mirrors.pt/almalinux/
+  rsync: rsync://mirrors.pt/almalinux
+update_frequency: 3h
+sponsor: Edgoo Networks
+sponsor_url: https://www.edgoo.io
+email: noc@edgoo.io
+...
+
