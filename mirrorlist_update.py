@@ -8,6 +8,7 @@ import sys
 
 def mirror_available(mirror):
     """Check mirror availability."""
+    print('Checking mirror ' + mirror['name'] + ' ...')
     for version in config['version']:
         for repo in config['repos']:
             try:
@@ -19,7 +20,11 @@ def mirror_available(mirror):
                 print('No http or https address for ' + mirror['name'])
                 return False
             check_url = ("%s%s/%srepodata/repomd.xml" % (mirror_url, str(version), repo['path'])).replace('$basearch', 'x86_64')
-            request = requests.get(check_url)
+            try:
+                request = requests.get(check_url)
+            except:
+                print('Mirror ' + mirror['name'] + ' is NOT available')
+                return False
             if request.status_code != 200:
                 print('Mirror ' + mirror['name'] + ' is NOT available')
                 return False

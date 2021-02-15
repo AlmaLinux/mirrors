@@ -6,3 +6,6 @@
 |almalinux.mirror.liteserver.nl|[LiteServer](https://www.liteserver.nl/)|[Mirror](http://almalinux.mirror.liteserver.nl/)|[Mirror](https://almalinux.mirror.liteserver.nl/)|[Link](rsync://mirror.liteserver.nl/almalinux)|
 |mirror.netweaver.uk|[NetWeaver](https://www.netweaver.uk)|[Mirror](http://mirror.netweaver.uk/almalinux/)|[Mirror](https://mirror.netweaver.uk/almalinux/)||
 |mirror.hosting.com.tr|[Hosting](https://www.hosting.com.tr)|[Mirror](http://mirror.hosting.com.tr/almalinux/)|||
+|mirror.veriteknik.net.tr|[VeriTeknik](https://www.veriteknik.net.tr)|[Mirror](http://mirror.veriteknik.net.tr/AlmaLinux/)|||
+|mirror.xeonbd.com|[XeonBD](https://www.xeonbd.com)|[Mirror](http://mirror.xeonbd.com/almalinux/)|||
+|mirrors.pt|[Edgoo Networks](https://www.edgoo.io)|[Mirror](http://mirrors.pt/almalinux/)|[Mirror](https://mirrors.pt/almalinux/)|[Link](rsync://mirrors.pt/almalinux)|

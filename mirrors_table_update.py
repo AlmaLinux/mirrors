@@ -34,6 +34,7 @@ if os.path.exists(config['mirrors_table']): os.remove(config['mirrors_table'])
 with open(config['mirrors_table'], 'a') as f:
     print('| Name | Sponsor | HTTP | HTTPS | RSYNC |\n| --- | --- | --- | --- | --- |', file=f)
     for mirror in all_mirrors:
+        print('Adding ' + mirror['name'])
         for protocol in ['http', 'https']:
             try:
                 mirror[protocol + '_link'] = '[Mirror](' + mirror['address'][protocol] + ')'
