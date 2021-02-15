@@ -6,6 +6,11 @@ import shutil
 import requests
 import sys
 
+# set user agent curl for python-requests
+headers = {
+    'User-Agent': 'curl/7.61.1'
+}
+
 def mirror_available(mirror):
     """Check mirror availability."""
     print('Checking mirror ' + mirror['name'] + ' ...')
@@ -21,7 +26,7 @@ def mirror_available(mirror):
                 return False
             check_url = ("%s%s/%srepodata/repomd.xml" % (mirror_url, str(version), repo['path'])).replace('$basearch', 'x86_64')
             try:
-                request = requests.get(check_url)
+                request = requests.get(check_url, headers=headers)
             except:
                 print('Mirror ' + mirror['name'] + ' is NOT available')
                 return False
