@@ -1,0 +1,10 @@
+---
+name: mirror.krmir.org
+address:
+  https: https://mirror.krmir.org/almalinux/
+  rsync: rsync://mirror.krmir.org/almalinux/
+update_frequency: 10m
+sponsor: krmir NPO
+sponsor_url: https://krmir.org
+email: krmir.ftp@gmail.com
+...
