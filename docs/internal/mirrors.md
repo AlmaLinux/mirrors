@@ -9,3 +9,6 @@
 |mirror.veriteknik.net.tr|[VeriTeknik](https://www.veriteknik.net.tr)|[Mirror](http://mirror.veriteknik.net.tr/AlmaLinux/)|||
 |mirror.xeonbd.com|[XeonBD](https://www.xeonbd.com)|[Mirror](http://mirror.xeonbd.com/almalinux/)|||
 |mirrors.pt|[Edgoo Networks](https://www.edgoo.io)|[Mirror](http://mirrors.pt/almalinux/)|[Mirror](https://mirrors.pt/almalinux/)|[Link](rsync://mirrors.pt/almalinux)|
+|mirror.dk.team.blue|[team.blue Denmark](https://team.blue)|[Mirror](http://mirror.dk.team.blue/almalinux/)|[Mirror](https://mirror.dk.team.blue/almalinux/)||
+|mirror.krmir.org|[krmir NPO](https://krmir.org)||[Mirror](https://mirror.krmir.org/almalinux/)|[Link](rsync://mirror.krmir.org/almalinux)|
+|mirror.steadfastnet.com|[Steadfast Networks, LLC](https://www.steadfast.net/)|[Mirror](http://mirror.steadfastnet.com/almalinux/)|[Mirror](https://mirror.steadfastnet.com/almalinux/)|[Link](rsync://mirror.steadfastnet.com/almalinux)|
