@@ -12,3 +12,6 @@
 |mirror.dk.team.blue|[team.blue Denmark](https://team.blue)|[Mirror](http://mirror.dk.team.blue/almalinux/)|[Mirror](https://mirror.dk.team.blue/almalinux/)||
 |mirror.krmir.org|[krmir NPO](https://krmir.org)||[Mirror](https://mirror.krmir.org/almalinux/)|[Link](rsync://mirror.krmir.org/almalinux)|
 |mirror.steadfastnet.com|[Steadfast Networks, LLC](https://www.steadfast.net/)|[Mirror](http://mirror.steadfastnet.com/almalinux/)|[Mirror](https://mirror.steadfastnet.com/almalinux/)|[Link](rsync://mirror.steadfastnet.com/almalinux)|
+|mirror.nitiphosting.in|[CV Tri Putra Media](https://www.triputramedia.id)|[Mirror](http://mirror.nitiphosting.in/almalinux/)|[Mirror](https://mirror.nitiphosting.in/almalinux/)|[Link](rsync://mirror.nitiphosting.in/almalinux)|
+|mirror.nodespace.net|[NodeSpace Hosting](https://www.nodespace.net/)|[Mirror](http://mirror.nodespace.net/almalinux/)|[Mirror](https://mirror.nodespace.net/almalinux/)||
+|mirrors.bkns.vn|[BKNS.VN](https://www.bkns.vn/)|[Mirror](http://mirrors.bkns.vn/almalinux/)|[Mirror](https://mirrors.bkns.vn/almalinux/)|[Link](rsync://mirrors.bkns.vn/almalinux)|

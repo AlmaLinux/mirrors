@@ -1,9 +1,8 @@
 ---
 name: mirror.nodespace.net
 address:
-  http: http://mirror.nodespace.net/almalinux
-  https: https://mirror.nodespace.net/almalinux
-  rsync: 
+  http: http://mirror.nodespace.net/almalinux/
+  https: https://mirror.nodespace.net/almalinux/
 update_frequency: 3h
 sponsor: NodeSpace Hosting
 sponsor_url: https://www.nodespace.net/
