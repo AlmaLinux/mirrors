@@ -1,11 +1,11 @@
 ---
-name: repo.almalinux.org
+name: mirror.radiantnet.co.za
 address:
-  http: http://repo.almalinux.org/almalinux/
-  https: https://repo.almalinux.org/almalinux/
-  rsync: rsync://rsync.repo.almalinux.org/almalinux
+  http: http://mirror.radiantnet.co.za/almalinux/
+  https: mirror.radiantnet.co.za/almalinux/
+  rsync: rsync://rsync.mirror.radiantnet.co.za/almalinux
 update_frequency: 1h
-sponsor: AlmaLinux
-sponsor_url: https://www.almalinux.org
-email: hello@almalinux.org
+sponsor: Radiant Networks
+sponsor_url: https://www.radiantnet.co.za
+email: support@radiantnet.co.za
 ...
