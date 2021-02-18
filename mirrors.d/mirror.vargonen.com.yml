@@ -2,7 +2,7 @@
 name: mirror.vargonen.com
 address:
   http: http://mirror.vargonen.com/almalinux/
-  https: http://mirror.vargonen.com/almalinux/
+  https: https://mirror.vargonen.com/almalinux/
 update_frequency: 3h
 sponsor: Vargonen Teknoloji
 sponsor_url: https://www.vargonen.com
