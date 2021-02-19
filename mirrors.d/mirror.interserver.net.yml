@@ -1,0 +1,11 @@
+---
+name: mirror.interserver.net
+address:
+  http: http://mirror.interserver.net/almalinux/
+  https: https://mirror.interserver.net/almalinux/
+  rsync: rsync://mirror.interserver.net/almalinux/
+update_frequency: 1h
+sponsor: InterServer, Inc
+sponsor_url: https://www.interserver.net/
+email: mirror@interserver.net
+...
