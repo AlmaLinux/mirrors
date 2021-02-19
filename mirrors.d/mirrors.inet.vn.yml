@@ -1,0 +1,8 @@
+name: mirrors.inet.vn
+address:
+http: http://mirrors.inet.vn/almalinux/
+https: https://mirrors.inet.vn/almalinux/
+update_frequency: 3h
+sponsor: iNET Software
+sponsor_url: https://inet.vn/
+email: support@inet.vn
