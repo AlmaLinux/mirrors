@@ -1,0 +1,11 @@
+---
+name: mirror.cedia.org.ec
+address:
+  http: http://mirror.cedia.org.ec/almalinux/
+  https: https://mirror.cedia.org.ec/almalinux/
+  rsync: rsync://mirror.cedia.org.ec/almalinux
+update_frequency: 4h
+sponsor: CEDIA
+sponsor_url: https://www.cedia.edu.ec
+email: paul.bernal@cedia.org.ec
+...
