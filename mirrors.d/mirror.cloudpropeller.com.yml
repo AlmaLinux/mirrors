@@ -3,7 +3,6 @@ name: mirror.cloudpropeller.com
 address:
   http: http://mirror.cloudpropeller.com/almalinux/
   https: https://mirror.cloudpropeller.com/almalinux/
-  rsync: rsync://rsync.mirror.cloudpropeller.com/almalinux
 update_frequency: 1h
 sponsor: Cloud Propeller, Inc.
 sponsor_url: https://cloudpropeller.com
