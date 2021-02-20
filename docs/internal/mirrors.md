@@ -7,6 +7,7 @@ mirror.netweaver.uk|[NetWeaver](https://www.netweaver.uk)|ok|[Mirror](https://mi
 mirror.steadfastnet.com|[Steadfast Networks, LLC](https://www.steadfast.net/)|ok|[Mirror](https://mirror.steadfastnet.com/almalinux/)|[Mirror](http://mirror.steadfastnet.com/almalinux/)|[Link](rsync://mirror.steadfastnet.com/almalinux)
 mirrors.bkns.vn|[BKNS.VN](https://www.bkns.vn/)|ok|[Mirror](https://mirrors.bkns.vn/almalinux/)|[Mirror](http://mirrors.bkns.vn/almalinux/)|[Link](rsync://mirrors.bkns.vn/almalinux)
 mirror.cloudpropeller.com|[Cloud Propeller, Inc.](https://cloudpropeller.com)|ok|[Mirror](https://mirror.cloudpropeller.com/almalinux/)|[Mirror](http://mirror.cloudpropeller.com/almalinux/)|
+almalinux-mirror.datakeepers.co.za|[datakeepers](https://datakeepers.co.za/)|ok|[Mirror](https://almalinux-mirror.datakeepers.co.za/)|[Mirror](http://almalinux-mirror.datakeepers.co.za/)|
 mirror.nodespace.net|[NodeSpace Hosting](https://www.nodespace.net/)|ok|[Mirror](https://mirror.nodespace.net/almalinux/)|[Mirror](http://mirror.nodespace.net/almalinux/)|
 mirror.nitiphosting.in|[CV Tri Putra Media](https://www.triputramedia.id)|expired|[Mirror](https://mirror.nitiphosting.in/almalinux/)|[Mirror](http://mirror.nitiphosting.in/almalinux/)|[Link](rsync://mirror.nitiphosting.in/almalinux)
 mirrors.inet.vn|[iNET Software](https://inet.vn/)|expired|[Mirror](https://mirrors.inet.vn/almalinux/)|[Mirror](http://mirrors.inet.vn/almalinux/)|
