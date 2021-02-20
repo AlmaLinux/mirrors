@@ -93,11 +93,13 @@ def mirror_available(
 
 
 def set_repo_status(
-        mirror_info: Dict[AnyStr, Union[Dict, AnyStr]]
+        mirror_info: Dict[AnyStr, Union[Dict, AnyStr]],
+        allowed_outdate: AnyStr
 ) -> None:
     """
     Return status of a mirror
     :param mirror_info: info about a mirror
+    :param allowed_outdate: allowed mirror lag
     :return: Status of a mirror: expired or ok
     """
 
@@ -126,7 +128,7 @@ def set_repo_status(
         return
     try:
         mirror_should_updated_at = dateparser.parse(
-            f'now-{mirror_info["update_frequency"]} UTC'
+            f'now-{allowed_outdate} UTC'
         ).timestamp()
         mirror_last_updated = float(request.content)
         if mirror_last_updated > mirror_should_updated_at:
@@ -143,6 +145,7 @@ def get_verified_mirrors(
         mirrors_dir: AnyStr,
         versions: List[AnyStr],
         repos: List[Dict[AnyStr, Union[Dict, AnyStr]]],
+        allowed_outdate: AnyStr
 ) -> List[Dict[AnyStr, Union[Dict, AnyStr]]]:
     """
     Loop through the list of mirrors and return only available
@@ -151,6 +154,7 @@ def get_verified_mirrors(
            config files of mirrors
     :param versions: the list of versions which should be provided by mirrors
     :param repos: the list of repos which should be provided by mirrors
+    :param allowed_outdate: allowed mirror lag
     """
 
     result = []
@@ -174,7 +178,7 @@ def get_verified_mirrors(
                 versions=versions,
                 repos=repos,
             ):
-                set_repo_status(mirror_info)
+                set_repo_status(mirror_info,allowed_outdate)
                 result.append(mirror_info)
     return result
 
@@ -296,6 +300,7 @@ def main():
         mirrors_dir=config['mirrors_dir'],
         versions=versions,
         repos=repos,
+        allowed_outdate=config['allowed_outdate']
     )
     if not verified_mirrors:
         logging.error('No available and not expired mirrors found')
