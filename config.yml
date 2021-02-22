@@ -1,10 +1,10 @@
 ---
-allowed_outdate: 6h
+allowed_outdate: 12h
 mirrorlist_dir: docs/.vuepress/public/mirrorlist
 mirrors_dir: mirrors.d
 mirrors_table: docs/internal/mirrors.md
 version:
-  - 8.3-beta
+  - 8.3-rc
   - 8.3
   - 8
 repos:
@@ -16,6 +16,8 @@ repos:
     path: PowerTools/$basearch/os/
   - name: extras
     path: extras/$basearch/os/
+  - name: ha
+    path: HighAvailability/$basearch/os/
   - name: baseos-source
     path: BaseOS/Source/
   - name: appstream-source
@@ -24,6 +26,8 @@ repos:
     path: PowerTools/Source/
   - name: extras-source
     path: extras/Source/
+  - name: ha-source
+    path: HighAvailability/Source/
   - name: baseos-debuginfo
     path: BaseOS/debug/$basearch/
   - name: appstream-debuginfo
@@ -32,4 +36,6 @@ repos:
     path: PowerTools/debug/$basearch/
   - name: extras-debuginfo
     path: extras/debug/$basearch/
+  - name: ha-debuginfo
+    path: HighAvailability/debug/$basearch/
 ...
