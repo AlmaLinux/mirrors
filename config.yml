@@ -1,4 +1,5 @@
 ---
+allowed_outdate: 6h
 mirrorlist_dir: docs/.vuepress/public/mirrorlist
 mirrors_dir: mirrors.d
 mirrors_table: docs/internal/mirrors.md
