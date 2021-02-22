@@ -274,7 +274,7 @@ def generate_mirrors_table(
             for protocol in ALL_MIRROR_PROTOCOLS:
                 if protocol in addresses:
                     link = f'[{address_prefixes[protocol]}]' \
-                           f'({addresses[protocol].split("/")})'
+                           f'({addresses[protocol].strip("/")})'
                 else:
                     link = ''
                 mirror_info[f'{protocol}_link'] = link
