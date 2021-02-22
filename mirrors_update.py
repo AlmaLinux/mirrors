@@ -26,6 +26,10 @@ HEADERS = {
     'User-Agent': 'libdnf (AlmaLinux 8.3; generic; Linux.x86_64)'
 }
 
+WHITELIST_MIRRORS = (
+    'repo.almalinux.org',
+)
+
 logging.basicConfig(level=logging.INFO)
 
 
@@ -173,6 +177,9 @@ def get_verified_mirrors(
                     config_path,
                 )
                 continue
+            if mirror_info['name'] in WHITELIST_MIRRORS:
+                result.append(mirror_info)
+                continue
             if mirror_available(
                 mirror_info=mirror_info,
                 versions=versions,
@@ -271,7 +278,7 @@ def generate_mirrors_table(
             for protocol in ALL_MIRROR_PROTOCOLS:
                 if protocol in addresses:
                     link = f'[{address_prefixes[protocol]}]' \
-                           f'({addresses[protocol]})'
+                           f'({addresses[protocol].strip("/")})'
                 else:
                     link = ''
                 mirror_info[f'{protocol}_link'] = link
