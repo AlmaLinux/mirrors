@@ -3,6 +3,7 @@
 mirrors.cloudfly.vn|[Cloudfly](https://cloudfly.vn/)|ok|Unknown|[Mirror](https://mirrors.cloudfly.vn/almalinux)|[Mirror](http://mirrors.cloudfly.vn/almalinux)|
 almalinux-mirror.hybula.com|[Hybula B.V.](https://www.hybula.com/)|ok|Unknown|[Mirror](https://almalinux-mirror.hybula.com)|[Mirror](http://almalinux-mirror.hybula.com)|[Link](rsync://almalinux-mirror.hybula.com/almalinux)
 mirror.nl.altushost.com|[AltusHost B.V.](https://www.altushost.com/)|ok|Netherlands|[Mirror](https://mirror.nl.altushost.com/almalinux)|[Mirror](http://mirror.nl.altushost.com/almalinux)|
+mirrors.bkns.vn|[BKNS.VN](https://www.bkns.vn/)|ok|Unknown|[Mirror](https://mirrors.bkns.vn/almalinux)|[Mirror](http://mirrors.bkns.vn/almalinux)|[Link](rsync://mirrors.bkns.vn/almalinux)
 mirror.cloudpropeller.com|[Cloud Propeller, Inc.](https://cloudpropeller.com)|ok|United States|[Mirror](https://mirror.cloudpropeller.com/almalinux)|[Mirror](http://mirror.cloudpropeller.com/almalinux)|
 almalinux-mirror.datakeepers.co.za|[datakeepers](https://datakeepers.co.za/)|ok|Unknown|[Mirror](https://almalinux-mirror.datakeepers.co.za)|[Mirror](http://almalinux-mirror.datakeepers.co.za)|
 mirrors.inet.vn|[iNET Software](https://inet.vn/)|ok|Unknown|[Mirror](https://mirrors.inet.vn/almalinux)|[Mirror](http://mirrors.inet.vn/almalinux)|
