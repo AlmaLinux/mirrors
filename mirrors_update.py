@@ -178,6 +178,7 @@ def get_verified_mirrors(
                 )
                 continue
             if mirror_info['name'] in WHITELIST_MIRRORS:
+                mirror_info['status'] = 'ok'
                 result.append(mirror_info)
                 continue
             if mirror_available(
