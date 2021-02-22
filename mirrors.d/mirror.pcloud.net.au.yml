@@ -1,0 +1,10 @@
+---
+name: mirror.pcloud.net.au
+address:
+  http: http://mirror.pcloud.net.au/almalinux/
+  https: https://mirror.pcloud.net.au/almalinux/
+update_frequency: 6h
+sponsor: PHREEK Solutions
+sponsor_url: https://phreek.com.au
+email: enquiries@phreek.com.au
+...
