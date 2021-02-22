@@ -4,10 +4,11 @@ import logging
 import os
 import dateparser
 import shutil
+import socket
 from collections import defaultdict
 from pathlib import Path
 from typing import Dict, AnyStr, List, Union
-
+from geoip import geolite2, IPInfo
 import requests
 import yaml
 
@@ -241,6 +242,25 @@ def write_mirrors_to_mirrorslists(
                     mirrorlist_file.write(f'{full_mirror_path}\n')
 
 
+def set_mirror_country(
+        mirror_info: Dict[AnyStr, Union[Dict, AnyStr]],
+) -> None:
+    """
+    Set country by IP of a mirror
+    :param mirror_info: Dict with info about a mirror
+    """
+
+    mirror_name = mirror_info['name']
+    ip = socket.gethostbyname(mirror_name)
+    match = geolite2.lookup(ip)  # type: IPInfo
+    logging.info('Set country for mirror "%s"', mirror_name)
+    if match is None:
+        mirror_info['country'] = 'Unknown'
+    else:
+        country = match.get_info_dict()['country']['names']['en']
+        mirror_info['country'] = country
+
+
 def generate_mirrors_table(
     mirrors_table_path: AnyStr,
     verified_mirrors: List[Dict[AnyStr, Union[Dict, AnyStr]]],
@@ -254,6 +274,7 @@ def generate_mirrors_table(
         'Name',
         'Sponsor',
         'Status',
+        'Country',
         *(
             protocol.upper() for protocol in ALL_MIRROR_PROTOCOLS
         ),
@@ -283,10 +304,12 @@ def generate_mirrors_table(
                 else:
                     link = ''
                 mirror_info[f'{protocol}_link'] = link
+            set_mirror_country(mirror_info)
             table_row = '|'.join((
                 mirror_info['name'],
                 f"[{mirror_info['sponsor']}]({mirror_info['sponsor_url']})",
                 mirror_info['status'],
+                mirror_info['country'],
                 *(
                     mirror_info[f'{protocol}_link'] for protocol
                     in ALL_MIRROR_PROTOCOLS
