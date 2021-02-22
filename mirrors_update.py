@@ -178,7 +178,7 @@ def get_verified_mirrors(
                 versions=versions,
                 repos=repos,
             ):
-                set_repo_status(mirror_info,allowed_outdate)
+                set_repo_status(mirror_info, allowed_outdate)
                 result.append(mirror_info)
     return result
 
