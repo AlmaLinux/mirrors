@@ -1,0 +1,11 @@
+---
+name: mirror.triputramedia.id
+address:
+  http: http://mirror.triputramedia.id/almalinux/
+  https: https://mirror.triputramedia.id/almalinux/
+  rsync: rsync://mirror.triputramedia.id/almalinux
+update_frequency: 1h
+sponsor: Tri Putra Media Indonesia
+sponsor_url: https://www.triputramedia.id
+email: ragil@triputramedia.id
+...
