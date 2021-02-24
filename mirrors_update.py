@@ -8,7 +8,7 @@ import socket
 from collections import defaultdict
 from pathlib import Path
 from typing import Dict, AnyStr, List, Union
-from geoip import geolite2, IPInfo
+from geoip import geolite2, IPInfo, open_database
 import requests
 import yaml
 
@@ -30,6 +30,7 @@ HEADERS = {
 WHITELIST_MIRRORS = (
     'repo.almalinux.org',
 )
+GEOPIP_DB = 'geoip_db.mmdb'
 
 logging.basicConfig(level=logging.INFO)
 
@@ -252,7 +253,8 @@ def set_mirror_country(
 
     mirror_name = mirror_info['name']
     ip = socket.gethostbyname(mirror_name)
-    match = geolite2.lookup(ip)  # type: IPInfo
+    db = open_database(GEOPIP_DB)
+    match = db.lookup(ip)  # type: IPInfo
     logging.info('Set country for mirror "%s"', mirror_name)
     if match is None:
         mirror_info['country'] = 'Unknown'
