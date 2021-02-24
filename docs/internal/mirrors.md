@@ -3,8 +3,8 @@
 mirrors.cloudfly.vn|[Cloudfly](https://cloudfly.vn/)|ok|Unknown|[Mirror](https://mirrors.cloudfly.vn/almalinux)|[Mirror](http://mirrors.cloudfly.vn/almalinux)|
 mirror.cedia.org.ec|[CEDIA](https://www.cedia.edu.ec)|ok|Ecuador|[Mirror](https://mirror.cedia.org.ec/almalinux)|[Mirror](http://mirror.cedia.org.ec/almalinux)|[Link](rsync://mirror.cedia.org.ec/almalinux)
 almalinux-mirror.hybula.com|[Hybula B.V.](https://www.hybula.com/)|ok|Unknown|[Mirror](https://almalinux-mirror.hybula.com)|[Mirror](http://almalinux-mirror.hybula.com)|[Link](rsync://almalinux-mirror.hybula.com/almalinux)
-mirror.netweaver.uk|[NetWeaver](https://www.netweaver.uk)|expired|Unknown|[Mirror](https://mirror.netweaver.uk/almalinux)|[Mirror](http://mirror.netweaver.uk/almalinux)|
-mirror.pcloud.net.au|[PHREEK Solutions](https://phreek.com.au)|expired|Australia|[Mirror](https://mirror.pcloud.net.au/almalinux)|[Mirror](http://mirror.pcloud.net.au/almalinux)|
+mirror.netweaver.uk|[NetWeaver](https://www.netweaver.uk)|ok|Unknown|[Mirror](https://mirror.netweaver.uk/almalinux)|[Mirror](http://mirror.netweaver.uk/almalinux)|
+mirror.pcloud.net.au|[PHREEK Solutions](https://phreek.solutions)|ok|Australia|[Mirror](https://mirror.pcloud.net.au/almalinux)|[Mirror](http://mirror.pcloud.net.au/almalinux)|
 mirror.nl.altushost.com|[AltusHost B.V.](https://www.altushost.com/)|expired|Netherlands|[Mirror](https://mirror.nl.altushost.com/almalinux)|[Mirror](http://mirror.nl.altushost.com/almalinux)|
 mirror.steadfastnet.com|[Steadfast Networks, LLC](https://www.steadfast.net/)|ok|United States|[Mirror](https://mirror.steadfastnet.com/almalinux)|[Mirror](http://mirror.steadfastnet.com/almalinux)|[Link](rsync://mirror.steadfastnet.com/almalinux)
 mirrors.bkns.vn|[BKNS.VN](https://www.bkns.vn/)|ok|Unknown|[Mirror](https://mirrors.bkns.vn/almalinux)|[Mirror](http://mirrors.bkns.vn/almalinux)|[Link](rsync://mirrors.bkns.vn/almalinux)
