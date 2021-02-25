@@ -1,5 +1,5 @@
 ---
-name: mirror.coreix.net
+name: mirrors.coreix.net
 address:
   http: http://mirrors.coreix.net/almalinux/
   ftp: ftp://mirrors.coreix.net/almalinux/
