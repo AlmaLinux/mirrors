@@ -3,7 +3,7 @@ name: mirror.nl.altushost.com
 address:
   http: http://mirror.nl.altushost.com/almalinux/
   https: https://mirror.nl.altushost.com/almalinux/
-update_frequency: 1h
+update_frequency: 4h
 sponsor: AltusHost B.V.
 sponsor_url: https://www.altushost.com/
 email: mirrors@altushost.com
