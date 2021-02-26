@@ -4,7 +4,7 @@ address:
   http: http://almalinux.singapore.crexio.com/
   https: https://almalinux.singapore.crexio.com/
   rsync: rsync://almalinux.singapore.crexio.com/almalinux
-update_frequency: 3h
+update_frequency: 1h
 sponsor: CREXIO
 sponsor_url: https://crexio.com
 email: admin@crexio.com
