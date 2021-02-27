@@ -1,0 +1,10 @@
+---
+name: mirror.chmuri.net
+address:
+  http: http://mirror.chmuri.net/almalinux/
+  https: https://mirror.chmuri.net/almalinux/
+update_frequency: 1h
+sponsor: Chmuri.net
+sponsor_url: https://www.chmuri.net
+email: info@chmuri.net
+...
