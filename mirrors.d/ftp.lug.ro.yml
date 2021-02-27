@@ -1,0 +1,9 @@
+---
+name: ftp.lug.ro
+address:
+  http: http://ftp.lug.ro/almalinux/
+update_frequency: 2h
+sponsor: lug.ro
+sponsor_url: https://wiki.lug.ro
+email: ftpadmin@lug.ro
+...
