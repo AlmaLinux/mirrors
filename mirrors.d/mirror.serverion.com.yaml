@@ -1,0 +1,11 @@
+---
+name: mirror.serverion.com
+address:
+  http: http://mirror.serverion.com/almalinux/
+  https: https://mirror.serverion.com/almalinux/
+  rsync: rsync://mirror.serverion.com/almalinux
+update_frequency: 1h
+sponsor: SERVERION
+sponsor_url: https://www.www.serverion.com
+email: desmond@serverion.com
+...
