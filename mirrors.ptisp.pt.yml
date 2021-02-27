@@ -1,0 +1,8 @@
+name: mirrors.ptisp.pt
+address:
+  http: http://mirrors.ptisp.pt/almalinux/
+  https: https://mirrors.ptisp.pt/almalinux/
+update_frequency: 3h
+sponsor: PTISP
+sponsor_url: https://mirrors.ptisp.pt/
+email: noc@ptisp.pt
