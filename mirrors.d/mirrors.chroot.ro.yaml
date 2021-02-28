@@ -1,0 +1,10 @@
+---
+name: mirrors.chroot.ro
+address:
+  http: http://mirrors.chroot.ro/almalinux/
+  https: https://mirrors.chroot.ro/almalinux/
+update_frequency: 2h
+sponsor: chroot.ro
+sponsor_url: https://www.chroot.ro
+email: noc@chroot.ro
+...
