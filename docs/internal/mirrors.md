@@ -31,6 +31,7 @@ mirrors.pt|[Edgoo Networks](https://www.edgoo.io)|ok|Portugal|[Mirror](https://m
 mirror.ch.altushost.com|[AltusHost B.V.](https://www.altushost.com/)|ok|Switzerland|[Mirror](https://mirror.ch.altushost.com/almalinux)|[Mirror](http://mirror.ch.altushost.com/almalinux)|
 almalinux.singapore.crexio.com|[CREXIO](https://crexio.com)|ok|Singapore|[Mirror](https://almalinux.singapore.crexio.com)|[Mirror](http://almalinux.singapore.crexio.com)|[Link](rsync://almalinux.singapore.crexio.com/almalinux)
 mirror.vargonen.com|[Vargonen Teknoloji](https://www.vargonen.com)|ok|Turkey|[Mirror](https://mirror.vargonen.com/almalinux)|[Mirror](http://mirror.vargonen.com/almalinux)|
+mirrors.ptisp.pt|[PTISP](https://mirrors.ptisp.pt/)|ok|Portugal|[Mirror](https://mirrors.ptisp.pt/almalinux)|[Mirror](http://mirrors.ptisp.pt/almalinux)|
 mirror.telkomuniversity.ac.id|[Telkom University](https://telkomuniversity.ac.id/)|ok|Indonesia|[Mirror](https://mirror.telkomuniversity.ac.id/almalinux)|[Mirror](http://mirror.telkomuniversity.ac.id/almalinux)|
 ftp.fau.de|[Friedrich-Alexander-Universitaet Erlangen-Nuernberg](https://www.rrze.fau.de)|ok|Germany|[Mirror](https://ftp.fau.de/almalinux)|[Mirror](http://ftp.fau.de/almalinux)|[Link](rsync://ftp.fau.de/almalinux)
 mirror.as24220.net|[Hostcentral](https://www.hostcentral.net.au)|ok|Australia|[Mirror](https://mirror.as24220.net/almalinux)|[Mirror](http://mirror.as24220.net/almalinux)|[Link](rsync://mirror.as24220.net/almalinux)
