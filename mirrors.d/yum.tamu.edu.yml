@@ -5,6 +5,6 @@ address:
   https: https://yum.tamu.edu/alma/
 update_frequency: 2h
 sponsor: Texas A&M University College of Geosciences
-sponsor_url: hhttps://geosciences.tamu.edu/
+sponsor_url: https://geosciences.tamu.edu/
 email: help@geos.tamu.edu
 ...
