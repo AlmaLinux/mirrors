@@ -1,0 +1,9 @@
+---
+
+- name: Send files
+  synchronize:
+    src: "{{ item }}"
+    dest: "{{ remote_source_path }}"
+  with_items:
+    - "../../../ci"
+    - "../../../src"

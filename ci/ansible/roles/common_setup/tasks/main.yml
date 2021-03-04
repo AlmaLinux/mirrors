@@ -1,0 +1,6 @@
+
+- name: Create configs directory
+  file:
+    name: "{{ config_root }}"
+    state: directory
+    mode: '0600'

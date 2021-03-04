@@ -1,0 +1,3 @@
+- include_tasks: create_env_file.yml
+- include_tasks: setup_certbot.yml
+  when: obtain_letsencrypt_certs == 'true'

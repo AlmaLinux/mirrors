@@ -1,0 +1,1 @@
+01 01 01 * * certbot renew > /dev/null 2>&1; /usr/bin/reload-docker-nginx

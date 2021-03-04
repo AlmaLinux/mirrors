@@ -1,0 +1,4 @@
+remote_source_path: /root/mirrors_service
+compose_file: docker-compose.yml
+docker_network_base: "172.17.0.0"
+docker_network_size: "12"

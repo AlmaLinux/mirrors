@@ -1,0 +1,70 @@
+---
+- name: Common setup
+  hosts: mirrors_service
+  tasks:
+    - name: Set connection type
+      set_fact:
+        connection: "{{ ansible_connection }}"
+      tags:
+        always
+
+    - fail:
+        msg: Production setup and https is not allowed for local connection
+      when: connection == "local" and (use_https == 'true')
+
+    - name: Set sources_root for local connection
+      set_fact:
+        sources_root: "{{ playbook_dir }}/../../"
+      tags:
+        always
+      when: connection == "local"
+
+    - name: Set sources_root for remote connection
+      set_fact:
+        sources_root: "{{ remote_source_path }}"
+      tags:
+        always
+      when: connection != "local"
+
+    - name: Set config_root for local connection
+      set_fact:
+        config_root: "{{ playbook_dir }}/../../runtime/{{ container_env_prefix }}"
+      tags:
+        always
+      when: connection == "local"
+
+    - name: Set config_root for remote connection
+      set_fact:
+        config_root: "/etc/delivery/{{ container_env_prefix }}"
+      tags:
+        always
+      when: connection != "local"
+
+    - name: Remote-only actions
+      block:
+        - import_role: name=common_setup
+          tags:
+            common_setup
+        - import_role: name=docker
+          tags:
+            docker
+        - import_role: name=deploy_files
+          tags:
+            sync
+      when: connection != "local"
+
+- name: Setup infrastructure
+  hosts: mirrors_service
+  tasks:
+    - import_role: name=prepare_host
+      tags:
+        prepare_host
+    - import_role: name=postgres
+      tags:
+        postgres
+    - import_role: name=backend
+      tags:
+        backend
+    - import_role: name=nginx
+      tags:
+        nginx

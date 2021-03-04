@@ -1,0 +1,24 @@
+- name: Create directory for configs
+  file:
+    name: "{{ config_root }}/nginx/"
+    state: directory
+    mode: '0600'
+
+- name: Prepare nginx configuration
+  template:
+    src: nginx.conf.j2
+    dest: "{{ config_root }}/nginx/nginx.conf"
+    owner: root
+    group: root
+    mode: '0644'
+
+- import_role:
+    name: start_service
+  vars:
+    service: nginx
+
+- import_role:
+    name: create_reload_script
+  vars:
+    # command that finds container named nginx and sends reload signal to its process
+    command: !unsafe "docker kill -s HUP `docker ps --format \"{{.ID}} {{.Names}}\" | grep _nginx | awk '{ print $1 }'`"

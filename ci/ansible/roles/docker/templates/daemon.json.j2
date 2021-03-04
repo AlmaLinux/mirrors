@@ -1,0 +1,11 @@
+#jinja2: lstrip_blocks: "True"
+{
+  "default-address-pools":
+  [
+    {
+      "base": "{{ docker_network_base }}/{{ docker_network_size }}",
+      "size": 19
+    }
+  ],
+  "userland-proxy": false
+}

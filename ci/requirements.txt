@@ -1,0 +1,13 @@
+flask
+flask_api
+sqlalchemy
+dateparser
+python-geoip-geolite2
+python-geoip
+python-geoip-python3
+alembic
+Werkzeug
+requests
+psycopg2
+pyyaml
+sentry-sdk[flask]
