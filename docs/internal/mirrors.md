@@ -8,6 +8,7 @@ mirror.netweaver.uk|[NetWeaver](https://www.netweaver.uk)|ok|United Kingdom|[Mir
 mirror.pcloud.net.au|[PHREEK Solutions](https://phreek.solutions)|ok|Australia|[Mirror](https://mirror.pcloud.net.au/almalinux)|[Mirror](http://mirror.pcloud.net.au/almalinux)|
 mirror.nl.altushost.com|[AltusHost B.V.](https://www.altushost.com/)|ok|Netherlands|[Mirror](https://mirror.nl.altushost.com/almalinux)|[Mirror](http://mirror.nl.altushost.com/almalinux)|
 mirror.xeonbd.com|[XeonBD](https://www.xeonbd.com)|ok|Bangladesh||[Mirror](http://mirror.xeonbd.com/almalinux)|
+yum.tamu.edu|[Texas A&M University College of Geosciences](https://geosciences.tamu.edu/)|ok|United States|[Mirror](https://yum.tamu.edu/alma)|[Mirror](http://yum.tamu.edu/alma)|
 mirror.epn.edu.ec|[Escuela Politécnica Nacional](https://www.epn.edu.ec)|ok|Ecuador|[Mirror](https://mirror.epn.edu.ec/almalinux)|[Mirror](http://mirror.epn.edu.ec/almalinux)|
 mirror.steadfastnet.com|[Steadfast Networks, LLC](https://www.steadfast.net/)|ok|United States|[Mirror](https://mirror.steadfastnet.com/almalinux)|[Mirror](http://mirror.steadfastnet.com/almalinux)|[Link](rsync://mirror.steadfastnet.com/almalinux)
 mirrors.bkns.vn|[BKNS.VN](https://www.bkns.vn/)|ok|Vietnam|[Mirror](https://mirrors.bkns.vn/almalinux)|[Mirror](http://mirrors.bkns.vn/almalinux)|[Link](rsync://mirrors.bkns.vn/almalinux)
@@ -21,6 +22,7 @@ mirrors.coreix.net|[Coreix ltd](https://www.coreix.net)|ok|United Kingdom||[Mirr
 mirror-onamae.almalinux.tokyo|[TRIPPYBOY.COM](https://blog.trippyboy.com)|ok|Japan|[Mirror](https://mirror-onamae.almalinux.tokyo/almalinux)|[Mirror](http://mirror-onamae.almalinux.tokyo/almalinux)|
 mirrors.inet.vn|[iNET Software](https://inet.vn/)|ok|Vietnam|[Mirror](https://mirrors.inet.vn/almalinux)|[Mirror](http://mirrors.inet.vn/almalinux)|
 mirror.almalinux.asia|[TRIPPYBOY.COM](https://blog.trippyboy.com)|ok|Japan|[Mirror](https://mirror.almalinux.asia/almalinux)|[Mirror](http://mirror.almalinux.asia/almalinux)|
+mirror-lolipop.almalinux.tokyo|[TRIPPYBOY.COM](https://blog.trippyboy.com)|ok|Japan|[Mirror](https://mirror-lolipop.almalinux.tokyo/almalinux)|[Mirror](http://mirror-lolipop.almalinux.tokyo/almalinux)|
 mirror.triputramedia.id|[Tri Putra Media Indonesia](https://www.triputramedia.id)|ok|Indonesia|[Mirror](https://mirror.triputramedia.id/almalinux)|[Mirror](http://mirror.triputramedia.id/almalinux)|[Link](rsync://mirror.triputramedia.id/almalinux)
 almalinux.unlimited.rs|[UNLIMITED.RS](https://unlimited.rs)|ok|Serbia|[Mirror](https://almalinux.unlimited.rs)|[Mirror](http://almalinux.unlimited.rs)|
 almalinux.mirror.katapult.io|[Katapult](https://katapult.io)|ok|United Kingdom|[Mirror](https://almalinux.mirror.katapult.io)|[Mirror](http://almalinux.mirror.katapult.io)|[Link](rsync://almalinux.mirror.katapult.io/almalinux)
