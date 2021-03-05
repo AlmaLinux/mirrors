@@ -1,0 +1,10 @@
+---
+name: mirror-lolipop.almalinux.tokyo
+address:
+  http: http://mirror-lolipop.almalinux.tokyo/almalinux/
+  https: https://mirror-lolipop.almalinux.tokyo/almalinux/
+update_frequency: 1h
+sponsor: TRIPPYBOY.COM
+sponsor_url: https://blog.trippyboy.com
+email: almalinux@trippyboy.com
+...
