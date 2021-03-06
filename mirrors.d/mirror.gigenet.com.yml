@@ -1,0 +1,9 @@
+---
+name: mirrors.gigenet.com
+address:
+  http: https://mirrors.gigenet.com/almalinux/
+update_frequency: 3h
+sponsor: Hosting
+sponsor_url: https://gigenet.com/
+email: support@gigenet.com
+...
