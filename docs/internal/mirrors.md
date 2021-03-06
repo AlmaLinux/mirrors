@@ -2,6 +2,7 @@
 | --- | --- | --- | --- | --- | --- | --- |
 mirrors.cloudfly.vn|[Cloudfly](https://cloudfly.vn/)|ok|Vietnam|[Mirror](https://mirrors.cloudfly.vn/almalinux)|[Mirror](http://mirrors.cloudfly.vn/almalinux)|
 mirror.cedia.org.ec|[CEDIA](https://www.cedia.edu.ec)|ok|Ecuador|[Mirror](https://mirror.cedia.org.ec/almalinux)|[Mirror](http://mirror.cedia.org.ec/almalinux)|[Link](rsync://mirror.cedia.org.ec/almalinux)
+mirrors.gigenet.com|[Hosting](https://gigenet.com/)|ok|United States||[Mirror](https://mirrors.gigenet.com/almalinux)|
 mirror.uta.edu.ec|[Universidad Técnica de Ambato](https://www.uta.edu.ec)|ok|Ecuador|[Mirror](https://mirror.uta.edu.ec/almalinux)|[Mirror](http://mirror.uta.edu.ec/almalinux)|
 almalinux-mirror.hybula.com|[Hybula B.V.](https://www.hybula.com/)|ok|Netherlands|[Mirror](https://almalinux-mirror.hybula.com)|[Mirror](http://almalinux-mirror.hybula.com)|[Link](rsync://almalinux-mirror.hybula.com/almalinux)
 mirror.netweaver.uk|[NetWeaver](https://www.netweaver.uk)|ok|United Kingdom|[Mirror](https://mirror.netweaver.uk/almalinux)|[Mirror](http://mirror.netweaver.uk/almalinux)|
