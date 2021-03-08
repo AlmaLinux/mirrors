@@ -1,0 +1,10 @@
+---
+name: mirror.netglobalis.net
+address:
+  http: http://mirror.netglobalis.net/almalinux/
+  https: https://mirror.netglobalis.net/almalinux/
+update_frequency: 3h
+sponsor: Netglobalis S.A.
+sponsor_url: https://www.netglobalis.net
+email: plataformas@netglobalis.net
+...
