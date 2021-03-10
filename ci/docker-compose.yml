@@ -21,11 +21,15 @@ services:
       SENTRY_DSN: "${SENTRY_DSN}"
       PYTHONPATH: "/src/app"
       DEPLOY_ENVIRONMENT: "${DEPLOY_ENVIRONMENT}"
+      AUTH_KEY: "${AUTH_KEY}"
     command: /wait_for_port.sh postgres:5432 -- /start.sh
     depends_on:
       - postgres
     volumes:
       - ../src/backend:/src/app:ro
+      - ${CONFIGS_DIR}/mirrors:/mirrors
+    ports:
+      - ${BACKEND_PORTS}
     logging:
       options:
         max-size: "200m"
@@ -40,30 +44,6 @@ services:
       <<: *x-postgres-env-config
     volumes:
       - pg_data:/var/lib/postgresql/data/
-    logging:
-      options:
-        max-size: "200m"
-        max-file: "5"
-
-  nginx:
-    image: "nginx:v1"
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: nginx
-    volumes:
-      - ${CONFIGS_DIR}/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ${CONFIGS_DIR}/nginx/acme/:/var/www/letsencrypt:ro
-      - /etc/letsencrypt/:/etc/letsencrypt/:ro
-    restart: unless-stopped
-    networks:
-      - public
-      - backend
-    ports:
-      - ${PUBLIC_NGINX_80_PORT:-8080:80}
-      - ${PUBLIC_NGINX_443_PORT:-443}
-    depends_on:
-      - backend
     logging:
       options:
         max-size: "200m"

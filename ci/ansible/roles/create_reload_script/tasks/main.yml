@@ -1,7 +1,0 @@
-- name: Create webserver reload script
-  template:
-    src: reload_nginx.sh.j2
-    dest: /usr/bin/reload-docker-nginx
-    owner: root
-    group: root
-    mode: a+x

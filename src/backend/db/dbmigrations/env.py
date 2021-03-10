@@ -2,8 +2,8 @@
 from logging.config import fileConfig
 
 from alembic import context
-from backend.db import POSTGRES_CONNECTION_PATH
-from backend.db.models import Base
+from db.db_engine import POSTGRES_CONNECTION_PATH
+from db.models import Base
 from sqlalchemy import create_engine
 
 # this is the Alembic Config object, which provides

@@ -1,16 +1,10 @@
 [api_server]
 <place here IP or domain name of your api sever>
 
-[api_server:vars]
-backend_public_domain=<place here a public domain name of your api sever>
-
 [all:vars]
 container_env_prefix=prod
 sentry_dsn=<place here a DSN key of your Sentry>
-obtain_letsencrypt_certs=false
-letsencrypt_production=false
-letsencrypt_notify_email=
 deploy_environment=Production
 uwsgi_processes=8
-production_setup=true
-debug_endpoints=false
+auth_key=<your auth key for access to the endpoint of updating mirrors list>
+backend_ports=<external port of uwsgi container>:3031

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import logging
 import os
 import dateparser
 import socket
@@ -10,7 +9,11 @@ from geoip import IPInfo
 import requests
 import yaml
 
-from backend.db.db_engine import GeoIPEngine
+from db.db_engine import GeoIPEngine
+
+from common.sentry import (
+    get_logger,
+)
 
 REQUIRED_MIRROR_PROTOCOLS = (
     'https',
@@ -27,7 +30,8 @@ WHITELIST_MIRRORS = (
     'repo.almalinux.org',
 )
 
-logging.basicConfig(level=logging.INFO)
+
+logger = get_logger(__name__)
 
 
 def get_config(
@@ -58,7 +62,7 @@ def mirror_available(
     :param versions: the list of versions which should be provided by a mirror
     :param repos: the list of repos which should be provided by a mirror
     """
-    logging.info('Checking mirror "%s"...', mirror_info['name'])
+    logger.info('Checking mirror "%s"...', mirror_info['name'])
     try:
         addresses = mirror_info['address']  # type: Dict[AnyStr, AnyStr]
         mirror_url = next(iter([
@@ -66,7 +70,7 @@ def mirror_available(
             if protocol_type in REQUIRED_MIRROR_PROTOCOLS
         ]))
     except StopIteration:
-        logging.error(
+        logger.error(
             'Mirror "%s" has no one address with protocols "%s"',
             mirror_info['name'],
             REQUIRED_MIRROR_PROTOCOLS,
@@ -85,7 +89,7 @@ def mirror_available(
                 request = requests.get(check_url, headers=HEADERS)
                 request.raise_for_status()
             except requests.RequestException:
-                logging.warning(
+                logger.warning(
                     'Mirror "%s" is not available for version '
                     '"%s" and repo path "%s"',
                     mirror_info['name'],
@@ -93,7 +97,7 @@ def mirror_available(
                     repo_path,
                 )
                 return False
-    logging.info(
+    logger.info(
         'Mirror "%s" is available',
         mirror_info['name']
     )
@@ -127,7 +131,7 @@ def set_repo_status(
         )
         request.raise_for_status()
     except requests.RequestException:
-        logging.error(
+        logger.error(
             'Mirror "%s" has no timestamp file by url "%s"',
             mirror_info['name'],
             timestamp_url,
@@ -170,13 +174,13 @@ def get_verified_mirrors(
         with open(str(config_path), 'r') as config_file:
             mirror_info = yaml.safe_load(config_file)
             if 'name' not in mirror_info:
-                logging.error(
+                logger.error(
                     'Mirror file "%s" doesn\'t have name of the mirror',
                     config_path,
                 )
                 continue
             if 'address' not in mirror_info:
-                logging.error(
+                logger.error(
                     'Mirror file "%s" doesn\'t have addresses of the mirror',
                     config_path,
                 )
@@ -210,7 +214,7 @@ def set_geo_data(
     ip = socket.gethostbyname(mirror_name)
     db = GeoIPEngine.get_instance()
     match = db.lookup(ip)  # type: IPInfo
-    logging.info('Set geo data for mirror "%s"', mirror_name)
+    logger.info('Set geo data for mirror "%s"', mirror_name)
     if match is None:
         mirror_info['country'] = 'Unknown'
         mirror_info['continent'] = 'Unknown'

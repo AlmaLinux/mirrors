@@ -4,8 +4,8 @@ import argparse
 import os
 
 from alembic.config import Config
-from backend.db import Engine
-from backend.db.utils import (
+from db.db_engine import Engine
+from db.utils import (
     create_database_if_not_exists,
     make_migrations,
     migrate_db,

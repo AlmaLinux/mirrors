@@ -1,0 +1,33 @@
+{% extends "bootstrap/base.html" %}
+{% block metas %}
+    {{ super() }}
+    <meta charset="UTF-8">
+{% endblock %}
+{% block content %}
+    {{ super() }}
+    <center>
+        <div style="width: 50%; height: 50%">
+        <table class="table table-striped table-bordered table-responsive-md">
+            <thead>
+                {% for column_name in column_names %}
+                    <th>{{ column_name }}</th>
+                {% endfor %}
+            </thead>
+            <tbody>
+                {% for mirror in mirror_list %}
+                    <tr>
+                        <td>{{ mirror.name }}</td>
+                        <td><a href="{{ mirror.sponsor_url }}">{{ mirror.sponsor_name }}</a></td>
+                        <td>{% if mirror.is_expired %}expired{% else %}ok{% endif %}</td>
+                        <td>{{ mirror.continent }}</td>
+                        <td>{{ mirror.country }}</td>
+                        {% for url_type in url_types %}
+                            <td>{% if mirror.urls.get(url_type) %} <a href="{{ mirror.urls.get(url_type, '') }}">Link</a>{% endif %}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </center>
+{% endblock %}

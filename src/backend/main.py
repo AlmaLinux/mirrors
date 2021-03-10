@@ -5,6 +5,7 @@ from flask import (
     Flask,
     request,
     Response,
+    render_template,
 )
 from werkzeug.exceptions import InternalServerError
 
@@ -16,6 +17,7 @@ from api.exceptions import (
 from api.handlers import (
     update_mirrors_handler,
     get_mirrors_list,
+    get_all_mirrors,
 )
 from api.utils import (
     success_result,
@@ -23,13 +25,16 @@ from api.utils import (
     auth_key_required,
     jsonify_response,
 )
+from db.models import url_types
 from common.sentry import (
     init_sentry_client,
     get_logger,
 )
+from flask_bootstrap import Bootstrap
 
 
 app = Flask(__name__)
+Bootstrap(app)
 init_sentry_client()
 logger = get_logger(__name__)
 
@@ -52,7 +57,8 @@ def get_mirror_list(
 
 
 @app.route(
-    '/update_mirrors'
+    '/update_mirrors',
+    methods=('POST',),
 )
 @success_result
 @error_result
@@ -60,6 +66,25 @@ def get_mirror_list(
 def update_mirrors():
     return update_mirrors_handler()
 
+
+@app.route(
+    '/',
+    methods=('GET',),
+)
+def mirrors_table():
+    data = {
+        'column_names': [
+            'Name',
+            'Sponsor',
+            'Status',
+            'Continent',
+            'Country',
+            *url_types,
+        ],
+        'url_types': url_types,
+        'mirror_list': get_all_mirrors(),
+    }
+    return render_template('mirrors.html', **data)
 
 @app.errorhandler(AuthException)
 def handle_jwt_exception(error: BaseCustomException) -> Response:
@@ -94,12 +119,4 @@ def handle_bad_request_format(error: BadRequestFormatExceptioin) -> Response:
             'message': str(error),
         },
         status_code=error.response_code,
-    )
-
-
-if __name__ == '__main__':
-    app.run(
-        host='localhost',
-        port=8080,
-        debug=True,
     )

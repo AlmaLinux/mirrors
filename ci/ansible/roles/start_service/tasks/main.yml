@@ -11,7 +11,7 @@
   environment:
     COMPOSE_PROJECT_NAME: "{{ container_env_prefix }}"
     CONFIGS_DIR: "{{ config_root }}"
-  retries: 10
+  retries: 1
   delay: 1
   register: result
-  until: (result.get('rc', -1) == 0) or ('i/o timeout' not in result.get('stderr', ''))
+  until: result is succeeded

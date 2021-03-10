@@ -9,7 +9,7 @@ from typing import (
     AnyStr,
 )
 
-from backend.api.exceptions import (
+from api.exceptions import (
     BaseCustomException,
     AuthException,
 )

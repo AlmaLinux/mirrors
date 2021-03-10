@@ -8,8 +8,8 @@ from typing import List
 from alembic import command, script
 from alembic.config import Config
 from alembic.runtime.migration import MigrationContext
-from backend.db.db_engine import Engine
-from backend.db.models import Base
+from db.db_engine import Engine
+from db.models import Base
 from sqlalchemy.engine.reflection import Inspector
 from sqlalchemy.orm import Session
 

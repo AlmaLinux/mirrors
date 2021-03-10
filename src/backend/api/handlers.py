@@ -5,19 +5,25 @@ from typing import AnyStr
 
 import dateparser
 
-from backend.api.exceptions import BadRequestFormatExceptioin
-from src.backend.api.mirrors_update import (
+from api.exceptions import BadRequestFormatExceptioin
+from api.mirrors_update import (
     get_config,
     get_verified_mirrors,
     REQUIRED_MIRROR_PROTOCOLS,
 )
-from backend.db.db_engine import GeoIPEngine
-from backend.db.models import Url, Mirror
-from backend.db.utils import session_scope
+from db.db_engine import GeoIPEngine
+from db.models import Url, Mirror
+from db.utils import session_scope
 from sqlalchemy.sql.expression import false
+
+from common.sentry import (
+    get_logger,
+)
 
 
 MAX_LENGTH_OF_MIRRORS_LIST = 5
+
+logger = get_logger(__name__)
 
 
 def _get_distance_between(
@@ -128,6 +134,23 @@ def update_mirrors_handler():
             )
             session.add(mirror_to_create)
         session.flush()
+
+    return 'Done'
+
+
+def get_all_mirrors():
+    mirrors_list = []
+    with session_scope() as session:
+        mirrors = session.query(Mirror).all()
+        logger.info(mirrors)
+        for mirror in mirrors:
+            mirror_data = mirror.to_dict()
+            mirror_data['urls'] = {
+                url['type']: url['url'] for url in mirror_data['urls']
+            }
+            mirrors_list.append(mirror_data)
+    logger.info(mirrors_list)
+    return mirrors_list
 
 
 def get_mirrors_list(
