@@ -1,0 +1,10 @@
+name: mirrors.gethosted.online
+address:
+  http: http://mirrors.gethosted.online/almalinux
+  https: https://mirrors.gethosted.online/almalinux
+  rsync: rsync://mirrors.gethosted.online/almalinux
+  ftp: ftp://mirrors.gethosted.online/almalinux
+update_frequency: 6h
+sponsor: Get Hosted Online
+sponsor_url: https://www.gethosted.online
+email: support@gethosted.online
