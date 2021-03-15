@@ -4,7 +4,7 @@ address:
   http: http://almalinux.mirrors.itworxx.de/
   https: https://almalinux.mirrors.itworxx.de
 update_frequency: 1h
-sponsor: AlmaLinux
+sponsor: ITWorxx
 sponsor_url: https://www.itworxx.de
 email: support@itworxx.de
 ...
