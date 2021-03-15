@@ -25,12 +25,14 @@ mirror-onamae.almalinux.tokyo|[TRIPPYBOY.COM](https://blog.trippyboy.com)|ok|Jap
 mirrors.inet.vn|[iNET Software](https://inet.vn/)|ok|Vietnam|[Mirror](https://mirrors.inet.vn/almalinux)|[Mirror](http://mirrors.inet.vn/almalinux)|
 mirror.almalinux.asia|[TRIPPYBOY.COM](https://blog.trippyboy.com)|ok|Japan|[Mirror](https://mirror.almalinux.asia/almalinux)|[Mirror](http://mirror.almalinux.asia/almalinux)|
 mirror-lolipop.almalinux.tokyo|[TRIPPYBOY.COM](https://blog.trippyboy.com)|ok|Japan|[Mirror](https://mirror-lolipop.almalinux.tokyo/almalinux)|[Mirror](http://mirror-lolipop.almalinux.tokyo/almalinux)|
+mirror-id.almalinux.id|[HostKita](https://hostkita.net)|ok|Indonesia|[Mirror](https://mirror-id.almalinux.id/almalinux)|[Mirror](http://mirror-id.almalinux.id/almalinux)|
 mirror.triputramedia.id|[Tri Putra Media Indonesia](https://www.triputramedia.id)|ok|Indonesia|[Mirror](https://mirror.triputramedia.id/almalinux)|[Mirror](http://mirror.triputramedia.id/almalinux)|[Link](rsync://mirror.triputramedia.id/almalinux)
 almalinux.unlimited.rs|[UNLIMITED.RS](https://unlimited.rs)|ok|Serbia|[Mirror](https://almalinux.unlimited.rs)|[Mirror](http://almalinux.unlimited.rs)|
 almalinux.mirror.katapult.io|[Katapult](https://katapult.io)|ok|United Kingdom|[Mirror](https://almalinux.mirror.katapult.io)|[Mirror](http://almalinux.mirror.katapult.io)|[Link](rsync://almalinux.mirror.katapult.io/almalinux)
 mirror.dk.team.blue|[team.blue Denmark](https://team.blue)|ok|Denmark|[Mirror](https://mirror.dk.team.blue/almalinux)|[Mirror](http://mirror.dk.team.blue/almalinux)|
 mirror.chmuri.net|[Chmuri.net](https://www.chmuri.net)|ok|Poland|[Mirror](https://mirror.chmuri.net/almalinux)|[Mirror](http://mirror.chmuri.net/almalinux)|
 repo.almalinux.org|[AlmaLinux](https://www.almalinux.org)|ok|Germany|[Mirror](https://repo.almalinux.org/almalinux)|[Mirror](http://repo.almalinux.org/almalinux)|[Link](rsync://rsync.repo.almalinux.org/almalinux)
+mirror-denizli.cenuta.com|[Cenuta Hosting](https://www.cenuta.com)|ok|Turkey|[Mirror](https://mirror-denizli.cenuta.com/almalinux)|[Mirror](http://mirror-denizli.cenuta.com/almalinux)|
 mirrors.pt|[Edgoo Networks](https://www.edgoo.io)|ok|Portugal|[Mirror](https://mirrors.pt/almalinux)|[Mirror](http://mirrors.pt/almalinux)|[Link](rsync://mirrors.pt/almalinux)
 mirror.ch.altushost.com|[AltusHost B.V.](https://www.altushost.com/)|ok|Switzerland|[Mirror](https://mirror.ch.altushost.com/almalinux)|[Mirror](http://mirror.ch.altushost.com/almalinux)|
 mirror.netglobalis.net|[Netglobalis S.A.](https://www.netglobalis.net)|ok|Chile|[Mirror](https://mirror.netglobalis.net/almalinux)|[Mirror](http://mirror.netglobalis.net/almalinux)|
@@ -38,6 +40,7 @@ almalinux.singapore.crexio.com|[CREXIO](https://crexio.com)|ok|Singapore|[Mirror
 mirror.vargonen.com|[Vargonen Teknoloji](https://www.vargonen.com)|ok|Turkey|[Mirror](https://mirror.vargonen.com/almalinux)|[Mirror](http://mirror.vargonen.com/almalinux)|
 mirrors.ptisp.pt|[PTISP](https://mirrors.ptisp.pt/)|ok|Portugal|[Mirror](https://mirrors.ptisp.pt/almalinux)|[Mirror](http://mirrors.ptisp.pt/almalinux)|[Link](rsync://mirrors.ptisp.pt/almalinux)
 mirror.telkomuniversity.ac.id|[Telkom University](https://telkomuniversity.ac.id/)|ok|Indonesia|[Mirror](https://mirror.telkomuniversity.ac.id/almalinux)|[Mirror](http://mirror.telkomuniversity.ac.id/almalinux)|
+almalinux.mirrors.itworxx.de|[ITWorxx](https://www.itworxx.de)|ok|Germany|[Mirror](https://almalinux.mirrors.itworxx.de)|[Mirror](http://almalinux.mirrors.itworxx.de)|
 ftp.fau.de|[Friedrich-Alexander-Universitaet Erlangen-Nuernberg](https://www.rrze.fau.de)|ok|Germany|[Mirror](https://ftp.fau.de/almalinux)|[Mirror](http://ftp.fau.de/almalinux)|[Link](rsync://ftp.fau.de/almalinux)
 mirror.as24220.net|[Hostcentral](https://www.hostcentral.net.au)|ok|Australia|[Mirror](https://mirror.as24220.net/almalinux)|[Mirror](http://mirror.as24220.net/almalinux)|[Link](rsync://mirror.as24220.net/almalinux)
 almalinux.mirror.liteserver.nl|[LiteServer](https://www.liteserver.nl/)|ok|Netherlands|[Mirror](https://almalinux.mirror.liteserver.nl)|[Mirror](http://almalinux.mirror.liteserver.nl)|[Link](rsync://mirror.liteserver.nl/almalinux)
