@@ -1,0 +1,10 @@
+---
+name: almalinux.li
+address:
+  http: http://almalinux.li/
+  https: https://almalinux.li/
+update_frequency: 3h
+sponsor: /dev/null/v
+sponsor_url: https://dev.nul.lv
+email: mirror@almalinux.li
+...
