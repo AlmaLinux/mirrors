@@ -1,0 +1,9 @@
+name: mirror.amscloud.co.id
+address:
+  http: http://mirror.amscloud.co.id/almalinux/
+  https: https://mirror.amscloud.co.id/almalinux/
+  rsync: rsync://mirror.amscloud.co.id::almalinux
+update_frequency: 3h
+sponsor: PT. Awan Media Semesta
+sponsor_url: https://amscloud.co.id/
+email: support@amscloud.co.id
