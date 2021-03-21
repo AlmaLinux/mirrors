@@ -9,7 +9,6 @@ http://mirror.nl.altushost.com/almalinux/8.3-rc/BaseOS/$basearch/os/
 http://mirror.xeonbd.com/almalinux/8.3-rc/BaseOS/$basearch/os/
 http://yum.tamu.edu/alma/8.3-rc/BaseOS/$basearch/os/
 http://mirror.epn.edu.ec/almalinux/8.3-rc/BaseOS/$basearch/os/
-http://almalinux.li/8.3-rc/BaseOS/$basearch/os/
 http://mirror.steadfastnet.com/almalinux/8.3-rc/BaseOS/$basearch/os/
 http://mirrors.bkns.vn/almalinux/8.3-rc/BaseOS/$basearch/os/
 http://mirror.cloudpropeller.com/almalinux/8.3-rc/BaseOS/$basearch/os/
@@ -22,6 +21,7 @@ http://mirror.nodespace.net/almalinux/8.3-rc/BaseOS/$basearch/os/
 http://mirrors.coreix.net/almalinux/8.3-rc/BaseOS/$basearch/os/
 http://mirror-onamae.almalinux.tokyo/almalinux/8.3-rc/BaseOS/$basearch/os/
 http://mirrors.inet.vn/almalinux/8.3-rc/BaseOS/$basearch/os/
+http://mirror.amscloud.co.id/almalinux/8.3-rc/BaseOS/$basearch/os/
 http://mirror.almalinux.asia/almalinux/8.3-rc/BaseOS/$basearch/os/
 http://mirror-lolipop.almalinux.tokyo/almalinux/8.3-rc/BaseOS/$basearch/os/
 http://mirror.espoch.edu.ec/almalinux/8.3-rc/BaseOS/$basearch/os/
@@ -34,7 +34,6 @@ http://repo.almalinux.org/almalinux/8.3-rc/BaseOS/$basearch/os/
 http://mirror-denizli.cenuta.com/almalinux/8.3-rc/BaseOS/$basearch/os/
 http://mirrors.pt/almalinux/8.3-rc/BaseOS/$basearch/os/
 http://mirror.ch.altushost.com/almalinux/8.3-rc/BaseOS/$basearch/os/
-http://mirror.netglobalis.net/almalinux/8.3-rc/BaseOS/$basearch/os/
 http://almalinux.singapore.crexio.com/8.3-rc/BaseOS/$basearch/os/
 http://mirror.vargonen.com/almalinux/8.3-rc/BaseOS/$basearch/os/
 http://mirrors.ptisp.pt/almalinux/8.3-rc/BaseOS/$basearch/os/
@@ -45,4 +44,4 @@ http://mirror.as24220.net/almalinux/8.3-rc/BaseOS/$basearch/os/
 http://almalinux.mirror.liteserver.nl/8.3-rc/BaseOS/$basearch/os/
 http://mirror.cov.ukservers.com/almalinux/8.3-rc/BaseOS/$basearch/os/
 http://mirror.interserver.net/almalinux/8.3-rc/BaseOS/$basearch/os/
-https://almalinux.japan.crexio.com/almalinux/8.3-rc/BaseOS/$basearch/os/
+http://almalinux.japan.crexio.com/almalinux/8.3-rc/BaseOS/$basearch/os/
