@@ -1,7 +1,6 @@
 | Name | Sponsor | Status | Country | HTTPS | HTTP | RSYNC |
 | --- | --- | --- | --- | --- | --- | --- |
 mirrors.cloudfly.vn|[Cloudfly](https://cloudfly.vn/)|ok|Vietnam|[Mirror](https://mirrors.cloudfly.vn/almalinux)|[Mirror](http://mirrors.cloudfly.vn/almalinux)|
-mirror.cedia.org.ec|[CEDIA](https://www.cedia.edu.ec)|ok|Ecuador|[Mirror](https://mirror.cedia.org.ec/almalinux)|[Mirror](http://mirror.cedia.org.ec/almalinux)|[Link](rsync://mirror.cedia.org.ec/almalinux)
 mirrors.gigenet.com|[Hosting](https://gigenet.com/)|ok|United States||[Mirror](https://mirrors.gigenet.com/almalinux)|
 mirror.uta.edu.ec|[Universidad Técnica de Ambato](https://www.uta.edu.ec)|ok|Ecuador|[Mirror](https://mirror.uta.edu.ec/almalinux)|[Mirror](http://mirror.uta.edu.ec/almalinux)|
 almalinux-mirror.hybula.com|[Hybula B.V.](https://www.hybula.com/)|ok|Netherlands|[Mirror](https://almalinux-mirror.hybula.com)|[Mirror](http://almalinux-mirror.hybula.com)|[Link](rsync://almalinux-mirror.hybula.com/almalinux)
@@ -37,7 +36,7 @@ repo.almalinux.org|[AlmaLinux](https://www.almalinux.org)|ok|Germany|[Mirror](ht
 mirror-denizli.cenuta.com|[Cenuta Hosting](https://www.cenuta.com)|ok|Turkey|[Mirror](https://mirror-denizli.cenuta.com/almalinux)|[Mirror](http://mirror-denizli.cenuta.com/almalinux)|
 mirrors.pt|[Edgoo Networks](https://www.edgoo.io)|ok|Portugal|[Mirror](https://mirrors.pt/almalinux)|[Mirror](http://mirrors.pt/almalinux)|[Link](rsync://mirrors.pt/almalinux)
 mirror.ch.altushost.com|[AltusHost B.V.](https://www.altushost.com/)|ok|Switzerland|[Mirror](https://mirror.ch.altushost.com/almalinux)|[Mirror](http://mirror.ch.altushost.com/almalinux)|
-mirror.netglobalis.net|[Netglobalis S.A.](https://www.netglobalis.net)|expired|Chile|[Mirror](https://mirror.netglobalis.net/almalinux)|[Mirror](http://mirror.netglobalis.net/almalinux)|
+mirror.netglobalis.net|[Netglobalis S.A.](https://www.netglobalis.net)|ok|Chile|[Mirror](https://mirror.netglobalis.net/almalinux)|[Mirror](http://mirror.netglobalis.net/almalinux)|
 almalinux.singapore.crexio.com|[CREXIO](https://crexio.com)|ok|Singapore|[Mirror](https://almalinux.singapore.crexio.com)|[Mirror](http://almalinux.singapore.crexio.com)|[Link](rsync://almalinux.singapore.crexio.com/almalinux)
 mirror.vargonen.com|[Vargonen Teknoloji](https://www.vargonen.com)|ok|Turkey|[Mirror](https://mirror.vargonen.com/almalinux)|[Mirror](http://mirror.vargonen.com/almalinux)|
 mirrors.ptisp.pt|[PTISP](https://mirrors.ptisp.pt/)|ok|Portugal|[Mirror](https://mirrors.ptisp.pt/almalinux)|[Mirror](http://mirrors.ptisp.pt/almalinux)|[Link](rsync://mirrors.ptisp.pt/almalinux)
