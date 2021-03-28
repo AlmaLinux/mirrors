@@ -1,8 +1,8 @@
 ---
 name: almalinux.singapore.crexio.com
 address:
-  http: http://almalinux.singapore.crexio.com/
-  https: https://almalinux.singapore.crexio.com/
+  http: http://almalinux.singapore.crexio.com/almalinux
+  https: https://almalinux.singapore.crexio.com/almalinux
   rsync: rsync://almalinux.singapore.crexio.com/almalinux
 update_frequency: 1h
 sponsor: CREXIO
