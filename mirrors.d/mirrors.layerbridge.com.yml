@@ -3,7 +3,7 @@ name: mirrors.layerbridge.com
 address:
   http: http://mirrors.layerbridge.com/almalinux/
   https: https://mirrors.layerbridge.com/almalinux/
-  rsync: mirrors.layerbridge.com::AlmaLinux
+  rsync: rsync://mirrors.layerbridge.com/almalinux/
 update_frequency: 4h
 sponsor: LayerBridge
 sponsor_url: https://www.layerbridge.com
