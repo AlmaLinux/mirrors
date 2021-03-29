@@ -4,6 +4,6 @@ address:
   http: http://mirror.hosting.com.tr/almalinux/
 update_frequency: 3h
 sponsor: Hosting
-sponsor_url: https://www.hosting.com.tr
+sponsor_url: https://www.hosting.com.tr 
 email: mirror@hosting.com.tr
 ...
