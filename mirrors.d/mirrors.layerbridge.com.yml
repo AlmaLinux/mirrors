@@ -1,0 +1,11 @@
+---
+name: mirrors.layerbridge.com
+address:
+  http: http://mirrors.layerbridge.com/almalinux/
+  https: https://mirrors.layerbridge.com/almalinux/
+  rsync: mirrors.layerbridge.com::AlmaLinux
+update_frequency: 4h
+sponsor: LayerBridge
+sponsor_url: https://www.layerbridge.com
+email: internal@layerbridge.com
+...
