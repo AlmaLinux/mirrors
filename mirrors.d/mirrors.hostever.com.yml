@@ -1,5 +1,5 @@
 ---
-name: mrrors.hostever.com
+name: mirrors.hostever.com
 address:
   http: http://mirrors.hostever.com/almalinux/
 update_frequency: 3h
