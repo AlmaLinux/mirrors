@@ -1,0 +1,9 @@
+---
+name: mrrors.hostever.com
+address:
+  http: http://mrrors.hostever.com/almalinux/
+update_frequency: 4h
+sponsor: CodeforHost Inc
+sponsor_url: https://www.codeforhost.com
+email: support@codeforhost.com
+...
