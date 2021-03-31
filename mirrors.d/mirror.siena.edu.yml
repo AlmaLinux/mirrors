@@ -1,0 +1,11 @@
+---
+name: mirror.siena.edu
+address:
+  http: http://mirror.siena.edu/almalinux/
+  rsync: rsync://mirror.siena.edu/almalinux
+update_frequency: 3h
+sponsor: Siena College
+sponsor_url: https://www.siena.edu
+email: mirror@siena.edu
+...
+
