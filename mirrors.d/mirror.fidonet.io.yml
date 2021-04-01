@@ -1,8 +1,8 @@
 ---
 name: mirror.fidonet.io
 address:
-  http: http://mirror.fidonet.io/
-  https: https://mirror.fidonet.io/
+  http: http://mirror.fidonet.io/almalinux/
+  https: https://mirror.fidonet.io/almalinux/
 update_frequency: 3h
 sponsor: fidonet.io
 sponsor_url: https://fidonet.io
