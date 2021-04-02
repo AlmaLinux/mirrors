@@ -1,0 +1,11 @@
+---
+name: mirror.yandex.ru
+address:
+  http: http://mirror.yandex.ru/almalinux/
+  https: https://mirror.yandex.ru/almalinux/
+  rsync: rsync://mirror.yandex.ru/almalinux/
+update_frequency: 1h
+sponsor: Yandex
+sponsor_url: https://www.yandex.ru
+email: opensource@yandex-team.ru
+...
