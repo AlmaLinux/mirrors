@@ -1,0 +1,8 @@
+name: kartolo.sby.datautama.net.id
+address:
+  http: http://kartolo.sby.datautama.net.id/almalinux
+  https: 
+update_frequency: 8h
+sponsor: DATAUTAMA-NET-ID
+sponsor_url: https://datautama.net.id/
+email: mirrors-admin@sby.datautama.net.id
