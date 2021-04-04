@@ -1,0 +1,10 @@
+---
+name: mirror.netzwerge.de
+address:
+  http: http://mirror.netzwerge.de/almalinux/
+  https: https://mirror.netzwerge.de/almalinux/
+update_frequency: 8h
+sponsor: Netzwerge GmbH
+sponsor_url: https://www.netzwerge.de
+email: mirror@netzwerge.de
+...
