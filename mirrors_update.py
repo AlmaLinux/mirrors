@@ -5,12 +5,14 @@ import os
 import dateparser
 import shutil
 import socket
+import multiprocessing
 from collections import defaultdict
 from pathlib import Path
-from typing import Dict, AnyStr, List, Union
-from geoip import geolite2, IPInfo, open_database
+from typing import Dict, AnyStr, List, Union, Tuple
+from geoip import IPInfo, open_database
 import requests
 import yaml
+from urllib3.exceptions import HTTPError
 
 REQUIRED_MIRROR_PROTOCOLS = (
     'https',
@@ -31,8 +33,18 @@ WHITELIST_MIRRORS = (
     'repo.almalinux.org',
 )
 GEOPIP_DB = 'geoip_db.mmdb'
+NUMBER_OF_PROCESSES_FOR_MIRRORS_CHECK = 15
 
-logging.basicConfig(level=logging.INFO)
+
+logger = multiprocessing.get_logger()
+logger.setLevel(logging.INFO)
+stream_handler = logging.StreamHandler()
+stream_handler.setLevel(logging.INFO)
+formatter = logging.Formatter(
+    '%(asctime)s | %(name)s |  %(levelname)s: %(message)s'
+)
+stream_handler.setFormatter(formatter)
+logger.addHandler(stream_handler)
 
 
 def get_config(path_to_config: AnyStr = 'config.yml') -> Dict:
@@ -48,7 +60,7 @@ def mirror_available(
         mirror_info: Dict[AnyStr, Union[Dict, AnyStr]],
         versions: List[AnyStr],
         repos: List[Dict[AnyStr, Union[Dict, AnyStr]]],
-) -> bool:
+) -> Tuple[AnyStr, bool]:
     """
     Check mirror availability
     :param mirror_info: the dictionary which contains info about a mirror
@@ -56,7 +68,7 @@ def mirror_available(
     :param versions: the list of versions which should be provided by a mirror
     :param repos: the list of repos which should be provided by a mirror
     """
-    logging.info('Checking mirror "%s"...', mirror_info['name'])
+    logger.info('Checking mirror "%s"...', mirror_info['name'])
     try:
         addresses = mirror_info['address']  # type: Dict[AnyStr, AnyStr]
         mirror_url = next(iter([
@@ -64,12 +76,12 @@ def mirror_available(
             if protocol_type in REQUIRED_MIRROR_PROTOCOLS
         ]))
     except StopIteration:
-        logging.error(
+        logger.error(
             'Mirror "%s" has no one address with protocols "%s"',
             mirror_info['name'],
             REQUIRED_MIRROR_PROTOCOLS,
         )
-        return False
+        return mirror_info['name'], False
     for version in versions:
         for repo_info in repos:
             repo_path = repo_info['path'].replace('$basearch', DEFAULT_ARCH)
@@ -82,20 +94,20 @@ def mirror_available(
             try:
                 request = requests.get(check_url, headers=HEADERS)
                 request.raise_for_status()
-            except requests.RequestException:
-                logging.warning(
+            except (requests.RequestException, HTTPError):
+                logger.warning(
                     'Mirror "%s" is not available for version '
                     '"%s" and repo path "%s"',
                     mirror_info['name'],
                     version,
                     repo_path,
                 )
-                return False
-    logging.info(
+                return mirror_info['name'], False
+    logger.info(
         'Mirror "%s" is available',
         mirror_info['name']
     )
-    return True
+    return mirror_info['name'], True
 
 
 def set_repo_status(
@@ -125,7 +137,7 @@ def set_repo_status(
         )
         request.raise_for_status()
     except requests.RequestException:
-        logging.error(
+        logger.error(
             'Mirror "%s" has no timestamp file by url "%s"',
             mirror_info['name'],
             timestamp_url,
@@ -163,34 +175,43 @@ def get_verified_mirrors(
     :param allowed_outdate: allowed mirror lag
     """
 
-    result = []
+    args = []
+    mirrors_info = {}
     for config_path in Path(mirrors_dir).rglob('*.yml'):
         with open(str(config_path), 'r') as config_file:
             mirror_info = yaml.safe_load(config_file)
             if 'name' not in mirror_info:
-                logging.error(
+                logger.error(
                     'Mirror file "%s" doesn\'t have name of the mirror',
                     config_path,
                 )
                 continue
             if 'address' not in mirror_info:
-                logging.error(
+                logger.error(
                     'Mirror file "%s" doesn\'t have addresses of the mirror',
                     config_path,
                 )
                 continue
             if mirror_info['name'] in WHITELIST_MIRRORS:
                 mirror_info['status'] = 'ok'
-                result.append(mirror_info)
+                mirrors_info[mirror_info['name']] = mirror_info
                 continue
-            if mirror_available(
-                mirror_info=mirror_info,
-                versions=versions,
-                repos=repos,
-            ):
-                set_repo_status(mirror_info, allowed_outdate)
-                result.append(mirror_info)
-    return result
+            args.append((mirror_info, versions, repos))
+            mirrors_info[mirror_info['name']] = mirror_info
+    pool = multiprocessing.Pool(
+        processes=NUMBER_OF_PROCESSES_FOR_MIRRORS_CHECK,
+    )
+    pool_result = pool.map(_helper_mirror_available, args)
+    for mirror_name, is_available in pool_result:
+        if is_available:
+            set_repo_status(mirrors_info[mirror_name], allowed_outdate)
+        else:
+            del mirrors_info[mirror_name]
+    return list(mirrors_info.values())
+
+
+def _helper_mirror_available(args):
+    return mirror_available(*args)
 
 
 def write_mirrors_to_mirrorslists(
@@ -213,7 +234,7 @@ def write_mirrors_to_mirrorslists(
 
     for mirror_info in verified_mirrors:
         if mirror_info['status'] != 'ok':
-            logging.warning(
+            logger.warning(
                 'Mirror "%s" is expired and isn\'t added to mirrorlist',
                 mirror_info['name']
             )
@@ -252,10 +273,15 @@ def set_mirror_country(
     """
 
     mirror_name = mirror_info['name']
-    ip = socket.gethostbyname(mirror_name)
+    try:
+        ip = socket.gethostbyname(mirror_name)
+    except socket.gaierror:
+        logger.error('Can\'t get IP of mirror %s', mirror_name)
+        mirror_info['country'] = 'Unknown'
+        return
     db = open_database(GEOPIP_DB)
     match = db.lookup(ip)  # type: IPInfo
-    logging.info('Set country for mirror "%s"', mirror_name)
+    logger.info('Set country for mirror "%s"', mirror_name)
     if match is None:
         mirror_info['country'] = 'Unknown'
     else:
@@ -264,8 +290,8 @@ def set_mirror_country(
 
 
 def generate_mirrors_table(
-    mirrors_table_path: AnyStr,
-    verified_mirrors: List[Dict[AnyStr, Union[Dict, AnyStr]]],
+        mirrors_table_path: AnyStr,
+        verified_mirrors: List[Dict[AnyStr, Union[Dict, AnyStr]]],
 ) -> None:
     """
     Generates mirrors table from list verified mirrors
@@ -291,10 +317,10 @@ def generate_mirrors_table(
         'rsync': 'Link',
     })
     with open(mirrors_table_path, 'a') as mirrors_table_file:
-        logging.info('Generate mirrors table')
+        logger.info('Generate mirrors table')
         mirrors_table_file.write(f'{table_header}\n')
         for mirror_info in verified_mirrors:
-            logging.info(
+            logger.info(
                 'Adding mirror "%s" to mirrors table',
                 mirror_info['name']
             )
@@ -336,7 +362,7 @@ def main():
         allowed_outdate=config['allowed_outdate']
     )
     if not verified_mirrors:
-        logging.error('No available and not expired mirrors found')
+        logger.error('No available and not expired mirrors found')
         exit(1)
     write_mirrors_to_mirrorslists(
         verified_mirrors=verified_mirrors,
