@@ -39,6 +39,7 @@ mirrors.inet.vn|[iNET Software](https://inet.vn/)|ok|Vietnam|[Mirror](https://mi
 mirror.amscloud.co.id|[PT. Awan Media Semesta](https://amscloud.co.id/)|ok|Indonesia|[Mirror](https://mirror.amscloud.co.id/almalinux)|[Mirror](http://mirror.amscloud.co.id/almalinux)|[Link](rsync://mirror.amscloud.co.id::almalinux)
 mirror.almalinux.asia|[TRIPPYBOY.COM](https://blog.trippyboy.com)|ok|Japan|[Mirror](https://mirror.almalinux.asia/almalinux)|[Mirror](http://mirror.almalinux.asia/almalinux)|
 mirror.domainhizmetleri.com|[Domainhizmetleri.com Hosting](https://www.domainhizmetleri.com)|ok|Turkey|[Mirror](https://mirror.domainhizmetleri.com/almalinux)|[Mirror](http://mirror.domainhizmetleri.com/almalinux)|
+mirror.espoch.edu.ec|[Escuela Superior Politécnica de Chimborazo](https://www.espoch.edu.ec)|ok|Ecuador|[Mirror](https://mirror.espoch.edu.ec/almalinux)|[Mirror](http://mirror.espoch.edu.ec/almalinux)|[Link](rsync://mirror.espoch.edu.ec/almalinux)
 mirror.netzwerge.de|[Netzwerge GmbH](https://www.netzwerge.de)|ok|Germany|[Mirror](https://mirror.netzwerge.de/almalinux)|[Mirror](http://mirror.netzwerge.de/almalinux)|
 mirror.host.ag|[Host.ag](https://www.host.ag)|ok|Bulgaria|[Mirror](https://mirror.host.ag/almalinux)|[Mirror](http://mirror.host.ag/almalinux)|
 mirror-id.almalinux.id|[HostKita](https://hostkita.net)|ok|Indonesia|[Mirror](https://mirror-id.almalinux.id/almalinux)|[Mirror](http://mirror-id.almalinux.id/almalinux)|
@@ -54,7 +55,7 @@ repo.almalinux.org|[AlmaLinux](https://www.almalinux.org)|ok|Germany|[Mirror](ht
 mirror-denizli.cenuta.com|[Cenuta Hosting](https://www.cenuta.com)|ok|Turkey|[Mirror](https://mirror-denizli.cenuta.com/almalinux)|[Mirror](http://mirror-denizli.cenuta.com/almalinux)|
 mirrors.pt|[Edgoo Networks](https://www.edgoo.io)|ok|Portugal|[Mirror](https://mirrors.pt/almalinux)|[Mirror](http://mirrors.pt/almalinux)|[Link](rsync://mirrors.pt/almalinux)
 mirror.ch.altushost.com|[AltusHost B.V.](https://www.altushost.com/)|ok|Switzerland|[Mirror](https://mirror.ch.altushost.com/almalinux)|[Mirror](http://mirror.ch.altushost.com/almalinux)|
-mirror.netglobalis.net|[Netglobalis S.A.](https://www.netglobalis.net)|expired|Chile|[Mirror](https://mirror.netglobalis.net/almalinux)|[Mirror](http://mirror.netglobalis.net/almalinux)|
+mirror.netglobalis.net|[Netglobalis S.A.](https://www.netglobalis.net)|ok|Chile|[Mirror](https://mirror.netglobalis.net/almalinux)|[Mirror](http://mirror.netglobalis.net/almalinux)|
 mirror.vargonen.com|[Vargonen Teknoloji](https://www.vargonen.com)|ok|Turkey|[Mirror](https://mirror.vargonen.com/almalinux)|[Mirror](http://mirror.vargonen.com/almalinux)|
 mirror.yandex.ru|[Yandex](https://yandex.ru)|ok|Russia|[Mirror](https://mirror.yandex.ru/almalinux)|[Mirror](http://mirror.yandex.ru/almalinux)|[Link](rsync://mirror.yandex.ru/almalinux)
 mirrors.ptisp.pt|[PTISP](https://mirrors.ptisp.pt/)|ok|Portugal|[Mirror](https://mirrors.ptisp.pt/almalinux)|[Mirror](http://mirrors.ptisp.pt/almalinux)|[Link](rsync://mirrors.ptisp.pt/almalinux)
