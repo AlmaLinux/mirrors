@@ -3,8 +3,8 @@ allowed_outdate: 12h
 mirrorlist_dir: docs/.vuepress/public/mirrorlist
 mirrors_dir: mirrors.d
 mirrors_table: docs/internal/mirrors.md
+internal_docs_dir: docs/internal
 version:
-  - 8.3-rc
   - 8.3
   - 8
 repos:
