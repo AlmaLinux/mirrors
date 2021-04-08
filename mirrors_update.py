@@ -335,7 +335,7 @@ def generate_mirrors_table(
         ),
     )
 
-    header_separator = f"| {' | '.join(['---'] * len(columns_names))} |"
+    header_separator = f"| {' | '.join([':---'] * len(columns_names))} |"
     table_header = f"| {' | '.join(columns_names)} |\n{header_separator}"
     address_prefixes = defaultdict(lambda: 'Link')
     address_prefixes.update({
@@ -373,59 +373,65 @@ def generate_mirrors_table(
 
 
 def generate_isos_list(
-        internal_docs_dir: AnyStr,
+        isos_file: AnyStr,
+        isos_dir: AnyStr,
         versions: List[AnyStr],
         verified_mirrors: List[Dict[AnyStr, Union[Dict, AnyStr]]],
 ) -> None:
     """
-    Generates isos list from list verified mirrors
-    :param internal_docs_dir: path to dir with internal md files
+    Generates ISOs list from list verified mirrors
+    :param isos_file: path to table with archs and versions for ISOs
+    :param isos_dir: path to dir with ISOs md files
     :param versions: the list of versions which should be provided by mirrors
     :param verified_mirrors: list of verified mirrors
     """
     mirrors_by_countries = defaultdict(list)
     for mirror_info in verified_mirrors:
         mirrors_by_countries[mirror_info['country']].append(mirror_info)
-    with open(
-            os.path.join(
-                internal_docs_dir,
-                'isos.md'
-            ),
-            'a',
-    ) as isos_list_file:
+    with open(isos_file, 'a') as isos_list_file:
         isos_list_file.write(
-            '# AlmaLinux ISOs links  \n'
-            'There are you can find the list of '
-            'available architectures and versions on the mirrors.  \n'
-            'Also you can use a BitTorrent file for downloading ISOs. '
-            'It should be faster than using '
-            'direct downloading from the mirrors.  \n'
-            'A .torrent file can be found from any mirror in ISOs folder.  \n'
-        )
-        isos_list_file.write(
-            '<div align="center">\n\n'
             '| Architecture | Version |\n'
             '| :--- | :--- |\n'
         )
         for arch in ARCHS:
+            os.makedirs(
+                os.path.join(
+                    isos_dir,
+                    arch,
+                ),
+                exist_ok=True,
+            )
             table_row = f'| {arch} | '
             for version in versions:
-                table_row = f'{table_row}[{version}](/internal/isos_' \
-                            f'{arch}_{version}.html)</br>'
+                table_row = f'{table_row}[{version}](/isos/' \
+                            f'{arch}/{version})</br>'
             table_row = f'{table_row} |'
             isos_list_file.write(f'{table_row}\n')
-        isos_list_file.write(f'</div>\n')
     for arch in ARCHS:
         for version in versions:
             with open(
                     os.path.join(
-                        internal_docs_dir,
-                        f'isos_{arch}_{version}.md',
+                        isos_dir,
+                        arch,
+                        f'{version}.md',
                     ),
                     'a'
             ) as current_isos_file:
                 current_isos_file.write(
                     '<div align="center">\n\n'
+                )
+                current_isos_file.write(
+                    '# AlmaLinux ISOs links  \n'
+                    'There are you can find the list of '
+                    'ISOs links for architecture/version'
+                    f' `{arch}/{version}` for all of mirrors.  \n'
+                    'Also you can use a BitTorrent file for downloading ISOs. '
+                    'It should be faster than using '
+                    'direct downloading from the mirrors.  \n'
+                    'A .torrent file can be found from '
+                    'any mirror in ISOs folder.  \n'
+                )
+                current_isos_file.write(
                     '| Country | Links |\n'
                     '| :--- | :--- |\n'
                 )
@@ -452,12 +458,33 @@ def generate_isos_list(
                 current_isos_file.write(f'</div>\n')
 
 
+def clear_old_mirror_content(
+        isos_file: AnyStr,
+        mirrors_table_path: AnyStr,
+        isos_dir: AnyStr,
+) -> None:
+    """
+    Clear old mirror content in *.md files
+    """
+
+    if os.path.exists(isos_file):
+        os.remove(isos_file)
+    if os.path.exists(mirrors_table_path):
+        os.remove(mirrors_table_path)
+    for file_item in glob(os.path.join(isos_dir, '*')):
+        if os.path.isfile(file_item):
+            os.remove(file_item)
+        elif os.path.isdir(file_item):
+            shutil.rmtree(file_item)
+
+
 def main():
     config = get_config()
     versions = config['version']
     repos = config['repos']
     mirrors_table_path = config['mirrors_table']
-    internal_docs_dir = config['internal_docs_dir']
+    isos_file = 'docs/internal/isos.md'
+    isos_dir = 'docs/isos'
     shutil.rmtree(
         config['mirrorlist_dir'],
         ignore_errors=True,
@@ -480,21 +507,18 @@ def main():
         repos=repos,
         mirrorlist_dir=config['mirrorlist_dir'],
     )
-    if os.path.exists(mirrors_table_path):
-        os.remove(mirrors_table_path)
+    clear_old_mirror_content(
+        isos_file=isos_file,
+        mirrors_table_path=mirrors_table_path,
+        isos_dir=isos_dir,
+    )
     generate_mirrors_table(
         mirrors_table_path=mirrors_table_path,
         verified_mirrors=verified_mirrors,
     )
-    for isos_file in glob(
-        os.path.join(
-            internal_docs_dir,
-            'isos*.md',
-        )
-    ):
-        os.remove(isos_file)
     generate_isos_list(
-        internal_docs_dir=internal_docs_dir,
+        isos_file=isos_file,
+        isos_dir=isos_dir,
         versions=versions,
         verified_mirrors=verified_mirrors,
     )
