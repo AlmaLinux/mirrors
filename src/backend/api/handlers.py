@@ -26,15 +26,13 @@ MAX_LENGTH_OF_MIRRORS_LIST = 5
 logger = get_logger(__name__)
 
 
-def _get_distance_between(
+def _get_conditional_distance_between(
         lat1: float,
         lon1: float,
         lat2: float,
         lon2: float,
 ) -> float:
-    return math.sqrt(
-        (lat1 - lat2)**2 + (lon1 - lon2)**2
-    )
+    return abs(lat1 - lat2) + abs(lon1 - lon2)
 
 
 def _get_nearest_mirrors(ip_address):
@@ -75,12 +73,11 @@ def _get_nearest_mirrors(ip_address):
             ).all()
             rest_mirrors = [mirror.to_dict() for mirror in rest_mirrors]
         distance_dict = {
-            _get_distance_between(
-                lat1=match.location[0],
-                lon1=match.location[1],
-                lat2=mirror['location']['lat'],
-                lon2=mirror['location']['lon'],
-            ): mirror for mirror in rest_mirrors
+            _get_conditional_distance_between(lat1=match.location[0],
+                                              lon1=match.location[1],
+                                              lat2=mirror['location']['lat'],
+                                              lon2=mirror['location']['lon']):
+            mirror for mirror in rest_mirrors
         }
         suitable_mirrors.extend(
             [distance_dict[distance] for distance in

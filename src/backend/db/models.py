@@ -19,6 +19,7 @@ from typing import (
 )
 
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.hybrid import hybrid_method
 
 Base = declarative_base()
 url_types = (
@@ -81,6 +82,14 @@ class Mirror(Base):
         secondary=mirrors_urls,
         passive_deletes=True,
     )
+
+    @hybrid_method
+    def conditional_distance(self, lon: float, lat: float):
+        """
+        Calculate conditional distance between this mirror and some point
+        """
+
+        return abs(self.longitude - lon) + abs(self.latitude - lat)
 
     def to_dict(self) -> Dict[AnyStr, Union[AnyStr, float, Dict, List]]:
         return {

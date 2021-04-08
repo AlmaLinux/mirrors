@@ -1,4 +1,4 @@
-[api_server]
+[mirrors_service]
 <place here IP or domain name of your api sever>
 
 [all:vars]
