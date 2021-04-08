@@ -2,6 +2,9 @@
 
 import logging
 import os
+from copy import copy
+from glob import glob
+
 import dateparser
 import shutil
 import socket
@@ -18,11 +21,11 @@ REQUIRED_MIRROR_PROTOCOLS = (
     'https',
     'http',
 )
-ALL_MIRROR_PROTOCOLS = (
-    *REQUIRED_MIRROR_PROTOCOLS,
-    'rsync',
+ALL_MIRROR_PROTOCOLS = list(REQUIRED_MIRROR_PROTOCOLS)
+
+ARCHS = (
+    'x86_64',
 )
-DEFAULT_ARCH = 'x86_64'
 
 # set User-Agent for python-requests
 HEADERS = {
@@ -84,7 +87,7 @@ def mirror_available(
         return mirror_info['name'], False
     for version in versions:
         for repo_info in repos:
-            repo_path = repo_info['path'].replace('$basearch', DEFAULT_ARCH)
+            repo_path = repo_info['path'].replace('$basearch', ARCHS[0])
             check_url = os.path.join(
                 mirror_url,
                 str(version),
@@ -159,24 +162,16 @@ def set_repo_status(
         return
 
 
-def get_verified_mirrors(
+def get_mirrors_info(
         mirrors_dir: AnyStr,
-        versions: List[AnyStr],
-        repos: List[Dict[AnyStr, Union[Dict, AnyStr]]],
-        allowed_outdate: AnyStr
-) -> List[Dict[AnyStr, Union[Dict, AnyStr]]]:
+) -> List[Dict]:
     """
-    Loop through the list of mirrors and return only available
-    and not expired mirrors
+    Extract info about all of mirrors from yaml files
     :param mirrors_dir: path to the directory which contains
            config files of mirrors
-    :param versions: the list of versions which should be provided by mirrors
-    :param repos: the list of repos which should be provided by mirrors
-    :param allowed_outdate: allowed mirror lag
     """
-
-    args = []
-    mirrors_info = {}
+    global ALL_MIRROR_PROTOCOLS
+    result = []
     for config_path in Path(mirrors_dir).rglob('*.yml'):
         with open(str(config_path), 'r') as config_file:
             mirror_info = yaml.safe_load(config_file)
@@ -189,15 +184,43 @@ def get_verified_mirrors(
             if 'address' not in mirror_info:
                 logger.error(
                     'Mirror file "%s" doesn\'t have addresses of the mirror',
-                    config_path,
+                    mirror_info,
                 )
                 continue
-            if mirror_info['name'] in WHITELIST_MIRRORS:
-                mirror_info['status'] = 'ok'
-                mirrors_info[mirror_info['name']] = mirror_info
-                continue
-            args.append((mirror_info, versions, repos))
+            ALL_MIRROR_PROTOCOLS.extend(
+                protocol for protocol in mirror_info['address'].keys() if
+                protocol not in ALL_MIRROR_PROTOCOLS
+            )
+            result.append(mirror_info)
+
+    return result
+
+
+def get_verified_mirrors(
+        all_mirrors: List[Dict],
+        versions: List[AnyStr],
+        repos: List[Dict[AnyStr, Union[Dict, AnyStr]]],
+        allowed_outdate: AnyStr
+) -> List[Dict[AnyStr, Union[Dict, AnyStr]]]:
+    """
+    Loop through the list of mirrors and return only available
+    and not expired mirrors
+    :param all_mirrors: extracted info about mirrors from yaml files
+    :param versions: the list of versions which should be provided by mirrors
+    :param repos: the list of repos which should be provided by mirrors
+    :param allowed_outdate: allowed mirror lag
+    """
+
+    args = []
+    mirrors_info = {}
+    for mirror_info in all_mirrors:
+        set_mirror_country(mirror_info)
+        if mirror_info['name'] in WHITELIST_MIRRORS:
+            mirror_info['status'] = 'ok'
             mirrors_info[mirror_info['name']] = mirror_info
+            continue
+        args.append((mirror_info, versions, repos))
+        mirrors_info[mirror_info['name']] = mirror_info
     pool = multiprocessing.Pool(
         processes=NUMBER_OF_PROCESSES_FOR_MIRRORS_CHECK,
     )
@@ -207,7 +230,11 @@ def get_verified_mirrors(
             set_repo_status(mirrors_info[mirror_name], allowed_outdate)
         else:
             del mirrors_info[mirror_name]
-    return list(mirrors_info.values())
+    result = sorted(
+        mirrors_info.values(),
+        key=lambda _mirror_info: _mirror_info['country'],
+    )
+    return list(result)
 
 
 def _helper_mirror_available(args):
@@ -308,7 +335,7 @@ def generate_mirrors_table(
         ),
     )
 
-    header_separator = f"| {' | '.join(['---'] * len(columns_names))} |"
+    header_separator = f"| {' | '.join([':---'] * len(columns_names))} |"
     table_header = f"| {' | '.join(columns_names)} |\n{header_separator}"
     address_prefixes = defaultdict(lambda: 'Link')
     address_prefixes.update({
@@ -332,7 +359,6 @@ def generate_mirrors_table(
                 else:
                     link = ''
                 mirror_info[f'{protocol}_link'] = link
-            set_mirror_country(mirror_info)
             table_row = '|'.join((
                 mirror_info['name'],
                 f"[{mirror_info['sponsor']}]({mirror_info['sponsor_url']})",
@@ -346,17 +372,125 @@ def generate_mirrors_table(
             mirrors_table_file.write(f'{table_row}\n')
 
 
+def generate_isos_list(
+        isos_file: AnyStr,
+        isos_dir: AnyStr,
+        versions: List[AnyStr],
+        verified_mirrors: List[Dict[AnyStr, Union[Dict, AnyStr]]],
+) -> None:
+    """
+    Generates ISOs list from list verified mirrors
+    :param isos_file: path to table with archs and versions for ISOs
+    :param isos_dir: path to dir with ISOs md files
+    :param versions: the list of versions which should be provided by mirrors
+    :param verified_mirrors: list of verified mirrors
+    """
+    mirrors_by_countries = defaultdict(list)
+    for mirror_info in verified_mirrors:
+        mirrors_by_countries[mirror_info['country']].append(mirror_info)
+    with open(isos_file, 'a') as isos_list_file:
+        isos_list_file.write(
+            '| Architecture | Version |\n'
+            '| :--- | :--- |\n'
+        )
+        for arch in ARCHS:
+            os.makedirs(
+                os.path.join(
+                    isos_dir,
+                    arch,
+                ),
+                exist_ok=True,
+            )
+            table_row = f'| {arch} | '
+            for version in versions:
+                table_row = f'{table_row}[{version}](/isos/' \
+                            f'{arch}/{version})</br>'
+            table_row = f'{table_row} |'
+            isos_list_file.write(f'{table_row}\n')
+    for arch in ARCHS:
+        for version in versions:
+            with open(
+                    os.path.join(
+                        isos_dir,
+                        arch,
+                        f'{version}.md',
+                    ),
+                    'a'
+            ) as current_isos_file:
+                current_isos_file.write(
+                    '# AlmaLinux ISOs links  \n'
+                    'There are you can find the list of '
+                    'ISOs links for architecture/version'
+                    f' `{arch}/{version}` for all of mirrors.  \n'
+                    'Also you can use a BitTorrent file for downloading ISOs. '
+                    'It should be faster than using '
+                    'direct downloading from the mirrors.  \n'
+                    'A .torrent file can be found from '
+                    'any mirror in ISOs folder.  \n'
+                )
+                current_isos_file.write(
+                    '| Country | Links |\n'
+                    '| :--- | :--- |\n'
+                )
+                for country, country_mirrors in \
+                        mirrors_by_countries.items():
+                    table_row = f'| {country} | '
+                    for mirror_info in country_mirrors:
+                        addresses = mirror_info['address']
+                        mirror_url = next(iter([
+                            address for protocol_type, address in
+                            addresses.items()
+                            if protocol_type in REQUIRED_MIRROR_PROTOCOLS
+                        ]))
+                        full_isos_url = os.path.join(
+                            mirror_url,
+                            str(version),
+                            'isos',
+                            arch,
+                        )
+                        table_row = f'{table_row}[{mirror_info["name"]}]' \
+                                    f'({full_isos_url})</br>'
+                    table_row = f'{table_row} |'
+                    current_isos_file.write(f'{table_row}\n')
+
+
+def clear_old_mirror_content(
+        isos_file: AnyStr,
+        mirrors_table_path: AnyStr,
+        isos_dir: AnyStr,
+) -> None:
+    """
+    Clear old mirror content in *.md files
+    """
+
+    if os.path.exists(isos_file):
+        os.remove(isos_file)
+    if os.path.exists(mirrors_table_path):
+        os.remove(mirrors_table_path)
+    for file_item in glob(os.path.join(isos_dir, '*')):
+        if os.path.isfile(file_item):
+            os.remove(file_item)
+        elif os.path.isdir(file_item):
+            shutil.rmtree(file_item)
+
+
 def main():
     config = get_config()
-    versions = config['version']
+    versions = config['versions']
+    duplicated_versions = config['duplicated_versions']
     repos = config['repos']
     mirrors_table_path = config['mirrors_table']
+    isos_file = 'docs/internal/isos.md'
+    isos_dir = 'docs/isos'
     shutil.rmtree(
         config['mirrorlist_dir'],
         ignore_errors=True,
     )
+    all_mirrors = get_mirrors_info(
+        config['mirrors_dir']
+    )
     verified_mirrors = get_verified_mirrors(
-        mirrors_dir=config['mirrors_dir'],
+        all_mirrors=all_mirrors,
         versions=versions,
         repos=repos,
         allowed_outdate=config['allowed_outdate']
@@ -370,10 +504,20 @@ def main():
         repos=repos,
         mirrorlist_dir=config['mirrorlist_dir'],
     )
-    if os.path.exists(mirrors_table_path):
-        os.remove(mirrors_table_path)
+    clear_old_mirror_content(
+        isos_file=isos_file,
+        mirrors_table_path=mirrors_table_path,
+        isos_dir=isos_dir,
+    )
     generate_mirrors_table(
         mirrors_table_path=mirrors_table_path,
+        verified_mirrors=verified_mirrors,
+    )
+    generate_isos_list(
+        isos_file=isos_file,
+        isos_dir=isos_dir,
+        versions=[version for version in versions if version
+                  not in duplicated_versions],
         verified_mirrors=verified_mirrors,
     )
 

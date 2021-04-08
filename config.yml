@@ -3,9 +3,10 @@ allowed_outdate: 12h
 mirrorlist_dir: docs/.vuepress/public/mirrorlist
 mirrors_dir: mirrors.d
 mirrors_table: docs/internal/mirrors.md
-version:
-  - 8.3-rc
+versions:
   - 8.3
+  - 8
+duplicated_versions:
   - 8
 repos:
   - name: baseos
