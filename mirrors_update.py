@@ -418,9 +418,6 @@ def generate_isos_list(
                     'a'
             ) as current_isos_file:
                 current_isos_file.write(
-                    '<div align="center">\n\n'
-                )
-                current_isos_file.write(
                     '# AlmaLinux ISOs links  \n'
                     'There are you can find the list of '
                     'ISOs links for architecture/version'
@@ -455,7 +452,6 @@ def generate_isos_list(
                                     f'({full_isos_url})</br>'
                     table_row = f'{table_row} |'
                     current_isos_file.write(f'{table_row}\n')
-                current_isos_file.write(f'</div>\n')
 
 
 def clear_old_mirror_content(
