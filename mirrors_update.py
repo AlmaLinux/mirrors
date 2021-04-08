@@ -480,7 +480,8 @@ def clear_old_mirror_content(
 
 def main():
     config = get_config()
-    versions = config['version']
+    versions = config['versions']
+    duplicated_versions = config['duplicated_versions']
     repos = config['repos']
     mirrors_table_path = config['mirrors_table']
     isos_file = 'docs/internal/isos.md'
@@ -519,7 +520,8 @@ def main():
     generate_isos_list(
         isos_file=isos_file,
         isos_dir=isos_dir,
-        versions=versions,
+        versions=[version for version in versions if version
+                  not in duplicated_versions],
         verified_mirrors=verified_mirrors,
     )
 

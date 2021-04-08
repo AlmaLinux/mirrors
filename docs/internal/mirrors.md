@@ -1,5 +1,5 @@
 | Name | Sponsor | Status | Country | HTTPS | HTTP | RSYNC | FTP |
-| --- | --- | --- | --- | --- | --- | --- | --- |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 mirror.as24220.net|[Hostcentral](https://www.hostcentral.net.au)|ok|Australia|[Mirror](https://mirror.as24220.net/almalinux)|[Mirror](http://mirror.as24220.net/almalinux)|[Link](rsync://mirror.as24220.net/almalinux)|
 mirror.pcloud.net.au|[PHREEK Solutions](https://phreek.solutions)|ok|Australia|[Mirror](https://mirror.pcloud.net.au/almalinux)|[Mirror](http://mirror.pcloud.net.au/almalinux)||
 almalinux.mirror.digitalpacific.com.au|[Digital Pacific](https://www.digitalpacific.com.au/)|ok|Australia|[Mirror](https://almalinux.mirror.digitalpacific.com.au)|[Mirror](http://almalinux.mirror.digitalpacific.com.au)|[Link](rsync://mirror.digitalpacific.com.au/almalinux)|
