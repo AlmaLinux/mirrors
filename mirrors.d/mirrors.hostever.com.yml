@@ -2,6 +2,7 @@
 name: mirrors.hostever.com
 address:
   http: http://mirrors.hostever.com/almalinux/
+  https: https://mirrors.hostever.com/almalinux/
 update_frequency: 3h
 sponsor: CodeforHost Inc
 sponsor_url: https://www.codeforhost.com
