@@ -1,6 +1,6 @@
 # coding=utf-8
 import os
-from typing import AnyStr
+from typing import AnyStr, List
 
 import dateparser
 
@@ -148,14 +148,9 @@ def get_all_mirrors():
     mirrors_list = []
     with session_scope() as session:
         mirrors = session.query(Mirror).all()
-        logger.info(mirrors)
         for mirror in mirrors:
             mirror_data = mirror.to_dict()
-            mirror_data['urls'] = {
-                url['type']: url['url'] for url in mirror_data['urls']
-            }
             mirrors_list.append(mirror_data)
-    logger.info(mirrors_list)
     return mirrors_list
 
 
@@ -183,10 +178,8 @@ def get_mirrors_list(
     repo_path = repos[repository]
     nearest_mirrors = _get_nearest_mirrors(ip_address=ip_address)
     for mirror in nearest_mirrors:
-        mirror_url = next(iter(
-            url['url'] for url in mirror['urls']
-            if url['type'] in REQUIRED_MIRROR_PROTOCOLS
-        ))
+        mirror_url = mirror['urls'].get(REQUIRED_MIRROR_PROTOCOLS[0]) or \
+                     mirror['urls'].get(REQUIRED_MIRROR_PROTOCOLS[1])
         full_mirror_path = os.path.join(
             mirror_url,
             version,
@@ -195,3 +188,10 @@ def get_mirrors_list(
         mirrors_list.append(full_mirror_path)
 
     return '\n'.join(mirrors_list)
+
+
+def get_url_types() -> List[AnyStr]:
+    with session_scope() as session:
+        return [value[0] for value in session.query(
+            Url.type
+        ).distinct()]

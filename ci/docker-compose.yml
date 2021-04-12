@@ -29,7 +29,7 @@ services:
       - ../src/backend:/src/app:ro
       - ${CONFIGS_DIR}/mirrors:/mirrors
     ports:
-      - ${BACKEND_PORTS}
+      - ${BACKEND_PORT}:3031
     logging:
       options:
         max-size: "200m"

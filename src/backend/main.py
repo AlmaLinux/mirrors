@@ -18,6 +18,7 @@ from api.handlers import (
     update_mirrors_handler,
     get_mirrors_list,
     get_all_mirrors,
+    get_url_types,
 )
 from api.utils import (
     success_result,
@@ -25,7 +26,6 @@ from api.utils import (
     auth_key_required,
     jsonify_response,
 )
-from db.models import url_types
 from common.sentry import (
     init_sentry_client,
     get_logger,
@@ -72,6 +72,7 @@ def update_mirrors():
     methods=('GET',),
 )
 def mirrors_table():
+    url_types = get_url_types()
     data = {
         'column_names': [
             'Name',

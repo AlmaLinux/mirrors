@@ -29,12 +29,6 @@ logger = get_logger(__name__)
 
 
 Base = declarative_base()
-url_types = (
-    'ftp',
-    'https',
-    'http',
-    'rsync',
-)
 
 
 class Url(Base):
@@ -42,12 +36,11 @@ class Url(Base):
 
     id = Column(Integer, nullable=False, primary_key=True)
     url = Column(String, nullable=False)
-    type = Column(Enum(*url_types, name='type'), nullable=False)
+    type = Column(String, nullable=False)
 
     def to_dict(self) -> Dict[AnyStr, AnyStr]:
         return {
-            'url': self.url,
-            'type': self.type,
+           self.type: self.url,
         }
 
 
@@ -121,5 +114,5 @@ class Mirror(Base):
             'sponsor_name': self.sponsor_name,
             'sponsor_url': self.sponsor_url,
             'email': self.email,
-            'urls': [url.to_dict() for url in self.urls],
+            'urls': {url.type: url.url for url in self.urls},
         }
