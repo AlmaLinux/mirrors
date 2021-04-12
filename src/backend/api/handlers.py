@@ -8,7 +8,7 @@ from api.exceptions import BadRequestFormatExceptioin
 from api.mirrors_update import (
     get_config,
     get_verified_mirrors,
-    REQUIRED_MIRROR_PROTOCOLS,
+    REQUIRED_MIRROR_PROTOCOLS, get_mirrors_info,
 )
 from api.utils import get_geo_data_by_ip
 from db.models import Url, Mirror
@@ -96,14 +96,18 @@ def update_mirrors_handler():
     config = get_config()
     versions = config['versions']
     repos = config['repos']
-    verified_mirrors = get_verified_mirrors(
-        mirrors_dir=os.path.join(
-            os.path.dirname(
-                os.path.abspath(__file__),
-            ),
-            '../../../mirrors',
-            config['mirrors_dir'],
+    mirrors_dir=os.path.join(
+        os.path.dirname(
+            os.path.abspath(__file__),
         ),
+        '../../../mirrors',
+        config['mirrors_dir'],
+    )
+    all_mirrors = get_mirrors_info(
+        mirrors_dir=mirrors_dir,
+    )
+    verified_mirrors = get_verified_mirrors(
+        all_mirrors=all_mirrors,
         versions=versions,
         repos=repos,
         allowed_outdate=config['allowed_outdate']

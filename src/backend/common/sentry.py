@@ -1,6 +1,7 @@
 # coding=utf-8
 
 import logging
+import multiprocessing
 import os
 from typing import Optional
 
@@ -37,8 +38,9 @@ def get_logger(logger_name: str):
     :param logger_name: Name of the new or existing logger
     :return: logging object
     """
+
     # create logger or get existing
-    logger = logging.getLogger(logger_name)
+    logger = multiprocessing.get_logger()
     # Set handler if it doesn't exist
     if not len(logger.handlers):
         deploy_environment = os.getenv('DEPLOY_ENVIRONMENT')
@@ -46,13 +48,12 @@ def get_logger(logger_name: str):
             logging_level = logging.WARNING
         else:
             logging_level = logging.INFO
-        logger.propagate = True
         logger.setLevel(logging_level)
-        ch = logging.StreamHandler()
-        ch.setLevel(logging_level)
+        stream_handler = logging.StreamHandler()
+        stream_handler.setLevel(logging_level)
         formatter = logging.Formatter(
-            '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+            '%(asctime)s | %(name)s | %(levelname)s | %(message)s'
         )
-        ch.setFormatter(formatter)
-        logger.addHandler(ch)
+        stream_handler.setFormatter(formatter)
+        logger.addHandler(stream_handler)
     return logger

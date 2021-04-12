@@ -1,0 +1,7 @@
+- name: Update local repo with mirrors list
+  git:
+    repo: "https://github.com/AlmaLinux/mirrors.git"
+    dest: "{{ config_root }}/mirrors"
+    clone: yes
+    update: yes
+    accept_hostkey: yes

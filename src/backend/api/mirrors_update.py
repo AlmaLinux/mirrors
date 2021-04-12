@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import multiprocessing
 import os
 import dateparser
 import socket
@@ -9,6 +9,7 @@ from typing import (
     AnyStr,
     List,
     Union,
+    Tuple,
 )
 import requests
 import yaml
@@ -24,7 +25,9 @@ REQUIRED_MIRROR_PROTOCOLS = (
     'https',
     'http',
 )
-DEFAULT_ARCH = 'x86_64'
+ARCHS = (
+    'x86_64',
+)
 
 # set User-Agent for python-requests
 HEADERS = {
@@ -34,6 +37,7 @@ HEADERS = {
 WHITELIST_MIRRORS = (
     'repo.almalinux.org',
 )
+NUMBER_OF_PROCESSES_FOR_MIRRORS_CHECK = 15
 
 
 logger = get_logger(__name__)
@@ -55,11 +59,45 @@ def get_config(
         return yaml.safe_load(config_file)
 
 
+def get_mirrors_info(
+        mirrors_dir: AnyStr,
+) -> List[Dict]:
+    """
+    Extract info about all of mirrors from yaml files
+    :param mirrors_dir: path to the directory which contains
+           config files of mirrors
+    """
+    # global ALL_MIRROR_PROTOCOLS
+    result = []
+    for config_path in Path(mirrors_dir).rglob('*.yml'):
+        with open(str(config_path), 'r') as config_file:
+            mirror_info = yaml.safe_load(config_file)
+            if 'name' not in mirror_info:
+                logger.error(
+                    'Mirror file "%s" doesn\'t have name of the mirror',
+                    config_path,
+                )
+                continue
+            if 'address' not in mirror_info:
+                logger.error(
+                    'Mirror file "%s" doesn\'t have addresses of the mirror',
+                    mirror_info,
+                )
+                continue
+            # ALL_MIRROR_PROTOCOLS.extend(
+            #     protocol for protocol in mirror_info['address'].keys() if
+            #     protocol not in ALL_MIRROR_PROTOCOLS
+            # )
+            result.append(mirror_info)
+
+    return result
+
+
 def mirror_available(
         mirror_info: Dict[AnyStr, Union[Dict, AnyStr]],
         versions: List[AnyStr],
         repos: List[Dict[AnyStr, Union[Dict, AnyStr]]],
-) -> bool:
+) -> Tuple[AnyStr, bool]:
     """
     Check mirror availability
     :param mirror_info: the dictionary which contains info about a mirror
@@ -80,10 +118,10 @@ def mirror_available(
             mirror_info['name'],
             REQUIRED_MIRROR_PROTOCOLS,
         )
-        return False
+        return mirror_info['name'], False
     for version in versions:
         for repo_info in repos:
-            repo_path = repo_info['path'].replace('$basearch', DEFAULT_ARCH)
+            repo_path = repo_info['path'].replace('$basearch', ARCHS[0])
             check_url = os.path.join(
                 mirror_url,
                 str(version),
@@ -101,12 +139,12 @@ def mirror_available(
                     version,
                     repo_path,
                 )
-                return False
+                return mirror_info['name'], False
     logger.info(
         'Mirror "%s" is available',
         mirror_info['name']
     )
-    return True
+    return mirror_info['name'], True
 
 
 def set_repo_status(
@@ -159,7 +197,7 @@ def set_repo_status(
 
 
 def get_verified_mirrors(
-        mirrors_dir: AnyStr,
+        all_mirrors: List[Dict],
         versions: List[AnyStr],
         repos: List[Dict[AnyStr, Union[Dict, AnyStr]]],
         allowed_outdate: AnyStr
@@ -167,44 +205,40 @@ def get_verified_mirrors(
     """
     Loop through the list of mirrors and return only available
     and not expired mirrors
-    :param mirrors_dir: path to the directory which contains
-           config files of mirrors
+    :param all_mirrors: extracted info about mirrors from yaml files
     :param versions: the list of versions which should be provided by mirrors
     :param repos: the list of repos which should be provided by mirrors
     :param allowed_outdate: allowed mirror lag
     """
 
-    result = []
-    for config_path in Path(mirrors_dir).rglob('*.yml'):
-        with open(str(config_path), 'r') as config_file:
-            mirror_info = yaml.safe_load(config_file)
-            if 'name' not in mirror_info:
-                logger.error(
-                    'Mirror file "%s" doesn\'t have name of the mirror',
-                    config_path,
-                )
-                continue
-            if 'address' not in mirror_info:
-                logger.error(
-                    'Mirror file "%s" doesn\'t have addresses of the mirror',
-                    config_path,
-                )
-                continue
-            if mirror_info['name'] in WHITELIST_MIRRORS:
-                mirror_info['status'] = 'ok'
-                set_repo_status(mirror_info, allowed_outdate)
-                set_geo_data(mirror_info)
-                result.append(mirror_info)
-                continue
-            if mirror_available(
-                    mirror_info=mirror_info,
-                    versions=versions,
-                    repos=repos,
-            ):
-                set_repo_status(mirror_info, allowed_outdate)
-                set_geo_data(mirror_info)
-                result.append(mirror_info)
-    return result
+    args = []
+    mirrors_info = {}
+    for mirror_info in all_mirrors:
+        set_geo_data(mirror_info)
+        if mirror_info['name'] in WHITELIST_MIRRORS:
+            mirror_info['status'] = 'ok'
+            mirrors_info[mirror_info['name']] = mirror_info
+            continue
+        args.append((mirror_info, versions, repos))
+        mirrors_info[mirror_info['name']] = mirror_info
+    pool = multiprocessing.Pool(
+        processes=NUMBER_OF_PROCESSES_FOR_MIRRORS_CHECK,
+    )
+    pool_result = pool.map(_helper_mirror_available, args)
+    for mirror_name, is_available in pool_result:
+        if is_available:
+            set_repo_status(mirrors_info[mirror_name], allowed_outdate)
+        else:
+            del mirrors_info[mirror_name]
+    result = sorted(
+        mirrors_info.values(),
+        key=lambda _mirror_info: _mirror_info['country'],
+    )
+    return list(result)
+
+
+def _helper_mirror_available(args):
+    return mirror_available(*args)
 
 
 def set_geo_data(

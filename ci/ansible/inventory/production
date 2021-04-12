@@ -7,5 +7,5 @@ sentry_dsn=<place here a DSN key of your Sentry>
 deploy_environment=Production
 uwsgi_processes=8
 auth_key=<your auth key for access to the endpoint of updating mirrors list>
-backend_ports=<external port of uwsgi container>:3031
+backend_port=<external port of uwsgi container>
 postgresql_pass=<password to postgres>
