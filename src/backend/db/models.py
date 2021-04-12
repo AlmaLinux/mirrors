@@ -18,8 +18,15 @@ from typing import (
     List,
 )
 
+from sqlalchemy import func
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.hybrid import hybrid_method
+from common.sentry import (
+    get_logger,
+)
+
+logger = get_logger(__name__)
+
 
 Base = declarative_base()
 url_types = (
@@ -87,9 +94,17 @@ class Mirror(Base):
     def conditional_distance(self, lon: float, lat: float):
         """
         Calculate conditional distance between this mirror and some point
+        This method is used like instance-method
         """
-
         return abs(self.longitude - lon) + abs(self.latitude - lat)
+
+    @conditional_distance.expression
+    def conditional_distance(self, lon: float, lat: float):
+        """
+        Calculate conditional distance between this mirror and some point
+        This method is used like class-method
+        """
+        return func.abs(self.longitude - lon) + func.abs(self.latitude - lat)
 
     def to_dict(self) -> Dict[AnyStr, Union[AnyStr, float, Dict, List]]:
         return {

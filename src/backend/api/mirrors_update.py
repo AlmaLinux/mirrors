@@ -4,16 +4,21 @@ import os
 import dateparser
 import socket
 from pathlib import Path
-from typing import Dict, AnyStr, List, Union
-from geoip import IPInfo
+from typing import (
+    Dict,
+    AnyStr,
+    List,
+    Union,
+)
 import requests
 import yaml
 
-from db.db_engine import GeoIPEngine
+from api.utils import get_geo_data_by_ip
 
 from common.sentry import (
     get_logger,
 )
+from urllib3.exceptions import HTTPError
 
 REQUIRED_MIRROR_PROTOCOLS = (
     'https',
@@ -88,7 +93,7 @@ def mirror_available(
             try:
                 request = requests.get(check_url, headers=HEADERS)
                 request.raise_for_status()
-            except requests.RequestException:
+            except (requests.RequestException, HTTPError):
                 logger.warning(
                     'Mirror "%s" is not available for version '
                     '"%s" and repo path "%s"',
@@ -130,7 +135,7 @@ def set_repo_status(
             headers=HEADERS,
         )
         request.raise_for_status()
-    except requests.RequestException:
+    except (requests.RequestException, HTTPError):
         logger.error(
             'Mirror "%s" has no timestamp file by url "%s"',
             mirror_info['name'],
@@ -211,9 +216,13 @@ def set_geo_data(
     """
 
     mirror_name = mirror_info['name']
-    ip = socket.gethostbyname(mirror_name)
-    db = GeoIPEngine.get_instance()
-    match = db.lookup(ip)  # type: IPInfo
+    try:
+        ip = socket.gethostbyname(mirror_name)
+        match = get_geo_data_by_ip(ip)
+    except socket.gaierror:
+        logger.error('Can\'t get IP of mirror %s', mirror_name)
+        match = None
+        ip = '0.0.0.0'
     logger.info('Set geo data for mirror "%s"', mirror_name)
     if match is None:
         mirror_info['country'] = 'Unknown'
@@ -224,13 +233,11 @@ def set_geo_data(
             'lon': -181,  # outside range of longitude (-180 to 180)
         }
     else:
-        match_dict = match.get_info_dict()
-        country = match_dict['country']['names']['en']
-        continent = match_dict['continent']['names']['en']
+        continent, country, latitude, longitude = match
         mirror_info['country'] = country
         mirror_info['continent'] = continent
         mirror_info['ip'] = ip
         mirror_info['location'] = {
-            'lat': match.location[0],
-            'lon': match.location[1],
+            'lat': latitude,
+            'lon': longitude,
         }

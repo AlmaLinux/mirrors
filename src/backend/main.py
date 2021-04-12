@@ -86,6 +86,7 @@ def mirrors_table():
     }
     return render_template('mirrors.html', **data)
 
+
 @app.errorhandler(AuthException)
 def handle_jwt_exception(error: BaseCustomException) -> Response:
     logger.exception(error.message, *error.args)

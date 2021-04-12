@@ -1,5 +1,4 @@
 # coding=utf-8
-import math
 import os
 from typing import AnyStr
 
@@ -11,7 +10,7 @@ from api.mirrors_update import (
     get_verified_mirrors,
     REQUIRED_MIRROR_PROTOCOLS,
 )
-from db.db_engine import GeoIPEngine
+from api.utils import get_geo_data_by_ip
 from db.models import Url, Mirror
 from db.utils import session_scope
 from sqlalchemy.sql.expression import false
@@ -26,70 +25,76 @@ MAX_LENGTH_OF_MIRRORS_LIST = 5
 logger = get_logger(__name__)
 
 
-def _get_conditional_distance_between(
-        lat1: float,
-        lon1: float,
-        lat2: float,
-        lon2: float,
-) -> float:
-    return abs(lat1 - lat2) + abs(lon1 - lon2)
-
-
 def _get_nearest_mirrors(ip_address):
-    db = GeoIPEngine.get_instance()
-    match = db.lookup(ip_address)
+    """
+    The function returns 5 nearest mirrors towards a request's IP
+    Firstly, it searches first 5 mirrors inside a request's country
+    Secondly, it searches first 5 nearest mirrors by distance
+        inside a request's continent
+    Thirdly, it searches first 5 nearest mirrors by distance in the world
+    Further the functions concatenate lists and return first
+        5 elements of a summary list
+    """
+    ip_address = '87.240.190.67'
+    match = get_geo_data_by_ip(ip_address)
     with session_scope() as session:
-        if match is None:
-            all_mirrors = session.query(Mirror).filter(
-                Mirror.is_expired == false(),
-                ).all()
-            all_mirrors = [mirror.to_dict() for mirror in all_mirrors]
-            return all_mirrors
-        match_dict = match.get_info_dict()
-        match_country = match_dict['country']['names']['en']
-        match_continent = match_dict['continent']['names']['en']
-        suitable_mirrors = session.query(Mirror).filter(
-            Mirror.continent == match_continent,
-            Mirror.country == match_country,
+        all_mirrors_query = session.query(Mirror).filter(
             Mirror.is_expired == false(),
-        ).limit(MAX_LENGTH_OF_MIRRORS_LIST).all()
-        suitable_mirrors = [mirror.to_dict() for mirror in suitable_mirrors]
-        if len(suitable_mirrors) == MAX_LENGTH_OF_MIRRORS_LIST:
-            return suitable_mirrors
-        rest_mirrors = session.query(Mirror).filter(
-            Mirror.continent == match_continent,
-            Mirror.is_expired == false(),
-            Mirror.name.notin_(
-                [mirror.name for mirror in suitable_mirrors]
-            ),
-        ).all()
-        rest_mirrors = [mirror.to_dict() for mirror in rest_mirrors]
-        if not rest_mirrors:
-            rest_mirrors = session.query(Mirror).filter(
-                Mirror.name.notin_(
-                    [mirror.name for mirror in suitable_mirrors]
-                ),
-                Mirror.is_expired == false(),
-            ).all()
-            rest_mirrors = [mirror.to_dict() for mirror in rest_mirrors]
-        distance_dict = {
-            _get_conditional_distance_between(lat1=match.location[0],
-                                              lon1=match.location[1],
-                                              lat2=mirror['location']['lat'],
-                                              lon2=mirror['location']['lon']):
-            mirror for mirror in rest_mirrors
-        }
-        suitable_mirrors.extend(
-            [distance_dict[distance] for distance in
-             sorted(distance_dict.keys())
-             [:MAX_LENGTH_OF_MIRRORS_LIST - len(suitable_mirrors)]]
         )
+        # We return all of mirrors if we can't
+        # determine geo data of a request's IP
+        if match is None:
+            all_mirrors = [
+                mirror.to_dict() for mirror in all_mirrors_query.all()
+            ]
+            return all_mirrors
+        continent, country, latitude, longitude = match
+        # get five mirrors in a request's country
+        mirrors_by_country_query = session.query(Mirror).filter(
+            Mirror.continent == continent,
+            Mirror.country == country,
+            Mirror.is_expired == false(),
+        ).limit(
+            MAX_LENGTH_OF_MIRRORS_LIST,
+        )
+        # get five nearest mirrors inside a request's continent
+        mirrors_by_continent_query = session.query(Mirror).filter(
+            Mirror.continent == continent,
+            Mirror.is_expired == false(),
+            ).order_by(
+            Mirror.conditional_distance(
+                lon=longitude,
+                lat=latitude,
+            )
+        ).limit(
+            MAX_LENGTH_OF_MIRRORS_LIST,
+        )
+        # get five nearest mirrors from all of mirrors
+        all_rest_mirrors_query = session.query(Mirror).filter(
+            Mirror.is_expired == false(),
+            ).order_by(
+            Mirror.conditional_distance(
+                lon=longitude,
+                lat=latitude,
+            )
+        ).limit(
+            MAX_LENGTH_OF_MIRRORS_LIST,
+        )
+        suitable_mirrors_query = mirrors_by_country_query.union_all(
+            mirrors_by_continent_query,
+        ).union_all(
+            all_rest_mirrors_query,
+        )
+        suitable_mirrors = suitable_mirrors_query.all()
+        # return five nearst mirrors
+        suitable_mirrors = [mirror.to_dict() for mirror
+                            in suitable_mirrors][:MAX_LENGTH_OF_MIRRORS_LIST]
         return suitable_mirrors
 
 
 def update_mirrors_handler():
     config = get_config()
-    versions = config['version']
+    versions = config['versions']
     repos = config['repos']
     verified_mirrors = get_verified_mirrors(
         mirrors_dir=os.path.join(
@@ -157,7 +162,7 @@ def get_mirrors_list(
 ) -> AnyStr:
     mirrors_list = []
     config = get_config()
-    versions = [str(version) for version in config['version']]
+    versions = [str(version) for version in config['versions']]
     if version not in versions:
         raise BadRequestFormatExceptioin(
             'Unknown version "%s". Allowed list of versions "%s"',

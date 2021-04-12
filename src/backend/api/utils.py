@@ -7,8 +7,11 @@ from typing import (
     Dict,
     Any,
     AnyStr,
+    Tuple,
+    Optional,
 )
 
+from db.db_engine import GeoIPEngine
 from api.exceptions import (
     BaseCustomException,
     AuthException,
@@ -108,3 +111,23 @@ def error_result(f):
             )
 
     return decorated_function
+
+
+def get_geo_data_by_ip(
+        ip: AnyStr
+) -> Optional[Tuple[AnyStr, AnyStr, float, float]]:
+    """
+    The function returns continent, country and locations of IP in English
+    """
+
+    db = GeoIPEngine.get_instance()
+    match = db.lookup(ip)
+    if match is None:
+        return
+    match_dict = match.get_info_dict()
+    country = match_dict['country']['names']['en']
+    continent = match_dict['continent']['names']['en']
+    latitude = match_dict['location']['latitude']
+    longitude = match_dict['location']['longitude']
+
+    return continent, country, latitude, longitude
