@@ -2,17 +2,17 @@
 {% block text %}
 {{ super() }}
 <h1>AlmaLinux ISOs links</h1>
-There is you can find the list of
+You can find the list of
 {% if mirror_list %}
 ISOs links for architecture/version <code>{{ arch }}/{{ version }}</code> for all of mirrors.
 {% else %}
-available architectures and versions on the mirrors.
+available AlmaLinux architectures and versions below.
 {% endif %}
 <br>
 <br>
-Also you can use a BitTorrent file for downloading ISOs. It should be faster than using direct downloading from the mirrors.<br>
+Also you can use a BitTorrent file for downloading ISOs. It might be faster than direct downloading from the mirrors.<br>
 <br>
-A .torrent file can be found from any mirror in ISOs folder.
+A .torrent file can be found on all mirrors in the folder with ISO files.
 <br>
 <br>
 {% endblock %}
@@ -25,9 +25,9 @@ A .torrent file can be found from any mirror in ISOs folder.
     <li><a href="{{ mirror_info.isos_link }}">{{ mirror_info.name }}</a><br></li>
 {% endfor %}
 </ul>
-{% endif %}
 <h3>You can also choose from full list of mirrors:</h3>
 <br>
+{% endif %}
 <table class="table table-striped table-bordered table-responsive-md">
     <thead>
     {% if mirror_list %}
