@@ -1,0 +1,10 @@
+---
+name: mirrors.hostico.ro
+address:
+  http: http://mirrors.hostico.ro/almalinux/
+  https: https://mirrors.hostico.ro/almalinux/
+update_frequency: 6h
+sponsor: Hostico
+sponsor_url: https://hostico.ro
+email: mirrors@awesomeprojects.ro
+...
