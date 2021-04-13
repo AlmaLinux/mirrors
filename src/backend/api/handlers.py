@@ -1,5 +1,6 @@
 # coding=utf-8
 import os
+from collections import defaultdict
 from typing import AnyStr, List
 
 import dateparser
@@ -8,7 +9,9 @@ from api.exceptions import BadRequestFormatExceptioin
 from api.mirrors_update import (
     get_config,
     get_verified_mirrors,
-    REQUIRED_MIRROR_PROTOCOLS, get_mirrors_info,
+    REQUIRED_MIRROR_PROTOCOLS,
+    get_mirrors_info,
+    ARCHS,
 )
 from api.utils import get_geo_data_by_ip
 from db.models import Url, Mirror
@@ -188,6 +191,44 @@ def get_mirrors_list(
         mirrors_list.append(full_mirror_path)
 
     return '\n'.join(mirrors_list)
+
+
+def get_isos_list_by_countries(
+        arch: AnyStr,
+        version: AnyStr,
+):
+    mirrors_by_countries = defaultdict(list)
+    for mirror_info in get_all_mirrors():
+        mirrors_by_countries[mirror_info['country']].append(mirror_info)
+    for country, country_mirrors in \
+            mirrors_by_countries.items():
+        for mirror_info in country_mirrors:
+            addresses = mirror_info['urls']
+            mirror_url = next(iter([
+                address for protocol_type, address in
+                addresses.items()
+                if protocol_type in REQUIRED_MIRROR_PROTOCOLS
+            ]))
+            mirror_info['isos_link'] = os.path.join(
+                mirror_url,
+                str(version),
+                'isos',
+                arch,
+            )
+
+    return mirrors_by_countries
+
+
+def get_main_isos_table():
+    result = defaultdict(list)
+    config = get_config()
+    versions = config['versions']
+    duplicated_versions = config['duplicated_versions']
+    for arch in ARCHS:
+        result[arch] = [version for version in versions
+                        if version not in duplicated_versions]
+
+    return result
 
 
 def get_url_types() -> List[AnyStr]:

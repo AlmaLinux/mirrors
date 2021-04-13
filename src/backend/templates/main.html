@@ -1,0 +1,14 @@
+{% extends "bootstrap/base.html" %}
+{% block metas %}
+{{ super() }}
+<meta charset="UTF-8">
+{% endblock %}
+{% block content %}
+{{ super() }}
+<div style="width: 50%; height: 50%; margin: auto">
+    {% block text %}
+    {% endblock %}
+    {% block table %}
+    {% endblock %}
+</div>
+{% endblock %}

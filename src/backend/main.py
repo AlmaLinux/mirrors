@@ -19,6 +19,8 @@ from api.handlers import (
     get_mirrors_list,
     get_all_mirrors,
     get_url_types,
+    get_isos_list_by_countries,
+    get_main_isos_table,
 )
 from api.utils import (
     success_result,
@@ -65,6 +67,39 @@ def get_mirror_list(
 @auth_key_required
 def update_mirrors():
     return update_mirrors_handler()
+
+
+@app.route(
+    '/isos',
+    methods=('GET',),
+)
+@app.route(
+    '/isos.html',
+    methods=('GET',),
+)
+@app.route(
+    '/isos/<arch>/<version>',
+    methods=('GET',),
+)
+@app.route(
+    '/isos/<arch>/<version>.html',
+    methods=('GET',),
+)
+def isos(
+        arch: AnyStr = None,
+        version: AnyStr = None,
+):
+    if arch is None or version is None:
+        data = {
+            'isos_list': get_main_isos_table(),
+        }
+    else:
+        data = {
+            'arch': arch,
+            'version': version,
+            'mirror_list': get_isos_list_by_countries(arch=arch, version=version)
+        }
+    return render_template('isos.html', **data)
 
 
 @app.route(
