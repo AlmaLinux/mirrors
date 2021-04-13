@@ -18,6 +18,16 @@ A .torrent file can be found from any mirror in ISOs folder.
 {% endblock %}
 {% block table %}
 {{ super() }}
+{% if nearest_mirrors %}
+<h3>The following mirrors are nearest to you:</h3>
+<ul>
+{% for mirror_info in nearest_mirrors %}
+    <li><a href="{{ mirror_info.isos_link }}">{{ mirror_info.name }}</a><br></li>
+{% endfor %}
+</ul>
+{% endif %}
+<h3>You can also choose from full list of mirrors:</h3>
+<br>
 <table class="table table-striped table-bordered table-responsive-md">
     <thead>
     {% if mirror_list %}

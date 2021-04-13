@@ -94,10 +94,16 @@ def isos(
             'isos_list': get_main_isos_table(),
         }
     else:
+        mirrors_by_countries, nearest_mirrors = get_isos_list_by_countries(
+            arch=arch,
+            version=version,
+            ip_address=request.remote_addr,
+        )
         data = {
             'arch': arch,
             'version': version,
-            'mirror_list': get_isos_list_by_countries(arch=arch, version=version)
+            'mirror_list': mirrors_by_countries,
+            'nearest_mirrors': nearest_mirrors,
         }
     return render_template('isos.html', **data)
 

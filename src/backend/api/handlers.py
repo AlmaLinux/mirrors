@@ -1,7 +1,7 @@
 # coding=utf-8
 import os
 from collections import defaultdict
-from typing import AnyStr, List
+from typing import AnyStr, List, Dict
 
 import dateparser
 
@@ -28,7 +28,10 @@ MAX_LENGTH_OF_MIRRORS_LIST = 5
 logger = get_logger(__name__)
 
 
-def _get_nearest_mirrors(ip_address):
+def _get_nearest_mirrors(
+        ip_address: AnyStr,
+        empty_for_unknown_ip: bool = False,
+):
     """
     The function returns 5 nearest mirrors towards a request's IP
     Firstly, it searches first 5 mirrors inside a request's country
@@ -37,6 +40,8 @@ def _get_nearest_mirrors(ip_address):
     Thirdly, it searches first 5 nearest mirrors by distance in the world
     Further the functions concatenate lists and return first
         5 elements of a summary list
+    :param empty_for_unknown_ip: if True and we can't get geo data of an IP
+        the function returns empty list
     """
     match = get_geo_data_by_ip(ip_address)
     with session_scope() as session:
@@ -45,11 +50,13 @@ def _get_nearest_mirrors(ip_address):
         )
         # We return all of mirrors if we can't
         # determine geo data of a request's IP
-        if match is None:
+        if match is None and not empty_for_unknown_ip:
             all_mirrors = [
                 mirror.to_dict() for mirror in all_mirrors_query.all()
             ]
             return all_mirrors
+        elif match is None:
+            return []
         continent, country, latitude, longitude = match
         # get five mirrors in a request's country
         mirrors_by_country_query = session.query(Mirror).filter(
@@ -192,9 +199,29 @@ def get_mirrors_list(
     return '\n'.join(mirrors_list)
 
 
+def _set_isos_link_for_mirror(
+        mirror_info: Dict,
+        version: AnyStr,
+        arch: AnyStr,
+):
+    addresses = mirror_info['urls']
+    mirror_url = next(iter([
+        address for protocol_type, address in
+        addresses.items()
+        if protocol_type in REQUIRED_MIRROR_PROTOCOLS
+    ]))
+    mirror_info['isos_link'] = os.path.join(
+        mirror_url,
+        str(version),
+        'isos',
+        arch,
+    )
+
+
 def get_isos_list_by_countries(
         arch: AnyStr,
         version: AnyStr,
+        ip_address: AnyStr,
 ):
     mirrors_by_countries = defaultdict(list)
     for mirror_info in get_all_mirrors():
@@ -202,20 +229,22 @@ def get_isos_list_by_countries(
     for country, country_mirrors in \
             mirrors_by_countries.items():
         for mirror_info in country_mirrors:
-            addresses = mirror_info['urls']
-            mirror_url = next(iter([
-                address for protocol_type, address in
-                addresses.items()
-                if protocol_type in REQUIRED_MIRROR_PROTOCOLS
-            ]))
-            mirror_info['isos_link'] = os.path.join(
-                mirror_url,
-                str(version),
-                'isos',
-                arch,
+            _set_isos_link_for_mirror(
+                mirror_info=mirror_info,
+                version=version,
+                arch=arch
             )
-
-    return mirrors_by_countries
+    nearest_mirrors = _get_nearest_mirrors(
+        ip_address=ip_address,
+        empty_for_unknown_ip=True,
+    )
+    for nearest_mirror in nearest_mirrors:
+        _set_isos_link_for_mirror(
+            mirror_info=nearest_mirror,
+            version=version,
+            arch=arch
+        )
+    return mirrors_by_countries, nearest_mirrors
 
 
 def get_main_isos_table():
