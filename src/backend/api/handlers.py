@@ -38,7 +38,6 @@ def _get_nearest_mirrors(ip_address):
     Further the functions concatenate lists and return first
         5 elements of a summary list
     """
-    ip_address = '87.240.190.67'
     match = get_geo_data_by_ip(ip_address)
     with session_scope() as session:
         all_mirrors_query = session.query(Mirror).filter(
