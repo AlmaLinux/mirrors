@@ -1,0 +1,9 @@
+---
+name: alma.chi.mirror.heficed.com
+address:
+  http: http://alma.chi.mirror.heficed.com/
+update_frequency: 3h
+sponsor: Heficed
+sponsor_url: https://www.heficed.com/
+email: support@heficed.com
+...
