@@ -9,3 +9,4 @@ uwsgi_processes=8
 auth_key=<your auth key for access to the endpoint of updating mirrors list>
 backend_port=<external port of uwsgi container>
 postgresql_pass=<password to postgres>
+test_ip_address=<ip_address_of_request>

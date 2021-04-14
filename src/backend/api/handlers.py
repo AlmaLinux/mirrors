@@ -43,6 +43,13 @@ def _get_nearest_mirrors(
     :param empty_for_unknown_ip: if True and we can't get geo data of an IP
         the function returns empty list
     """
+    if os.environ.get('DEPLOY_ENVIRONMENT') in (
+        'Dev',
+        'Development',
+    ):
+        ip_address = os.environ.get(
+            'TEST_IP_ADDRESS',
+        ) or '77.121.201.30'
     match = get_geo_data_by_ip(ip_address)
     with session_scope() as session:
         all_mirrors_query = session.query(Mirror).filter(
@@ -156,7 +163,12 @@ def update_mirrors_handler():
 def get_all_mirrors():
     mirrors_list = []
     with session_scope() as session:
-        mirrors = session.query(Mirror).all()
+        mirrors = session.query(
+            Mirror
+        ).order_by(
+            Mirror.continent,
+            Mirror.country,
+        ).all()
         for mirror in mirrors:
             mirror_data = mirror.to_dict()
             mirrors_list.append(mirror_data)

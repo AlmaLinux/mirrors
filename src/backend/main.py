@@ -32,7 +32,7 @@ from common.sentry import (
     init_sentry_client,
     get_logger,
 )
-from flask_bootstrap import Bootstrap
+from flask_bs4 import Bootstrap
 
 
 app = Flask(__name__)
@@ -51,8 +51,9 @@ def get_mirror_list(
         version: AnyStr,
         repository: AnyStr,
 ):
+    ip_address = request.headers.get('X-Forwarded-For') or request.remote_addr
     return get_mirrors_list(
-        ip_address=request.remote_addr,
+        ip_address=ip_address,
         version=version,
         repository=repository,
     )
@@ -89,23 +90,28 @@ def isos(
         arch: AnyStr = None,
         version: AnyStr = None,
 ):
+    data = {
+        'main_title': 'AlmaLinux ISOs links'
+    }
     if arch is None or version is None:
-        data = {
+        data.update({
             'isos_list': get_main_isos_table(),
-        }
+        })
+
+        return render_template('isos_main.html', **data)
     else:
         mirrors_by_countries, nearest_mirrors = get_isos_list_by_countries(
             arch=arch,
             version=version,
             ip_address=request.remote_addr,
         )
-        data = {
+        data.update({
             'arch': arch,
             'version': version,
             'mirror_list': mirrors_by_countries,
             'nearest_mirrors': nearest_mirrors,
-        }
-    return render_template('isos.html', **data)
+        })
+        return render_template('isos.html', **data)
 
 
 @app.route(
@@ -121,10 +127,11 @@ def mirrors_table():
             'Status',
             'Continent',
             'Country',
-            *url_types,
+            *(item.upper() for item in url_types),
         ],
         'url_types': url_types,
         'mirror_list': get_all_mirrors(),
+        'main_title': 'AlmaLinux Mirrors',
     }
     return render_template('mirrors.html', **data)
 

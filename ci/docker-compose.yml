@@ -21,6 +21,7 @@ services:
       SENTRY_DSN: "${SENTRY_DSN}"
       PYTHONPATH: "/src/app"
       DEPLOY_ENVIRONMENT: "${DEPLOY_ENVIRONMENT}"
+      TEST_IP_ADDRESS: "${TEST_IP_ADDRESS}"
       AUTH_KEY: "${AUTH_KEY}"
     command: /wait_for_port.sh postgres:5432 -- /start.sh
     depends_on:

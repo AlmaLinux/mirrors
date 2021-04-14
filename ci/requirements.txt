@@ -11,5 +11,5 @@ requests
 psycopg2>=2.8
 pyyaml
 sentry-sdk[flask]
-Flask-bootstrap
+Flask-BS4
 Jinja2

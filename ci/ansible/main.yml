@@ -32,3 +32,19 @@
     - import_role: name=backend
       tags:
         backend
+
+    - name: First update mirrors list in db
+      block:
+        - stat:
+            path: "{{ config_root }}/.first_deploy_is_done"
+          register: first_deploy_file
+        - file:
+            path: "{{ config_root }}/.first_deploy_is_done"
+            state: touch
+        - shell: >
+            touch {{ config_root }}/.first_deploy_is_done;
+            pushd {{ config_root }}/mirrors/;
+            git pull;
+            popd;
+            curl --cookie 'AUTH_KEY={{ auth_key }}' -X POST http://127.0.0.1:{{ backend_port }}/update_mirrors
+          when: first_deploy_file is defined and not first_deploy_file.stat.exists
