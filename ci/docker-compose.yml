@@ -1,9 +1,4 @@
 version: "3.8"
-x-postgres-env-config: &x-postgres-env-config
-  POSTGRES_USER: "${POSTGRES_USER}"
-  POSTGRES_DB: "${POSTGRES_DB}"
-  POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-  POSTGRES_HOST: "${POSTGRES_HOST}"
 
 services:
 
@@ -16,35 +11,19 @@ services:
       - backend
     restart: unless-stopped
     environment:
-      <<: *x-postgres-env-config
       UWSGI_PROCESSES: "${UWSGI_PROCESSES}"
       SENTRY_DSN: "${SENTRY_DSN}"
       PYTHONPATH: "/src/app"
       DEPLOY_ENVIRONMENT: "${DEPLOY_ENVIRONMENT}"
       TEST_IP_ADDRESS: "${TEST_IP_ADDRESS}"
       AUTH_KEY: "${AUTH_KEY}"
-    command: /wait_for_port.sh postgres:5432 -- /start.sh
-    depends_on:
-      - postgres
+      SQLITE_PATH: "${SQLITE_PATH}"
     volumes:
       - ../src/backend:/src/app:ro
       - ${CONFIGS_DIR}/mirrors:/mirrors
+      - ${CONFIGS_DIR}/sqlite:/sqlite
     ports:
       - ${BACKEND_PORT}:3031
-    logging:
-      options:
-        max-size: "200m"
-        max-file: "5"
-
-  postgres:
-    image: postgres:12.3
-    restart: unless-stopped
-    networks:
-      - backend
-    environment:
-      <<: *x-postgres-env-config
-    volumes:
-      - pg_data:/var/lib/postgresql/data/
     logging:
       options:
         max-size: "200m"
@@ -54,6 +33,3 @@ networks:
   backend:
   public:
     driver: bridge
-
-volumes:
-  pg_data:

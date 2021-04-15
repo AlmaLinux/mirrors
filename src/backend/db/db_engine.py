@@ -10,13 +10,11 @@ GEOIP_DATABASE = os.path.join(
     ),
     'geoip_db.mmdb',
 )
-POSTGRES_USER = os.environ.get('POSTGRES_USER')
-POSTGRES_DB = os.environ.get('POSTGRES_DB')
-POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD')
-POSTGRES_HOST = os.environ.get('POSTGRES_HOST')
-POSTGRES_CONNECTION_PATH = f'postgresql://{POSTGRES_USER}:' \
-                           f'{POSTGRES_PASSWORD}@' \
-                           f'{POSTGRES_HOST}/{POSTGRES_DB}'
+SQLITE_PATH = os.environ.get('SQLITE_PATH')
+if SQLITE_PATH:
+    SQLITE_CONNECTION_STRING = f'sqlite:///{SQLITE_PATH}'
+else:
+    SQLITE_CONNECTION_STRING = 'sqlite:////sqlite/mirrors.db'
 
 
 class Engine:
@@ -25,7 +23,7 @@ class Engine:
     @classmethod
     def get_instance(cls):
         if not cls.__instance:
-            cls.__instance = create_engine(POSTGRES_CONNECTION_PATH)
+            cls.__instance = create_engine(SQLITE_CONNECTION_STRING)
         return cls.__instance
 
 

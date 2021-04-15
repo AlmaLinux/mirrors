@@ -96,15 +96,26 @@ def _get_nearest_mirrors(
         ).limit(
             MAX_LENGTH_OF_MIRRORS_LIST,
         )
-        suitable_mirrors_query = mirrors_by_country_query.union_all(
-            mirrors_by_continent_query,
-        ).union_all(
-            all_rest_mirrors_query,
-        )
-        suitable_mirrors = suitable_mirrors_query.all()
+
+        mirrors_by_country = mirrors_by_country_query.all()
+        mirrors_by_continent = mirrors_by_continent_query.all()
+        all_rest_mirrors = all_rest_mirrors_query.all()
+        suitable_mirrors = mirrors_by_country + \
+            mirrors_by_continent + \
+            all_rest_mirrors
+
+        # TODO: SQLAlchemy adds brackets around queries. And it looks like
+        # TODO: incorrect query for SQLite
+        # suitable_mirrors_query = mirrors_by_country_query.union_all(
+        #     mirrors_by_continent_query,
+        # ).union_all(
+        #     all_rest_mirrors_query,
+        # ).limit(MAX_LENGTH_OF_MIRRORS_LIST)
+        # suitable_mirrors = suitable_mirrors_query.all()
+
         # return five nearst mirrors
         suitable_mirrors = [mirror.to_dict() for mirror
-                            in suitable_mirrors][:MAX_LENGTH_OF_MIRRORS_LIST]
+                            in suitable_mirrors[:MAX_LENGTH_OF_MIRRORS_LIST]]
         return suitable_mirrors
 
 

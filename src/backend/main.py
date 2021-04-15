@@ -119,7 +119,7 @@ def isos(
     methods=('GET',),
 )
 def mirrors_table():
-    url_types = get_url_types()
+    url_types = sorted(get_url_types())
     data = {
         'column_names': [
             'Name',
@@ -169,4 +169,12 @@ def handle_bad_request_format(error: BadRequestFormatExceptioin) -> Response:
             'message': str(error),
         },
         status_code=error.response_code,
+    )
+
+
+if __name__ == '__main__':
+    app.run(
+        debug=True,
+        host='0.0.0.0',
+        port=8080,
     )

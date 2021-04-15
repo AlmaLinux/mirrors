@@ -8,7 +8,4 @@
     mode: '0600'
     force: '{{ item.force }}'
   with_items:
-      - {dest: '{{ const_env_file }}', force: no, src: 'const.env.j2'}
       - {dest: '{{ env_file }}', force: yes, src: 'env.j2'}
-  vars:
-    postgresql_pass: "{{ lookup('password', '/dev/null length=64 chars=ascii_letters,digits') }}"

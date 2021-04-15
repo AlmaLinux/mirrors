@@ -8,7 +8,7 @@ from sqlalchemy import (
     Table,
     ForeignKey,
     Boolean,
-    Time, Enum,
+    DateTime,
 )
 from sqlalchemy.ext.declarative import declarative_base
 from typing import (
@@ -73,7 +73,7 @@ class Mirror(Base):
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)
     is_expired = Column(Boolean, nullable=False, default=False)
-    update_frequency = Column(Time, nullable=False)
+    update_frequency = Column(DateTime, nullable=False)
     sponsor_name = Column(String, nullable=False)
     sponsor_url = Column(String, nullable=False)
     email = Column(String, nullable=False)

@@ -8,6 +8,8 @@ from typing import List
 from alembic import command, script
 from alembic.config import Config
 from alembic.runtime.migration import MigrationContext
+from sqlalchemy.exc import OperationalError
+
 from db.db_engine import Engine
 from db.models import Base
 from sqlalchemy.engine.reflection import Inspector
@@ -39,9 +41,15 @@ def is_db_exists():
     """
     Checks that DB already present, by getting tables list from it
     """
-    database_inspection = Inspector.from_engine(Engine.get_instance())
-    tables = [table for table in database_inspection.get_table_names()
-              if table != 'alembic_version']
+    tables = []
+    try:
+        database_inspection = Inspector.from_engine(Engine.get_instance())
+        tables = [table for table in database_inspection.get_table_names()
+                  if table != 'alembic_version']
+    except OperationalError as err:
+        if '(sqlite3.OperationalError) unable to' \
+           ' open database file' in err.args:
+            return False
     return len(tables) > 0
 
 
@@ -77,9 +85,6 @@ def create_database_if_not_exists(config: Config) -> None:
     """
     engine = Engine.get_instance()
     if not is_db_exists():
-        logging.info('Starting creating DB from scratch')
-        # when creating DB from scratch w/o migrations
-        engine.execute('CREATE EXTENSION IF NOT EXISTS "hstore";')
         Base.metadata.create_all(engine)
         # set created DB as latest version
         command.stamp(config, 'head')

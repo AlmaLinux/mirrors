@@ -26,9 +26,6 @@
     - import_role: name=prepare_host
       tags:
         prepare_host
-    - import_role: name=postgres
-      tags:
-        postgres
     - import_role: name=backend
       tags:
         backend
@@ -42,7 +39,6 @@
             path: "{{ config_root }}/.first_deploy_is_done"
             state: touch
         - shell: >
-            touch {{ config_root }}/.first_deploy_is_done;
             pushd {{ config_root }}/mirrors/;
             git pull;
             popd;

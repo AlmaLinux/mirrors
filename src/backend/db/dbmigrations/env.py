@@ -2,7 +2,7 @@
 from logging.config import fileConfig
 
 from alembic import context
-from db.db_engine import POSTGRES_CONNECTION_PATH
+from db.db_engine import SQLITE_CONNECTION_STRING
 from db.models import Base
 from sqlalchemy import create_engine
 
@@ -37,7 +37,7 @@ def run_migrations_offline():
     script output.
     """
     context.configure(
-        url=POSTGRES_CONNECTION_PATH,
+        url=SQLITE_CONNECTION_STRING,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
@@ -58,7 +58,7 @@ def run_migrations_online():
         if script.upgrade_ops.is_empty():
             directives[:] = []
 
-    connectable = create_engine(POSTGRES_CONNECTION_PATH)
+    connectable = create_engine(SQLITE_CONNECTION_STRING)
 
     with connectable.connect() as connection:
         context.configure(
