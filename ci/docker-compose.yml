@@ -17,7 +17,6 @@ services:
       DEPLOY_ENVIRONMENT: "${DEPLOY_ENVIRONMENT}"
       TEST_IP_ADDRESS: "${TEST_IP_ADDRESS}"
       AUTH_KEY: "${AUTH_KEY}"
-      SQLITE_PATH: "${SQLITE_PATH}"
     volumes:
       - ../src/backend:/src/app:ro
       - ${CONFIGS_DIR}/mirrors:/mirrors
