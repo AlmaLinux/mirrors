@@ -1,9 +1,0 @@
-name: repo.shinjiru.com
-address:
-  http: http://repo.shinjiru.com/almalinux/
-  https: https://repo.shinjiru.com/almalinux/
-  rsync: rsync://repo.shinjiru.com/almalinux/
-update_frequency: 3h
-sponsor: Shinjiru Technology Sdn Bhd
-sponsor_url: https://www.shinjiru.com
-email: vpsadmin@piradius.net
