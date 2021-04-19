@@ -1,0 +1,9 @@
+---
+name: mirror.sjtu.edu.cn
+address:
+  https: https://mirror.sjtu.edu.cn/almalinux/
+update_frequency: 8h
+sponsor: Shanghai Jiao Tong University Network Information Center
+sponsor_url: https://net.sjtu.edu.cn
+email: sjtug-mirror-maintainers@googlegroups.com
+...
