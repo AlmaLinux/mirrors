@@ -15,6 +15,7 @@ http://mirror.dk.team.blue/almalinux/8/AppStream/$basearch/os/
 http://mirror.cedia.org.ec/almalinux/8/AppStream/$basearch/os/
 http://mirror.uta.edu.ec/almalinux/8/AppStream/$basearch/os/
 http://mirror.epn.edu.ec/almalinux/8/AppStream/$basearch/os/
+http://mirror.espoch.edu.ec/almalinux/8/AppStream/$basearch/os/
 http://mirror.crexio.com/almalinux/8/AppStream/$basearch/os/
 http://mirror.almalinux.ikoula.com/8/AppStream/$basearch/os/
 http://almalinux.li/8/AppStream/$basearch/os/
@@ -25,6 +26,7 @@ http://almalinux.mirrors.itworxx.de/8/AppStream/$basearch/os/
 http://ftp.fau.de/almalinux/8/AppStream/$basearch/os/
 http://alma.fra.mirror.heficed.com/8/AppStream/$basearch/os/
 http://mirrors.sth.sze.hu/almalinux/8/AppStream/$basearch/os/
+http://mirror-jp.almalinux.id/almalinux/8/AppStream/$basearch/os/
 http://mirror.amscloud.co.id/almalinux/8/AppStream/$basearch/os/
 http://mirror-id.almalinux.id/almalinux/8/AppStream/$basearch/os/
 http://mirror.triputramedia.id/almalinux/8/AppStream/$basearch/os/
@@ -33,7 +35,6 @@ http://mirror.telkomuniversity.ac.id/almalinux/8/AppStream/$basearch/os/
 http://kartolo.sby.datautama.net.id/almalinux/8/AppStream/$basearch/os/
 http://ftp.sakura.ad.jp/almalinux/8/AppStream/$basearch/os/
 http://ftp.iij.ad.jp/pub/linux/almalinux/8/AppStream/$basearch/os/
-http://mirror-jp.almalinux.id/almalinux/8/AppStream/$basearch/os/
 http://mirror-conoha.almalinux.tokyo/almalinux/8/AppStream/$basearch/os/
 http://ftp.riken.jp/Linux/almalinux/8/AppStream/$basearch/os/
 http://mirror-onamae.almalinux.tokyo/almalinux/8/AppStream/$basearch/os/
@@ -73,13 +74,12 @@ http://mirror.nl.fusioned.net/almalinux/8/AppStream/$basearch/os/
 http://mirror.netweaver.uk/almalinux/8/AppStream/$basearch/os/
 http://mirrors.coreix.net/almalinux/8/AppStream/$basearch/os/
 http://almalinux.mirror.katapult.io/8/AppStream/$basearch/os/
-http://mirror.cov.ukservers.com/almalinux/8/AppStream/$basearch/os/
 http://mirror.vtti.vt.edu/almalinux/8/AppStream/$basearch/os/
+https://mirrors.gigenet.com/almalinux/8/AppStream/$basearch/os/
 http://yum.tamu.edu/alma/8/AppStream/$basearch/os/
 http://mirror.siena.edu/almalinux/8/AppStream/$basearch/os/
 http://mirror.steadfastnet.com/almalinux/8/AppStream/$basearch/os/
 http://mirror.cloudpropeller.com/almalinux/8/AppStream/$basearch/os/
-https://repos.eggycrew.com/almalinux/8/AppStream/$basearch/os/
 http://alma.chi.mirror.heficed.com/8/AppStream/$basearch/os/
 http://mirror.nodespace.net/almalinux/8/AppStream/$basearch/os/
 http://almalinux-mirror.dal1.hivelocity.net/8/AppStream/$basearch/os/
