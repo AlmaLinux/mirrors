@@ -29,6 +29,7 @@ ftp.fau.de|[Friedrich-Alexander-Universitaet Erlangen-Nuernberg](https://www.rrz
 alma.fra.mirror.heficed.com|[Heficed](https://www.heficed.com/)|ok|Germany||[Mirror](http://alma.fra.mirror.heficed.com)||
 mirrors.sth.sze.hu|[SzE - NetClub](https://internet.sth.sze.hu)|ok|Hungary|[Mirror](https://mirrors.sth.sze.hu/almalinux)|[Mirror](http://mirrors.sth.sze.hu/almalinux)|[Link](rsync://mirrors.sth.sze.hu/almalinux)|
 mirror-jp.almalinux.id|[HostKita](https://hostkita.net)|ok|Indonesia|[Mirror](https://mirror-jp.almalinux.id/almalinux)|[Mirror](http://mirror-jp.almalinux.id/almalinux)||
+mirror.dewabiz.com|[DewaBiz](http://dewabiz.com/)|ok|Indonesia|[Mirror](https://mirror.dewabiz.com/almalinux)|[Mirror](http://mirror.dewabiz.com/almalinux)||
 mirror.amscloud.co.id|[PT. Awan Media Semesta](https://amscloud.co.id/)|ok|Indonesia|[Mirror](https://mirror.amscloud.co.id/almalinux)|[Mirror](http://mirror.amscloud.co.id/almalinux)|[Link](rsync://mirror.amscloud.co.id::almalinux)|
 mirror-id.almalinux.id|[HostKita](https://hostkita.net)|ok|Indonesia|[Mirror](https://mirror-id.almalinux.id/almalinux)|[Mirror](http://mirror-id.almalinux.id/almalinux)||
 mirror.triputramedia.id|[Tri Putra Media Indonesia](https://www.triputramedia.id)|ok|Indonesia|[Mirror](https://mirror.triputramedia.id/almalinux)|[Mirror](http://mirror.triputramedia.id/almalinux)|[Link](rsync://mirror.triputramedia.id/almalinux)|
