@@ -329,7 +329,7 @@ def generate_mirrors_table(
         'Name',
         'Sponsor',
         'Status',
-        'Country',
+        'Location',
         *(
             protocol.upper() for protocol in ALL_MIRROR_PROTOCOLS
         ),
@@ -429,7 +429,7 @@ def generate_isos_list(
                     'any mirror in ISOs folder.  \n'
                 )
                 current_isos_file.write(
-                    '| Country | Links |\n'
+                    '| Location | Links |\n'
                     '| :--- | :--- |\n'
                 )
                 for country, country_mirrors in \

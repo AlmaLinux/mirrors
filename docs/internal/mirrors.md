@@ -1,4 +1,4 @@
-| Name | Sponsor | Status | Country | HTTPS | HTTP | RSYNC | FTP |
+| Name | Sponsor | Status | Location | HTTPS | HTTP | RSYNC | FTP |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 mirror.pcloud.net.au|[PHREEK Solutions](https://phreek.solutions)|ok|Australia|[Mirror](https://mirror.pcloud.net.au/almalinux)|[Mirror](http://mirror.pcloud.net.au/almalinux)||
 almalinux.mirror.digitalpacific.com.au|[Digital Pacific](https://www.digitalpacific.com.au/)|ok|Australia|[Mirror](https://almalinux.mirror.digitalpacific.com.au)|[Mirror](http://almalinux.mirror.digitalpacific.com.au)|[Link](rsync://mirror.digitalpacific.com.au/almalinux)|
