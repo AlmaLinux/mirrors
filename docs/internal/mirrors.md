@@ -70,7 +70,6 @@ yum.tamu.edu|[Texas A&M University College of Geosciences](https://geosciences.t
 mirror.siena.edu|[Siena College](https://www.siena.edu)|ok|United States||[Mirror](http://mirror.siena.edu/almalinux)|[Link](rsync://mirror.siena.edu/almalinux)|
 mirror.steadfastnet.com|[Steadfast Networks, LLC](https://www.steadfast.net/)|ok|United States|[Mirror](https://mirror.steadfastnet.com/almalinux)|[Mirror](http://mirror.steadfastnet.com/almalinux)|[Link](rsync://mirror.steadfastnet.com/almalinux)|
 mirror.cloudpropeller.com|[Cloud Propeller, Inc.](https://cloudpropeller.com)|ok|United States|[Mirror](https://mirror.cloudpropeller.com/almalinux)|[Mirror](http://mirror.cloudpropeller.com/almalinux)||
-repos.eggycrew.com|[EggyCrew](NA)|ok|United States|[Mirror](https://repos.eggycrew.com/almalinux)|||
 alma.chi.mirror.heficed.com|[Heficed](https://www.heficed.com/)|ok|United States||[Mirror](http://alma.chi.mirror.heficed.com)||
 mirror.nodespace.net|[NodeSpace Hosting](https://www.nodespace.net/)|ok|United States|[Mirror](https://mirror.nodespace.net/almalinux)|[Mirror](http://mirror.nodespace.net/almalinux)||
 almalinux-mirror.dal1.hivelocity.net|[Hivelocity Hosting](https://hivelocity.net/)|ok|United States|[Mirror](https://almalinux-mirror.dal1.hivelocity.net)|[Mirror](http://almalinux-mirror.dal1.hivelocity.net)|[Link](rsync://almalinux-mirror.dal1.hivelocity.net)|
