@@ -1,0 +1,9 @@
+---
+name: almalinux.cu.be
+address:
+  http: http://almalinux.cu.be/
+update_frequency: 3h
+sponsor: Cu.be Solutions
+sponsor_url: https://cu.be/
+email: information@cu.be
+...
