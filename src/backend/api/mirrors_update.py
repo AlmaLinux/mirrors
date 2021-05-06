@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 import multiprocessing
 import os
+
+import requests
+import yaml
 import dateparser
 import socket
+
 from pathlib import Path
 from typing import (
     Dict,
@@ -11,8 +15,9 @@ from typing import (
     Union,
     Tuple,
 )
-import requests
-import yaml
+
+from sqlalchemy.exc import NoResultFound
+from uwsgidecorators import thread
 
 from api.utils import get_geo_data_by_ip
 
@@ -20,6 +25,12 @@ from common.sentry import (
     get_logger,
 )
 from urllib3.exceptions import HTTPError
+
+from db.models import (
+    Mirror,
+    Url,
+)
+from db.utils import session_scope
 
 REQUIRED_MIRROR_PROTOCOLS = (
     'https',
@@ -196,45 +207,71 @@ def set_repo_status(
         return
 
 
-def get_verified_mirrors(
-        all_mirrors: List[Dict],
+@thread
+def update_mirror_in_db(
+        mirror_info: Dict[AnyStr, Union[Dict, AnyStr]],
         versions: List[AnyStr],
         repos: List[Dict[AnyStr, Union[Dict, AnyStr]]],
-        allowed_outdate: AnyStr
-) -> List[Dict[AnyStr, Union[Dict, AnyStr]]]:
+        allowed_outdate: AnyStr,
+) -> None:
     """
-    Loop through the list of mirrors and return only available
-    and not expired mirrors
+    Update record about a mirror in DB in background thread.
+    The function remove old record about a mirror and add new record if
+        a mirror is actual
     :param all_mirrors: extracted info about mirrors from yaml files
     :param versions: the list of versions which should be provided by mirrors
     :param repos: the list of repos which should be provided by mirrors
     :param allowed_outdate: allowed mirror lag
     """
 
-    args = []
-    mirrors_info = {}
-    for mirror_info in all_mirrors:
-        set_geo_data(mirror_info)
-        if mirror_info['name'] in WHITELIST_MIRRORS:
-            mirror_info['status'] = 'ok'
-            mirrors_info[mirror_info['name']] = mirror_info
-            continue
-        args.append((mirror_info, versions, repos))
-        mirrors_info[mirror_info['name']] = mirror_info
-    pool = multiprocessing.Pool(
-        processes=NUMBER_OF_PROCESSES_FOR_MIRRORS_CHECK,
-    )
-    pool_result = pool.map(_helper_mirror_available, args)
-    for mirror_name, is_available in pool_result:
-        if is_available:
-            set_repo_status(mirrors_info[mirror_name], allowed_outdate)
-        else:
-            del mirrors_info[mirror_name]
-    result = sorted(
-        mirrors_info.values(),
-        key=lambda _mirror_info: _mirror_info['country'],
-    )
-    return list(result)
+    set_geo_data(mirror_info)
+    mirror_name = mirror_info['name']
+    if mirror_name in WHITELIST_MIRRORS:
+        mirror_info['status'] = 'ok'
+        is_available = True
+    else:
+        mirror_name, is_available = mirror_available(
+            mirror_info=mirror_info,
+            versions=versions,
+            repos=repos,
+        )
+    with session_scope() as session:
+        try:
+            mirror_to_delete = session.query(Mirror).filter(
+                Mirror.name == mirror_name
+            ).one()
+            session.delete(mirror_to_delete)
+        except NoResultFound:
+            pass
+        if not is_available:
+            return
+        set_repo_status(mirror_info, allowed_outdate)
+        urls_to_create = [
+            Url(
+                url=url,
+                type=url_type,
+            ) for url_type, url in mirror_info['address'].items()
+        ]
+        for url_to_create in urls_to_create:
+            session.add(url_to_create)
+        mirror_to_create = Mirror(
+            name=mirror_info['name'],
+            continent=mirror_info['continent'],
+            country=mirror_info['country'],
+            ip=mirror_info['ip'],
+            latitude=mirror_info['location']['lat'],
+            longitude=mirror_info['location']['lon'],
+            is_expired=mirror_info['status'] == 'expired',
+            update_frequency=dateparser.parse(
+                mirror_info['update_frequency']
+            ),
+            sponsor_name=mirror_info['sponsor'],
+            sponsor_url=mirror_info['sponsor_url'],
+            email=mirror_info['email'],
+            urls=urls_to_create,
+        )
+        session.add(mirror_to_create)
+        session.flush()
 
 
 def _helper_mirror_available(args):

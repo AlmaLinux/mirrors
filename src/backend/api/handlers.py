@@ -1,20 +1,26 @@
 # coding=utf-8
 import os
 from collections import defaultdict
-from typing import AnyStr, List, Dict
-
-import dateparser
+from time import sleep
+from typing import (
+    AnyStr,
+    List,
+    Dict,
+)
 
 from api.exceptions import BadRequestFormatExceptioin
 from api.mirrors_update import (
     get_config,
-    get_verified_mirrors,
     REQUIRED_MIRROR_PROTOCOLS,
     get_mirrors_info,
     ARCHS,
+    update_mirror_in_db,
 )
 from api.utils import get_geo_data_by_ip
-from db.models import Url, Mirror
+from db.models import (
+    Url,
+    Mirror,
+)
 from db.utils import session_scope
 from sqlalchemy.sql.expression import false
 
@@ -133,41 +139,14 @@ def update_mirrors_handler():
     all_mirrors = get_mirrors_info(
         mirrors_dir=mirrors_dir,
     )
-    verified_mirrors = get_verified_mirrors(
-        all_mirrors=all_mirrors,
-        versions=versions,
-        repos=repos,
-        allowed_outdate=config['allowed_outdate']
-    )
-    with session_scope() as session:
-        session.query(Mirror).delete()
-        session.query(Url).delete()
-        for mirror in verified_mirrors:
-            urls_to_create = [
-                Url(
-                    url=url,
-                    type=url_type,
-                ) for url_type, url in mirror['address'].items()
-            ]
-            for url_to_create in urls_to_create:
-                session.add(url_to_create)
-            mirror_to_create = Mirror(
-                name=mirror['name'],
-                continent=mirror['continent'],
-                country=mirror['country'],
-                ip=mirror['ip'],
-                latitude=mirror['location']['lat'],
-                longitude=mirror['location']['lon'],
-                is_expired=mirror['status'] == 'expired',
-                update_frequency=dateparser.parse(mirror['update_frequency']),
-                sponsor_name=mirror['sponsor'],
-                sponsor_url=mirror['sponsor_url'],
-                email=mirror['email'],
-                urls=urls_to_create,
-            )
-            session.add(mirror_to_create)
-        session.flush()
-
+    for mirror_info in all_mirrors:
+        update_mirror_in_db(
+            mirror_info,
+            versions,
+            repos,
+            config['allowed_outdate'],
+        )
+        sleep(1)
     return 'Done'
 
 
