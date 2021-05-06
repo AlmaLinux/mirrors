@@ -1,0 +1,33 @@
+---
+- name: Prepare script for updating local mirrors list
+  template:
+    src: "{{ timer_name }}_script.j2"
+    dest: "{{ update_mirrors_list_script_path }}"
+    owner: root
+    group: root
+    mode: 0740
+    force: 'yes'
+
+- name: Prepare systemd units
+  template:
+    src: "{{ item.src }}"
+    dest: "/etc/systemd/system/{{ item.dst }}"
+    owner: root
+    group: root
+    mode: 0640
+    force: 'yes'
+  vars:
+    description: Update a local mirrors list
+  with_items:
+    - dst: "{{ timer_name }}.service"
+      src: "{{ timer_name }}_service.j2"
+    - dst: "{{ timer_name }}.timer"
+      src: "{{ timer_name }}_timer.j2"
+
+- name: Enable systemd timer
+  systemd:
+    name: "{{ timer_name }}.timer"
+    state: started
+    enabled: true
+    masked: false
+    daemon_reload: true

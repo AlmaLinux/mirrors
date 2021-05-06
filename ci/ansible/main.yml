@@ -1,46 +1,5 @@
 ---
-- name: Common setup
+- name: Deploy the mirror service
   hosts: mirrors_service
   tasks:
-
-    - name: Set sources_root
-      set_fact:
-        sources_root: "{{ source_path }}"
-      tags:
-        always
-
-    - name: Set config_root
-      set_fact:
-        config_root: "/etc/mirrors_service/{{ container_env_prefix }}"
-      tags:
-        always
-
-    - import_role: name=common_setup
-      tags:
-        common_setup
-
-    - import_role: name=deploy_files
-      tags:
-        sync
-
-    - import_role: name=prepare_host
-      tags:
-        prepare_host
-    - import_role: name=backend
-      tags:
-        backend
-
-    - name: First update mirrors list in db
-      block:
-        - stat:
-            path: "{{ config_root }}/.first_deploy_is_done"
-          register: first_deploy_file
-        - file:
-            path: "{{ config_root }}/.first_deploy_is_done"
-            state: touch
-        - shell: >
-            pushd {{ config_root }}/mirrors/;
-            git pull;
-            popd;
-            curl --cookie 'AUTH_KEY={{ auth_key }}' -X POST http://127.0.0.1:{{ backend_port }}/update_mirrors
-          when: first_deploy_file is defined and not first_deploy_file.stat.exists
+    - import_role: name=deploy

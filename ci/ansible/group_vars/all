@@ -1,3 +1,0 @@
-source_path: /root/mirrors_service
-compose_file: docker-compose.yml
-docker_compose_version: 1.29.1

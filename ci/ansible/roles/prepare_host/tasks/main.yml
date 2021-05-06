@@ -1,3 +1,0 @@
-- include_tasks: create_env_file.yml
-- include_tasks: get_mirrors_repo.yml
-- include_tasks: create_mirrors_cron.yml

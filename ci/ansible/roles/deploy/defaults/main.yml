@@ -1,0 +1,6 @@
+env_file: env
+timer_name: local_mirrors_list
+update_mirrors_list_script_path: "/usr/bin/{{ timer_name }}.sh"
+source_path: /root/mirrors_service
+compose_file: docker-compose.yml
+docker_compose_version: 1.29.1

@@ -1,3 +1,4 @@
+---
 - name: Update local repo with mirrors list
   git:
     repo: "https://github.com/AlmaLinux/mirrors.git"

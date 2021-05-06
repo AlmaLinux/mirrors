@@ -1,5 +1,0 @@
-- name: Prepare mirrors cron job
-  cron:
-    name: "Update local repo with mirrors list"
-    special_time: daily
-    job: "pushd {{ config_root }}/mirrors/; git pull; popd; curl --cookie 'AUTH_KEY={{ auth_key }}' -X POST http://127.0.0.1:{{ backend_port }}/update_mirrors"

@@ -126,7 +126,7 @@ def mirrors_table():
             'Sponsor',
             'Status',
             'Continent',
-            'Country',
+            'Region',
             *(item.upper() for item in url_types),
         ],
         'url_types': url_types,

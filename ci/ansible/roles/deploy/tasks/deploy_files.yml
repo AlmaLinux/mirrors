@@ -1,5 +1,4 @@
 ---
-
 - name: Send files
   synchronize:
     src: "{{ item }}"

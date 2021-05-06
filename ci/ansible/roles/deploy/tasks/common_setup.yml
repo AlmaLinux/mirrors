@@ -1,0 +1,48 @@
+---
+- name: Set config_root
+  set_fact:
+    config_root: "/etc/mirrors_service/{{ container_env_prefix }}"
+
+- name: Create configs directory
+  file:
+    name: "{{ config_root }}"
+    state: directory
+    mode: '0600'
+
+- name: Install git
+  dnf:
+    name:
+      - git
+    state: present
+
+- name: Install Docker SDK for python
+  pip:
+    name: docker
+
+- name: Add repository "docker-ce"
+  get_url:
+    url: "https://download.docker.com/linux/centos/docker-ce.repo"
+    dest: "/etc/yum.repos.d/docker-ce.repo"
+    owner: root
+    mode: 0644
+    force: yes
+
+- name: Install docker-ce
+  dnf:
+    name:
+      - docker-ce
+    state: present
+
+- name: Download binary "docker-compose"
+  get_url:
+    url: "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-Linux-{{ ansible_architecture }}"
+    dest: "/usr/local/bin/docker-compose"
+    owner: root
+    mode: 0755
+    force: yes
+
+- name: Enable and start docker service
+  systemd:
+    name: docker
+    state: started
+    enabled: yes

@@ -7,7 +7,9 @@
 ## Requirements
 
 * CentOS 8 (target server)
-* Ansible version is 2.10
+* Ansible version is 2.10 or newer
+* Ansible community.docker collection
+    * Use command `ansible-galaxy collection install community.docker` for installing it
 
 ## Deploying
 
@@ -28,5 +30,6 @@
        accept only local connections if you set value of `deploy_environment` to `Production`. 
        Otherwise, the container will accept remote connections. 
     7. Set value of option `test_ip_address` to test IP. This options is work only for non-production layout.
-6. Run command `ansible-playbook -vv -i ansible/inventory/dev -u 
-   <username> --become ansible/main.yml`, there is `<username>` is name of an user from a remote server which has sudo rights
+6. Go to project directory `ci/ansible`
+6. Run command `ansible-playbook -vv -i inventory/dev -u 
+   <username> --become main.yml`, there is `<username>` is name of a user from a remote server which has sudo rights
