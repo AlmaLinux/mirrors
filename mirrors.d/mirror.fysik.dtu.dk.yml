@@ -1,0 +1,11 @@
+---
+name: mirror.fysik.dtu.dk
+address:
+  http: http://mirror.fysik.dtu.dk/linux/almalinux/
+  https: https://mirror.fysik.dtu.dk/linux/almalinux/
+update_frequency: 3h
+sponsor: DTU Fysik
+sponsor_url: https://www.fysik.dtu.dk/
+email: ole.h.nielsen@fysik.dtu.dk
+...
+
