@@ -1,0 +1,10 @@
+---
+name: mirror.cloudcone.net
+address:
+  http: http://mirror.cloudcone.net/almalinux
+  https: https://mirror.cloudcone.net/almalinux
+update_frequency: 6h
+sponsor: CloudCone
+sponsor_url: https://cloudcone.com/
+email: hello@hivelocity.net
+...
