@@ -1,0 +1,4 @@
+.idea
+.venv
+mirrors/*
+ci/ansible/inventory/dev

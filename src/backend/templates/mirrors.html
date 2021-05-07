@@ -1,0 +1,72 @@
+{% extends "main.html" %}
+
+{% block text %}
+    {{ super() }}
+    Mirrors are extremely important to provide a fast and reliable infrastructure,
+    and we are very grateful to people and organizations that are helping us with this.
+    <br>
+    This page contains a list of official
+    <a href="https://almalinux.org/"
+       target="_blank"
+       class="link-success text-decoration-none">AlmaLinux</a> {% include "snipets/link_icon.html" %}
+    mirrors.
+    If you want to set up a public mirror, please read
+    <a href="https://wiki.almalinux.org/Mirrors.html"
+       target="_blank"
+       class="link-success text-decoration-none">our mirror guidelines</a> {% include "snipets/link_icon.html" %}
+    <br>
+    You can find the list of links to ISOs for all of mirrors by
+    <a href="{{ url_for('.isos') }}"
+       target="_self"
+       class="link-success text-decoration-none">this link</a>.
+
+    <br>
+{% endblock text %}
+
+{% block table %}
+    {{ super() }}
+    <table id="dtBasic" class="table table-striped table-bordered table-responsive-sm" data-order='[[ 3, "asc" ], [4, "asc"]]'>
+        <thead>
+            <tr>
+                {% for column_name in column_names %}
+                    <th class="th-sm sorting">{{ column_name }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for mirror in mirror_list %}
+                <tr>
+                    <td>{{ mirror.name }}</td>
+                    <td>
+                        <a href="{{ mirror.sponsor_url }}"
+                           target="_blank"
+                           class="link-success text-decoration-none">
+                            {{ mirror.sponsor_name }}
+                        </a> {% include "snipets/link_icon.html" %}
+                    </td>
+                    <td>{% if mirror.is_expired %}expired{% else %}ok{% endif %}</td>
+                    <td>{{ mirror.continent }}</td>
+                    <td>{{ mirror.country }}</td>
+                    {% for url_type in url_types %}
+                        <td>
+                            {% if mirror.urls.get(url_type) %}
+                                <a href="{{ mirror.urls.get(url_type, '') }}"
+                                   target="_blank"
+                                   class="link-success text-decoration-none">
+                                    {% if url_type == 'http' or url_type == 'https' %}
+                                        Mirror
+                                    {% else %}
+                                        Link
+                                    {% endif %}
+                                </a>
+                                {% if url_type == 'http' or url_type == 'https' %}
+                                    {% include "snipets/link_icon.html" %}
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock table %}

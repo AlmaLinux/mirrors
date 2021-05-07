@@ -1,0 +1,56 @@
+{% extends "main.html" %}
+
+{% block text %}
+{{ super() }}
+        You can find the list of available AlmaLinux architectures and versions below.
+        <br>
+        Also you can use a BitTorrent file for downloading ISOs. It might be faster than direct downloading from the mirrors.
+        <br>
+        A .torrent file can be found on all mirrors in the folder with ISO files.
+        <br>
+        {% if nearest_mirrors %}
+            <h3>The following mirrors are nearest to you:</h3>
+            <ul>
+                {% for mirror_info in nearest_mirrors %}
+                    <li>
+                        <a href="{{ mirror_info.isos_link }}"
+                           target="_blank"
+                           class="link-success text-decoration-none">
+                            {{ mirror_info.name }} {% include "snipets/link_icon.html" %}
+                        </a>
+                        <br>
+                    </li>
+                {% endfor %}
+            </ul>
+            <h3>You can also choose from full list of mirrors:</h3>
+        {% endif %}
+{% endblock text %}
+
+{% block table %}
+{{ super() }}
+    <table id="dtBasic" class="table table-striped table-bordered table-responsive-sm" data-order='[[ 0, "asc" ]]'>
+        <thead>
+            <tr>
+                <th>Region</th>
+                <th>Links</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for country, mirrors_info in mirror_list.items() %}
+                <tr>
+                    <td>{{ country }}</td>
+                    <td>
+                        {% for mirror_info in mirrors_info %}
+                            <a href="{{ mirror_info.isos_link }}"
+                               class="link-success text-decoration-none"
+                               target="_blank">
+                                {{ mirror_info.name }} {% include "snipets/link_icon.html" %}
+                            </a>
+                            <br>
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock table %}
