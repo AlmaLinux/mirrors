@@ -1,7 +1,7 @@
 name: repo.dinosaurus.fleksibel.com
 address:
-  http: http://repo.dinosaurus.fleksibel.com/almalinux/
-  https: https://repo.dinosaurus.fleksibel.com/almalinux/
+  http: http://dinosaurus.fleksibel.com/almalinux/
+  https: https://dinosaurus.fleksibel.com/almalinux/
 update_frequency: 3h
 sponsor: fleksibel.com
 sponsor_url: https://fleksibel.com/
