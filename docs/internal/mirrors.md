@@ -88,6 +88,7 @@ repos.eggycrew.com|[EggyCrew](NA)|ok|United States|[Mirror](https://repos.eggycr
 alma.chi.mirror.heficed.com|[Heficed](https://www.heficed.com/)|ok|United States||[Mirror](http://alma.chi.mirror.heficed.com)||
 mirror.nodespace.net|[NodeSpace Hosting](https://www.nodespace.net/)|ok|United States|[Mirror](https://mirror.nodespace.net/almalinux)|[Mirror](http://mirror.nodespace.net/almalinux)||
 almalinux.ourhome.kiwi|[Federation of Aotearoa Migrants (FAM)](https://fam.org.nz)|ok|United States|[Mirror](https://almalinux.ourhome.kiwi)|||
+mirror.cloudcone.net|[CloudCone](https://cloudcone.com/)|ok|United States|[Mirror](https://mirror.cloudcone.net/almalinux)|[Mirror](http://mirror.cloudcone.net/almalinux)||
 almalinux-mirror.dal1.hivelocity.net|[Hivelocity Hosting](https://hivelocity.net/)|ok|United States|[Mirror](https://almalinux-mirror.dal1.hivelocity.net)|[Mirror](http://almalinux-mirror.dal1.hivelocity.net)|[Link](rsync://almalinux-mirror.dal1.hivelocity.net)|
 almalinux-mirror.tpa.hivelocity.net|[Hivelocity Hosting](https://hivelocity.net/)|ok|United States|[Mirror](https://almalinux-mirror.tpa.hivelocity.net)|[Mirror](http://almalinux-mirror.tpa.hivelocity.net)|[Link](rsync://almalinux-mirror.tpa.hivelocity.net)|
 mirror.hostup.org|[Hostup AB](https://hostup.se/)|ok|United States|[Mirror](https://mirror.hostup.org/almalinux)|[Mirror](http://mirror.hostup.org/almalinux)|[Link](rsync://mirror.hostup.org/almalinux)|
