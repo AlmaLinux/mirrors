@@ -1,12 +1,12 @@
 http://mirror.pcloud.net.au/almalinux/8/AppStream/Source/
 http://almalinux.mirror.digitalpacific.com.au/8/AppStream/Source/
-http://mirror.as24220.net/almalinux/8/AppStream/Source/
 http://mirror.alwyzon.net/almalinux/8/AppStream/Source/
 http://mirror.xeonbd.com/almalinux/8/AppStream/Source/
 http://almalinux.cu.be/8/AppStream/Source/
 http://almalinux.mirror.letscloud.io/8/AppStream/Source/
 http://mirror.host.ag/almalinux/8/AppStream/Source/
 http://mirrors.uni-ruse.bg/almalinux/8/AppStream/Source/
+http://mirror.csclub.uwaterloo.ca/almalinux/8/AppStream/Source/
 http://dist-mirror.fibernetics.ca/almalinux/8/AppStream/Source/
 http://mirror-almalinux.grupocg.cl/almalinux/8/AppStream/Source/
 http://mirror.netglobalis.net/almalinux/8/AppStream/Source/
@@ -42,11 +42,14 @@ http://mirror-conoha.almalinux.tokyo/almalinux/8/AppStream/Source/
 http://ftp.riken.jp/Linux/almalinux/8/AppStream/Source/
 http://mirror-onamae.almalinux.tokyo/almalinux/8/AppStream/Source/
 http://mirror.almalinux.asia/almalinux/8/AppStream/Source/
+http://mirror-lolipop.almalinux.tokyo/almalinux/8/AppStream/Source/
+http://ftp.yz.yamagata-u.ac.jp/pub/linux/almalinux/8/AppStream/Source/
 http://almalinux.japan.crexio.com/almalinux/8/AppStream/Source/
 http://repo.shinjiru.com/almalinux/8/AppStream/Source/
 http://mirror.nl.altushost.com/almalinux/8/AppStream/Source/
 http://mirror.wd6.net/almalinux/8/AppStream/Source/
 http://mirror.mijn.host/almalinux/8/AppStream/Source/
+http://mirror.nforce.com/pub/linux/almalinux/8/AppStream/Source/
 http://mirror.serverion.com/almalinux/8/AppStream/Source/
 http://almalinux.mirror.liteserver.nl/8/AppStream/Source/
 http://mirror.terrahost.no/almalinux/8/AppStream/Source/
@@ -70,6 +73,7 @@ http://mirror.natro.com/almalinux/8/AppStream/Source/
 http://mirror.domainhizmetleri.com/almalinux/8/AppStream/Source/
 http://mirror.hosting.com.tr/almalinux/8/AppStream/Source/
 http://mirror-denizli.cenuta.com/almalinux/8/AppStream/Source/
+http://mirror.verinomi.com/almalinux/8/AppStream/Source/
 http://mirror.vargonen.com/almalinux/8/AppStream/Source/
 http://mirror.nl.fusioned.net/almalinux/8/AppStream/Source/
 http://mirror.netweaver.uk/almalinux/8/AppStream/Source/

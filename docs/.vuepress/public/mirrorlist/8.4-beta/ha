@@ -1,12 +1,12 @@
 http://mirror.pcloud.net.au/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://almalinux.mirror.digitalpacific.com.au/8.4-beta/HighAvailability/$basearch/os/
-http://mirror.as24220.net/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://mirror.alwyzon.net/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://mirror.xeonbd.com/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://almalinux.cu.be/8.4-beta/HighAvailability/$basearch/os/
 http://almalinux.mirror.letscloud.io/8.4-beta/HighAvailability/$basearch/os/
 http://mirror.host.ag/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://mirrors.uni-ruse.bg/almalinux/8.4-beta/HighAvailability/$basearch/os/
+http://mirror.csclub.uwaterloo.ca/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://dist-mirror.fibernetics.ca/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://mirror-almalinux.grupocg.cl/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://mirror.netglobalis.net/almalinux/8.4-beta/HighAvailability/$basearch/os/
@@ -42,11 +42,14 @@ http://mirror-conoha.almalinux.tokyo/almalinux/8.4-beta/HighAvailability/$basear
 http://ftp.riken.jp/Linux/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://mirror-onamae.almalinux.tokyo/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://mirror.almalinux.asia/almalinux/8.4-beta/HighAvailability/$basearch/os/
+http://mirror-lolipop.almalinux.tokyo/almalinux/8.4-beta/HighAvailability/$basearch/os/
+http://ftp.yz.yamagata-u.ac.jp/pub/linux/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://almalinux.japan.crexio.com/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://repo.shinjiru.com/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://mirror.nl.altushost.com/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://mirror.wd6.net/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://mirror.mijn.host/almalinux/8.4-beta/HighAvailability/$basearch/os/
+http://mirror.nforce.com/pub/linux/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://mirror.serverion.com/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://almalinux.mirror.liteserver.nl/8.4-beta/HighAvailability/$basearch/os/
 http://mirror.terrahost.no/almalinux/8.4-beta/HighAvailability/$basearch/os/
@@ -70,6 +73,7 @@ http://mirror.natro.com/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://mirror.domainhizmetleri.com/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://mirror.hosting.com.tr/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://mirror-denizli.cenuta.com/almalinux/8.4-beta/HighAvailability/$basearch/os/
+http://mirror.verinomi.com/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://mirror.vargonen.com/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://mirror.nl.fusioned.net/almalinux/8.4-beta/HighAvailability/$basearch/os/
 http://mirror.netweaver.uk/almalinux/8.4-beta/HighAvailability/$basearch/os/
