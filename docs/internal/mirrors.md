@@ -72,6 +72,7 @@ almalinux-mirror.datakeepers.co.za|[datakeepers](https://datakeepers.co.za/)|ok|
 alma.jhb.mirror.heficed.com|[Heficed](https://www.heficed.com/)|ok|South Africa||[Mirror](http://alma.jhb.mirror.heficed.com)||
 mirror.ch.altushost.com|[AltusHost B.V.](https://www.altushost.com/)|ok|Switzerland|[Mirror](https://mirror.ch.altushost.com/almalinux)|[Mirror](http://mirror.ch.altushost.com/almalinux)||
 mirrors.gethosted.online|[Get Hosted Online](https://www.gethosted.online)|ok|Taiwan|[Mirror](https://mirrors.gethosted.online/almalinux)|[Mirror](http://mirrors.gethosted.online/almalinux)|[Link](rsync://mirrors.gethosted.online/almalinux)|[Link](ftp://mirrors.gethosted.online/almalinux)
+mirror.kku.ac.th|[Khon Kaen University](https://www.kku.ac.th)|ok|Thailand|[Mirror](https://mirror.kku.ac.th/almalinux)|[Mirror](http://mirror.kku.ac.th/almalinux)|[Link](rsync://mirror.kku.ac.th/almalinux)|
 mirror.natro.com|[Natro](https://www.natro.com)|ok|Turkey|[Mirror](https://mirror.natro.com/almalinux)|[Mirror](http://mirror.natro.com/almalinux)|[Link](rsync://mirror.natro.com/almalinux)|
 mirror.domainhizmetleri.com|[Domainhizmetleri.com Hosting](https://www.domainhizmetleri.com)|ok|Turkey|[Mirror](https://mirror.domainhizmetleri.com/almalinux)|[Mirror](http://mirror.domainhizmetleri.com/almalinux)||
 mirror.hosting.com.tr|[Hosting](https://www.hosting.com.tr)|ok|Turkey||[Mirror](http://mirror.hosting.com.tr/almalinux)||
@@ -82,6 +83,7 @@ mirror.nl.fusioned.net|[Fusioned Ltd](https://www.fusioned.net/)|ok|United Kingd
 mirror.netweaver.uk|[NetWeaver](https://www.netweaver.uk)|ok|United Kingdom|[Mirror](https://mirror.netweaver.uk/almalinux)|[Mirror](http://mirror.netweaver.uk/almalinux)||
 mirrors.coreix.net|[Coreix ltd](https://www.coreix.net)|ok|United Kingdom||[Mirror](http://mirrors.coreix.net/almalinux)|[Link](rsync://mirrors.coreix.net/mirrors/almalinux)|[Link](ftp://mirrors.coreix.net/almalinux)
 almalinux.mirror.katapult.io|[Katapult](https://katapult.io)|ok|United Kingdom|[Mirror](https://almalinux.mirror.katapult.io)|[Mirror](http://almalinux.mirror.katapult.io)|[Link](rsync://almalinux.mirror.katapult.io/almalinux)|
+mirror.rackspace.com|[Rackspace Technology](https://www.rackspace.com)|ok|United Kingdom|[Mirror](https://mirror.rackspace.com/almalinux)|[Mirror](http://mirror.rackspace.com/almalinux)|[Link](rsync://mirror.rackspace.com/almalinux)|
 mirror.cov.ukservers.com|[UK Dedicated Servers Limited](https://www.ukservers.com/)|ok|United Kingdom|[Mirror](https://mirror.cov.ukservers.com/almalinux)|[Mirror](http://mirror.cov.ukservers.com/almalinux)||
 mirror.vtti.vt.edu|[Virginia Tech Transportation Institute](https://www.vtti.vt.edu)|ok|United States|[Mirror](https://mirror.vtti.vt.edu/almalinux)|[Mirror](http://mirror.vtti.vt.edu/almalinux)||
 mirrors.gigenet.com|[Hosting](https://gigenet.com/)|ok|United States||[Mirror](https://mirrors.gigenet.com/almalinux)||
