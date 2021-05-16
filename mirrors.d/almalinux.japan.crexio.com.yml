@@ -1,9 +1,0 @@
----
-name: almalinux.japan.crexio.com
-address:
-  http: http://almalinux.japan.crexio.com/almalinux/
-update_frequency: 1h
-sponsor: CREXIO
-sponsor_url: https://crexio.com
-email: admin@crexio.com
-...
