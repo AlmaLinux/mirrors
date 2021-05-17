@@ -1,10 +1,4 @@
 ---
-- name: Remove old docker image
-  docker_image:
-    name: "python38-uwsgi"
-    state: absent
-
-
 - name: Build docker image
   docker_image:
     name: "python38-uwsgi"

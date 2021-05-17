@@ -4,8 +4,7 @@ RUN pip install -U -r requirements.txt
 
 WORKDIR /src/app
 
-# Install uWSGI
-RUN pip install uwsgi
+# Add webserver user
 RUN useradd webserver
 
 COPY start.sh /start.sh

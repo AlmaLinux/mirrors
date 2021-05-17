@@ -7,14 +7,14 @@
   file:
     name: "{{ config_root }}"
     state: directory
-    mode: '0600'
+    mode: '0755'
 
 
 - name: Create db directory
   file:
     name: "{{ config_root }}/sqlite"
     state: directory
-    mode: '0600'
+    mode: '0755'
 
 - name: Install git
   dnf:
