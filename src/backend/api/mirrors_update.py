@@ -267,7 +267,7 @@ def update_mirror_in_db(
             ),
             sponsor_name=mirror_info['sponsor'],
             sponsor_url=mirror_info['sponsor_url'],
-            email=mirror_info['email'],
+            email=mirror_info.get('email', 'unknown'),
             urls=urls_to_create,
         )
         session.add(mirror_to_create)
