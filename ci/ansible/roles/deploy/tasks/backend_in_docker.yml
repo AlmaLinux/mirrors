@@ -1,12 +1,8 @@
 ---
 - name: Build docker image
   docker_image:
-    name: "python38-uwsgi"
-    build:
-      path: "{{ source_path }}/ci/"
-      pull: yes
-      network: host
-    source: build
+    name: "almalinux/mirror_service:latest"
+    source: pull
 
 - name: Set facts for docker container with backend
   set_fact:
