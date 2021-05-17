@@ -1,0 +1,11 @@
+---
+name: hkg.mirror.rackspace.com
+address:
+  http: http://hkg.mirror.rackspace.com/almalinux/
+  https: https://hkg.mirror.rackspace.com/almalinux/
+  rsync: rsync://hkg.mirror.rackspace.com/almalinux
+update_frequency: 4h
+sponsor: Rackspace Technology
+sponsor_url: https://www.rackspace.com
+email: mirroradmin@rackspace.com
+...
