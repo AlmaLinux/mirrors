@@ -1,5 +1,5 @@
 ---
-- name: Build docker image
+- name: Pull docker image
   docker_image:
     name: "almalinux/mirror_service:latest"
     source: pull
@@ -39,8 +39,8 @@
         target: "/mirrors"
         read_only: no
         type: bind
-      - source: "{{ config_root }}/sqlite"
-        target: "/sqlite"
+      - source: "{{ config_root }}/data"
+        target: "/data"
         read_only: no
         type: bind
     log_driver: "json-file"

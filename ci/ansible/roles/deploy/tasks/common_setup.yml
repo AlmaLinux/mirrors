@@ -12,7 +12,7 @@
 
 - name: Create db directory
   file:
-    name: "{{ config_root }}/sqlite"
+    name: "{{ config_root }}/data"
     state: directory
     mode: '0755'
 

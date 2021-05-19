@@ -4,17 +4,22 @@ import os
 from geoip import open_database
 from sqlalchemy import create_engine
 
-GEOIP_DATABASE = os.path.join(
-    os.path.dirname(
-        os.path.abspath(__file__),
-    ),
-    'geoip_db.mmdb',
-)
+GEOIP_PATH = os.environ.get('GEOIP_PATH')
+if GEOIP_PATH:
+    GEOIP_DATABASE = GEOIP_PATH
+else:
+    GEOIP_DATABASE = os.path.join(
+        os.path.dirname(
+            os.path.abspath(__file__),
+        ),
+        'geoip_db.mmdb',
+    )
+
 SQLITE_PATH = os.environ.get('SQLITE_PATH')
 if SQLITE_PATH:
     SQLITE_CONNECTION_STRING = f'sqlite:///{SQLITE_PATH}'
 else:
-    SQLITE_CONNECTION_STRING = 'sqlite:////sqlite/mirrors.db'
+    SQLITE_CONNECTION_STRING = 'sqlite:////data/mirrors.db'
 
 
 class Engine:
