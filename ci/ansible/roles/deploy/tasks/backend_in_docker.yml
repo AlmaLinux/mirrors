@@ -18,7 +18,7 @@
     name: "{{ container_env_prefix }}_backend"
     image: "python38-uwsgi"
     state: started
-    restart: no
+    restart: yes
     restart_policy: unless-stopped
     env:
       UWSGI_PROCESSES: "{{ uwsgi_processes | string }}"

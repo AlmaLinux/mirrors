@@ -100,10 +100,11 @@ def isos(
 
         return render_template('isos_main.html', **data)
     else:
+        ip_address = request.headers.get('X-Forwarded-For') or request.remote_addr
         mirrors_by_countries, nearest_mirrors = get_isos_list_by_countries(
             arch=arch,
             version=version,
-            ip_address=request.remote_addr,
+            ip_address=ip_address,
         )
         data.update({
             'arch': arch,

@@ -55,7 +55,7 @@ def _get_nearest_mirrors(
     ):
         ip_address = os.environ.get(
             'TEST_IP_ADDRESS',
-        ) or '77.121.201.30'
+        ) or '195.123.213.149'
     match = get_geo_data_by_ip(ip_address)
     with session_scope() as session:
         all_mirrors_query = session.query(Mirror).filter(
