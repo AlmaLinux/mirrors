@@ -29,7 +29,7 @@ from common.sentry import (
 )
 
 
-MAX_LENGTH_OF_MIRRORS_LIST = 5
+MAX_LENGTH_OF_MIRRORS_LIST = 10
 
 logger = get_logger(__name__)
 
@@ -71,7 +71,7 @@ def _get_nearest_mirrors(
         elif match is None:
             return []
         continent, country, latitude, longitude = match
-        # get five mirrors in a request's country
+        # get n-mirrors in a request's country
         mirrors_by_country_query = session.query(Mirror).filter(
             Mirror.continent == continent,
             Mirror.country == country,
@@ -79,9 +79,11 @@ def _get_nearest_mirrors(
         ).limit(
             MAX_LENGTH_OF_MIRRORS_LIST,
         )
-        # get five nearest mirrors inside a request's continent
+        # get n-mirrors mirrors inside a request's continent
+        # but outside a request's contry
         mirrors_by_continent_query = session.query(Mirror).filter(
             Mirror.continent == continent,
+            Mirror.country != country,
             Mirror.is_expired == false(),
             ).order_by(
             Mirror.conditional_distance(
@@ -91,9 +93,12 @@ def _get_nearest_mirrors(
         ).limit(
             MAX_LENGTH_OF_MIRRORS_LIST,
         )
-        # get five nearest mirrors from all of mirrors
+        # get n-mirrors mirrors from all of mirrors outside
+        # a request's country and continent
         all_rest_mirrors_query = session.query(Mirror).filter(
             Mirror.is_expired == false(),
+            Mirror.continent != continent,
+            Mirror.country != country,
             ).order_by(
             Mirror.conditional_distance(
                 lon=longitude,
@@ -119,7 +124,7 @@ def _get_nearest_mirrors(
         # ).limit(MAX_LENGTH_OF_MIRRORS_LIST)
         # suitable_mirrors = suitable_mirrors_query.all()
 
-        # return five nearst mirrors
+        # return n-nearst mirrors
         suitable_mirrors = [mirror.to_dict() for mirror
                             in suitable_mirrors[:MAX_LENGTH_OF_MIRRORS_LIST]]
         return suitable_mirrors
