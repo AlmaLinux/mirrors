@@ -138,7 +138,7 @@ def update_mirrors_handler():
         os.path.dirname(
             os.path.abspath(__file__),
         ),
-        '../../../mirrors',
+        '../../../mirrors/updates',
         config['mirrors_dir'],
     )
     all_mirrors = get_mirrors_info(
