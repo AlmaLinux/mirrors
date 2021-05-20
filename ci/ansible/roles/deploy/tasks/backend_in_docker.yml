@@ -1,10 +1,4 @@
 ---
-- name: Pull docker image
-  docker_image:
-    name: "almalinux/mirror_service:latest"
-    source: pull
-    force_source: yes
-
 - name: Set facts for docker container with backend
   set_fact:
     uwsgi_processes: "{{ (uwsgi_processes is defined) | ternary(uwsgi_processes, 4) }}"
@@ -21,6 +15,7 @@
     state: started
     restart: yes
     restart_policy: unless-stopped
+    pull: yes
     env:
       UWSGI_PROCESSES: "{{ uwsgi_processes | string }}"
       SENTRY_DSN: "{{ sentry_dsn | string }}"

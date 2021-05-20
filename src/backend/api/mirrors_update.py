@@ -59,7 +59,7 @@ def get_config(
             os.path.dirname(
                 os.path.abspath(__file__),
             ),
-            '../../../mirrors/config.yml'
+            '../../../mirrors/updates/config.yml'
         )
 ) -> Dict:
     """
