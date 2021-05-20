@@ -11,5 +11,5 @@ else
     echo "There is no script $PRE_START_PATH"
 fi
 
-# Start Supervisor, with Nginx and uWSGI
-exec uwsgi --ini /src/app/uwsgi.ini -p "${UWSGI_PROCESSES:-2}"
+# start uWSGI
+exec uwsgi -p "${UWSGI_PROCESSES:-2}" --http "${UWSGI_ADDRESS}:${UWSGI_PORT}" --ini /src/app/uwsgi.ini

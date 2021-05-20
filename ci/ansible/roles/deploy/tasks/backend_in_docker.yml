@@ -10,7 +10,7 @@
     deploy_env: "{{ deploy_environment | default('Development') }}"
     test_ip_addr: "{{ test_ip_address | default('') }}"
     sentry_disabled: "{{ (deploy_environment is defined and deploy_environment == 'Production') | ternary('False', 'True') }}"
-    published_ports: "{{ (deploy_environment is defined and deploy_environment == 'Production') | ternary(['127.0.0.1', backend_port] | join(':'), backend_port) }}:3031"
+    published_ports: "{{ (deploy_environment is defined and deploy_environment == 'Production') | ternary(['127.0.0.1', backend_port] | join(':'), backend_port) }}:{{ uwsgi_port }}"
 
 
 - name: Up the container from docker image
@@ -28,6 +28,8 @@
       TEST_IP_ADDRESS: "{{ test_ip_addr | string }}"
       AUTH_KEY: "{{ auth_key | string }}"
       SENTRY_DISABLED: "{{ sentry_disabled | string }}"
+      UWSGI_ADDRESS: "{{ uwsgi_address | string }}"
+      UWSGI_PORT: "{{ uwsgi_port | string }}"
     published_ports:
       - "{{ published_ports }}"
     mounts:
