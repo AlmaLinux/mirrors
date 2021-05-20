@@ -3,6 +3,7 @@
   docker_image:
     name: "almalinux/mirror_service:latest"
     source: pull
+    force_source: yes
 
 - name: Set facts for docker container with backend
   set_fact:
@@ -16,7 +17,7 @@
 - name: Up the container from docker image
   docker_container:
     name: "{{ container_env_prefix }}_backend"
-    image: "python38-uwsgi"
+    image: "almalinux/mirror_service:latest"
     state: started
     restart: yes
     restart_policy: unless-stopped
