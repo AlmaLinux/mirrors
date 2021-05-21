@@ -16,7 +16,6 @@ http://mirror.netglobalis.net/almalinux/8.3/extras/Source/
 https://mirror.sjtu.edu.cn/almalinux/8.3/extras/Source/
 http://mirror.fysik.dtu.dk/linux/almalinux/8.3/extras/Source/
 http://mirror.dk.team.blue/almalinux/8.3/extras/Source/
-http://mirror.cedia.org.ec/almalinux/8.3/extras/Source/
 http://mirror.uta.edu.ec/almalinux/8.3/extras/Source/
 http://mirror.epn.edu.ec/almalinux/8.3/extras/Source/
 http://mirror.espoch.edu.ec/almalinux/8.3/extras/Source/
@@ -51,6 +50,7 @@ http://mirror-lolipop.almalinux.tokyo/almalinux/8.3/extras/Source/
 http://ftp.yz.yamagata-u.ac.jp/pub/linux/almalinux/8.3/extras/Source/
 http://mirror.crexio.co.jp/almalinux/8.3/extras/Source/
 http://repo.shinjiru.com/almalinux/8.3/extras/Source/
+http://mirror.nl.fusioned.net/almalinux/8.3/extras/Source/
 http://mirror.nl.altushost.com/almalinux/8.3/extras/Source/
 http://mirror.wd6.net/almalinux/8.3/extras/Source/
 http://mirror.mijn.host/almalinux/8.3/extras/Source/
@@ -74,7 +74,6 @@ http://ftp.arnes.si/mirrors/almalinux/8.3/extras/Source/
 http://almalinux-mirror.datakeepers.co.za/8.3/extras/Source/
 http://alma.jhb.mirror.heficed.com/8.3/extras/Source/
 http://mirror.ch.altushost.com/almalinux/8.3/extras/Source/
-http://mirrors.gethosted.online/almalinux/8.3/extras/Source/
 http://mirror.kku.ac.th/almalinux/8.3/extras/Source/
 http://mirror.natro.com/almalinux/8.3/extras/Source/
 http://mirror.domainhizmetleri.com/almalinux/8.3/extras/Source/
@@ -82,10 +81,10 @@ http://mirror.hosting.com.tr/almalinux/8.3/extras/Source/
 http://mirror-denizli.cenuta.com/almalinux/8.3/extras/Source/
 http://mirror.verinomi.com/almalinux/8.3/extras/Source/
 http://mirror.vargonen.com/almalinux/8.3/extras/Source/
-http://mirror.nl.fusioned.net/almalinux/8.3/extras/Source/
 http://lon.mirror.rackspace.com/almalinux/8.3/extras/Source/
 http://mirror.netweaver.uk/almalinux/8.3/extras/Source/
 http://mirrors.coreix.net/almalinux/8.3/extras/Source/
+http://mirrors.gethosted.online/almalinux/8.3/extras/Source/
 http://almalinux.mirror.katapult.io/8.3/extras/Source/
 http://mirror.cov.ukservers.com/almalinux/8.3/extras/Source/
 http://mirror.vtti.vt.edu/almalinux/8.3/extras/Source/
