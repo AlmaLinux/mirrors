@@ -1,3 +1,4 @@
+http://mirrors.eze.sysarmy.com/almalinux/8.4-beta/BaseOS/debug/$basearch/
 http://mirror.pcloud.net.au/almalinux/8.4-beta/BaseOS/debug/$basearch/
 http://almalinux.mirror.digitalpacific.com.au/8.4-beta/BaseOS/debug/$basearch/
 http://syd.mirror.rackspace.com/almalinux/8.4-beta/BaseOS/debug/$basearch/
@@ -18,7 +19,9 @@ http://mirror.dk.team.blue/almalinux/8.4-beta/BaseOS/debug/$basearch/
 http://mirror.cedia.org.ec/almalinux/8.4-beta/BaseOS/debug/$basearch/
 http://mirror.uta.edu.ec/almalinux/8.4-beta/BaseOS/debug/$basearch/
 http://mirror.epn.edu.ec/almalinux/8.4-beta/BaseOS/debug/$basearch/
+http://mirror.espoch.edu.ec/almalinux/8.4-beta/BaseOS/debug/$basearch/
 http://mirror.crexio.com/almalinux/8.4-beta/BaseOS/debug/$basearch/
+http://almalinux.reloumirrors.net/8.4-beta/BaseOS/debug/$basearch/
 http://mirror.almalinux.ikoula.com/8.4-beta/BaseOS/debug/$basearch/
 http://almalinux.li/8.4-beta/BaseOS/debug/$basearch/
 http://mirror.netzwerge.de/almalinux/8.4-beta/BaseOS/debug/$basearch/
@@ -55,6 +58,7 @@ http://mirror.nforce.com/pub/linux/almalinux/8.4-beta/BaseOS/debug/$basearch/
 http://mirror.serverion.com/almalinux/8.4-beta/BaseOS/debug/$basearch/
 http://almalinux.mirror.liteserver.nl/8.4-beta/BaseOS/debug/$basearch/
 http://mirror.terrahost.no/almalinux/8.4-beta/BaseOS/debug/$basearch/
+http://almalinux.uib.no/8.4-beta/BaseOS/debug/$basearch/
 http://mirror.pregi.net/almalinux/8.4-beta/BaseOS/debug/$basearch/
 http://mirror.chmuri.net/almalinux/8.4-beta/BaseOS/debug/$basearch/
 http://mirrors.pt/almalinux/8.4-beta/BaseOS/debug/$basearch/

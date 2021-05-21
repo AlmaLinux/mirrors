@@ -1,5 +1,6 @@
 | Name | Sponsor | Status | Location | HTTPS | HTTP | RSYNC | FTP |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+mirrors.eze.sysarmy.com|[Sysarmy](https://www.sysarmy.com)|ok|Argentina|[Mirror](https://mirrors.eze.sysarmy.com/almalinux)|[Mirror](http://mirrors.eze.sysarmy.com/almalinux)||
 mirror.pcloud.net.au|[PHREEK Solutions](https://phreek.solutions)|ok|Australia|[Mirror](https://mirror.pcloud.net.au/almalinux)|[Mirror](http://mirror.pcloud.net.au/almalinux)||
 almalinux.mirror.digitalpacific.com.au|[Digital Pacific](https://www.digitalpacific.com.au/)|ok|Australia|[Mirror](https://almalinux.mirror.digitalpacific.com.au)|[Mirror](http://almalinux.mirror.digitalpacific.com.au)|[Link](rsync://mirror.digitalpacific.com.au/almalinux)|
 syd.mirror.rackspace.com|[Rackspace Technology](https://www.rackspace.com)|ok|Australia|[Mirror](https://syd.mirror.rackspace.com/almalinux)|[Mirror](http://syd.mirror.rackspace.com/almalinux)|[Link](rsync://syd.mirror.rackspace.com/almalinux)|
@@ -20,7 +21,9 @@ mirror.dk.team.blue|[team.blue Denmark](https://team.blue)|ok|Denmark|[Mirror](h
 mirror.cedia.org.ec|[CEDIA](https://www.cedia.edu.ec)|ok|Ecuador|[Mirror](https://mirror.cedia.org.ec/almalinux)|[Mirror](http://mirror.cedia.org.ec/almalinux)|[Link](rsync://mirror.cedia.org.ec/almalinux)|
 mirror.uta.edu.ec|[Universidad Técnica de Ambato](https://www.uta.edu.ec)|ok|Ecuador|[Mirror](https://mirror.uta.edu.ec/almalinux)|[Mirror](http://mirror.uta.edu.ec/almalinux)||
 mirror.epn.edu.ec|[Escuela Politécnica Nacional](https://www.epn.edu.ec)|ok|Ecuador|[Mirror](https://mirror.epn.edu.ec/almalinux)|[Mirror](http://mirror.epn.edu.ec/almalinux)||
+mirror.espoch.edu.ec|[Escuela Superior Politécnica de Chimborazo](https://www.espoch.edu.ec)|ok|Ecuador|[Mirror](https://mirror.espoch.edu.ec/almalinux)|[Mirror](http://mirror.espoch.edu.ec/almalinux)|[Link](rsync://mirror.espoch.edu.ec/almalinux)|
 mirror.crexio.com|[CREXIO](https://crexio.com)|ok|France|[Mirror](https://mirror.crexio.com/almalinux)|[Mirror](http://mirror.crexio.com/almalinux)|[Link](rsync://mirror.crexio.com/almalinux)|
+almalinux.reloumirrors.net|[RelouFR](http://www.reloumirrors.net/)|ok|France|[Mirror](https://almalinux.reloumirrors.net)|[Mirror](http://almalinux.reloumirrors.net)|[Link](rsync://almalinux.reloumirrors.net/almalinux)|
 mirror.almalinux.ikoula.com|[Ikoula](https://www.ikoula.com/)|ok|France|[Mirror](https://mirror.almalinux.ikoula.com)|[Mirror](http://mirror.almalinux.ikoula.com)||
 almalinux.li|[/dev/null/v](https://dev.nul.lv)|ok|Germany|[Mirror](https://almalinux.li)|[Mirror](http://almalinux.li)||
 mirror.netzwerge.de|[Netzwerge GmbH](https://www.netzwerge.de)|ok|Germany|[Mirror](https://mirror.netzwerge.de/almalinux)|[Mirror](http://mirror.netzwerge.de/almalinux)||
@@ -57,6 +60,7 @@ mirror.nforce.com|[NFOrce Internet Services B.V.](https://www.nforce.com/)|ok|Ne
 mirror.serverion.com|[SERVERION](https://www.serverion.com)|ok|Netherlands|[Mirror](https://mirror.serverion.com/almalinux)|[Mirror](http://mirror.serverion.com/almalinux)|[Link](rsync://mirror.serverion.com/almalinux)|
 almalinux.mirror.liteserver.nl|[LiteServer](https://www.liteserver.nl/)|ok|Netherlands|[Mirror](https://almalinux.mirror.liteserver.nl)|[Mirror](http://almalinux.mirror.liteserver.nl)|[Link](rsync://mirror.liteserver.nl/almalinux)|
 mirror.terrahost.no|[Terrahost AS](https://terrahost.no/)|ok|Norway|[Mirror](https://mirror.terrahost.no/almalinux)|[Mirror](http://mirror.terrahost.no/almalinux)||
+almalinux.uib.no|[University of Bergen](https://www.uib.no)|ok|Norway|[Mirror](https://almalinux.uib.no)|[Mirror](http://almalinux.uib.no)|[Link](rsync://almalinux.uib.no)|
 mirror.pregi.net|[DOST-ASTI and PREGINET](https://asti.dost.gov.ph/)|ok|Philippines|[Mirror](https://mirror.pregi.net/almalinux)|[Mirror](http://mirror.pregi.net/almalinux)|[Link](rsync://mirror.pregi.net/almalinux)|
 mirror.chmuri.net|[Chmuri.net](https://www.chmuri.net)|ok|Poland|[Mirror](https://mirror.chmuri.net/almalinux)|[Mirror](http://mirror.chmuri.net/almalinux)||
 mirrors.pt|[Edgoo Networks](https://www.edgoo.io)|ok|Portugal|[Mirror](https://mirrors.pt/almalinux)|[Mirror](http://mirrors.pt/almalinux)|[Link](rsync://mirrors.pt/almalinux)|
