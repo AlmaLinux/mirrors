@@ -1,0 +1,10 @@
+---
+name: uk.mirrors.clouvider.net
+address:
+  http: http://uk.mirrors.clouvider.net/
+  https: https://uk.mirrors.clouvider.net/
+update_frequency: 3h
+sponsor: Clouvider
+sponsor_url: https://wwwclouvider.co.uk
+email: tech@clouvider.co.uk
+...

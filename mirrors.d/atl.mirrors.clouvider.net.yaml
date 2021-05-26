@@ -1,0 +1,10 @@
+---
+name: atl.mirrors.clouvider.net
+address:
+  http: http://atl.mirrors.clouvider.net/
+  https: https://atl.mirrors.clouvider.net/
+update_frequency: 3h
+sponsor: Clouvider
+sponsor_url: https://wwwclouvider.co.uk
+email: tech@clouvider.co.uk
+...

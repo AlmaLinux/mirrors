@@ -1,0 +1,10 @@
+---
+name: nl.mirrors.clouvider.net
+address:
+  http: http://nl.mirrors.clouvider.net/
+  https: https://nl.mirrors.clouvider.net/
+update_frequency: 3h
+sponsor: Clouvider
+sponsor_url: https://wwwclouvider.co.uk
+email: tech@clouvider.co.uk
+...
