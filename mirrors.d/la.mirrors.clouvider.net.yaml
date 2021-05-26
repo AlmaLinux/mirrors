@@ -1,10 +1,10 @@
 ---
 name: la.mirrors.clouvider.net
 address:
-  http: http://la.mirrors.clouvider.net/
-  https: https://la.mirrors.clouvider.net/
+  http: http://la.mirrors.clouvider.net/almalinux/
+  https: https://la.mirrors.clouvider.net/almalinux/
 update_frequency: 3h
 sponsor: Clouvider
-sponsor_url: https://wwwclouvider.co.uk
+sponsor_url: https://www.clouvider.co.uk
 email: tech@clouvider.co.uk
 ...
