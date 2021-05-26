@@ -10,7 +10,7 @@ versions:
   - 8
 duplicated_versions:
   - 8
-  - 8.4
+  - 8.4-beta
 repos:
   - name: baseos
     path: BaseOS/$basearch/os/
