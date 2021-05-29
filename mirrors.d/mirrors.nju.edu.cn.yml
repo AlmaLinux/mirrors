@@ -1,0 +1,11 @@
+---
+name: mirrors.nju.edu.cn
+address:
+  http: http://mirrors.nju.edu.cn/almalinux/
+  https: https://mirrors.nju.edu.cn/almalinux/
+  rsync: rsync://mirrors.nju.edu.cn/almalinux/
+update_frequency: 3h
+sponsor: eScience Center, Nanjing University
+sponsor_url: https://sci.nju.edu.cn
+email: my@yaoge123.com
+...
