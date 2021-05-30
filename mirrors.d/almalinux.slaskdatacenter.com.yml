@@ -1,0 +1,10 @@
+---
+name: almalinux.slaskdatacenter.com
+address:
+  http: http://almalinux.slaskdatacenter.com/
+  https: https://almalinux.slaskdatacenter.com/
+update_frequency: 3h
+sponsor: Slask Data Center
+sponsor_url: https://sldc.eu/
+email: bok@sldc.eu
+...
