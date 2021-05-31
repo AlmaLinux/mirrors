@@ -1,0 +1,8 @@
+name: mirror.dewabiz.com
+address:
+  http: http://mirror.dewabiz.com/almalinux/
+  https: https://mirror.dewabiz.com/almalinux/
+update_frequency: 3h
+sponsor: DewaBisnis Digital (DewaBiz
+sponsor_url: http://dewabiz.com/
+email: info@dewabiz.com
