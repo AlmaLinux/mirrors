@@ -12,6 +12,7 @@ http://mirror.host.ag/almalinux/8/PowerTools/debug/$basearch/
 http://mirrors.uni-ruse.bg/almalinux/8/PowerTools/debug/$basearch/
 http://mirror.csclub.uwaterloo.ca/almalinux/8/PowerTools/debug/$basearch/
 http://dist-mirror.fibernetics.ca/almalinux/8/PowerTools/debug/$basearch/
+http://mirror.esecuredata.com/almalinux/8/PowerTools/debug/$basearch/
 http://mirror1.cl.netactuate.com/almalinux/8/PowerTools/debug/$basearch/
 http://mirror-almalinux.grupocg.cl/almalinux/8/PowerTools/debug/$basearch/
 http://mirror.netglobalis.net/almalinux/8/PowerTools/debug/$basearch/
@@ -34,13 +35,17 @@ http://de.mirrors.clouvider.net/almalinux/8/PowerTools/debug/$basearch/
 http://mirror.01link.hk/almalinux/8/PowerTools/debug/$basearch/
 http://hkg.mirror.rackspace.com/almalinux/8/PowerTools/debug/$basearch/
 http://mirrors.sth.sze.hu/almalinux/8/PowerTools/debug/$basearch/
+http://mirror.almalinux.mum01.readydedis.com/almalinux/8/PowerTools/debug/$basearch/
 http://bom.mirror.leapswitch.com/almalinux/8/PowerTools/debug/$basearch/
 http://dinosaurus.fleksibel.com/almalinux/8/PowerTools/debug/$basearch/
 http://mirror-jp.almalinux.id/almalinux/8/PowerTools/debug/$basearch/
+http://mirror.dewabiz.com/almalinux/8/PowerTools/debug/$basearch/
 http://mirror.amscloud.co.id/almalinux/8/PowerTools/debug/$basearch/
 http://mirror-id.almalinux.id/almalinux/8/PowerTools/debug/$basearch/
+http://mirror.triputramedia.id/almalinux/8/PowerTools/debug/$basearch/
 http://mirror.herza.id/almalinux/8/PowerTools/debug/$basearch/
 http://mirror.telkomuniversity.ac.id/almalinux/8/PowerTools/debug/$basearch/
+http://kartolo.sby.datautama.net.id/almalinux/8/PowerTools/debug/$basearch/
 http://ftp.sakura.ad.jp/almalinux/8/PowerTools/debug/$basearch/
 http://ftp.iij.ad.jp/pub/linux/almalinux/8/PowerTools/debug/$basearch/
 http://mirror-conoha.almalinux.tokyo/almalinux/8/PowerTools/debug/$basearch/
@@ -50,9 +55,9 @@ http://mirror.almalinux.asia/almalinux/8/PowerTools/debug/$basearch/
 http://mirror-lolipop.almalinux.tokyo/almalinux/8/PowerTools/debug/$basearch/
 http://ftp.yz.yamagata-u.ac.jp/pub/linux/almalinux/8/PowerTools/debug/$basearch/
 http://repo.shinjiru.com/almalinux/8/PowerTools/debug/$basearch/
+http://mirror.nl.fusioned.net/almalinux/8/PowerTools/debug/$basearch/
 http://mirror.nl.altushost.com/almalinux/8/PowerTools/debug/$basearch/
 http://mirror.wd6.net/almalinux/8/PowerTools/debug/$basearch/
-http://mirror.mijn.host/almalinux/8/PowerTools/debug/$basearch/
 http://mirror.nforce.com/pub/linux/almalinux/8/PowerTools/debug/$basearch/
 http://mirror.serverion.com/almalinux/8/PowerTools/debug/$basearch/
 http://nl.mirrors.clouvider.net/almalinux/8/PowerTools/debug/$basearch/
@@ -60,6 +65,7 @@ http://almalinux.mirror.liteserver.nl/8/PowerTools/debug/$basearch/
 http://mirror.terrahost.no/almalinux/8/PowerTools/debug/$basearch/
 http://almalinux.uib.no/8/PowerTools/debug/$basearch/
 http://mirror.pregi.net/almalinux/8/PowerTools/debug/$basearch/
+http://almalinux.slaskdatacenter.com/8/PowerTools/debug/$basearch/
 http://mirror.chmuri.net/almalinux/8/PowerTools/debug/$basearch/
 http://mirrors.pt/almalinux/8/PowerTools/debug/$basearch/
 http://mirrors.ptisp.pt/almalinux/8/PowerTools/debug/$basearch/
@@ -67,12 +73,12 @@ http://mirrors.chroot.ro/almalinux/8/PowerTools/debug/$basearch/
 http://mirrors.hostico.ro/almalinux/8/PowerTools/debug/$basearch/
 http://ftp.lug.ro/almalinux/8/PowerTools/debug/$basearch/
 http://mirrors.layerbridge.com/almalinux/8/PowerTools/debug/$basearch/
-http://mirror.reconn.ru/almalinux/8/PowerTools/debug/$basearch/
 http://mirror.yandex.ru/almalinux/8/PowerTools/debug/$basearch/
 http://almalinux.unlimited.rs/8/PowerTools/debug/$basearch/
 http://ftp.arnes.si/mirrors/almalinux/8/PowerTools/debug/$basearch/
 http://almalinux-mirror.datakeepers.co.za/8/PowerTools/debug/$basearch/
 http://mirror.misakamikoto.network/almalinux/8/PowerTools/debug/$basearch/
+http://ftp.yjsoft.xyz/almalinux/8/PowerTools/debug/$basearch/
 http://repo.ifca.es/almalinux/8/PowerTools/debug/$basearch/
 http://mirror.ch.altushost.com/almalinux/8/PowerTools/debug/$basearch/
 http://mirror.kku.ac.th/almalinux/8/PowerTools/debug/$basearch/
@@ -93,6 +99,7 @@ http://yum.tamu.edu/alma/8/PowerTools/debug/$basearch/
 http://mirror.siena.edu/almalinux/8/PowerTools/debug/$basearch/
 http://mirror.steadfastnet.com/almalinux/8/PowerTools/debug/$basearch/
 http://mirror.cloudpropeller.com/almalinux/8/PowerTools/debug/$basearch/
+https://repos.eggycrew.com/almalinux/8/PowerTools/debug/$basearch/
 http://dfw.mirror.rackspace.com/almalinux/8/PowerTools/debug/$basearch/
 http://atl.mirrors.clouvider.net/almalinux/8/PowerTools/debug/$basearch/
 http://mirror.nodespace.net/almalinux/8/PowerTools/debug/$basearch/
@@ -100,8 +107,8 @@ http://iad.mirror.rackspace.com/almalinux/8/PowerTools/debug/$basearch/
 https://almalinux.ourhome.kiwi/8/PowerTools/debug/$basearch/
 http://la.mirrors.clouvider.net/almalinux/8/PowerTools/debug/$basearch/
 http://mirror.cloudcone.net/almalinux/8/PowerTools/debug/$basearch/
-http://almalinux-mirror.dal1.hivelocity.net/8/PowerTools/debug/$basearch/
-http://almalinux-mirror.tpa.hivelocity.net/8/PowerTools/debug/$basearch/
+http://mirror.almalinux.dal01.readydedis.com/almalinux/8/PowerTools/debug/$basearch/
+http://mirror.almalinux.ams01.readydedis.com/almalinux/8/PowerTools/debug/$basearch/
 http://mirror.hostup.org/almalinux/8/PowerTools/debug/$basearch/
 http://ord.mirror.rackspace.com/almalinux/8/PowerTools/debug/$basearch/
 http://almalinux.mirrors.as212647.net/8/PowerTools/debug/$basearch/
