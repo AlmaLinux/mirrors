@@ -95,7 +95,7 @@ def mirror_available(
                 'repodata/repomd.xml',
             )
             try:
-                request = requests.get(check_url, headers=HEADERS)
+                request = requests.get(check_url, headers=HEADERS, timeout=60)
                 request.raise_for_status()
             except (requests.RequestException, HTTPError):
                 logger.warning(
