@@ -1,0 +1,11 @@
+---
+name: almalinux.ipserverone.com
+address:
+  http: http://almalinux.ipserverone.com/almalinux/
+  https: https://almalinux.ipserverone.com/almalinux/
+  rsync: rsync://almalinux.ipserverone.com/almalinux/
+update_frequency: 1h
+sponsor: IP Serverone Solutions Sdn Bhd
+sponsor_url: https://www.ipserverone.com/
+email: support@ipserverone.com
+...
