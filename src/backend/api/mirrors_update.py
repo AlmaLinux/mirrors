@@ -276,6 +276,7 @@ def update_mirror_in_db(
         mirror_name,
     )
     session.add(mirror_to_create)
+    session.flush()
     logger.debug(
         'Mirror "%s" is addded',
         mirror_name,
