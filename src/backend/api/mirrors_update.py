@@ -32,7 +32,6 @@ from db.models import (
     Mirror,
     Url,
 )
-from db.utils import session_scope
 
 REQUIRED_MIRROR_PROTOCOLS = (
     'https',
@@ -45,7 +44,12 @@ ARCHS = (
 
 # set User-Agent for python-requests
 HEADERS = {
-    'User-Agent': 'libdnf (AlmaLinux 8.3; generic; Linux.x86_64)'
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36',
+    "Upgrade-Insecure-Requests": "1",
+    "DNT": "1",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.5",
+    "Accept-Encoding": "gzip, deflate"
 }
 # the list of mirrors which should be always available
 WHITELIST_MIRRORS = (
@@ -147,42 +151,33 @@ def mirror_available(
                 'repodata/repomd.xml',
             )
             try:
-                request = None
                 logger.debug(
                     'Checking url "%s" of mirror "%s"',
                     check_url,
                     mirror_info['name'],
                 )
-                # request = requests.get(check_url, headers=HEADERS)
-                request = urlopen(check_url)
+                request = requests.get(check_url, headers=HEADERS, timeout=15)
 
                 logger.debug(
                     'Checking url "%s" of mirror "%s" (before raise_status)',
                     check_url,
                     mirror_info['name'],
                 )
-                # request.raise_for_status()
-                if request.status != 200:
-                    raise URLError()
+                request.raise_for_status()
                 logger.debug(
                     'Checking url "%s" of mirror "%s" is completed',
                     check_url,
                     mirror_info['name'],
                 )
-            # except (requests.RequestException, HTTPError, Exception) as err:
-            except (URLError,) as err:
+            except (requests.RequestException, HTTPError, Exception):
                 logger.warning(
                     'Mirror "%s" is not available for version '
-                    '"%s" and repo path "%s", error: "%s"',
+                    '"%s" and repo path "%s"',
                     mirror_info['name'],
                     version,
                     repo_path,
-                    err,
                 )
                 return mirror_info['name'], False
-            finally:
-                if request is not None:
-                    request.close()
     logger.info(
         'Mirror "%s" is available',
         mirror_info['name']
