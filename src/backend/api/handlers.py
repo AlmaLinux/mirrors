@@ -134,7 +134,7 @@ def update_mirrors_handler():
     config = get_config()
     versions = config['versions']
     repos = config['repos']
-    mirrors_dir=os.path.join(
+    mirrors_dir = os.path.join(
         os.path.dirname(
             os.path.abspath(__file__),
         ),
@@ -144,14 +144,18 @@ def update_mirrors_handler():
     all_mirrors = get_mirrors_info(
         mirrors_dir=mirrors_dir,
     )
-    for mirror_info in all_mirrors:
-        update_mirror_in_db(
-            mirror_info,
-            versions,
-            repos,
-            config['allowed_outdate'],
-        )
-        sleep(1)
+    with session_scope() as session:
+        session.query(Mirror).delete()
+        for mirror_info in all_mirrors:
+            update_mirror_in_db(
+                mirror_info,
+                versions,
+                repos,
+                config['allowed_outdate'],
+                session,
+            )
+            sleep(1)
+        session.flush()
     return 'Done'
 
 
