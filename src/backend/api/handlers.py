@@ -39,19 +39,19 @@ def _get_nearest_mirrors(
         empty_for_unknown_ip: bool = False,
 ):
     """
-    The function returns 5 nearest mirrors towards a request's IP
-    Firstly, it searches first 5 mirrors inside a request's country
-    Secondly, it searches first 5 nearest mirrors by distance
+    The function returns N nearest mirrors towards a request's IP
+    Firstly, it searches first N mirrors inside a request's country
+    Secondly, it searches first N nearest mirrors by distance
         inside a request's continent
-    Thirdly, it searches first 5 nearest mirrors by distance in the world
+    Thirdly, it searches first N nearest mirrors by distance in the world
     Further the functions concatenate lists and return first
-        5 elements of a summary list
+        N elements of a summary list
     :param empty_for_unknown_ip: if True and we can't get geo data of an IP
         the function returns empty list
     """
-    if os.environ.get('DEPLOY_ENVIRONMENT') in (
-        'Dev',
-        'Development',
+    if os.environ.get('DEPLOY_ENVIRONMENT').lower() in (
+        'dev',
+        'development',
     ):
         ip_address = os.environ.get(
             'TEST_IP_ADDRESS',
