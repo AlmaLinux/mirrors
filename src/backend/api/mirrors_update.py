@@ -241,6 +241,10 @@ def update_mirror_in_db(
                 Mirror.name == mirror_name
             ).all()
             for mirror_for_delete in mirrors_for_delete:
+                logger.info(
+                    'Old mirror "%s" is removed',
+                    mirror_for_delete.name,
+                )
                 session.delete(mirror_for_delete)
         except NoResultFound:
             pass
