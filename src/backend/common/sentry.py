@@ -47,7 +47,7 @@ def get_logger(logger_name: str):
         if deploy_environment.lower() == 'production':
             logging_level = logging.DEBUG
         else:
-            logging_level = logging.INFO
+            logging_level = logging.DEBUG
         logger.setLevel(logging_level)
         stream_handler = logging.StreamHandler()
         stream_handler.setLevel(logging_level)
