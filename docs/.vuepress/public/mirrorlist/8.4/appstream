@@ -2,7 +2,6 @@ http://mirrors.eze.sysarmy.com/almalinux/8.4/AppStream/$basearch/os/
 http://mirror.pcloud.net.au/almalinux/8.4/AppStream/$basearch/os/
 http://almalinux.mirror.digitalpacific.com.au/8.4/AppStream/$basearch/os/
 http://syd.mirror.rackspace.com/almalinux/8.4/AppStream/$basearch/os/
-http://mirror.as24220.net/almalinux/8.4/AppStream/$basearch/os/
 http://mirror.alwyzon.net/almalinux/8.4/AppStream/$basearch/os/
 http://mirror.xeonbd.com/almalinux/8.4/AppStream/$basearch/os/
 http://mirrors.hostever.com/almalinux/8.4/AppStream/$basearch/os/
@@ -16,6 +15,7 @@ http://mirror.esecuredata.com/almalinux/8.4/AppStream/$basearch/os/
 http://mirror1.cl.netactuate.com/almalinux/8.4/AppStream/$basearch/os/
 http://mirror-almalinux.grupocg.cl/almalinux/8.4/AppStream/$basearch/os/
 http://mirror.netglobalis.net/almalinux/8.4/AppStream/$basearch/os/
+http://mirrors.nju.edu.cn/almalinux/8.4/AppStream/$basearch/os/
 https://mirror.sjtu.edu.cn/almalinux/8.4/AppStream/$basearch/os/
 http://mirror.fysik.dtu.dk/linux/almalinux/8.4/AppStream/$basearch/os/
 http://mirror.dk.team.blue/almalinux/8.4/AppStream/$basearch/os/
@@ -26,6 +26,7 @@ http://mirror.crexio.com/almalinux/8.4/AppStream/$basearch/os/
 http://almalinux.reloumirrors.net/8.4/AppStream/$basearch/os/
 http://mirror.almalinux.ikoula.com/8.4/AppStream/$basearch/os/
 http://almalinux.li/8.4/AppStream/$basearch/os/
+http://mirror.hs-esslingen.de/Mirrors/almalinux/8.4/AppStream/$basearch/os/
 http://mirror.netzwerge.de/almalinux/8.4/AppStream/$basearch/os/
 http://ftp.gwdg.de/pub/linux/almalinux/8.4/AppStream/$basearch/os/
 http://repo.almalinux.org/almalinux/8.4/AppStream/$basearch/os/

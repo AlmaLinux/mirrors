@@ -4,7 +4,6 @@ mirrors.eze.sysarmy.com|[Sysarmy](https://www.sysarmy.com)|ok|Argentina|[Mirror]
 mirror.pcloud.net.au|[PHREEK Solutions](https://phreek.solutions)|ok|Australia|[Mirror](https://mirror.pcloud.net.au/almalinux)|[Mirror](http://mirror.pcloud.net.au/almalinux)||
 almalinux.mirror.digitalpacific.com.au|[Digital Pacific](https://www.digitalpacific.com.au/)|ok|Australia|[Mirror](https://almalinux.mirror.digitalpacific.com.au)|[Mirror](http://almalinux.mirror.digitalpacific.com.au)|[Link](rsync://mirror.digitalpacific.com.au/almalinux)|
 syd.mirror.rackspace.com|[Rackspace Technology](https://www.rackspace.com)|ok|Australia|[Mirror](https://syd.mirror.rackspace.com/almalinux)|[Mirror](http://syd.mirror.rackspace.com/almalinux)|[Link](rsync://syd.mirror.rackspace.com/almalinux)|
-mirror.as24220.net|[Hostcentral](https://www.hostcentral.net.au)|ok|Australia|[Mirror](https://mirror.as24220.net/almalinux)|[Mirror](http://mirror.as24220.net/almalinux)|[Link](rsync://mirror.as24220.net/almalinux)|
 mirror.alwyzon.net|[Alwyzon](https://www.alwyzon.com/)|ok|Austria|[Mirror](https://mirror.alwyzon.net/almalinux)|[Mirror](http://mirror.alwyzon.net/almalinux)||
 mirror.xeonbd.com|[XeonBD](https://www.xeonbd.com)|ok|Bangladesh||[Mirror](http://mirror.xeonbd.com/almalinux)||
 mirrors.hostever.com|[CodeforHost Inc](https://www.codeforhost.com)|ok|Bangladesh|[Mirror](https://mirrors.hostever.com/almalinux)|[Mirror](http://mirrors.hostever.com/almalinux)||
@@ -18,6 +17,7 @@ mirror.esecuredata.com|[eSecureData](https://www.esecuredata.com/)|ok|Canada|[Mi
 mirror1.cl.netactuate.com|[NetActuate](https://www.netactuate.com)|ok|Chile|[Mirror](https://mirror1.cl.netactuate.com/almalinux)|[Mirror](http://mirror1.cl.netactuate.com/almalinux)|[Link](rsync://mirror1.cl.netactuate.com/almalinux)|
 mirror-almalinux.grupocg.cl|[Grupo CG](https://www.grupocg.cl)|ok|Chile|[Mirror](https://mirror-almalinux.grupocg.cl/almalinux)|[Mirror](http://mirror-almalinux.grupocg.cl/almalinux)||
 mirror.netglobalis.net|[Netglobalis S.A.](https://www.netglobalis.net)|ok|Chile|[Mirror](https://mirror.netglobalis.net/almalinux)|[Mirror](http://mirror.netglobalis.net/almalinux)||
+mirrors.nju.edu.cn|[eScience Center, Nanjing University](https://sci.nju.edu.cn)|ok|China|[Mirror](https://mirrors.nju.edu.cn/almalinux)|[Mirror](http://mirrors.nju.edu.cn/almalinux)|[Link](rsync://mirrors.nju.edu.cn/almalinux)|
 mirror.sjtu.edu.cn|[Shanghai Jiao Tong University Network Information Center](https://net.sjtu.edu.cn)|ok|China|[Mirror](https://mirror.sjtu.edu.cn/almalinux)|||
 mirror.fysik.dtu.dk|[DTU Fysik](https://www.fysik.dtu.dk/)|ok|Denmark|[Mirror](https://mirror.fysik.dtu.dk/linux/almalinux)|[Mirror](http://mirror.fysik.dtu.dk/linux/almalinux)||
 mirror.dk.team.blue|[team.blue Denmark](https://team.blue)|ok|Denmark|[Mirror](https://mirror.dk.team.blue/almalinux)|[Mirror](http://mirror.dk.team.blue/almalinux)||
@@ -28,6 +28,7 @@ mirror.crexio.com|[CREXIO](https://crexio.com)|ok|France|[Mirror](https://mirror
 almalinux.reloumirrors.net|[RelouFR](http://www.reloumirrors.net/)|ok|France|[Mirror](https://almalinux.reloumirrors.net)|[Mirror](http://almalinux.reloumirrors.net)|[Link](rsync://almalinux.reloumirrors.net/almalinux)|
 mirror.almalinux.ikoula.com|[Ikoula](https://www.ikoula.com/)|ok|France|[Mirror](https://mirror.almalinux.ikoula.com)|[Mirror](http://mirror.almalinux.ikoula.com)||
 almalinux.li|[/dev/null/v](https://dev.nul.lv)|ok|Germany|[Mirror](https://almalinux.li)|[Mirror](http://almalinux.li)||
+mirror.hs-esslingen.de|[Hochschule Esslingen](https://www.hs-esslingen.de/)|ok|Germany|[Mirror](https://mirror.hs-esslingen.de/Mirrors/almalinux)|[Mirror](http://mirror.hs-esslingen.de/Mirrors/almalinux)|[Link](rsync://mirror.hs-esslingen.de/almalinux)|
 mirror.netzwerge.de|[Netzwerge GmbH](https://www.netzwerge.de)|ok|Germany|[Mirror](https://mirror.netzwerge.de/almalinux)|[Mirror](http://mirror.netzwerge.de/almalinux)||
 ftp.gwdg.de|[Gesellschaft für wissenschaftliche Datenverarbeitung mbH Göttingen](https://www.gwdg.de)|ok|Germany|[Mirror](https://ftp.gwdg.de/pub/linux/almalinux)|[Mirror](http://ftp.gwdg.de/pub/linux/almalinux)|[Link](rsync://ftp.gwdg.de/almalinux)|
 repo.almalinux.org|[AlmaLinux](https://www.almalinux.org)|ok|Germany|[Mirror](https://repo.almalinux.org/almalinux)|[Mirror](http://repo.almalinux.org/almalinux)|[Link](rsync://rsync.repo.almalinux.org/almalinux)|
@@ -57,7 +58,7 @@ mirror-onamae.almalinux.tokyo|[TRIPPYBOY.COM](https://blog.trippyboy.com)|ok|Jap
 mirror.almalinux.asia|[TRIPPYBOY.COM](https://blog.trippyboy.com)|ok|Japan|[Mirror](https://mirror.almalinux.asia/almalinux)|[Mirror](http://mirror.almalinux.asia/almalinux)||
 mirror-lolipop.almalinux.tokyo|[TRIPPYBOY.COM](https://blog.trippyboy.com)|ok|Japan|[Mirror](https://mirror-lolipop.almalinux.tokyo/almalinux)|[Mirror](http://mirror-lolipop.almalinux.tokyo/almalinux)||
 ftp.yz.yamagata-u.ac.jp|[Yamagata University](https://www.yamagata-u.ac.jp/)|ok|Japan|[Mirror](https://ftp.yz.yamagata-u.ac.jp/pub/linux/almalinux)|[Mirror](http://ftp.yz.yamagata-u.ac.jp/pub/linux/almalinux)|[Link](rsync://rsync.ftp.yz.yamagata-u.ac.jp/pub/linux/almalinux)|
-mirror.crexio.co.jp|[CREXIO](https://crexio.com)|ok|Japan|[Mirror](https://mirror.crexio.co.jp/almalinux)|[Mirror](http://mirror.crexio.co.jp/almalinux)||
+mirror.crexio.co.jp|[CREXIO](https://crexio.com)|ok|Japan|[Mirror](https://mirror.crexio.co.jp/almalinux)|[Mirror](http://mirror.crexio.co.jp/almalinux)|[Link](rsync://mirror.crexio.co.jp/almalinux)|
 almalinux.ipserverone.com|[IP Serverone Solutions Sdn Bhd](https://www.ipserverone.com/)|ok|Malaysia|[Mirror](https://almalinux.ipserverone.com/almalinux)|[Mirror](http://almalinux.ipserverone.com/almalinux)|[Link](rsync://almalinux.ipserverone.com/almalinux)|
 repo.shinjiru.com|[Shinjiru Technology Sdn Bhd](https://www.shinjiru.com)|ok|Malaysia|[Mirror](https://repo.shinjiru.com/almalinux)|[Mirror](http://repo.shinjiru.com/almalinux)|[Link](rsync://repo.shinjiru.com/almalinux)|
 mirror.nl.fusioned.net|[Fusioned Ltd](https://www.fusioned.net/)|ok|Netherlands|[Mirror](https://mirror.nl.fusioned.net/almalinux)|[Mirror](http://mirror.nl.fusioned.net/almalinux)||
