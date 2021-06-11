@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import multiprocessing
 import os
+from urllib.error import URLError
+from urllib.request import urlopen
 
 import requests
 import yaml
@@ -145,33 +147,42 @@ def mirror_available(
                 'repodata/repomd.xml',
             )
             try:
+                request = None
                 logger.debug(
                     'Checking url "%s" of mirror "%s"',
                     check_url,
                     mirror_info['name'],
                 )
-                request = requests.get(check_url, headers=HEADERS)
+                # request = requests.get(check_url, headers=HEADERS)
+                request = urlopen(check_url)
 
                 logger.debug(
                     'Checking url "%s" of mirror "%s" (before raise_status)',
                     check_url,
                     mirror_info['name'],
                 )
-                request.raise_for_status()
+                # request.raise_for_status()
+                if request.status != 200:
+                    raise URLError()
                 logger.debug(
                     'Checking url "%s" of mirror "%s" is completed',
                     check_url,
                     mirror_info['name'],
                 )
-            except (requests.RequestException, HTTPError, Exception):
+            # except (requests.RequestException, HTTPError, Exception) as err:
+            except (URLError,) as err:
                 logger.warning(
                     'Mirror "%s" is not available for version '
-                    '"%s" and repo path "%s"',
+                    '"%s" and repo path "%s", error: "%s"',
                     mirror_info['name'],
                     version,
                     repo_path,
+                    err,
                 )
                 return mirror_info['name'], False
+            finally:
+                if request is not None:
+                    request.close()
     logger.info(
         'Mirror "%s" is available',
         mirror_info['name']
