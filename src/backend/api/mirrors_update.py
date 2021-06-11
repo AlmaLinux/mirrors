@@ -151,13 +151,19 @@ def mirror_available(
                     mirror_info['name'],
                 )
                 request = requests.get(check_url, headers=HEADERS)
+
+                logger.debug(
+                    'Checking url "%s" of mirror "%s" (before raise_status)',
+                    check_url,
+                    mirror_info['name'],
+                )
                 request.raise_for_status()
                 logger.debug(
                     'Checking url "%s" of mirror "%s" is completed',
                     check_url,
                     mirror_info['name'],
                 )
-            except (requests.RequestException, HTTPError):
+            except (requests.RequestException, HTTPError, Exception):
                 logger.warning(
                     'Mirror "%s" is not available for version '
                     '"%s" and repo path "%s"',
