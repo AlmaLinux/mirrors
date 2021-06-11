@@ -237,10 +237,9 @@ def update_mirror_in_db(
         )
     with session_scope() as session:
         try:
-            mirror_to_delete = session.query(Mirror).filter(
+            session.query(Mirror).filter(
                 Mirror.name == mirror_name
-            ).one()
-            session.delete(mirror_to_delete)
+            ).delete()
         except NoResultFound:
             pass
         if not is_available:
