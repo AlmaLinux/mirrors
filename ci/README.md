@@ -2,6 +2,7 @@
 
 * [Requirements](#Requirements)
 * [How to deploy](#Deploying)
+* [How it works]
 
 
 ## Requirements
@@ -34,3 +35,24 @@
 6. Go to project directory `ci/ansible`
 6. Run command `ansible-playbook -vv -i inventory/dev -u 
    <username> --become main.yml`, there is `<username>` is name of a user from a remote server which has sudo rights
+
+## How it works
+The service uses IP of a incoming request for detecting country and region. Therefore, a location can be different by expected if a server or you are using proxy, vpn, Cloudflare (or something like this).
+For detecting of location by IP we use GeoIP database from https://www.maxmind.com/en/geoip2-databases.
+The service returns full list of mirrors if it can't detect your location by IP.
+Otherwise, it returns list of the ten nearest mirrors. The list make up by following methods:
+- Take the ten nearest to you mirrors inside your country (e.g. inside UK)
+- Take the ten nearest to you mirrors inside your region (e.g. Europe). This list doesn't include the previous list.
+- Take the ten nearest to you mirrors outside your region and country. This list doesn't include the previous lists too.
+- Length of each list can be less than ten, because your country/region may not contain required amount of mirrors.
+- Each next mirrors list adds to previous
+- The final list is trimmed to first ten elements and it's returned to a client.
+  
+Example:
+- Your location is Egypt.
+- Egypt contains four mirrors.
+- Africa contains five mirrors.
+- Other world contains 95 mirrors.
+- The service takes four mirrors from Egypt, five mirrors from Africa and ten mirrors from other world.
+- It trims this list to ten elements and return it to client:
+- | E | E | E | E | A | A | A | A | A | W |, there is E - Egypt mirror, A - Africa mirror, W - World mirror
