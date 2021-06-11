@@ -32,6 +32,7 @@ from db.models import (
     Mirror,
     Url,
 )
+from db.utils import session_scope
 
 REQUIRED_MIRROR_PROTOCOLS = (
     'https',
@@ -220,7 +221,6 @@ def update_mirror_in_db(
         versions: List[AnyStr],
         repos: List[Dict[AnyStr, Union[Dict, AnyStr]]],
         allowed_outdate: AnyStr,
-        session: Session,
 ) -> None:
     """
     Update record about a mirror in DB in background thread.
@@ -253,34 +253,35 @@ def update_mirror_in_db(
             type=url_type,
         ) for url_type, url in mirror_info['address'].items()
     ]
-    for url_to_create in urls_to_create:
-        session.add(url_to_create)
-    mirror_to_create = Mirror(
-        name=mirror_info['name'],
-        continent=mirror_info['continent'],
-        country=mirror_info['country'],
-        ip=mirror_info['ip'],
-        latitude=mirror_info['location']['lat'],
-        longitude=mirror_info['location']['lon'],
-        is_expired=mirror_info['status'] == 'expired',
-        update_frequency=dateparser.parse(
-            mirror_info['update_frequency']
-        ),
-        sponsor_name=mirror_info['sponsor'],
-        sponsor_url=mirror_info['sponsor_url'],
-        email=mirror_info.get('email', 'unknown'),
-        urls=urls_to_create,
-    )
-    logger.debug(
-        'Mirror "%s" is created',
-        mirror_name,
-    )
-    session.add(mirror_to_create)
-    session.flush()
-    logger.debug(
-        'Mirror "%s" is addded',
-        mirror_name,
-    )
+    with session_scope() as session:
+        for url_to_create in urls_to_create:
+            session.add(url_to_create)
+        mirror_to_create = Mirror(
+            name=mirror_info['name'],
+            continent=mirror_info['continent'],
+            country=mirror_info['country'],
+            ip=mirror_info['ip'],
+            latitude=mirror_info['location']['lat'],
+            longitude=mirror_info['location']['lon'],
+            is_expired=mirror_info['status'] == 'expired',
+            update_frequency=dateparser.parse(
+                mirror_info['update_frequency']
+            ),
+            sponsor_name=mirror_info['sponsor'],
+            sponsor_url=mirror_info['sponsor_url'],
+            email=mirror_info.get('email', 'unknown'),
+            urls=urls_to_create,
+        )
+        logger.debug(
+            'Mirror "%s" is created',
+            mirror_name,
+        )
+        session.add(mirror_to_create)
+        session.flush()
+        logger.debug(
+            'Mirror "%s" is addded',
+            mirror_name,
+        )
 
 
 def _helper_mirror_available(args):

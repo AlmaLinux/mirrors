@@ -147,15 +147,14 @@ def update_mirrors_handler():
     with session_scope() as session:
         session.query(Mirror).delete()
         session.flush()
-        for mirror_info in all_mirrors:
-            update_mirror_in_db(
-                mirror_info,
-                versions,
-                repos,
-                config['allowed_outdate'],
-                session,
-            )
-            sleep(1)
+    for mirror_info in all_mirrors:
+        update_mirror_in_db(
+            mirror_info,
+            versions,
+            repos,
+            config['allowed_outdate'],
+        )
+        sleep(1)
     return 'Done'
 
 
