@@ -118,6 +118,10 @@ def mirror_available(
     """
     logger.info('Checking mirror "%s"...', mirror_info['name'])
     try:
+        logger.info(
+            'Checking required protocols of mirror "%s"...',
+            mirror_info['name'],
+        )
         addresses = mirror_info['address']  # type: Dict[AnyStr, AnyStr]
         mirror_url = next(iter([
             address for protocol_type, address in addresses.items()
@@ -230,11 +234,19 @@ def update_mirror_in_db(
         mirror_info['status'] = 'ok'
         is_available = True
     else:
-        mirror_name, is_available = mirror_available(
-            mirror_info=mirror_info,
-            versions=versions,
-            repos=repos,
-        )
+        try:
+            mirror_name, is_available = mirror_available(
+                mirror_info=mirror_info,
+                versions=versions,
+                repos=repos,
+            )
+        except Exception as error:
+            logger.error(
+                'Some unexpected error is occurred '
+                'while checking of mirror\'s "%s" availability: "%s"',
+                mirror_name,
+                error,
+            )
     with session_scope() as session:
         try:
             mirrors_for_delete = session.query(Mirror).filter(
