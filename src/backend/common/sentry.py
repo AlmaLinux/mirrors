@@ -44,8 +44,8 @@ def get_logger(logger_name: str):
     # Set handler if it doesn't exist
     if not len(logger.handlers):
         deploy_environment = os.getenv('DEPLOY_ENVIRONMENT')
-        if deploy_environment == 'production':
-            logging_level = logging.WARNING
+        if deploy_environment.lower() == 'production':
+            logging_level = logging.DEBUG
         else:
             logging_level = logging.INFO
         logger.setLevel(logging_level)

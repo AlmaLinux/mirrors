@@ -38,6 +38,7 @@ REQUIRED_MIRROR_PROTOCOLS = (
 )
 ARCHS = (
     'x86_64',
+    'aarch64',
 )
 
 # set User-Agent for python-requests
@@ -118,8 +119,8 @@ def mirror_available(
     """
     logger.info('Checking mirror "%s"...', mirror_info['name'])
     try:
-        logger.info(
-            'Checking required protocols of mirror "%s"...',
+        logger.debug(
+            'Checking required protocols of mirror "%s"',
             mirror_info['name'],
         )
         addresses = mirror_info['address']  # type: Dict[AnyStr, AnyStr]
@@ -144,8 +145,18 @@ def mirror_available(
                 'repodata/repomd.xml',
             )
             try:
+                logger.debug(
+                    'Checking url "%s" of mirror "%s"',
+                    check_url,
+                    mirror_info['name'],
+                )
                 request = requests.get(check_url, headers=HEADERS)
                 request.raise_for_status()
+                logger.debug(
+                    'Checking url "%s" of mirror "%s" is completed',
+                    check_url,
+                    mirror_info['name'],
+                )
             except (requests.RequestException, HTTPError):
                 logger.warning(
                     'Mirror "%s" is not available for version '
