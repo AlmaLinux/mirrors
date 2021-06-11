@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-import multiprocessing
 import os
-from urllib.error import URLError
-from urllib.request import urlopen
 
 import requests
 import yaml
@@ -18,7 +15,7 @@ from typing import (
     Tuple,
 )
 
-from sqlalchemy.orm import Session
+from sqlalchemy.exc import NoResultFound
 from uwsgidecorators import thread
 
 from api.utils import get_geo_data_by_ip
@@ -254,6 +251,12 @@ def update_mirror_in_db(
         ) for url_type, url in mirror_info['address'].items()
     ]
     with session_scope() as session:
+        try:
+            session.query(Mirror).filter(
+                Mirror.name == mirror_name
+            ).delete()
+        except NoResultFound:
+            pass
         for url_to_create in urls_to_create:
             session.add(url_to_create)
         mirror_to_create = Mirror(

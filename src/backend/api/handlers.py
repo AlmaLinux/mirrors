@@ -145,7 +145,9 @@ def update_mirrors_handler():
         mirrors_dir=mirrors_dir,
     )
     with session_scope() as session:
-        session.query(Mirror).delete()
+        session.query(Mirror).filter(
+            Mirror.name in [mirror_info['name'] for mirror_info in all_mirrors]
+        ).delete()
         session.flush()
     for mirror_info in all_mirrors:
         update_mirror_in_db(
