@@ -125,10 +125,6 @@ def mirror_available(
     """
     logger.info('Checking mirror "%s"...', mirror_info['name'])
     try:
-        logger.debug(
-            'Checking required protocols of mirror "%s"',
-            mirror_info['name'],
-        )
         addresses = mirror_info['address']  # type: Dict[AnyStr, AnyStr]
         mirror_url = next(iter([
             address for protocol_type, address in addresses.items()
@@ -151,24 +147,8 @@ def mirror_available(
                 'repodata/repomd.xml',
             )
             try:
-                logger.debug(
-                    'Checking url "%s" of mirror "%s"',
-                    check_url,
-                    mirror_info['name'],
-                )
                 request = requests.get(check_url, headers=HEADERS, timeout=15)
-
-                logger.debug(
-                    'Checking url "%s" of mirror "%s" (before raise_status)',
-                    check_url,
-                    mirror_info['name'],
-                )
                 request.raise_for_status()
-                logger.debug(
-                    'Checking url "%s" of mirror "%s" is completed',
-                    check_url,
-                    mirror_info['name'],
-                )
             except (requests.RequestException, HTTPError, Exception):
                 logger.warning(
                     'Mirror "%s" is not available for version '
@@ -259,19 +239,11 @@ def update_mirror_in_db(
         mirror_info['status'] = 'ok'
         is_available = True
     else:
-        try:
-            mirror_name, is_available = mirror_available(
-                mirror_info=mirror_info,
-                versions=versions,
-                repos=repos,
-            )
-        except Exception as error:
-            logger.error(
-                'Some unexpected error is occurred '
-                'while checking of mirror\'s "%s" availability: "%s"',
-                mirror_name,
-                error,
-            )
+        mirror_name, is_available = mirror_available(
+            mirror_info=mirror_info,
+            versions=versions,
+            repos=repos,
+        )
     if not is_available:
         return
     set_repo_status(mirror_info, allowed_outdate)
@@ -299,7 +271,15 @@ def update_mirror_in_db(
         email=mirror_info.get('email', 'unknown'),
         urls=urls_to_create,
     )
+    logger.debug(
+        'Mirror "%s" is created',
+        mirror_name,
+    )
     session.add(mirror_to_create)
+    logger.debug(
+        'Mirror "%s" is addded',
+        mirror_name,
+    )
 
 
 def _helper_mirror_available(args):
