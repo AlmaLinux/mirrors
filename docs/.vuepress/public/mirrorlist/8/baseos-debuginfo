@@ -2,12 +2,12 @@ http://mirrors.eze.sysarmy.com/almalinux/8/BaseOS/debug/$basearch/
 http://mirror.pcloud.net.au/almalinux/8/BaseOS/debug/$basearch/
 http://almalinux.mirror.digitalpacific.com.au/8/BaseOS/debug/$basearch/
 http://syd.mirror.rackspace.com/almalinux/8/BaseOS/debug/$basearch/
+http://mirror.as24220.net/almalinux/8/BaseOS/debug/$basearch/
 http://mirror.alwyzon.net/almalinux/8/BaseOS/debug/$basearch/
 http://mirror.xeonbd.com/almalinux/8/BaseOS/debug/$basearch/
 http://mirrors.hostever.com/almalinux/8/BaseOS/debug/$basearch/
 http://almalinux.cu.be/8/BaseOS/debug/$basearch/
 http://almalinux.mirror.letscloud.io/8/BaseOS/debug/$basearch/
-http://mirror.host.ag/almalinux/8/BaseOS/debug/$basearch/
 http://mirrors.uni-ruse.bg/almalinux/8/BaseOS/debug/$basearch/
 http://mirror.csclub.uwaterloo.ca/almalinux/8/BaseOS/debug/$basearch/
 http://dist-mirror.fibernetics.ca/almalinux/8/BaseOS/debug/$basearch/
@@ -36,6 +36,7 @@ http://ftp.fau.de/almalinux/8/BaseOS/debug/$basearch/
 http://de.mirrors.clouvider.net/almalinux/8/BaseOS/debug/$basearch/
 http://mirror.01link.hk/almalinux/8/BaseOS/debug/$basearch/
 http://hkg.mirror.rackspace.com/almalinux/8/BaseOS/debug/$basearch/
+http://mirror.niif.hu/almalinux/8/BaseOS/debug/$basearch/
 http://ftp.bme.hu/almalinux/8/BaseOS/debug/$basearch/
 http://mirrors.sth.sze.hu/almalinux/8/BaseOS/debug/$basearch/
 http://mirror.almalinux.mum01.readydedis.com/almalinux/8/BaseOS/debug/$basearch/
@@ -79,6 +80,7 @@ http://ftp.lug.ro/almalinux/8/BaseOS/debug/$basearch/
 http://mirrors.layerbridge.com/almalinux/8/BaseOS/debug/$basearch/
 http://mirror.yandex.ru/almalinux/8/BaseOS/debug/$basearch/
 http://almalinux.unlimited.rs/8/BaseOS/debug/$basearch/
+http://almalinux.secureax.com/8/BaseOS/debug/$basearch/
 http://ftp.arnes.si/mirrors/almalinux/8/BaseOS/debug/$basearch/
 http://almalinux-mirror.datakeepers.co.za/8/BaseOS/debug/$basearch/
 http://mirror.misakamikoto.network/almalinux/8/BaseOS/debug/$basearch/
@@ -95,6 +97,7 @@ http://lon.mirror.rackspace.com/almalinux/8/BaseOS/debug/$basearch/
 http://mirror.netweaver.uk/almalinux/8/BaseOS/debug/$basearch/
 http://mirrors.coreix.net/almalinux/8/BaseOS/debug/$basearch/
 http://mirrors.gethosted.online/almalinux/8/BaseOS/debug/$basearch/
+http://almalinux.mirror.katapult.io/8/BaseOS/debug/$basearch/
 http://mirror.cov.ukservers.com/almalinux/8/BaseOS/debug/$basearch/
 http://uk.mirrors.clouvider.net/almalinux/8/BaseOS/debug/$basearch/
 http://mirror.vtti.vt.edu/almalinux/8/BaseOS/debug/$basearch/
