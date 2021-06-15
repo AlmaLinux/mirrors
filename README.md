@@ -2,7 +2,7 @@
 
 * [Requirements](#Requirements)
 * [How to deploy](#Deploying)
-* [How it works](#How it works)
+* [How it works](#How)
 
 
 ## Requirements
