@@ -25,6 +25,7 @@ ALL_MIRROR_PROTOCOLS = list(REQUIRED_MIRROR_PROTOCOLS)
 
 ARCHS = (
     'x86_64',
+    'aarch64',
 )
 
 # set User-Agent for python-requests
