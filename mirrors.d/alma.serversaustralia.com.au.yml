@@ -1,0 +1,11 @@
+---
+name: alma.serversaustralia.com.au
+address:
+  http: http://alma.mirror.serversaustralia.com.au/
+  https: https://alma.mirror.serversaustralia.com.au/
+  rsync: rsync://alma.mirror.serversaustralia.com.au/alma
+update_frequency: 3h
+sponsor: Servers Australia Pty Ltd
+sponsor_url: https://serversaustralia.com.au/
+email: shane.hutter@serversaustralia.com.au
+...
