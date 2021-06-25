@@ -1,0 +1,10 @@
+---
+name: mirror.ath1.fusioned.net
+address:
+  http: http://mirror.ath1.fusioned.net/almalinux/
+  https: https://mirror.ath1.fusioned.net/almalinux/
+update_frequency: 1h
+sponsor: Fusioned Ltd
+sponsor_url: https://www.fusioned.net/
+email: support@fusioned.net
+...
