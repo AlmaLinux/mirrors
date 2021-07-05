@@ -1,0 +1,12 @@
+---
+name: mirrors.radwebhosting.com
+address:
+  http: http://mirrors.radwebhosting.com/almalinux/
+  https: https://mirrors.radwebhosting.com/almalinux/
+  rsync: rsync://mirrors.radwebhosting.com/almalinux
+  ftp: ftp://mirrors.radwebhosting.com/almalinux/
+update_frequency: 3h
+sponsor: Rad Web Hosting
+sponsor_url: https://radwebhosting.com
+email: mirrors@radwebhosting.com
+...
