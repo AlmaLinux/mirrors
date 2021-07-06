@@ -1,0 +1,12 @@
+
+---
+name: mirror.cogentco.com
+address:
+  http: http://mirror.cogentco.com/pub/linux/almalinux/
+  https: https://mirror.cogentco.com/pub/linux/almalinux/
+  rsync: rsync://mirror.cogentco.com/almalinux
+update_frequency: 4h
+sponsor: Cogent Communications
+sponsor_url: https://www.cogentco.com
+email: mirror-admin@cogentco.com
+...
