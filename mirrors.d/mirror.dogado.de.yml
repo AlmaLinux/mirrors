@@ -1,0 +1,10 @@
+---
+name: mirror.dogado.de
+address:
+  http: http://mirror.dogado.de/almalinux
+  https: https://mirror.dogado.de/almalinux
+update_frequency: 3h
+sponsor: dogado GmbH
+sponsor_url: https://mirror.dogado.de
+email: mirror@dogado.de
+...
