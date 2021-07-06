@@ -420,7 +420,7 @@ def generate_isos_list(
             ) as current_isos_file:
                 current_isos_file.write(
                     '# AlmaLinux ISOs links  \n'
-                    'There are you can find the list of '
+                    'Here are you can find the list of '
                     'ISOs links for architecture/version'
                     f' `{arch}/{version}` for all of mirrors.  \n'
                     'Also you can use a BitTorrent file for downloading ISOs. '
