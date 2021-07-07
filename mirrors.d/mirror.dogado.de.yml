@@ -5,6 +5,6 @@ address:
   https: https://mirror.dogado.de/almalinux
 update_frequency: 3h
 sponsor: dogado GmbH
-sponsor_url: https://mirror.dogado.de
+sponsor_url: https://www.dogado.de
 email: mirror@dogado.de
 ...
