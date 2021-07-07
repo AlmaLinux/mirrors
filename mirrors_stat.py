@@ -219,7 +219,7 @@ def create_parser():
         '--dry-run',
         help='Print the statistics as json instead saving it to stat files',
         action='store_true',
-        default=False,
+        default=None,
     )
     stat_options.add_argument(
         '--stat-dir',
