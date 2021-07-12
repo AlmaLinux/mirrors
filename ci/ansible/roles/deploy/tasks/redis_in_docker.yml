@@ -1,0 +1,24 @@
+---
+
+- name: Up the redis container from docker image
+  docker_container:
+    name: "{{ container_env_prefix }}_redis"
+    image: "redis:6.0.3"
+    state: started
+    restart: yes
+    restart_policy: unless-stopped
+    pull: yes
+    hostname: redis
+    networks:
+      - name: backend
+    command: "redis-server --appendonly yes"
+    mounts:
+      - redis_data:/data
+    log_driver: "json-file"
+    log_options:
+      max-size: "200m"
+      max-file: "5"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 1m

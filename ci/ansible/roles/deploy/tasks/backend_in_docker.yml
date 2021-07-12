@@ -8,7 +8,7 @@
     published_ports: "{{ (deploy_environment is defined and deploy_environment == 'Production') | ternary(['127.0.0.1', backend_port] | join(':'), backend_port) }}:{{ uwsgi_port }}"
 
 
-- name: Up the container from docker image
+- name: Up the backend container from docker image
   docker_container:
     name: "{{ container_env_prefix }}_backend"
     image: "almalinux/mirror_service:latest"
@@ -16,6 +16,9 @@
     restart: yes
     restart_policy: unless-stopped
     pull: yes
+    hostname: backend
+    networks:
+      - name: backend
     env:
       UWSGI_PROCESSES: "{{ uwsgi_processes | string }}"
       SENTRY_DSN: "{{ sentry_dsn | string }}"

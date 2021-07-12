@@ -11,6 +11,8 @@ from typing import (
     Optional,
 )
 
+from geoip2.errors import AddressNotFoundError
+
 from db.db_engine import GeoIPEngine
 from api.exceptions import (
     BaseCustomException,
@@ -121,13 +123,13 @@ def get_geo_data_by_ip(
     """
 
     db = GeoIPEngine.get_instance()
-    match = db.lookup(ip)
-    if match is None:
+    try:
+        city = db.city(ip)
+    except AddressNotFoundError:
         return
-    match_dict = match.get_info_dict()
-    country = match_dict['country']['names']['en']
-    continent = match_dict['continent']['names']['en']
-    latitude = match_dict['location']['latitude']
-    longitude = match_dict['location']['longitude']
+    country = city.country.name
+    continent = city.continent.name
+    latitude = city.location.latitude
+    longitude = city.location.longitude
 
     return continent, country, latitude, longitude

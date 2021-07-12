@@ -6,6 +6,7 @@ from typing import (
     AnyStr,
     List,
     Dict,
+    Optional,
 )
 
 from api.exceptions import BadRequestFormatExceptioin
@@ -17,6 +18,7 @@ from api.mirrors_update import (
     update_mirror_in_db,
 )
 from api.utils import get_geo_data_by_ip
+from db.db_engine import RedisEngine
 from db.models import (
     Url,
     Mirror,
@@ -57,6 +59,7 @@ def _get_nearest_mirrors(
             'TEST_IP_ADDRESS',
         ) or '195.123.213.149'
     match = get_geo_data_by_ip(ip_address)
+
     with session_scope() as session:
         all_mirrors_query = session.query(Mirror).filter(
             Mirror.is_expired == false(),
@@ -64,12 +67,10 @@ def _get_nearest_mirrors(
         # We return all of mirrors if we can't
         # determine geo data of a request's IP
         if match is None and not empty_for_unknown_ip:
-            all_mirrors = [
+            all_mirrors = [] if empty_for_unknown_ip else [
                 mirror.to_dict() for mirror in all_mirrors_query.all()
             ]
             return all_mirrors
-        elif match is None:
-            return []
         continent, country, latitude, longitude = match
         # get n-mirrors in a request's country
         mirrors_by_country_query = session.query(Mirror).filter(
@@ -175,12 +176,45 @@ def get_all_mirrors():
     return mirrors_list
 
 
+def _get_mirror_list(
+        ip_address: AnyStr,
+        version: AnyStr,
+        repo_path: AnyStr,
+) -> List[AnyStr]:
+
+    rd = RedisEngine.get_instance()
+    ip_address = rd.get(ip_address)
+    if ip_address is None:
+        rd.zremrangebyscore(ip_address, 0, '+inf')
+    else:
+        mirrors_list = rd.zrange(ip_address, 0, -1)
+        if mirrors_list:
+            return mirrors_list
+    nearest_mirrors = _get_nearest_mirrors(ip_address=ip_address)
+    mirrors_list = []
+    for mirror in nearest_mirrors:
+        mirror_url = mirror['urls'].get(REQUIRED_MIRROR_PROTOCOLS[0]) or \
+                     mirror['urls'].get(REQUIRED_MIRROR_PROTOCOLS[1])
+        full_mirror_path = os.path.join(
+            mirror_url,
+            version,
+            repo_path
+        )
+        mirrors_list.append(full_mirror_path)
+    rd.set(ip_address, ip_address, 24 * 3600)
+    rd.zadd(
+        ip_address,
+        {mirror: index for index, mirror in enumerate(mirrors_list)},
+    )
+    return mirrors_list
+
+
 def get_mirrors_list(
         ip_address: AnyStr,
         version: AnyStr,
         repository: AnyStr,
 ) -> AnyStr:
-    mirrors_list = []
+
     config = get_config()
     versions = [str(version) for version in config['versions']]
     if version not in versions:
@@ -197,17 +231,11 @@ def get_mirrors_list(
             ', '.join(repos.keys()),
         )
     repo_path = repos[repository]
-    nearest_mirrors = _get_nearest_mirrors(ip_address=ip_address)
-    for mirror in nearest_mirrors:
-        mirror_url = mirror['urls'].get(REQUIRED_MIRROR_PROTOCOLS[0]) or \
-                     mirror['urls'].get(REQUIRED_MIRROR_PROTOCOLS[1])
-        full_mirror_path = os.path.join(
-            mirror_url,
-            version,
-            repo_path
-        )
-        mirrors_list.append(full_mirror_path)
-
+    mirrors_list = _get_mirror_list(
+        ip_address=ip_address,
+        version=version,
+        repo_path=repo_path,
+    )
     return '\n'.join(mirrors_list)
 
 
