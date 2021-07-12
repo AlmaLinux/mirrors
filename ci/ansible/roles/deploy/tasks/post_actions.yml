@@ -1,0 +1,17 @@
+---
+- name: First update mirrors list in db
+  block:
+    - name: Get stat of first deploy flag
+      stat:
+        path: "{{ config_root }}/.first_deploy_is_done"
+      register: first_deploy_file
+    - name: Create first deploy flag if it's first deploy
+      file:
+        path: "{{ config_root }}/.first_deploy_is_done"
+        state: touch
+      when: first_deploy_file is defined and not first_deploy_file.stat.exists
+    - name: Run update mirrors list if it's first deploy
+      systemd:
+        name: "{{ timer_name }}.service"
+        state: restarted
+      when: first_deploy_file is defined and not first_deploy_file.stat.exists
