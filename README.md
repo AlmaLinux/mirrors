@@ -3,7 +3,7 @@
 * [Requirements](#Requirements)
 * [How to deploy](#Deploying)
 * [How it works](#How-it-works)
-
+* [Statistics of the mirrors service](#Statistics)
 
 ## Requirements
 
@@ -56,3 +56,13 @@ Example:
 - The service takes four mirrors from Egypt, five mirrors from Africa and ten mirrors from other world.
 - It trims this list to ten elements and return it to client:
 - | E | E | E | E | A | A | A | A | A | W |, there is E - Egypt mirror, A - Africa mirror, W - World mirror
+
+## Statistics
+
+Script `mirrors_stat.py` can collect statistics of using the mirrors service for following url:
+* `/mirrorlist/<version>/<repo>`
+* `/isos/<arch>/<version>`
+
+The script puts this statistics to Node Exporter stats files or can print it to stdout.
+
+Use help of the script for more information.
