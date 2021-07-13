@@ -17,6 +17,7 @@ from api.mirrors_update import (
     ARCHS,
     update_mirror_in_db,
 )
+from api.redis import get_mirrors_from_cache, set_mirrors_to_cache
 from api.utils import get_geo_data_by_ip
 from db.db_engine import RedisEngine
 from db.models import (
@@ -58,8 +59,10 @@ def _get_nearest_mirrors(
         ip_address = os.environ.get(
             'TEST_IP_ADDRESS',
         ) or '195.123.213.149'
+    suitable_mirrors = get_mirrors_from_cache(ip_address)
+    if suitable_mirrors is not None:
+        return suitable_mirrors
     match = get_geo_data_by_ip(ip_address)
-
     with session_scope() as session:
         all_mirrors_query = session.query(Mirror).filter(
             Mirror.is_expired == false(),
@@ -128,6 +131,10 @@ def _get_nearest_mirrors(
         # return n-nearst mirrors
         suitable_mirrors = [mirror.to_dict() for mirror
                             in suitable_mirrors[:MAX_LENGTH_OF_MIRRORS_LIST]]
+        set_mirrors_to_cache(
+            ip_address,
+            suitable_mirrors,
+        )
         return suitable_mirrors
 
 
