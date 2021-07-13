@@ -6,7 +6,6 @@ from typing import (
     AnyStr,
     List,
     Dict,
-    Optional,
 )
 
 from api.exceptions import BadRequestFormatExceptioin
@@ -19,7 +18,6 @@ from api.mirrors_update import (
 )
 from api.redis import get_mirrors_from_cache, set_mirrors_to_cache
 from api.utils import get_geo_data_by_ip
-from db.db_engine import RedisEngine
 from db.models import (
     Url,
     Mirror,
@@ -61,6 +59,7 @@ def _get_nearest_mirrors(
         ) or '195.123.213.149'
     suitable_mirrors = get_mirrors_from_cache(ip_address)
     if suitable_mirrors is not None:
+        logger.info('The nearest mirrors got from cache')
         return suitable_mirrors
     match = get_geo_data_by_ip(ip_address)
     with session_scope() as session:
@@ -183,45 +182,12 @@ def get_all_mirrors():
     return mirrors_list
 
 
-def _get_mirror_list(
-        ip_address: AnyStr,
-        version: AnyStr,
-        repo_path: AnyStr,
-) -> List[AnyStr]:
-
-    rd = RedisEngine.get_instance()
-    ip_address = rd.get(ip_address)
-    if ip_address is None:
-        rd.zremrangebyscore(ip_address, 0, '+inf')
-    else:
-        mirrors_list = rd.zrange(ip_address, 0, -1)
-        if mirrors_list:
-            return mirrors_list
-    nearest_mirrors = _get_nearest_mirrors(ip_address=ip_address)
-    mirrors_list = []
-    for mirror in nearest_mirrors:
-        mirror_url = mirror['urls'].get(REQUIRED_MIRROR_PROTOCOLS[0]) or \
-                     mirror['urls'].get(REQUIRED_MIRROR_PROTOCOLS[1])
-        full_mirror_path = os.path.join(
-            mirror_url,
-            version,
-            repo_path
-        )
-        mirrors_list.append(full_mirror_path)
-    rd.set(ip_address, ip_address, 24 * 3600)
-    rd.zadd(
-        ip_address,
-        {mirror: index for index, mirror in enumerate(mirrors_list)},
-    )
-    return mirrors_list
-
-
 def get_mirrors_list(
         ip_address: AnyStr,
         version: AnyStr,
         repository: AnyStr,
 ) -> AnyStr:
-
+    mirrors_list = []
     config = get_config()
     versions = [str(version) for version in config['versions']]
     if version not in versions:
@@ -238,11 +204,17 @@ def get_mirrors_list(
             ', '.join(repos.keys()),
         )
     repo_path = repos[repository]
-    mirrors_list = _get_mirror_list(
-        ip_address=ip_address,
-        version=version,
-        repo_path=repo_path,
-    )
+    nearest_mirrors = _get_nearest_mirrors(ip_address=ip_address)
+    for mirror in nearest_mirrors:
+        mirror_url = mirror['urls'].get(REQUIRED_MIRROR_PROTOCOLS[0]) or \
+                     mirror['urls'].get(REQUIRED_MIRROR_PROTOCOLS[1])
+        full_mirror_path = os.path.join(
+            mirror_url,
+            version,
+            repo_path
+        )
+        mirrors_list.append(full_mirror_path)
+
     return '\n'.join(mirrors_list)
 
 
