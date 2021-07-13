@@ -1,5 +1,9 @@
 # coding=utf-8
 
+from ipaddress import (
+    IPv4Network,
+    IPv4Address,
+)
 from sqlalchemy import (
     Column,
     String,
@@ -9,6 +13,7 @@ from sqlalchemy import (
     ForeignKey,
     Boolean,
     DateTime,
+    func,
 )
 from sqlalchemy.ext.declarative import declarative_base
 from typing import (
@@ -18,9 +23,10 @@ from typing import (
     List,
 )
 
-from sqlalchemy import func
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.hybrid import hybrid_method
+
+from api.utils import get_asn_by_ip
 from common.sentry import (
     get_logger,
 )
@@ -29,6 +35,13 @@ logger = get_logger(__name__)
 
 
 Base = declarative_base()
+
+
+class Subnet(Base):
+    ___tablename__ = 'subnets'
+
+    id = Column(Integer, nullable=False, primary_key=True)
+    subnet = Column(String, nullable=False)
 
 
 class Url(Base):
@@ -62,6 +75,24 @@ mirrors_urls = Table(
 )
 
 
+mirrors_subnets = Table(
+    'mirrors_subnets',
+    Base.metadata,
+    Column(
+        'mirror_id', Integer, ForeignKey(
+            'mirrors.id',
+            ondelete='CASCADE',
+        ),
+    ),
+    Column(
+        'subnet_id', Integer, ForeignKey(
+            'subnets.id',
+            ondelete='CASCADE',
+        )
+    ),
+)
+
+
 class Mirror(Base):
     __tablename__ = 'mirrors'
 
@@ -77,11 +108,45 @@ class Mirror(Base):
     sponsor_name = Column(String, nullable=False)
     sponsor_url = Column(String, nullable=False)
     email = Column(String, nullable=False)
+    asn = Column(String, nullable=True)
     urls = relationship(
         'Url',
         secondary=mirrors_urls,
         passive_deletes=True,
     )
+    subnets = relationship(
+        'Subnet',
+        secondary=mirrors_subnets,
+        passive_deletes=True,
+    )
+
+    @hybrid_method
+    def is_in_any_subnet(self, ip_address: Union[IPv4Address, AnyStr]):
+        if isinstance(ip_address, str):
+            ip_address = IPv4Address(ip_address)
+        return any(ip_address in IPv4Network(subnet.subnet)
+                   for subnet in self.subnets)
+
+    @is_in_any_subnet.expression
+    def is_in_any_subnet(self, ip_address: Union[IPv4Address, AnyStr]):
+        if isinstance(ip_address, str):
+            ip_address = IPv4Address(ip_address)
+        return func.any(ip_address in IPv4Network(subnet.subnet)
+                        for subnet in self.subnets)
+
+    @hybrid_method
+    def is_in_same_asn(self, ip_address: Union[IPv4Address, AnyStr]):
+        if isinstance(ip_address, IPv4Address):
+            ip_address = str(ip_address)
+        asn = get_asn_by_ip(ip_address)
+        return self.asn == asn.autonomous_system_number
+
+    @is_in_same_asn.expression
+    def is_in_same_asn(self, ip_address: Union[IPv4Address, AnyStr]):
+        if isinstance(ip_address, IPv4Address):
+            ip_address = str(ip_address)
+        asn = get_asn_by_ip(ip_address)
+        return self.asn == asn.autonomous_system_number
 
     @hybrid_method
     def conditional_distance(self, lon: float, lat: float):

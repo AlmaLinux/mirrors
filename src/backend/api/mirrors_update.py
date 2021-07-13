@@ -27,7 +27,7 @@ from urllib3.exceptions import HTTPError
 
 from db.models import (
     Mirror,
-    Url,
+    Url, Subnet,
 )
 from db.utils import session_scope
 
@@ -275,6 +275,16 @@ def update_mirror_in_db(
             email=mirror_info.get('email', 'unknown'),
             urls=urls_to_create,
         )
+        if 'asn' in mirror_info:
+            mirror_to_create.asn = mirror_info['asn']
+        if 'subnets' in mirror_info:
+            subnets_to_create = [
+                Subnet(
+                    subnet=subnet,
+                ) for subnet in mirror_info['subnets']
+            ]
+            for subnet_to_create in subnets_to_create:
+                session.add(subnet_to_create)
         logger.debug(
             'Mirror "%s" is created',
             mirror_name,

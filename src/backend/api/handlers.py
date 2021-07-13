@@ -23,7 +23,7 @@ from db.models import (
     Mirror,
 )
 from db.utils import session_scope
-from sqlalchemy.sql.expression import false
+from sqlalchemy.sql.expression import false, true
 
 from common.sentry import (
     get_logger,
@@ -35,7 +35,34 @@ MAX_LENGTH_OF_MIRRORS_LIST = 10
 logger = get_logger(__name__)
 
 
-def _get_nearest_mirrors(
+def _get_nearest_mirrors_by_network_data(
+        ip_address: AnyStr,
+):
+    """
+    The function returns mirrors which are in the same subnet or have the same
+    ASN as a request's IP
+    """
+
+    match = get_geo_data_by_ip(ip_address)
+    with session_scope() as session:
+        suitable_mirrors = session.query(Mirror).filter(
+            Mirror.is_in_any_subnet(ip_address) == true() or
+            Mirror.is_in_same_asn(ip_address) == true(),
+        ).all()
+        suitable_mirrors = [mirror.to_dict() for mirror in suitable_mirrors]
+        if len(suitable_mirrors) == 1 and match is not None:
+            continent, country, latitude, longitude = match
+            nearest_mirror = session.query(Mirror).filter(
+                Mirror.conditional_distance(
+                    lon=longitude,
+                    lat=latitude,
+                )
+            ).one()  # type: Mirror
+            suitable_mirrors.extend(nearest_mirror.to_dict())
+        return suitable_mirrors
+
+
+def _get_nearest_mirrors_by_geo_data(
         ip_address: AnyStr,
         empty_for_unknown_ip: bool = False,
 ):
@@ -50,22 +77,11 @@ def _get_nearest_mirrors(
     :param empty_for_unknown_ip: if True and we can't get geo data of an IP
         the function returns empty list
     """
-    if os.environ.get('DEPLOY_ENVIRONMENT').lower() in (
-        'dev',
-        'development',
-    ):
-        ip_address = os.environ.get(
-            'TEST_IP_ADDRESS',
-        ) or '195.123.213.149'
-    suitable_mirrors = get_mirrors_from_cache(ip_address)
-    if suitable_mirrors is not None:
-        logger.info('The nearest mirrors got from cache')
-        return suitable_mirrors
     match = get_geo_data_by_ip(ip_address)
     with session_scope() as session:
         all_mirrors_query = session.query(Mirror).filter(
             Mirror.is_expired == false(),
-        )
+            )
         # We return all of mirrors if we can't
         # determine geo data of a request's IP
         if match is None and not empty_for_unknown_ip:
@@ -79,7 +95,7 @@ def _get_nearest_mirrors(
             Mirror.continent == continent,
             Mirror.country == country,
             Mirror.is_expired == false(),
-        ).limit(
+            ).limit(
             MAX_LENGTH_OF_MIRRORS_LIST,
         )
         # get n-mirrors mirrors inside a request's continent
@@ -111,13 +127,6 @@ def _get_nearest_mirrors(
             MAX_LENGTH_OF_MIRRORS_LIST,
         )
 
-        mirrors_by_country = mirrors_by_country_query.all()
-        mirrors_by_continent = mirrors_by_continent_query.all()
-        all_rest_mirrors = all_rest_mirrors_query.all()
-        suitable_mirrors = mirrors_by_country + \
-            mirrors_by_continent + \
-            all_rest_mirrors
-
         # TODO: SQLAlchemy adds brackets around queries. And it looks like
         # TODO: incorrect query for SQLite
         # suitable_mirrors_query = mirrors_by_country_query.union_all(
@@ -128,13 +137,45 @@ def _get_nearest_mirrors(
         # suitable_mirrors = suitable_mirrors_query.all()
 
         # return n-nearest mirrors
-        suitable_mirrors = [mirror.to_dict() for mirror
-                            in suitable_mirrors[:MAX_LENGTH_OF_MIRRORS_LIST]]
-        set_mirrors_to_cache(
-            ip_address,
-            suitable_mirrors,
-        )
+        mirrors_by_country = mirrors_by_country_query.all()
+        mirrors_by_continent = mirrors_by_continent_query.all()
+        all_rest_mirrors = all_rest_mirrors_query.all()
+
+    suitable_mirrors = mirrors_by_country + \
+        mirrors_by_continent + \
+        all_rest_mirrors
+    suitable_mirrors = [mirror.to_dict() for mirror
+                        in suitable_mirrors[:MAX_LENGTH_OF_MIRRORS_LIST]]
+    return suitable_mirrors
+
+
+def _get_nearest_mirrors(
+        ip_address: AnyStr,
+        empty_for_unknown_ip: bool = False,
+):
+    """
+    Get nearest mirrors by geo-data or by subnet/ASN
+    """
+    if os.environ.get('DEPLOY_ENVIRONMENT').lower() in (
+        'dev',
+        'development',
+    ):
+        ip_address = os.environ.get(
+            'TEST_IP_ADDRESS',
+        ) or '195.123.213.149'
+    suitable_mirrors = get_mirrors_from_cache(ip_address)
+    if suitable_mirrors is not None:
         return suitable_mirrors
+
+    suitable_mirrors = _get_nearest_mirrors_by_geo_data(
+        ip_address=ip_address,
+        empty_for_unknown_ip=empty_for_unknown_ip,
+    )
+    set_mirrors_to_cache(
+        ip_address,
+        suitable_mirrors,
+    )
+    return suitable_mirrors
 
 
 def update_mirrors_handler():
