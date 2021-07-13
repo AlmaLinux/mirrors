@@ -6,6 +6,7 @@ from typing import (
     AnyStr,
     List,
     Dict,
+    Tuple,
 )
 
 from api.exceptions import BadRequestFormatExceptioin
@@ -16,28 +17,36 @@ from api.mirrors_update import (
     ARCHS,
     update_mirror_in_db,
 )
-from api.redis import get_mirrors_from_cache, set_mirrors_to_cache
+from api.redis import (
+    get_mirrors_from_cache,
+    set_mirrors_to_cache,
+    get_url_types_from_cache,
+    set_url_types_to_cache,
+)
 from api.utils import get_geo_data_by_ip
 from db.models import (
     Url,
     Mirror,
+    MirrorData,
 )
 from db.utils import session_scope
-from sqlalchemy.sql.expression import false, true
-
+from sqlalchemy.sql.expression import (
+    false,
+    true,
+)
 from common.sentry import (
     get_logger,
 )
 
+logger = get_logger(__name__)
+
 
 MAX_LENGTH_OF_MIRRORS_LIST = 10
-
-logger = get_logger(__name__)
 
 
 def _get_nearest_mirrors_by_network_data(
         ip_address: AnyStr,
-):
+) -> List[MirrorData]:
     """
     The function returns mirrors which are in the same subnet or have the same
     ASN as a request's IP
@@ -49,7 +58,8 @@ def _get_nearest_mirrors_by_network_data(
             Mirror.is_in_any_subnet(ip_address) == true() or
             Mirror.is_in_same_asn(ip_address) == true(),
         ).all()
-        suitable_mirrors = [mirror.to_dict() for mirror in suitable_mirrors]
+        suitable_mirrors = [mirror.to_dataclass()
+                            for mirror in suitable_mirrors]
         if len(suitable_mirrors) == 1 and match is not None:
             continent, country, latitude, longitude = match
             nearest_mirror = session.query(Mirror).filter(
@@ -58,14 +68,14 @@ def _get_nearest_mirrors_by_network_data(
                     lat=latitude,
                 )
             ).one()  # type: Mirror
-            suitable_mirrors.extend(nearest_mirror.to_dict())
+            suitable_mirrors.append(nearest_mirror.to_dataclass())
         return suitable_mirrors
 
 
 def _get_nearest_mirrors_by_geo_data(
         ip_address: AnyStr,
         empty_for_unknown_ip: bool = False,
-):
+) -> List[MirrorData]:
     """
     The function returns N nearest mirrors towards a request's IP
     Firstly, it searches first N mirrors inside a request's country
@@ -86,7 +96,7 @@ def _get_nearest_mirrors_by_geo_data(
         # determine geo data of a request's IP
         if match is None and not empty_for_unknown_ip:
             all_mirrors = [] if empty_for_unknown_ip else [
-                mirror.to_dict() for mirror in all_mirrors_query.all()
+                mirror.to_dataclass() for mirror in all_mirrors_query.all()
             ]
             return all_mirrors
         continent, country, latitude, longitude = match
@@ -141,18 +151,18 @@ def _get_nearest_mirrors_by_geo_data(
         mirrors_by_continent = mirrors_by_continent_query.all()
         all_rest_mirrors = all_rest_mirrors_query.all()
 
-    suitable_mirrors = mirrors_by_country + \
-        mirrors_by_continent + \
-        all_rest_mirrors
-    suitable_mirrors = [mirror.to_dict() for mirror
-                        in suitable_mirrors[:MAX_LENGTH_OF_MIRRORS_LIST]]
+        suitable_mirrors = mirrors_by_country + \
+            mirrors_by_continent + \
+            all_rest_mirrors
+        suitable_mirrors = [mirror.to_dataclass() for mirror
+                            in suitable_mirrors[:MAX_LENGTH_OF_MIRRORS_LIST]]
     return suitable_mirrors
 
 
 def _get_nearest_mirrors(
         ip_address: AnyStr,
         empty_for_unknown_ip: bool = False,
-):
+) -> List[MirrorData]:
     """
     Get nearest mirrors by geo-data or by subnet/ASN
     """
@@ -166,11 +176,14 @@ def _get_nearest_mirrors(
     suitable_mirrors = get_mirrors_from_cache(ip_address)
     if suitable_mirrors is not None:
         return suitable_mirrors
-
-    suitable_mirrors = _get_nearest_mirrors_by_geo_data(
+    suitable_mirrors = _get_nearest_mirrors_by_network_data(
         ip_address=ip_address,
-        empty_for_unknown_ip=empty_for_unknown_ip,
     )
+    if not suitable_mirrors:
+        suitable_mirrors = _get_nearest_mirrors_by_geo_data(
+            ip_address=ip_address,
+            empty_for_unknown_ip=empty_for_unknown_ip,
+        )
     set_mirrors_to_cache(
         ip_address,
         suitable_mirrors,
@@ -178,7 +191,7 @@ def _get_nearest_mirrors(
     return suitable_mirrors
 
 
-def update_mirrors_handler():
+def update_mirrors_handler() -> AnyStr:
     config = get_config()
     versions = config['versions']
     repos = config['repos']
@@ -194,7 +207,7 @@ def update_mirrors_handler():
     )
     with session_scope() as session:
         session.query(Mirror).filter(
-            Mirror.name in [mirror_info['name'] for mirror_info in all_mirrors]
+            Mirror.name in [mirror_info.name for mirror_info in all_mirrors]
         ).delete()
         session.flush()
     for mirror_info in all_mirrors:
@@ -208,7 +221,7 @@ def update_mirrors_handler():
     return 'Done'
 
 
-def get_all_mirrors():
+def get_all_mirrors() -> List[MirrorData]:
     mirrors_list = []
     with session_scope() as session:
         mirrors = session.query(
@@ -218,7 +231,7 @@ def get_all_mirrors():
             Mirror.country,
         ).all()
         for mirror in mirrors:
-            mirror_data = mirror.to_dict()
+            mirror_data = mirror.to_dataclass()
             mirrors_list.append(mirror_data)
     return mirrors_list
 
@@ -247,8 +260,8 @@ def get_mirrors_list(
     repo_path = repos[repository]
     nearest_mirrors = _get_nearest_mirrors(ip_address=ip_address)
     for mirror in nearest_mirrors:
-        mirror_url = mirror['urls'].get(REQUIRED_MIRROR_PROTOCOLS[0]) or \
-                     mirror['urls'].get(REQUIRED_MIRROR_PROTOCOLS[1])
+        mirror_url = mirror.urls.get(REQUIRED_MIRROR_PROTOCOLS[0]) or \
+                     mirror.urls.get(REQUIRED_MIRROR_PROTOCOLS[1])
         full_mirror_path = os.path.join(
             mirror_url,
             version,
@@ -260,17 +273,17 @@ def get_mirrors_list(
 
 
 def _set_isos_link_for_mirror(
-        mirror_info: Dict,
+        mirror_info: MirrorData,
         version: AnyStr,
         arch: AnyStr,
 ):
-    addresses = mirror_info['urls']
+    urls = mirror_info.urls
     mirror_url = next(iter([
         address for protocol_type, address in
-        addresses.items()
+        urls.items()
         if protocol_type in REQUIRED_MIRROR_PROTOCOLS
     ]))
-    mirror_info['isos_link'] = os.path.join(
+    mirror_info.isos_link = os.path.join(
         mirror_url,
         str(version),
         'isos',
@@ -282,10 +295,10 @@ def get_isos_list_by_countries(
         arch: AnyStr,
         version: AnyStr,
         ip_address: AnyStr,
-):
+) -> Tuple[Dict[AnyStr, List[MirrorData]], List[MirrorData]]:
     mirrors_by_countries = defaultdict(list)
     for mirror_info in get_all_mirrors():
-        mirrors_by_countries[mirror_info['country']].append(mirror_info)
+        mirrors_by_countries[mirror_info.country].append(mirror_info)
     for country, country_mirrors in \
             mirrors_by_countries.items():
         for mirror_info in country_mirrors:
@@ -307,7 +320,7 @@ def get_isos_list_by_countries(
     return mirrors_by_countries, nearest_mirrors
 
 
-def get_main_isos_table():
+def get_main_isos_table() -> Dict[AnyStr, List[AnyStr]]:
     result = defaultdict(list)
     config = get_config()
     versions = config['versions']
@@ -320,7 +333,12 @@ def get_main_isos_table():
 
 
 def get_url_types() -> List[AnyStr]:
+    url_types = get_url_types_from_cache()
+    if url_types is not None:
+        return url_types
     with session_scope() as session:
-        return [value[0] for value in session.query(
+        url_types = sorted(value[0] for value in session.query(
             Url.type
-        ).distinct()]
+        ).distinct())
+        set_url_types_to_cache(url_types)
+        return url_types

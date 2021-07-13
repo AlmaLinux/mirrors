@@ -1,5 +1,14 @@
 # coding=utf-8
-
+from dataclasses import (
+    dataclass,
+    field,
+    is_dataclass,
+    asdict,
+)
+from json import (
+    JSONEncoder,
+    JSONDecoder,
+)
 from ipaddress import (
     IPv4Network,
     IPv4Address,
@@ -21,6 +30,7 @@ from typing import (
     AnyStr,
     Union,
     List,
+    Optional,
 )
 
 from sqlalchemy.orm import relationship
@@ -37,8 +47,72 @@ logger = get_logger(__name__)
 Base = declarative_base()
 
 
+CACHE_EXPIRED_TIME = 24 * 3600  # 24 hours
+REQUIRED_MIRROR_PROTOCOLS = (
+    'https',
+    'http',
+)
+ARCHS = (
+    'x86_64',
+    'aarch64',
+)
+
+
+class DataClassesJSONEncoder(JSONEncoder):
+    """
+    Custom JSON encoder for data classes
+    """
+    def default(self, o):
+        if is_dataclass(o):
+            return asdict(o)
+        return super().default(o)
+
+
+class DataClassesJSONDecoder(JSONDecoder):
+    """
+    Custom JSON decoder for data classes
+    """
+    def __init__(self, *args, **kwargs):
+        JSONDecoder.__init__(
+            self,
+            object_hook=self.object_hook,
+            *args,
+            **kwargs,
+        )
+
+    @staticmethod
+    def object_hook(dct):
+        logger.info(dct)
+        if 'name' in dct:
+            return MirrorData(
+                name=dct['name'],
+                continent=dct['continent'],
+                country=dct['country'],
+                ip=dct['ip'],
+                location=LocationData(
+                    latitude=dct['location'].latitude,
+                    longitude=dct['location'].longitude,
+                ),
+                is_expired=dct['is_expired'],
+                update_frequency=dct['update_frequency'],
+                sponsor_name=dct['sponsor_name'],
+                sponsor_url=dct['sponsor_url'],
+                email=dct['email'],
+                asn=dct['asn'],
+                urls=dct['urls'],
+                subnets=dct['subnets'],
+            )
+        if 'latitude' in dct:
+            return LocationData(
+                latitude=dct['latitude'],
+                longitude=dct['longitude'],
+            )
+        if any(url_type in dct for url_type in REQUIRED_MIRROR_PROTOCOLS):
+            return dct
+
+
 class Subnet(Base):
-    ___tablename__ = 'subnets'
+    __tablename__ = 'subnets'
 
     id = Column(Integer, nullable=False, primary_key=True)
     subnet = Column(String, nullable=False)
@@ -93,6 +167,57 @@ mirrors_subnets = Table(
 )
 
 
+@dataclass
+class LocationData:
+    latitude: float
+    longitude: float
+
+
+@dataclass
+class _MirrorYamlDataBase:
+    name: AnyStr
+    update_frequency: AnyStr
+    sponsor_name: AnyStr
+    sponsor_url: AnyStr
+    email: AnyStr
+
+
+@dataclass
+class _MirrorYamlDataDefaultBase:
+    urls: Dict[AnyStr, AnyStr] = field(default_factory=dict)
+    subnets: List[AnyStr] = field(default_factory=list)
+    asn: Optional[AnyStr] = None
+
+
+@dataclass
+class MirrorYamlData(_MirrorYamlDataDefaultBase, _MirrorYamlDataBase):
+    pass
+
+
+@dataclass
+class _MirrorDataBase:
+    continent: AnyStr
+    country: AnyStr
+    ip: AnyStr
+    location: LocationData
+
+
+@dataclass
+class _MirrorDataDefaultBase:
+    isos_link: Optional[AnyStr] = None
+    is_expired: Optional[bool] = None
+
+
+@dataclass
+class MirrorData(
+    _MirrorDataDefaultBase,
+    _MirrorYamlDataDefaultBase,
+    _MirrorYamlDataBase,
+    _MirrorDataBase,
+):
+    pass
+
+
 class Mirror(Base):
     __tablename__ = 'mirrors'
 
@@ -139,14 +264,14 @@ class Mirror(Base):
         if isinstance(ip_address, IPv4Address):
             ip_address = str(ip_address)
         asn = get_asn_by_ip(ip_address)
-        return self.asn == asn.autonomous_system_number
+        return self.asn == asn
 
     @is_in_same_asn.expression
     def is_in_same_asn(self, ip_address: Union[IPv4Address, AnyStr]):
         if isinstance(ip_address, IPv4Address):
             ip_address = str(ip_address)
         asn = get_asn_by_ip(ip_address)
-        return self.asn == asn.autonomous_system_number
+        return self.asn == asn
 
     @hybrid_method
     def conditional_distance(self, lon: float, lat: float):
@@ -164,20 +289,24 @@ class Mirror(Base):
         """
         return func.abs(self.longitude - lon) + func.abs(self.latitude - lat)
 
-    def to_dict(self) -> Dict[AnyStr, Union[AnyStr, float, Dict, List]]:
-        return {
-            'name': self.name,
-            'continent': self.continent,
-            'country': self.country,
-            'ip': self.ip,
-            'location': {
-                'lat': self.latitude,
-                'lon': self.longitude,
+    def to_dataclass(self) -> MirrorData:
+        return MirrorData(
+            name=self.name,
+            continent=self.continent,
+            country=self.country,
+            ip=self.ip,
+            location=LocationData(
+                latitude=self.latitude,
+                longitude=self.longitude,
+            ),
+            is_expired=self.is_expired,
+            update_frequency=self.update_frequency.strftime('%H'),
+            sponsor_name=self.sponsor_name,
+            sponsor_url=self.sponsor_url,
+            email=self.email,
+            asn=self.asn,
+            urls={
+                url.type: url.url for url in self.urls
             },
-            'is_expired': self.is_expired,
-            'update_frequency': self.update_frequency.strftime('%H'),
-            'sponsor_name': self.sponsor_name,
-            'sponsor_url': self.sponsor_url,
-            'email': self.email,
-            'urls': {url.type: url.url for url in self.urls},
-        }
+            subnets=[subnet.subnet for subnet in self.subnets],
+        )
