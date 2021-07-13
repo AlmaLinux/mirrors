@@ -1,7 +1,6 @@
 # coding=utf-8
 import os
 
-from geoip import open_database
 from geoip2.database import Reader
 from redis import Redis
 from sqlalchemy import create_engine

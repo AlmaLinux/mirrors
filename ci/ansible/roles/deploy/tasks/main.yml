@@ -3,6 +3,7 @@
 - include_tasks: deploy_files.yml
 - include_tasks: get_mirrors_repo.yml
 - include_tasks: create_mirrors_systemd_timer.yml
+- include_tasks: docker_network.yml
 - include_tasks: redis_in_docker.yml
 - include_tasks: backend_in_docker.yml
 - include_tasks: post_actions.yml

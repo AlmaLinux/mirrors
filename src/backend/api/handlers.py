@@ -128,7 +128,7 @@ def _get_nearest_mirrors(
         # ).limit(MAX_LENGTH_OF_MIRRORS_LIST)
         # suitable_mirrors = suitable_mirrors_query.all()
 
-        # return n-nearst mirrors
+        # return n-nearest mirrors
         suitable_mirrors = [mirror.to_dict() for mirror
                             in suitable_mirrors[:MAX_LENGTH_OF_MIRRORS_LIST]]
         set_mirrors_to_cache(

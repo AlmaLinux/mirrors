@@ -16,16 +16,6 @@
     state: directory
     mode: '0755'
 
-- name: Install git
-  dnf:
-    name:
-      - git
-    state: present
-
-- name: Install Docker SDK for python
-  pip:
-    name: docker
-
 - name: Add repository "docker-ce"
   get_url:
     url: "https://download.docker.com/linux/centos/docker-ce.repo"
@@ -34,19 +24,19 @@
     mode: 0644
     force: yes
 
-- name: Install docker-ce
-  dnf:
+
+- name: Install python docker SDK
+  pip:
     name:
-      - docker-ce
+      - docker
     state: present
 
-- name: Download binary "docker-compose"
-  get_url:
-    url: "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-Linux-{{ ansible_architecture }}"
-    dest: "/usr/local/bin/docker-compose"
-    owner: root
-    mode: 0755
-    force: yes
+- name: Install dnf packages
+  dnf:
+    name:
+      - git
+      - docker-ce
+    state: present
 
 - name: Enable and start docker service
   systemd:
