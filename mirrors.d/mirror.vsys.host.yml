@@ -1,0 +1,11 @@
+---
+name: mirror.vsys.host
+address:
+  http: http://mirror.vsys.host/almalinux/
+  https: https://mirror.vsys.host/almalinux/
+  rsync: rsync://mirror.vsys.host/almalinux
+update_frequency: 6h
+sponsor: VSYS Hosting
+sponsor_url: https://vsys.host/
+email: mirrors-admin@vsys.host
+...
