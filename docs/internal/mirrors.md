@@ -71,7 +71,7 @@ mirror.wd6.net|[WD6.net](https://www.wd6.net)|ok|Netherlands|[Mirror](https://mi
 mirror.nforce.com|[NFOrce Internet Services B.V.](https://www.nforce.com/)|ok|Netherlands|[Mirror](https://mirror.nforce.com/pub/linux/almalinux)|[Mirror](http://mirror.nforce.com/pub/linux/almalinux)||
 mirror.serverion.com|[SERVERION](https://www.serverion.com)|ok|Netherlands|[Mirror](https://mirror.serverion.com/almalinux)|[Mirror](http://mirror.serverion.com/almalinux)|[Link](rsync://mirror.serverion.com/almalinux)|
 nl.mirrors.clouvider.net|[Clouvider](https://www.clouvider.co.uk)|ok|Netherlands|[Mirror](https://nl.mirrors.clouvider.net/almalinux)|[Mirror](http://nl.mirrors.clouvider.net/almalinux)||
-almalinux.mirror.liteserver.nl|[LiteServer](https://www.liteserver.nl/)|ok|Netherlands|[Mirror](https://almalinux.mirror.liteserver.nl)|[Mirror](http://almalinux.mirror.liteserver.nl)|[Link](rsync://mirror.liteserver.nl/almalinux)|
+almalinux.mirror.liteserver.nl|[LiteServer](https://www.liteserver.nl/)|ok|Netherlands|[Mirror](https://almalinux.mirror.liteserver.nl)|[Mirror](http://almalinux.mirror.liteserver.nl)|[Link](rsync://mirror.liteserver.nl/almalinux)|[Link](ftp://mirror.liteserver.nl/almalinux)
 mirror.2degrees.nz|[2degrees](https://www.2degrees.nz)|ok|New Zealand|[Mirror](https://mirror.2degrees.nz/almalinux)|[Mirror](http://mirror.2degrees.nz/almalinux)|[Link](rsync://mirror.2degrees.nz/almalinux)|
 mirror.terrahost.no|[Terrahost AS](https://terrahost.no/)|ok|Norway|[Mirror](https://mirror.terrahost.no/almalinux)|[Mirror](http://mirror.terrahost.no/almalinux)||
 almalinux.uib.no|[University of Bergen](https://www.uib.no)|ok|Norway|[Mirror](https://almalinux.uib.no)|[Mirror](http://almalinux.uib.no)|[Link](rsync://almalinux.uib.no)|
