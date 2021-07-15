@@ -10,6 +10,7 @@ http://almalinux.cu.be/8.4-beta/AppStream/debug/$basearch/
 http://almalinux.mirror.letscloud.io/8.4-beta/AppStream/debug/$basearch/
 http://mirror.host.ag/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirrors.uni-ruse.bg/almalinux/8.4-beta/AppStream/debug/$basearch/
+http://mirror.csclub.uwaterloo.ca/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://dist-mirror.fibernetics.ca/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirror.esecuredata.com/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirror1.cl.netactuate.com/almalinux/8.4-beta/AppStream/debug/$basearch/
@@ -19,9 +20,9 @@ http://mirrors.nju.edu.cn/almalinux/8.4-beta/AppStream/debug/$basearch/
 https://mirror.sjtu.edu.cn/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirror.fysik.dtu.dk/linux/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirror.dk.team.blue/almalinux/8.4-beta/AppStream/debug/$basearch/
+http://mirror.cedia.org.ec/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://www.nic.funet.fi/pub/mirrors/almalinux.org/8.4-beta/AppStream/debug/$basearch/
 http://mirror.crexio.com/almalinux/8.4-beta/AppStream/debug/$basearch/
-http://almalinux.reloumirrors.net/8.4-beta/AppStream/debug/$basearch/
 http://mirror.almalinux.ikoula.com/8.4-beta/AppStream/debug/$basearch/
 http://almalinux.li/8.4-beta/AppStream/debug/$basearch/
 http://ftp.uni-bayreuth.de/linux/almalinux/8.4-beta/AppStream/debug/$basearch/
@@ -35,6 +36,7 @@ https://sala-mail.de/pub/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://almalinux.mirrors.itworxx.de/8.4-beta/AppStream/debug/$basearch/
 http://ftp.fau.de/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://de.mirrors.clouvider.net/almalinux/8.4-beta/AppStream/debug/$basearch/
+http://mirror.ath1.fusioned.net/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirror.01link.hk/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://hkg.mirror.rackspace.com/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirror.niif.hu/almalinux/8.4-beta/AppStream/debug/$basearch/
@@ -45,8 +47,10 @@ http://bom.mirror.leapswitch.com/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://dinosaurus.fleksibel.com/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirror-jp.almalinux.id/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirror.dewabiz.com/almalinux/8.4-beta/AppStream/debug/$basearch/
+http://mirror.amscloud.co.id/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirror-id.almalinux.id/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirror.triputramedia.id/almalinux/8.4-beta/AppStream/debug/$basearch/
+http://mirror.herza.id/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirror.telkomuniversity.ac.id/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://kartolo.sby.datautama.net.id/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://ftp.sakura.ad.jp/almalinux/8.4-beta/AppStream/debug/$basearch/
@@ -68,7 +72,6 @@ http://almalinux.mirror.liteserver.nl/8.4-beta/AppStream/debug/$basearch/
 http://mirror.2degrees.nz/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirror.terrahost.no/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://almalinux.uib.no/8.4-beta/AppStream/debug/$basearch/
-http://mirror.pregi.net/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://almalinux.slaskdatacenter.com/8.4-beta/AppStream/debug/$basearch/
 http://mirror.chmuri.net/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirrors.pt/almalinux/8.4-beta/AppStream/debug/$basearch/
@@ -76,6 +79,7 @@ http://mirrors.ptisp.pt/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirrors.chroot.ro/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://ftp.lug.ro/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirrors.layerbridge.com/almalinux/8.4-beta/AppStream/debug/$basearch/
+http://mirror.reconn.ru/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirror.yandex.ru/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://almalinux.unlimited.rs/8.4-beta/AppStream/debug/$basearch/
 http://almalinux.secureax.com/8.4-beta/AppStream/debug/$basearch/
@@ -90,12 +94,12 @@ http://mirror.domainhizmetleri.com/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirror-denizli.cenuta.com/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirror.verinomi.com/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirror.vargonen.com/almalinux/8.4-beta/AppStream/debug/$basearch/
+http://mirror.vsys.host/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://lon.mirror.rackspace.com/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirror.netweaver.uk/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirrors.coreix.net/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirrors.gethosted.online/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://almalinux.mirror.katapult.io/8.4-beta/AppStream/debug/$basearch/
-http://mirror.ath1.fusioned.net/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirror.cov.ukservers.com/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://uk.mirrors.clouvider.net/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirror.vtti.vt.edu/almalinux/8.4-beta/AppStream/debug/$basearch/
@@ -122,7 +126,6 @@ http://mirror.almalinux.ams01.readydedis.com/almalinux/8.4-beta/AppStream/debug/
 http://ord.mirror.rackspace.com/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://nyc.mirrors.clouvider.net/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirror.interserver.net/almalinux/8.4-beta/AppStream/debug/$basearch/
-http://mirror.herza.id/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirrors.cloudfly.vn/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirrors.bkns.vn/almalinux/8.4-beta/AppStream/debug/$basearch/
 http://mirrors.inet.vn/almalinux/8.4-beta/AppStream/debug/$basearch/
