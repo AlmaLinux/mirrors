@@ -2,7 +2,6 @@
 
 import logging
 import os
-from copy import copy
 from glob import glob
 
 import dateparser
@@ -12,10 +11,72 @@ import multiprocessing
 from collections import defaultdict
 from pathlib import Path
 from typing import Dict, AnyStr, List, Union, Tuple
-from geoip import IPInfo, open_database
+from geoip2.database import Reader
+from geoip2.errors import AddressNotFoundError
+from geoip2.models import City
 import requests
 import yaml
+from jsonschema import ValidationError, validate
 from urllib3.exceptions import HTTPError
+
+
+MIRROR_CONFIG_SCHEMA = {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "address": {
+            "type": "object",
+            "properties": {
+                "http": {
+                    "type": "string"
+                },
+                "https": {
+                    "type": "string"
+                },
+                "rsync": {
+                    "type": "string"
+                },
+                "ftp": {
+                    "type": "string"
+                },
+            },
+            "anyOf": [
+                {
+                    "required": [
+                        "http",
+                    ],
+                },
+                {
+                    "required": [
+                        "https",
+                    ],
+                },
+            ],
+        },
+        "update_frequency": {
+            "type": "string"
+        },
+        "sponsor": {
+            "type": "string"
+        },
+        "sponsor_url": {
+            "type": "string"
+        },
+        "email": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "name",
+        "address",
+        "update_frequency",
+        "sponsor",
+        "sponsor_url",
+    ]
+}
 
 REQUIRED_MIRROR_PROTOCOLS = (
     'https',
@@ -152,7 +213,16 @@ def set_repo_status(
         mirror_should_updated_at = dateparser.parse(
             f'now-{allowed_outdate} UTC'
         ).timestamp()
-        mirror_last_updated = float(request.content)
+        try:
+            mirror_last_updated = float(request.content)
+        except ValueError:
+            logger.info(
+                'Mirror "%s" has broken timestamp file by url "%s"',
+                mirror_info['name'],
+                timestamp_url,
+            )
+            mirror_info['status'] = 'expired'
+            return
         if mirror_last_updated > mirror_should_updated_at:
             mirror_info['status'] = 'ok'
         else:
@@ -176,18 +246,17 @@ def get_mirrors_info(
     for config_path in Path(mirrors_dir).rglob('*.yml'):
         with open(str(config_path), 'r') as config_file:
             mirror_info = yaml.safe_load(config_file)
-            if 'name' not in mirror_info:
-                logger.error(
-                    'Mirror file "%s" doesn\'t have name of the mirror',
-                    config_path,
-                )
-                continue
-            if 'address' not in mirror_info:
-                logger.error(
-                    'Mirror file "%s" doesn\'t have addresses of the mirror',
+            try:
+                validate(
                     mirror_info,
+                    MIRROR_CONFIG_SCHEMA,
                 )
-                continue
+            except ValidationError as err:
+                logger.error(
+                    'Mirror by path "%s" is not valid, because "%s"',
+                    config_path,
+                    err,
+                )
             ALL_MIRROR_PROTOCOLS.extend(
                 protocol for protocol in mirror_info['address'].keys() if
                 protocol not in ALL_MIRROR_PROTOCOLS
@@ -307,14 +376,17 @@ def set_mirror_country(
         logger.error('Can\'t get IP of mirror %s', mirror_name)
         mirror_info['country'] = 'Unknown'
         return
-    db = open_database(GEOPIP_DB)
-    match = db.lookup(ip)  # type: IPInfo
+    db = Reader(GEOPIP_DB)
     logger.info('Set country for mirror "%s"', mirror_name)
-    if match is None:
+    try:
+        match = db.city(ip)  # type: City
+        mirror_info['country'] = match.country.name
+    except AddressNotFoundError:
+        logger.warning(
+            'GeoIP db does not have information about IP "%s"',
+            ip,
+        )
         mirror_info['country'] = 'Unknown'
-    else:
-        country = match.get_info_dict()['country']['names']['en']
-        mirror_info['country'] = country
 
 
 def generate_mirrors_table(
