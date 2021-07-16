@@ -9,14 +9,15 @@ from typing import (
     Any,
     AnyStr,
     Tuple,
-    Optional, List,
+    Optional,
+    List,
 )
 
 import requests
 from bs4 import BeautifulSoup
 from geoip2.errors import AddressNotFoundError
 
-from db.db_engine import GeoIPEngine, AsnEngine
+from db.db_engine import GeoIPEngine
 from db.models import (
     MirrorYamlData,
 )
@@ -144,20 +145,6 @@ def get_geo_data_by_ip(
     longitude = city.location.longitude
 
     return continent, country, latitude, longitude
-
-
-def get_asn_by_ip(
-        ip: AnyStr,
-) -> Optional[AnyStr]:
-    """
-    Get ASN by an IP
-    """
-
-    db = AsnEngine.get_instance()
-    try:
-        return db.asn(ip).autonomous_system_number
-    except AddressNotFoundError:
-        return
 
 
 def get_azure_subnets_json() -> Optional[Dict]:

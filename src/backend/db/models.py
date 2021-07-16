@@ -13,6 +13,8 @@ from ipaddress import (
     IPv4Network,
     IPv4Address,
 )
+
+from geoip2.errors import AddressNotFoundError
 from sqlalchemy import (
     Column,
     String,
@@ -36,10 +38,10 @@ from typing import (
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.hybrid import hybrid_method
 
-from api.utils import get_asn_by_ip
 from common.sentry import (
     get_logger,
 )
+from db.db_engine import AsnEngine
 
 logger = get_logger(__name__)
 
@@ -314,3 +316,17 @@ class Mirror(Base):
             },
             subnets=[subnet.subnet for subnet in self.subnets],
         )
+
+
+def get_asn_by_ip(
+        ip: AnyStr,
+) -> Optional[AnyStr]:
+    """
+    Get ASN by an IP
+    """
+
+    db = AsnEngine.get_instance()
+    try:
+        return db.asn(ip).autonomous_system_number
+    except AddressNotFoundError:
+        return

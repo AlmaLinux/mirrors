@@ -34,7 +34,8 @@ from db.models import (
     MirrorData,
     LocationData,
     MirrorYamlData,
-    REQUIRED_MIRROR_PROTOCOLS, ARCHS,
+    REQUIRED_MIRROR_PROTOCOLS,
+    ARCHS,
 )
 from db.utils import session_scope
 
