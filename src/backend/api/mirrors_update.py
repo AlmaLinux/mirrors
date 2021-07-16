@@ -101,6 +101,8 @@ def _load_mirror_info_from_yaml_file(
             },
             subnets=mirror_info.get('subnets', []),
             asn=mirror_info.get('asn'),
+            cloud_type=mirror_info.get('cloud_type', ''),
+            cloud_region=mirror_info.get('cloud_region', ''),
         )
 
 
@@ -287,6 +289,8 @@ def update_mirror_in_db(
             sponsor_name=mirror_info.sponsor_name,
             sponsor_url=mirror_info.sponsor_url,
             email=mirror_info.email,
+            cloud_type=mirror_info.cloud_type,
+            cloud_region=mirror_info.cloud_region,
             urls=urls_to_create,
         )
         mirror_to_create.asn = mirror_info.asn

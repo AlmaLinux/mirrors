@@ -187,6 +187,8 @@ class _MirrorYamlDataDefaultBase:
     urls: Dict[AnyStr, AnyStr] = field(default_factory=dict)
     subnets: List[AnyStr] = field(default_factory=list)
     asn: Optional[AnyStr] = None
+    cloud_type: AnyStr = ''
+    cloud_region: AnyStr = ''
 
 
 @dataclass
@@ -234,6 +236,8 @@ class Mirror(Base):
     sponsor_url = Column(String, nullable=False)
     email = Column(String, nullable=False)
     asn = Column(String, nullable=True)
+    cloud_type = Column(String, nullable=True)
+    cloud_region = Column(String, nullable=True)
     urls = relationship(
         'Url',
         secondary=mirrors_urls,

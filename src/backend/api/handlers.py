@@ -23,7 +23,8 @@ from api.redis import (
     get_url_types_from_cache,
     set_url_types_to_cache,
 )
-from api.utils import get_geo_data_by_ip
+from api.utils import get_geo_data_by_ip, get_aws_subnets, get_azure_subnets, \
+    set_subnets_for_hyper_cloud_mirror
 from db.models import (
     Url,
     Mirror,
@@ -205,12 +206,19 @@ def update_mirrors_handler() -> AnyStr:
     all_mirrors = get_mirrors_info(
         mirrors_dir=mirrors_dir,
     )
+
     with session_scope() as session:
         session.query(Mirror).filter(
             Mirror.name in [mirror_info.name for mirror_info in all_mirrors]
         ).delete()
         session.flush()
+    subnets = get_aws_subnets()
+    subnets.update(get_azure_subnets())
     for mirror_info in all_mirrors:
+        set_subnets_for_hyper_cloud_mirror(
+            subnets=subnets,
+            mirror_info=mirror_info,
+        )
         update_mirror_in_db(
             mirror_info,
             versions,
