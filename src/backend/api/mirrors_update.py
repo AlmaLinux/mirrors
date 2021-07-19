@@ -91,6 +91,20 @@ def _load_mirror_info_from_yaml_file(
                 'Mirror file "%s" doesn\'t have addresses of the mirror',
                 mirror_info,
             )
+        subnets = mirror_info.get('subnets', [])
+        if not isinstance(subnets, list):
+            try:
+                req = requests.get(subnets)
+                req.raise_for_status()
+                subnets = req.json()
+            except requests.RequestException as err:
+                logger.error(
+                    'Can not get the subnets of mirror "%s" '
+                    'by url "%s" because "%s"',
+                    mirror_info['name'],
+                    subnets,
+                    err,
+                )
         return MirrorYamlData(
             name=mirror_info['name'],
             update_frequency=mirror_info['update_frequency'],
