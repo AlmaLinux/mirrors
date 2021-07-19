@@ -8,10 +8,10 @@
     restart: yes
     restart_policy: unless-stopped
     pull: yes
-    hostname: redis
+    hostname: "{{ redis_host }}"
     networks:
       - name: backend
-    command: "redis-server --appendonly yes"
+    command: "redis-server --appendonly yes --port {{ redis_port }}"
     mounts:
       - source: "redis_data"
         target: "/data"

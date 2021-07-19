@@ -29,6 +29,8 @@
       SENTRY_DISABLED: "{{ sentry_disabled | string }}"
       UWSGI_ADDRESS: "{{ uwsgi_address | string }}"
       UWSGI_PORT: "{{ uwsgi_port | string }}"
+      REDIS_PORT: "{{ redis_port | string }}"
+      REDIS_HOST: "{{ redis_host | string }}"
     published_ports:
       - "{{ published_ports }}"
     mounts:

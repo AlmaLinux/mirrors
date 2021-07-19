@@ -8,8 +8,8 @@ from sqlalchemy import create_engine
 GEOIP_PATH = os.environ.get('GEOIP_PATH')
 ASN_PATH = os.environ.get('ASN_PATH')
 SQLITE_PATH = os.environ.get('SQLITE_PATH')
-REDIS_HOST = 'redis'
-REDIS_PORT = 6379
+REDIS_HOST = os.environ.get('REDIS_HOST')
+REDIS_PORT = os.environ.get('REDIS_PORT')
 REDIS_DB = 0
 
 if GEOIP_PATH:
