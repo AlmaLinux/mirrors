@@ -50,6 +50,79 @@ Base = declarative_base()
 
 
 CACHE_EXPIRED_TIME = 24 * 3600  # 24 hours
+MIRROR_CONFIG_SCHEMA = {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "address": {
+            "type": "object",
+            "properties": {
+                "http": {
+                    "type": "string"
+                },
+                "https": {
+                    "type": "string"
+                },
+                "rsync": {
+                    "type": "string"
+                },
+                "ftp": {
+                    "type": "string"
+                },
+            },
+            "anyOf": [
+                {
+                    "required": [
+                        "http",
+                    ],
+                },
+                {
+                    "required": [
+                        "https",
+                    ],
+                },
+            ],
+        },
+        "update_frequency": {
+            "type": "string"
+        },
+        "sponsor": {
+            "type": "string"
+        },
+        "sponsor_url": {
+            "type": "string"
+        },
+        "email": {
+            "type": "string"
+        },
+        "asn": {
+            "type": "string"
+        },
+        "subnets": {
+            "oneOf": [
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                {
+                    "type": "string",
+                }
+            ]
+        }
+    },
+    "required": [
+        "name",
+        "address",
+        "update_frequency",
+        "sponsor",
+        "sponsor_url",
+    ]
+}
 REQUIRED_MIRROR_PROTOCOLS = (
     'https',
     'http',

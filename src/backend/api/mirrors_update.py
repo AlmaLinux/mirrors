@@ -19,6 +19,10 @@ from typing import (
 
 from sqlalchemy.exc import NoResultFound
 from uwsgidecorators import thread
+from jsonschema import (
+    ValidationError,
+    validate,
+)
 
 from api.utils import get_geo_data_by_ip
 
@@ -36,6 +40,7 @@ from db.models import (
     MirrorYamlData,
     REQUIRED_MIRROR_PROTOCOLS,
     ARCHS,
+    MIRROR_CONFIG_SCHEMA,
 )
 from db.utils import session_scope
 
@@ -81,15 +86,16 @@ def _load_mirror_info_from_yaml_file(
 ) -> Optional[MirrorYamlData]:
     with open(str(config_path), 'r') as config_file:
         mirror_info = yaml.safe_load(config_file)
-        if 'name' not in mirror_info:
-            logger.error(
-                'Mirror file "%s" doesn\'t have name of the mirror',
-                config_path,
-            )
-        if 'address' not in mirror_info:
-            logger.error(
-                'Mirror file "%s" doesn\'t have addresses of the mirror',
+        try:
+            validate(
                 mirror_info,
+                MIRROR_CONFIG_SCHEMA,
+            )
+        except ValidationError as err:
+            logger.error(
+                'Mirror by path "%s" is not valid, because "%s"',
+                config_path,
+                err,
             )
         subnets = mirror_info.get('subnets', [])
         if not isinstance(subnets, list):
@@ -105,6 +111,7 @@ def _load_mirror_info_from_yaml_file(
                     subnets,
                     err,
                 )
+                subnets = []
         return MirrorYamlData(
             name=mirror_info['name'],
             update_frequency=mirror_info['update_frequency'],
@@ -114,7 +121,7 @@ def _load_mirror_info_from_yaml_file(
             urls={
                 _type: url for _type, url in mirror_info['address'].items()
             },
-            subnets=mirror_info.get('subnets', []),
+            subnets=subnets,
             asn=mirror_info.get('asn'),
             cloud_type=mirror_info.get('cloud_type', ''),
             cloud_region=mirror_info.get('cloud_region', ''),
