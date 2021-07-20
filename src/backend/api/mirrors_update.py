@@ -233,7 +233,16 @@ def set_repo_status(
         mirror_should_updated_at = dateparser.parse(
             f'now-{allowed_outdate} UTC'
         ).timestamp()
-        mirror_last_updated = float(request.content)
+        try:
+            mirror_last_updated = float(request.content)
+        except ValueError:
+            logger.info(
+                'Mirror "%s" has broken timestamp file by url "%s"',
+                mirror_info.name,
+                timestamp_url,
+            )
+            mirror_info.is_expired = True
+            return
         if mirror_last_updated > mirror_should_updated_at:
             mirror_info.is_expired = False
         else:
