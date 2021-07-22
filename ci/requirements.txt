@@ -13,7 +13,7 @@ pyyaml==5.4.1
 redis==3.5.3
 requests==2.26.0
 sentry-sdk[flask]==1.3.0
-sqlalchemy==1.4.21
+sqlalchemy==1.4.22
 uwsgi==2.0.19.1
 uwsgidecorators==1.1.0
 Werkzeug==2.0.1
