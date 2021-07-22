@@ -13,3 +13,4 @@ uwsgi_address=<ip of uwsgi service inside a container>
 uwsgi_port=<port of uwsgi service inside a container>
 redis_port=<port of Redis service inside a container>
 redis_host=<hostname of Redis service inside a container>
+license_key=<License key from MaxMind site>

@@ -23,17 +23,26 @@ from api.redis import (
     get_url_types_from_cache,
     set_url_types_to_cache,
 )
-from api.utils import get_geo_data_by_ip, get_aws_subnets, get_azure_subnets, \
-    set_subnets_for_hyper_cloud_mirror
+from api.utils import (
+    get_geo_data_by_ip,
+    get_aws_subnets,
+    get_azure_subnets,
+    set_subnets_for_hyper_cloud_mirror,
+)
 from db.models import (
     Url,
     Mirror,
     MirrorData,
+    get_asn_by_ip,
+    is_ip_in_any_subnet,
+    Subnet,
+    mirrors_subnets,
+    mirrors_urls,
 )
 from db.utils import session_scope
 from sqlalchemy.sql.expression import (
+    null,
     false,
-    true,
 )
 from common.sentry import (
     get_logger,
@@ -54,21 +63,29 @@ def _get_nearest_mirrors_by_network_data(
     """
 
     match = get_geo_data_by_ip(ip_address)
+    asn = get_asn_by_ip(ip_address)
+    suitable_mirrors = []
     with session_scope() as session:
-        suitable_mirrors = session.query(Mirror).filter(
-            Mirror.is_in_any_subnet(ip_address) == true() or
-            Mirror.is_in_same_asn(ip_address) == true(),
+        mirrors = session.query(Mirror).filter(
+            (Mirror.asn != null()) | (Mirror.subnets != null())
         ).all()
-        suitable_mirrors = [mirror.to_dataclass()
-                            for mirror in suitable_mirrors]
+        for mirror in mirrors:
+            if (asn and asn == mirror.asn) or is_ip_in_any_subnet(
+                ip_address=ip_address,
+                subnets=mirror.get_subnets(),
+            ):
+                suitable_mirrors.append(mirror.to_dataclass())
         if len(suitable_mirrors) == 1 and match is not None:
             continent, country, latitude, longitude = match
             nearest_mirror = session.query(Mirror).filter(
+                Mirror.name.not_in([mirror.name for mirror in
+                                    suitable_mirrors])
+            ).order_by(
                 Mirror.conditional_distance(
                     lon=longitude,
                     lat=latitude,
                 )
-            ).one()  # type: Mirror
+            ).first()  # type: Mirror
             suitable_mirrors.append(nearest_mirror.to_dataclass())
         return suitable_mirrors
 
@@ -208,9 +225,10 @@ def update_mirrors_handler() -> AnyStr:
     )
 
     with session_scope() as session:
-        session.query(Mirror).filter(
-            Mirror.name in [mirror_info.name for mirror_info in all_mirrors]
-        ).delete()
+        session.query(Mirror).delete()
+        session.query(Subnet).delete()
+        session.query(mirrors_urls).delete()
+        session.query(mirrors_subnets).delete()
         session.flush()
     subnets = get_aws_subnets()
     subnets.update(get_azure_subnets())

@@ -10,8 +10,7 @@ from json import (
     JSONDecoder,
 )
 from ipaddress import (
-    IPv4Network,
-    IPv4Address,
+    ip_network,
 )
 
 from geoip2.errors import AddressNotFoundError
@@ -30,7 +29,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from typing import (
     Dict,
     AnyStr,
-    Union,
     List,
     Optional,
 )
@@ -99,7 +97,14 @@ MIRROR_CONFIG_SCHEMA = {
             "type": "string"
         },
         "asn": {
-            "type": "string"
+            "oneOf": [
+                {
+                    "type": "string",
+                },
+                {
+                    "type": "integer"
+                }
+            ]
         },
         "subnets": {
             "oneOf": [
@@ -325,34 +330,6 @@ class Mirror(Base):
     )
 
     @hybrid_method
-    def is_in_any_subnet(self, ip_address: Union[IPv4Address, AnyStr]):
-        if isinstance(ip_address, str):
-            ip_address = IPv4Address(ip_address)
-        return any(ip_address in IPv4Network(subnet.subnet)
-                   for subnet in self.subnets)
-
-    @is_in_any_subnet.expression
-    def is_in_any_subnet(self, ip_address: Union[IPv4Address, AnyStr]):
-        if isinstance(ip_address, str):
-            ip_address = IPv4Address(ip_address)
-        return func.any(ip_address in IPv4Network(subnet.subnet)
-                        for subnet in self.subnets)
-
-    @hybrid_method
-    def is_in_same_asn(self, ip_address: Union[IPv4Address, AnyStr]):
-        if isinstance(ip_address, IPv4Address):
-            ip_address = str(ip_address)
-        asn = get_asn_by_ip(ip_address)
-        return self.asn == asn
-
-    @is_in_same_asn.expression
-    def is_in_same_asn(self, ip_address: Union[IPv4Address, AnyStr]):
-        if isinstance(ip_address, IPv4Address):
-            ip_address = str(ip_address)
-        asn = get_asn_by_ip(ip_address)
-        return self.asn == asn
-
-    @hybrid_method
     def conditional_distance(self, lon: float, lat: float):
         """
         Calculate conditional distance between this mirror and some point
@@ -390,6 +367,9 @@ class Mirror(Base):
             subnets=[subnet.subnet for subnet in self.subnets],
         )
 
+    def get_subnets(self) -> List[AnyStr]:
+        return [subnet.subnet for subnet in self.subnets]
+
 
 def get_asn_by_ip(
         ip: AnyStr,
@@ -400,6 +380,19 @@ def get_asn_by_ip(
 
     db = AsnEngine.get_instance()
     try:
-        return db.asn(ip).autonomous_system_number
+        return str(db.asn(ip).autonomous_system_number)
     except AddressNotFoundError:
         return
+
+
+def is_ip_in_any_subnet(
+        ip_address: AnyStr,
+        subnets: List[AnyStr]
+) -> bool:
+    ip_address = ip_network(ip_address)
+    for subnet in subnets:
+        subnet = ip_network(subnet)
+        if ip_address.version == subnet.version and \
+           ip_address.subnet_of(subnet):
+            return True
+    return False

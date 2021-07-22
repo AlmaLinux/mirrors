@@ -1,0 +1,10 @@
+[Unit]
+Description={{ description }} Service
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+AccuracySec=15s
+
+[Install]
+WantedBy=timers.target

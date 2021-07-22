@@ -1,4 +1,6 @@
 env_file: env
-timer_name: local_mirrors_list
-update_mirrors_list_script_path: "/usr/bin/{{ timer_name }}.sh"
+mirrors_timer_name: local_mirrors_list
+dbs_timer_name: dbs_update
+update_mirrors_list_script_path: "/usr/bin/{{ mirrors_timer_name }}.sh"
+update_maxmind_dbs_script_path: "/usr/bin/{{ dbs_timer_name }}.sh"
 source_path: /root/mirrors_service

@@ -1,0 +1,33 @@
+---
+- name: Prepare script for updating MaxMind DBs
+  template:
+    src: "{{ dbs_timer_name }}_script.j2"
+    dest: "{{ update_maxmind_dbs_script_path }}"
+    owner: root
+    group: root
+    mode: 0740
+    force: 'yes'
+
+- name: Prepare systemd units
+  template:
+    src: "{{ item.src }}"
+    dest: "/etc/systemd/system/{{ item.dst }}"
+    owner: root
+    group: root
+    mode: 0640
+    force: 'yes'
+  vars:
+    description: Update the MaxMind DBs
+  with_items:
+    - dst: "{{ dbs_timer_name }}.service"
+      src: "{{ dbs_timer_name }}_service.j2"
+    - dst: "{{ dbs_timer_name }}.timer"
+      src: "{{ dbs_timer_name }}_timer.j2"
+
+- name: Enable systemd timer
+  systemd:
+    name: "{{ dbs_timer_name }}.timer"
+    state: started
+    enabled: true
+    masked: false
+    daemon_reload: true

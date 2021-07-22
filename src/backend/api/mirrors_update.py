@@ -298,12 +298,6 @@ def update_mirror_in_db(
         ) for url_type, url in mirror_info.urls.items()
     ]
     with session_scope() as session:
-        try:
-            session.query(Mirror).filter(
-                Mirror.name == mirror_name
-            ).delete()
-        except NoResultFound:
-            pass
         for url_to_create in urls_to_create:
             session.add(url_to_create)
         mirror_to_create = Mirror(
@@ -333,6 +327,7 @@ def update_mirror_in_db(
             ]
             for subnet_to_create in subnets_to_create:
                 session.add(subnet_to_create)
+            mirror_to_create.subnets = subnets_to_create
         logger.debug(
             'Mirror "%s" is created',
             mirror_name,
