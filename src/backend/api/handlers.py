@@ -112,7 +112,7 @@ def _get_nearest_mirrors_by_geo_data(
             )
         # We return all of mirrors if we can't
         # determine geo data of a request's IP
-        if match is None and not empty_for_unknown_ip:
+        if match is None:
             all_mirrors = [] if empty_for_unknown_ip else [
                 mirror.to_dataclass() for mirror in all_mirrors_query.all()
             ]

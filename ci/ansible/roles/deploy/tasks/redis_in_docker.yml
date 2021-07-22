@@ -11,6 +11,8 @@
     hostname: "{{ redis_host }}"
     networks:
       - name: backend
+    published_ports:
+      - "127.0.0.1:{{ redis_port }}:{{ redis_port }}"
     command: "redis-server --appendonly yes --port {{ redis_port }}"
     mounts:
       - source: "redis_data"

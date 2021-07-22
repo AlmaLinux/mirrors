@@ -1,0 +1,39 @@
+---
+
+- name: Prepare nginx configuration
+  template:
+    src: nginx.conf.j2
+    dest: "{{ config_root }}/nginx.conf"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Up the nginx container from docker image
+  docker_container:
+    name: "{{ container_env_prefix }}_nginx"
+    image: "nginx:1.21.1"
+    state: started
+    restart: yes
+    restart_policy: unless-stopped
+    pull: yes
+    networks:
+      - name: public
+      - name: backend
+    published_ports:
+      - "80:80"
+    mounts:
+      - source: "{{ config_root }}/nginx.conf"
+        target: "/etc/nginx/nginx.conf"
+        read_only: yes
+        type: bind
+    log_driver: "json-file"
+    log_options:
+      max-size: "200m"
+      max-file: "5"
+  when: deploy_environment | default('Development') == 'Production'
+
+- name: Stop the nginx container if it's dev environment
+  docker_container:
+    name: "{{ container_env_prefix }}_nginx"
+    state: stopped
+  when: deploy_environment | default('Development') != 'Production'
