@@ -24,18 +24,18 @@
     mode: 0644
     force: yes
 
+- name: Install dnf packages
+  dnf:
+    name:
+      - python3-pip
+      - git
+      - docker-ce
+    state: present
 
 - name: Install python docker SDK
   pip:
     name:
       - docker
-    state: present
-
-- name: Install dnf packages
-  dnf:
-    name:
-      - git
-      - docker-ce
     state: present
 
 - name: Enable and start docker service
