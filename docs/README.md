@@ -8,7 +8,7 @@ AlmaLinux would like to personally thank [HiVelocity](https://www.hivelocity.net
 <p align="center"><a href="https://www.hivelocity.net/"><img src="https://hivelocity.b-cdn.net/wp-content/uploads/2019/07/logo.svg" width="180" height="67"/></a></p>
 
 This page contains a list of official [AlmaLinux](https://almalinux.org/) mirrors. If you want to set up a public mirror, please read
-[our mirror guidelines](https://wiki.almalinux.org/Mirrors.html).  You can find the list of links to ISOs for all of mirrors [here](/isos.html).
+[our mirror guidelines](https://wiki.almalinux.org/Mirrors.html).  You can find the list of links to ISOs for all of mirrors [here](https://mirrors.almalinux.org/isos.html).
 
 
 <Content :page-key="$site.pages.find(p => p.path === '/internal/mirrors.html').key"/>
