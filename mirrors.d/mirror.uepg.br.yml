@@ -1,0 +1,11 @@
+---
+name: mirror.uepg.br
+address:
+  http: http://mirror.uepg.br/almalinux/
+  https: https://mirror.uepg.br/almalinux/
+  rsync: rsync://mirror.uepg.br/almalinux
+update_frequency: 6h
+sponsor: Universidade Estadual de Ponta Grossa
+sponsor_url: https://uepg.br/nti
+email: redes@uepg.br
+...
