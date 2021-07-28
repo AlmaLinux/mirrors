@@ -3,6 +3,7 @@ import os
 
 import time
 from collections import defaultdict
+from random import choice
 from functools import wraps
 from typing import (
     Dict,
@@ -229,9 +230,10 @@ def set_subnets_for_hyper_cloud_mirror(
         subnets: Dict[AnyStr, List[AnyStr]],
         mirror_info: MirrorYamlData,
 ):
-    cloud_region = mirror_info.cloud_region.lower()
+    cloud_regions = mirror_info.cloud_region.lower().split(',')
     cloud_type = mirror_info.cloud_type.lower()
+    intersection = list(set(cloud_regions) & set(subnets))
     if subnets is not None and \
             cloud_type in ('azure', 'aws') and \
-            cloud_region in subnets:
-        mirror_info.subnets = subnets[cloud_region]
+            intersection:
+        mirror_info.subnets = subnets[choice(intersection)]

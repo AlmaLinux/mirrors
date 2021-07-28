@@ -112,6 +112,8 @@ def _load_mirror_info_from_yaml_file(
                     err,
                 )
                 subnets = []
+        cloud_regions = mirror_info.get('cloud_regions', [])
+
         return MirrorYamlData(
             name=mirror_info['name'],
             update_frequency=mirror_info['update_frequency'],
@@ -124,7 +126,7 @@ def _load_mirror_info_from_yaml_file(
             subnets=subnets,
             asn=mirror_info.get('asn'),
             cloud_type=mirror_info.get('cloud_type', ''),
-            cloud_region=mirror_info.get('cloud_region', ''),
+            cloud_region=','.join(cloud_regions),
         )
 
 

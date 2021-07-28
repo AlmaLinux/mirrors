@@ -43,15 +43,22 @@ from db.db_engine import AsnEngine
 
 logger = get_logger(__name__)
 
-
 Base = declarative_base()
-
 
 CACHE_EXPIRED_TIME = 24 * 3600  # 24 hours
 MIRROR_CONFIG_SCHEMA = {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
     "properties": {
+        "cloud_type": {
+            "type": "string"
+        },
+        "cloud_region": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
         "name": {
             "type": "string"
         },
@@ -126,7 +133,10 @@ MIRROR_CONFIG_SCHEMA = {
         "update_frequency",
         "sponsor",
         "sponsor_url",
-    ]
+    ],
+    "dependencies": {
+        "cloud_type": {"required": ["cloud_region"]}
+    }
 }
 REQUIRED_MIRROR_PROTOCOLS = (
     'https',
@@ -142,6 +152,7 @@ class DataClassesJSONEncoder(JSONEncoder):
     """
     Custom JSON encoder for data classes
     """
+
     def default(self, o):
         if is_dataclass(o):
             return asdict(o)
@@ -152,6 +163,7 @@ class DataClassesJSONDecoder(JSONDecoder):
     """
     Custom JSON decoder for data classes
     """
+
     def __init__(self, *args, **kwargs):
         JSONDecoder.__init__(
             self,
@@ -207,7 +219,7 @@ class Url(Base):
 
     def to_dict(self) -> Dict[AnyStr, AnyStr]:
         return {
-           self.type: self.url,
+            self.type: self.url,
         }
 
 
@@ -227,7 +239,6 @@ mirrors_urls = Table(
         )
     ),
 )
-
 
 mirrors_subnets = Table(
     'mirrors_subnets',
@@ -393,6 +404,6 @@ def is_ip_in_any_subnet(
     for subnet in subnets:
         subnet = ip_network(subnet)
         if ip_address.version == subnet.version and \
-           ip_address.subnet_of(subnet):
+                ip_address.subnet_of(subnet):
             return True
     return False
