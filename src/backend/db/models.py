@@ -53,7 +53,7 @@ MIRROR_CONFIG_SCHEMA = {
         "cloud_type": {
             "type": "string"
         },
-        "cloud_region": {
+        "cloud_regions": {
             "type": "array",
             "items": {
                 "type": "string"
@@ -135,7 +135,7 @@ MIRROR_CONFIG_SCHEMA = {
         "sponsor_url",
     ],
     "dependencies": {
-        "cloud_type": {"required": ["cloud_region"]}
+        "cloud_type": {"required": ["cloud_regions"]}
     }
 }
 REQUIRED_MIRROR_PROTOCOLS = (
