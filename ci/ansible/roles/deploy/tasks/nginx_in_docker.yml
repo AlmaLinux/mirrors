@@ -31,9 +31,3 @@
       max-size: "200m"
       max-file: "5"
   when: deploy_environment | default('Development') == 'Production'
-
-- name: Stop the nginx container if it's dev environment
-  docker_container:
-    name: "{{ container_env_prefix }}_nginx"
-    state: stopped
-  when: deploy_environment | default('Development') != 'Production'
