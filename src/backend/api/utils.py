@@ -232,8 +232,13 @@ def set_subnets_for_hyper_cloud_mirror(
 ):
     cloud_regions = mirror_info.cloud_region.lower().split(',')
     cloud_type = mirror_info.cloud_type.lower()
-    intersection = list(set(cloud_regions) & set(subnets))
-    if subnets is not None and \
-            cloud_type in ('azure', 'aws') and \
-            intersection:
-        mirror_info.subnets = subnets[choice(intersection)]
+
+    if subnets is not None:
+        if cloud_type == 'aws' and len(cloud_regions) and \
+                cloud_regions[0] in subnets:
+            mirror_info.subnets = subnets[cloud_regions[0]]
+        elif cloud_type == 'azure':
+            total_subnets = []
+            for cloud_region in cloud_regions:
+                total_subnets.extend(subnets.get(cloud_region, []))
+            mirror_info.subnets = total_subnets
