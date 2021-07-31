@@ -1,0 +1,10 @@
+---
+name: danweb2.dsteiner.ch
+address:
+  http: http://danweb2.dsteiner.ch/almalinux/
+  https: https://danweb2.dsteiner.ch/almalinux/
+update_frequency: 6h
+sponsor: DS
+sponsor_url: https://www.dsteiner.ch/
+email: support@dsteiner.ch
+...
