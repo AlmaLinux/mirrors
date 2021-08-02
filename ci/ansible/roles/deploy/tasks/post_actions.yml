@@ -15,6 +15,10 @@
         name: "{{ dbs_timer_name }}.service"
         state: restarted
       when: first_deploy_file is defined and not first_deploy_file.stat.exists
+    - name: Waiting for 30 sec before updating mirrors lit
+      wait_for:
+        timeout: 30
+      when: first_deploy_file is defined and not first_deploy_file.stat.exists
     - name: Run update mirrors list if it's first deploy
       systemd:
         name: "{{ mirrors_timer_name }}.service"
