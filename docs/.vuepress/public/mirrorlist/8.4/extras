@@ -5,12 +5,11 @@ http://syd.mirror.rackspace.com/almalinux/8.4/extras/$basearch/os/
 http://mirror.as24220.net/almalinux/8.4/extras/$basearch/os/
 http://mirror.alwyzon.net/almalinux/8.4/extras/$basearch/os/
 http://mirror.xeonbd.com/almalinux/8.4/extras/$basearch/os/
-http://mirrors.hostever.com/almalinux/8.4/extras/$basearch/os/
 http://almalinux.cu.be/8.4/extras/$basearch/os/
 http://almalinux.mirror.letscloud.io/8.4/extras/$basearch/os/
+http://mirror.uepg.br/almalinux/8.4/extras/$basearch/os/
 http://mirror.host.ag/almalinux/8.4/extras/$basearch/os/
 http://mirrors.uni-ruse.bg/almalinux/8.4/extras/$basearch/os/
-http://mirror.csclub.uwaterloo.ca/almalinux/8.4/extras/$basearch/os/
 http://dist-mirror.fibernetics.ca/almalinux/8.4/extras/$basearch/os/
 http://mirror.esecuredata.com/almalinux/8.4/extras/$basearch/os/
 http://mirror1.cl.netactuate.com/almalinux/8.4/extras/$basearch/os/
@@ -21,6 +20,9 @@ https://mirror.sjtu.edu.cn/almalinux/8.4/extras/$basearch/os/
 http://mirror.fysik.dtu.dk/linux/almalinux/8.4/extras/$basearch/os/
 http://mirror.dk.team.blue/almalinux/8.4/extras/$basearch/os/
 http://mirror.cedia.org.ec/almalinux/8.4/extras/$basearch/os/
+http://mirror.uta.edu.ec/almalinux/8.4/extras/$basearch/os/
+http://mirror.epn.edu.ec/almalinux/8.4/extras/$basearch/os/
+http://mirror.espoch.edu.ec/almalinux/8.4/extras/$basearch/os/
 http://www.nic.funet.fi/pub/mirrors/almalinux.org/8.4/extras/$basearch/os/
 http://mirror.crexio.com/almalinux/8.4/extras/$basearch/os/
 http://mirror.almalinux.ikoula.com/8.4/extras/$basearch/os/
@@ -28,6 +30,7 @@ http://almalinux.li/8.4/extras/$basearch/os/
 http://ftp.uni-bayreuth.de/linux/almalinux/8.4/extras/$basearch/os/
 http://mirror.hs-esslingen.de/Mirrors/almalinux/8.4/extras/$basearch/os/
 http://mirrors.xtom.de/almalinux/8.4/extras/$basearch/os/
+http://germanywestcentral.azure.repo.almalinux.org/almalinux/8.4/extras/$basearch/os/
 http://mirror.netzwerge.de/almalinux/8.4/extras/$basearch/os/
 http://ftp.gwdg.de/pub/linux/almalinux/8.4/extras/$basearch/os/
 http://repo.almalinux.org/almalinux/8.4/extras/$basearch/os/
@@ -36,7 +39,6 @@ http://almalinux.mirrors.itworxx.de/8.4/extras/$basearch/os/
 http://ftp.fau.de/almalinux/8.4/extras/$basearch/os/
 http://de.mirrors.clouvider.net/almalinux/8.4/extras/$basearch/os/
 http://mirror.ath1.fusioned.net/almalinux/8.4/extras/$basearch/os/
-http://mirror.01link.hk/almalinux/8.4/extras/$basearch/os/
 http://hkg.mirror.rackspace.com/almalinux/8.4/extras/$basearch/os/
 http://mirror.niif.hu/almalinux/8.4/extras/$basearch/os/
 http://ftp.bme.hu/almalinux/8.4/extras/$basearch/os/
@@ -49,6 +51,7 @@ http://mirror.amscloud.co.id/almalinux/8.4/extras/$basearch/os/
 http://mirror.triputramedia.id/almalinux/8.4/extras/$basearch/os/
 http://mirror.herza.id/almalinux/8.4/extras/$basearch/os/
 http://mirror.telkomuniversity.ac.id/almalinux/8.4/extras/$basearch/os/
+http://kartolo.sby.datautama.net.id/almalinux/8.4/extras/$basearch/os/
 http://ftp.sakura.ad.jp/almalinux/8.4/extras/$basearch/os/
 http://ftp.iij.ad.jp/pub/linux/almalinux/8.4/extras/$basearch/os/
 http://ftp.jaist.ac.jp/pub/Linux/almalinux/8.4/extras/$basearch/os/
@@ -79,12 +82,13 @@ http://mirrors.layerbridge.com/almalinux/8.4/extras/$basearch/os/
 http://mirror.reconn.ru/almalinux/8.4/extras/$basearch/os/
 http://mirror.yandex.ru/almalinux/8.4/extras/$basearch/os/
 http://almalinux.unlimited.rs/8.4/extras/$basearch/os/
+http://southeastasia.azure.repo.almalinux.org/almalinux/8.4/extras/$basearch/os/
 http://almalinux.secureax.com/8.4/extras/$basearch/os/
 http://ftp.arnes.si/mirrors/almalinux/8.4/extras/$basearch/os/
 http://almalinux-mirror.datakeepers.co.za/8.4/extras/$basearch/os/
 http://mirror.misakamikoto.network/almalinux/8.4/extras/$basearch/os/
 http://ftp.yjsoft.xyz/almalinux/8.4/extras/$basearch/os/
-http://repo.ifca.es/almalinux/8.4/extras/$basearch/os/
+http://danweb2.dsteiner.ch/almalinux/8.4/extras/$basearch/os/
 http://mirror.ch.altushost.com/almalinux/8.4/extras/$basearch/os/
 http://mirror.kku.ac.th/almalinux/8.4/extras/$basearch/os/
 http://mirror.natro.com/almalinux/8.4/extras/$basearch/os/
@@ -113,9 +117,11 @@ http://iad.mirror.rackspace.com/almalinux/8.4/extras/$basearch/os/
 https://almalinux.ourhome.kiwi/8.4/extras/$basearch/os/
 http://la.mirrors.clouvider.net/almalinux/8.4/extras/$basearch/os/
 http://mirror.cloudcone.net/almalinux/8.4/extras/$basearch/os/
+http://westus2.azure.repo.almalinux.org/almalinux/8.4/extras/$basearch/os/
 http://mirror.mia.velocihost.net/almalinux/8.4/extras/$basearch/os/
 http://almalinux-mirror.dal1.hivelocity.net/8.4/extras/$basearch/os/
 http://mirrors.radwebhosting.com/almalinux/8.4/extras/$basearch/os/
+http://mirror.nyc.velocihost.net/almalinux/8.4/extras/$basearch/os/
 http://almalinux-mirror.tpa.hivelocity.net/8.4/extras/$basearch/os/
 http://mirror.cogentco.com/pub/linux/almalinux/8.4/extras/$basearch/os/
 http://mirror.almalinux.dal01.readydedis.com/almalinux/8.4/extras/$basearch/os/
@@ -125,6 +131,7 @@ http://mirror.hostup.org/almalinux/8.4/extras/$basearch/os/
 http://ord.mirror.rackspace.com/almalinux/8.4/extras/$basearch/os/
 http://nyc.mirrors.clouvider.net/almalinux/8.4/extras/$basearch/os/
 http://mirror.interserver.net/almalinux/8.4/extras/$basearch/os/
+http://eastus.azure.repo.almalinux.org/almalinux/8.4/extras/$basearch/os/
 http://mirrors.cloudfly.vn/almalinux/8.4/extras/$basearch/os/
 http://mirrors.bkns.vn/almalinux/8.4/extras/$basearch/os/
 http://mirrors.inet.vn/almalinux/8.4/extras/$basearch/os/
