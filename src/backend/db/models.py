@@ -376,6 +376,8 @@ class Mirror(Base):
                 url.type: url.url for url in self.urls
             },
             subnets=[subnet.subnet for subnet in self.subnets],
+            cloud_type=self.cloud_type,
+            cloud_region=self.cloud_region,
         )
 
     def get_subnets(self) -> List[AnyStr]:

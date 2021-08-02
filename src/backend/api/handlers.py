@@ -324,15 +324,17 @@ def get_isos_list_by_countries(
 ) -> Tuple[Dict[AnyStr, List[MirrorData]], List[MirrorData]]:
     mirrors_by_countries = defaultdict(list)
     for mirror_info in get_all_mirrors():
+        # Hyper clouds (like AWS/Azure) don't have isos, because they traffic
+        # is too expensive
+        if mirror_info.cloud_type in ('aws', 'azure'):
+            continue
+
+        _set_isos_link_for_mirror(
+            mirror_info=mirror_info,
+            version=version,
+            arch=arch
+        )
         mirrors_by_countries[mirror_info.country].append(mirror_info)
-    for country, country_mirrors in \
-            mirrors_by_countries.items():
-        for mirror_info in country_mirrors:
-            _set_isos_link_for_mirror(
-                mirror_info=mirror_info,
-                version=version,
-                arch=arch
-            )
     nearest_mirrors = _get_nearest_mirrors(
         ip_address=ip_address,
         empty_for_unknown_ip=True,
