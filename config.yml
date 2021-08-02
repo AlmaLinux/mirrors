@@ -19,6 +19,8 @@ repos:
     path: extras/$basearch/os/
   - name: ha
     path: HighAvailability/$basearch/os/
+  - name: devel
+    path: devel/$basearch/os/
   - name: baseos-source
     path: BaseOS/Source/
   - name: appstream-source
@@ -29,6 +31,8 @@ repos:
     path: extras/Source/
   - name: ha-source
     path: HighAvailability/Source/
+  - name: devel-source
+    path: devel/Source/
   - name: baseos-debuginfo
     path: BaseOS/debug/$basearch/
   - name: appstream-debuginfo
@@ -39,4 +43,6 @@ repos:
     path: extras/debug/$basearch/
   - name: ha-debuginfo
     path: HighAvailability/debug/$basearch/
+  - name: devel-debuginfo
+    path: devel/debug/$basearch/
 ...
