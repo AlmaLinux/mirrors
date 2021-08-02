@@ -51,7 +51,8 @@ from common.sentry import (
 logger = get_logger(__name__)
 
 
-MAX_LENGTH_OF_MIRRORS_LIST = 10
+LENGTH_GEO_MIRRORS_LIST = 10
+LENGTH_CLOUD_MIRRORS_LIST = 5
 
 
 def _get_nearest_mirrors_by_network_data(
@@ -75,9 +76,10 @@ def _get_nearest_mirrors_by_network_data(
                 subnets=mirror.get_subnets(),
             ):
                 suitable_mirrors.append(mirror.to_dataclass())
-        if len(suitable_mirrors) == 1 and match is not None:
+        if len(suitable_mirrors) < LENGTH_CLOUD_MIRRORS_LIST\
+                and match is not None:
             continent, country, latitude, longitude = match
-            nearest_mirror = session.query(Mirror).filter(
+            nearest_mirrors = session.query(Mirror).filter(
                 Mirror.name.not_in([mirror.name for mirror in
                                     suitable_mirrors])
             ).order_by(
@@ -85,8 +87,12 @@ def _get_nearest_mirrors_by_network_data(
                     lon=longitude,
                     lat=latitude,
                 )
-            ).first()  # type: Mirror
-            suitable_mirrors.append(nearest_mirror.to_dataclass())
+            ).limit(
+                LENGTH_CLOUD_MIRRORS_LIST - len(suitable_mirrors)
+            )  # type: List[Mirror]
+            suitable_mirrors.extend(
+                mirror.to_dataclass() for mirror in nearest_mirrors
+            )
         return suitable_mirrors
 
 
@@ -124,7 +130,7 @@ def _get_nearest_mirrors_by_geo_data(
             Mirror.country == country,
             Mirror.is_expired == false(),
             ).limit(
-            MAX_LENGTH_OF_MIRRORS_LIST,
+            LENGTH_GEO_MIRRORS_LIST,
         )
         # get n-mirrors mirrors inside a request's continent
         # but outside a request's contry
@@ -138,7 +144,7 @@ def _get_nearest_mirrors_by_geo_data(
                 lat=latitude,
             )
         ).limit(
-            MAX_LENGTH_OF_MIRRORS_LIST,
+            LENGTH_GEO_MIRRORS_LIST,
         )
         # get n-mirrors mirrors from all of mirrors outside
         # a request's country and continent
@@ -152,7 +158,7 @@ def _get_nearest_mirrors_by_geo_data(
                 lat=latitude,
             )
         ).limit(
-            MAX_LENGTH_OF_MIRRORS_LIST,
+            LENGTH_GEO_MIRRORS_LIST,
         )
 
         # TODO: SQLAlchemy adds brackets around queries. And it looks like
@@ -173,7 +179,7 @@ def _get_nearest_mirrors_by_geo_data(
             mirrors_by_continent + \
             all_rest_mirrors
         suitable_mirrors = [mirror.to_dataclass() for mirror
-                            in suitable_mirrors[:MAX_LENGTH_OF_MIRRORS_LIST]]
+                            in suitable_mirrors[:LENGTH_GEO_MIRRORS_LIST]]
     return suitable_mirrors
 
 
