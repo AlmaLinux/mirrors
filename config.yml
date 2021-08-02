@@ -4,12 +4,10 @@ mirrorlist_dir: docs/.vuepress/public/mirrorlist
 mirrors_dir: mirrors.d
 mirrors_table: docs/internal/mirrors.md
 versions:
-  - 8.4-beta
   - 8.4
   - 8
 duplicated_versions:
   - 8
-  - 8.4-beta
 repos:
   - name: baseos
     path: BaseOS/$basearch/os/
