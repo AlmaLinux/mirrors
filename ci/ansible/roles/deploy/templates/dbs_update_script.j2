@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+pushd {{ config_root }}/mirrors
+geo_tar_archive_name="geoip.db.tar.gz"
+asn_tar_archive_name="asn.db.tar.gz"
+geo_ip_db_name="geoip_db.mmdb"
+asn_db_name="asn_db.mmdb"
+maxmind_url="https://download.maxmind.com/app/geoip_download"
+curl -G --data-urlencode "edition_id=GeoLite2-City" --data-urlencode "license_key={{ license_key }}" --data-urlencode "suffix=tar.gz" "${maxmind_url}" -o "${geo_tar_archive_name}"
+curl -G --data-urlencode "edition_id=GeoLite2-ASN" --data-urlencode "license_key={{ license_key }}" --data-urlencode "suffix=tar.gz" "${maxmind_url}" -o "${asn_tar_archive_name}"
+tar xzvf "${geo_tar_archive_name}"
+tar xzvf "${asn_tar_archive_name}"
+/usr/bin/mv GeoLite2-City*/GeoLite2-City.mmdb ./geoip_db.mmdb
+/usr/bin/mv GeoLite2-ASN*/GeoLite2-ASN.mmdb ./asn_db.mmdb
+rm -rf GeoLite2*
+rm -f "${geo_tar_archive_name}"
+rm -f "${asn_tar_archive_name}"
+docker restart "{{ container_env_prefix }}_backend"
+popd

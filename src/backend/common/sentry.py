@@ -43,7 +43,7 @@ def get_logger(logger_name: str):
     logger = multiprocessing.get_logger()
     # Set handler if it doesn't exist
     if not len(logger.handlers):
-        deploy_environment = os.getenv('DEPLOY_ENVIRONMENT')
+        deploy_environment = os.getenv('DEPLOY_ENVIRONMENT', '')
         if deploy_environment.lower() == 'production':
             logging_level = logging.WARNING
         else:

@@ -1,0 +1,10 @@
+---
+
+- name: Add backend docker network
+  docker_network:
+    name: backend
+
+- name: Add public docker network
+  docker_network:
+    name: public
+    driver: bridge

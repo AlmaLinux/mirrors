@@ -2,6 +2,7 @@
 import os
 
 import time
+from collections import defaultdict
 from functools import wraps
 from typing import (
     Dict,
@@ -9,9 +10,17 @@ from typing import (
     AnyStr,
     Tuple,
     Optional,
+    List,
 )
 
+import requests
+from bs4 import BeautifulSoup
+from geoip2.errors import AddressNotFoundError
+
 from db.db_engine import GeoIPEngine
+from db.models import (
+    MirrorYamlData,
+)
 from api.exceptions import (
     BaseCustomException,
     AuthException,
@@ -24,6 +33,11 @@ from flask import (
 )
 from flask_api.status import HTTP_200_OK
 from werkzeug.exceptions import InternalServerError
+from common.sentry import (
+    get_logger,
+)
+
+logger = get_logger(__name__)
 
 
 AUTH_KEY = os.environ.get('AUTH_KEY')
@@ -121,13 +135,109 @@ def get_geo_data_by_ip(
     """
 
     db = GeoIPEngine.get_instance()
-    match = db.lookup(ip)
-    if match is None:
+    try:
+        city = db.city(ip)
+    except AddressNotFoundError:
         return
-    match_dict = match.get_info_dict()
-    country = match_dict['country']['names']['en']
-    continent = match_dict['continent']['names']['en']
-    latitude = match_dict['location']['latitude']
-    longitude = match_dict['location']['longitude']
+    country = city.country.name
+    continent = city.continent.name
+    latitude = city.location.latitude
+    longitude = city.location.longitude
 
     return continent, country, latitude, longitude
+
+
+def get_azure_subnets_json() -> Optional[Dict]:
+    url = 'https://www.microsoft.com/en-us/download/confirmation.aspx?id=56519'
+    link_attributes = {
+        'data-bi-id': 'downloadretry',
+    }
+    req = requests.get(url)
+    try:
+        req.raise_for_status()
+    except requests.RequestException as err:
+        logger.error(
+            'Cannot get json with Azure subnets by url "%s" because "%s"',
+            url,
+            err,
+        )
+        return
+    try:
+        soup = BeautifulSoup(req.content, features='lxml')
+        link_tag = soup.find('a', attrs=link_attributes)
+        link_to_json_url = link_tag.attrs['href']
+    except (ValueError, KeyError) as err:
+        logger.error(
+            'Cannot get json link with Azure '
+            'subnets from page content because "%s"',
+            err,
+        )
+        return
+    try:
+        req = requests.get(link_to_json_url)
+        req.raise_for_status()
+    except requests.RequestException as err:
+        logger.error(
+            'Cannot get json with Azure subnets by url "%s" because "%s"',
+            link_to_json_url,
+            err,
+        )
+    return req.json()
+
+
+def get_aws_subnets_json() -> Optional[Dict]:
+    url = 'https://ip-ranges.amazonaws.com/ip-ranges.json'
+    try:
+        req = requests.get(url)
+        req.raise_for_status()
+    except requests.RequestException as err:
+        logger.error(
+            'Cannot get json with AWS subnets by url "%s" because "%s"',
+            url,
+            err,
+        )
+        return
+    return req.json()
+
+
+def get_azure_subnets():
+    data_json = get_azure_subnets_json()
+    if data_json is None:
+        return
+    values = data_json['values']
+    subnets = {}
+    for value in values:
+        if value['name'].startswith('AzureCloud.'):
+            properties = value['properties']
+            subnets[properties['region'].lower()] = properties['addressPrefixes']
+    return subnets
+
+
+def get_aws_subnets():
+    data_json = get_aws_subnets_json()
+    subnets = defaultdict(list)
+    if data_json is None:
+        return
+    for v4_prefix in data_json['prefixes']:
+        subnets[v4_prefix['region'].lower()].append(v4_prefix['ip_prefix'])
+    for v6_prefix in data_json['ipv6_prefixes']:
+        subnets[v6_prefix['region'].lower()].append(v6_prefix['ipv6_prefix'])
+    return subnets
+
+
+def set_subnets_for_hyper_cloud_mirror(
+        subnets: Dict[AnyStr, List[AnyStr]],
+        mirror_info: MirrorYamlData,
+):
+    cloud_regions = mirror_info.cloud_region.lower().split(',')
+    cloud_type = mirror_info.cloud_type.lower()
+
+    if subnets is not None:
+        if cloud_type == 'aws' and len(cloud_regions) and \
+                cloud_regions[0] in subnets:
+            mirror_info.subnets = subnets[cloud_regions[0]]
+        elif cloud_type == 'azure':
+            total_subnets = []
+            for cloud_region in cloud_regions:
+                total_subnets.extend(subnets.get(cloud_region, []))
+            mirror_info.subnets = total_subnets

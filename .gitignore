@@ -1,4 +1,5 @@
 .idea
 .venv
 mirrors/*
-ci/ansible/inventory/dev
+ci/ansible/inventory/*
+!ci/ansible/inventory/template

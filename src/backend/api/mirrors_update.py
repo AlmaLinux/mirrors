@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+from dataclasses import asdict
 
 import requests
 import yaml
@@ -13,10 +14,15 @@ from typing import (
     List,
     Union,
     Tuple,
+    Optional,
 )
 
 from sqlalchemy.exc import NoResultFound
 from uwsgidecorators import thread
+from jsonschema import (
+    ValidationError,
+    validate,
+)
 
 from api.utils import get_geo_data_by_ip
 
@@ -28,24 +34,24 @@ from urllib3.exceptions import HTTPError
 from db.models import (
     Mirror,
     Url,
+    Subnet,
+    MirrorData,
+    LocationData,
+    MirrorYamlData,
+    REQUIRED_MIRROR_PROTOCOLS,
+    ARCHS,
+    MIRROR_CONFIG_SCHEMA,
 )
 from db.utils import session_scope
 
-REQUIRED_MIRROR_PROTOCOLS = (
-    'https',
-    'http',
-)
-ARCHS = (
-    'x86_64',
-    'aarch64',
-)
-
 # set User-Agent for python-requests
 HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 '
+                  '(KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36',
     "Upgrade-Insecure-Requests": "1",
     "DNT": "1",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept": "text/html,application/xhtml+xml,"
+              "application/xml;q=0.9,*/*;q=0.8",
     "Accept-Language": "en-US,en;q=0.5",
     "Accept-Encoding": "gzip, deflate"
 }
@@ -75,9 +81,58 @@ def get_config(
         return yaml.safe_load(config_file)
 
 
+def _load_mirror_info_from_yaml_file(
+        config_path: Path,
+) -> Optional[MirrorYamlData]:
+    with open(str(config_path), 'r') as config_file:
+        mirror_info = yaml.safe_load(config_file)
+        try:
+            validate(
+                mirror_info,
+                MIRROR_CONFIG_SCHEMA,
+            )
+        except ValidationError as err:
+            logger.error(
+                'Mirror by path "%s" is not valid, because "%s"',
+                config_path,
+                err,
+            )
+        subnets = mirror_info.get('subnets', [])
+        if not isinstance(subnets, list):
+            try:
+                req = requests.get(subnets)
+                req.raise_for_status()
+                subnets = req.json()
+            except requests.RequestException as err:
+                logger.error(
+                    'Can not get the subnets of mirror "%s" '
+                    'by url "%s" because "%s"',
+                    mirror_info['name'],
+                    subnets,
+                    err,
+                )
+                subnets = []
+        cloud_regions = mirror_info.get('cloud_regions', [])
+
+        return MirrorYamlData(
+            name=mirror_info['name'],
+            update_frequency=mirror_info['update_frequency'],
+            sponsor_name=mirror_info['sponsor'],
+            sponsor_url=mirror_info['sponsor_url'],
+            email=mirror_info.get('email', 'unknown'),
+            urls={
+                _type: url for _type, url in mirror_info['address'].items()
+            },
+            subnets=subnets,
+            asn=mirror_info.get('asn'),
+            cloud_type=mirror_info.get('cloud_type', ''),
+            cloud_region=','.join(cloud_regions),
+        )
+
+
 def get_mirrors_info(
         mirrors_dir: AnyStr,
-) -> List[Dict]:
+) -> List[MirrorYamlData]:
     """
     Extract info about all of mirrors from yaml files
     :param mirrors_dir: path to the directory which contains
@@ -86,31 +141,16 @@ def get_mirrors_info(
     # global ALL_MIRROR_PROTOCOLS
     result = []
     for config_path in Path(mirrors_dir).rglob('*.yml'):
-        with open(str(config_path), 'r') as config_file:
-            mirror_info = yaml.safe_load(config_file)
-            if 'name' not in mirror_info:
-                logger.error(
-                    'Mirror file "%s" doesn\'t have name of the mirror',
-                    config_path,
-                )
-                continue
-            if 'address' not in mirror_info:
-                logger.error(
-                    'Mirror file "%s" doesn\'t have addresses of the mirror',
-                    mirror_info,
-                )
-                continue
-            # ALL_MIRROR_PROTOCOLS.extend(
-            #     protocol for protocol in mirror_info['address'].keys() if
-            #     protocol not in ALL_MIRROR_PROTOCOLS
-            # )
-            result.append(mirror_info)
+        mirror_info = _load_mirror_info_from_yaml_file(
+            config_path=config_path,
+        )
+        result.append(mirror_info)
 
     return result
 
 
 def mirror_available(
-        mirror_info: Dict[AnyStr, Union[Dict, AnyStr]],
+        mirror_info: MirrorData,
         versions: List[AnyStr],
         repos: List[Dict[AnyStr, Union[Dict, AnyStr]]],
 ) -> Tuple[AnyStr, bool]:
@@ -121,20 +161,21 @@ def mirror_available(
     :param versions: the list of versions which should be provided by a mirror
     :param repos: the list of repos which should be provided by a mirror
     """
-    logger.info('Checking mirror "%s"...', mirror_info['name'])
+    mirror_name = mirror_info.name
+    logger.info('Checking mirror "%s"...', mirror_name)
     try:
-        addresses = mirror_info['address']  # type: Dict[AnyStr, AnyStr]
+        urls = mirror_info.urls  # type: Dict[AnyStr, AnyStr]
         mirror_url = next(iter([
-            address for protocol_type, address in addresses.items()
+            address for protocol_type, address in urls.items()
             if protocol_type in REQUIRED_MIRROR_PROTOCOLS
         ]))
     except StopIteration:
         logger.error(
             'Mirror "%s" has no one address with protocols "%s"',
-            mirror_info['name'],
+            mirror_name,
             REQUIRED_MIRROR_PROTOCOLS,
         )
-        return mirror_info['name'], False
+        return mirror_name, False
     for version in versions:
         for repo_info in repos:
             repo_path = repo_info['path'].replace('$basearch', ARCHS[0])
@@ -151,20 +192,20 @@ def mirror_available(
                 logger.warning(
                     'Mirror "%s" is not available for version '
                     '"%s" and repo path "%s"',
-                    mirror_info['name'],
+                    mirror_name,
                     version,
                     repo_path,
                 )
-                return mirror_info['name'], False
+                return mirror_name, False
     logger.info(
         'Mirror "%s" is available',
-        mirror_info['name']
+        mirror_name,
     )
-    return mirror_info['name'], True
+    return mirror_name, True
 
 
 def set_repo_status(
-        mirror_info: Dict[AnyStr, Union[Dict, AnyStr]],
+        mirror_info: MirrorData,
         allowed_outdate: AnyStr
 ) -> None:
     """
@@ -174,10 +215,10 @@ def set_repo_status(
     :return: Status of a mirror: expired or ok
     """
 
-    addresses = mirror_info['address']
+    urls = mirror_info.urls
     mirror_url = next(iter([
-        address for protocol_type, address in addresses.items()
-        if protocol_type in REQUIRED_MIRROR_PROTOCOLS
+        url for url_type, url in urls.items()
+        if url_type in REQUIRED_MIRROR_PROTOCOLS
     ]))
     timestamp_url = os.path.join(
         mirror_url,
@@ -192,29 +233,38 @@ def set_repo_status(
     except (requests.RequestException, HTTPError):
         logger.error(
             'Mirror "%s" has no timestamp file by url "%s"',
-            mirror_info['name'],
+            mirror_info.name,
             timestamp_url,
         )
-        mirror_info['status'] = 'expired'
+        mirror_info.is_expired = True
         return
     try:
         mirror_should_updated_at = dateparser.parse(
             f'now-{allowed_outdate} UTC'
         ).timestamp()
-        mirror_last_updated = float(request.content)
+        try:
+            mirror_last_updated = float(request.content)
+        except ValueError:
+            logger.info(
+                'Mirror "%s" has broken timestamp file by url "%s"',
+                mirror_info.name,
+                timestamp_url,
+            )
+            mirror_info.is_expired = True
+            return
         if mirror_last_updated > mirror_should_updated_at:
-            mirror_info['status'] = 'ok'
+            mirror_info.is_expired = False
         else:
-            mirror_info['status'] = 'expired'
+            mirror_info.is_expired = True
         return
     except AttributeError:
-        mirror_info['status'] = 'expired'
+        mirror_info.is_expired = True
         return
 
 
 @thread
 def update_mirror_in_db(
-        mirror_info: Dict[AnyStr, Union[Dict, AnyStr]],
+        mirror_info: MirrorYamlData,
         versions: List[AnyStr],
         repos: List[Dict[AnyStr, Union[Dict, AnyStr]]],
         allowed_outdate: AnyStr,
@@ -227,13 +277,12 @@ def update_mirror_in_db(
     :param versions: the list of versions which should be provided by mirrors
     :param repos: the list of repos which should be provided by mirrors
     :param allowed_outdate: allowed mirror lag
-    :param session: db session through SQLAlchemy
     """
 
-    set_geo_data(mirror_info)
-    mirror_name = mirror_info['name']
+    mirror_info = set_geo_data(mirror_info)
+    mirror_name = mirror_info.name
     if mirror_name in WHITELIST_MIRRORS:
-        mirror_info['status'] = 'ok'
+        mirror_info.is_expired = False
         is_available = True
     else:
         mirror_name, is_available = mirror_available(
@@ -248,33 +297,39 @@ def update_mirror_in_db(
         Url(
             url=url,
             type=url_type,
-        ) for url_type, url in mirror_info['address'].items()
+        ) for url_type, url in mirror_info.urls.items()
     ]
     with session_scope() as session:
-        try:
-            session.query(Mirror).filter(
-                Mirror.name == mirror_name
-            ).delete()
-        except NoResultFound:
-            pass
         for url_to_create in urls_to_create:
             session.add(url_to_create)
         mirror_to_create = Mirror(
-            name=mirror_info['name'],
-            continent=mirror_info['continent'],
-            country=mirror_info['country'],
-            ip=mirror_info['ip'],
-            latitude=mirror_info['location']['lat'],
-            longitude=mirror_info['location']['lon'],
-            is_expired=mirror_info['status'] == 'expired',
+            name=mirror_info.name,
+            continent=mirror_info.continent,
+            country=mirror_info.country,
+            ip=mirror_info.ip,
+            latitude=mirror_info.location.latitude,
+            longitude=mirror_info.location.longitude,
+            is_expired=mirror_info.is_expired,
             update_frequency=dateparser.parse(
-                mirror_info['update_frequency']
+                mirror_info.update_frequency
             ),
-            sponsor_name=mirror_info['sponsor'],
-            sponsor_url=mirror_info['sponsor_url'],
-            email=mirror_info.get('email', 'unknown'),
+            sponsor_name=mirror_info.sponsor_name,
+            sponsor_url=mirror_info.sponsor_url,
+            email=mirror_info.email,
+            cloud_type=mirror_info.cloud_type,
+            cloud_region=mirror_info.cloud_region,
             urls=urls_to_create,
         )
+        mirror_to_create.asn = mirror_info.asn
+        if mirror_info.subnets:
+            subnets_to_create = [
+                Subnet(
+                    subnet=subnet,
+                ) for subnet in mirror_info.subnets
+            ]
+            for subnet_to_create in subnets_to_create:
+                session.add(subnet_to_create)
+            mirror_to_create.subnets = subnets_to_create
         logger.debug(
             'Mirror "%s" is created',
             mirror_name,
@@ -287,19 +342,14 @@ def update_mirror_in_db(
         )
 
 
-def _helper_mirror_available(args):
-    return mirror_available(*args)
-
-
 def set_geo_data(
-        mirror_info: Dict[AnyStr, Union[Dict, AnyStr]],
-) -> None:
+        mirror_info: MirrorYamlData,
+) -> MirrorData:
     """
     Set geo data by IP of a mirror
     :param mirror_info: Dict with info about a mirror
     """
-
-    mirror_name = mirror_info['name']
+    mirror_name = mirror_info.name
     try:
         ip = socket.gethostbyname(mirror_name)
         match = get_geo_data_by_ip(ip)
@@ -309,19 +359,23 @@ def set_geo_data(
         ip = '0.0.0.0'
     logger.info('Set geo data for mirror "%s"', mirror_name)
     if match is None:
-        mirror_info['country'] = 'Unknown'
-        mirror_info['continent'] = 'Unknown'
-        mirror_info['ip'] = ip
-        mirror_info['location'] = {
-            'lat': -91,  # outside range of latitude (-90 to 90)
-            'lon': -181,  # outside range of longitude (-180 to 180)
-        }
+        country = 'Unknown'
+        continent = 'Unknown'
+        ip = ip
+        location = LocationData(
+            latitude=-91,  # outside range of latitude (-90 to 90)
+            longitude=-181,  # outside range of longitude (-180 to 180)
+        )
     else:
         continent, country, latitude, longitude = match
-        mirror_info['country'] = country
-        mirror_info['continent'] = continent
-        mirror_info['ip'] = ip
-        mirror_info['location'] = {
-            'lat': latitude,
-            'lon': longitude,
-        }
+        location = LocationData(
+            latitude=latitude,
+            longitude=longitude,
+        )
+    return MirrorData(
+        continent=continent,
+        country=country,
+        ip=ip,
+        location=location,
+        **asdict(mirror_info),
+    )
