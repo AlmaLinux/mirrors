@@ -1,10 +1,39 @@
 {% extends "main.html" %}
 
-{% block text %}
+{% block text_1 %}
     {{ super() }}
     Mirrors are extremely important to provide a fast and reliable infrastructure,
     and we are very grateful to people and organizations that are helping us with this.
     <br>
+    AlmaLinux would like to personally thank
+    <a href="https://www.hivelocity.net/"
+       target="_blank"
+       class="link-success text-decoration-none"
+    >HiVelocity</a> {% include "snipets/link_icon.html" %} for
+    their sponsorship of the AlmaLinux OS Foundation and sponsorship of our primary
+    rsync mirror and bandwidth. Please support those that support the community.
+    Check out
+    <a href="https://www.hivelocity.net/"
+       target="_blank"
+       class="link-success text-decoration-none"
+    >HiVelocity</a> {% include "snipets/link_icon.html" %} for all your dedicated server,
+    bare metal, colo, CDN and hosting needs.
+    <br>
+{% endblock text_1 %}
+{% block sponsor_link %}
+    <a href="https://www.hivelocity.net/"
+       target="_blank"
+       class="link-success text-decoration-none"
+    >
+        <img src="{{ url_for('static', filename='images/hivelocity.svg') }}"
+             alt="HiVelocity logo"
+             width="180"
+             height="67"
+             class="d-inline-block align-text-top">
+    </a>
+{% endblock sponsor_link %}
+{% block text_2 %}
+{{ super() }}
     This page contains a list of official
     <a href="https://almalinux.org/"
        target="_blank"
@@ -21,7 +50,7 @@
        class="link-success text-decoration-none">this link</a>.
 
     <br>
-{% endblock text %}
+{% endblock text_2 %}
 
 {% block table %}
     {{ super() }}

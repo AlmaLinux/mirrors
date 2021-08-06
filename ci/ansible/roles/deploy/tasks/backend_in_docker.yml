@@ -19,6 +19,8 @@
     hostname: backend
     networks:
       - name: backend
+    sysctls:
+      net.core.somaxconn: 65535
     env:
       GEOIP_PATH: "/mirrors/geoip_db.mmdb"
       ASN_PATH: "/mirrors/asn_db.mmdb"

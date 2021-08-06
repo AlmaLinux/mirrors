@@ -76,7 +76,7 @@ def _get_nearest_mirrors_by_network_data(
                 subnets=mirror.get_subnets(),
             ):
                 suitable_mirrors.append(mirror.to_dataclass())
-        if len(suitable_mirrors) < LENGTH_CLOUD_MIRRORS_LIST\
+        if 1 <= len(suitable_mirrors) < LENGTH_CLOUD_MIRRORS_LIST\
                 and match is not None:
             continent, country, latitude, longitude = match
             nearest_mirrors = session.query(Mirror).filter(
@@ -235,21 +235,23 @@ def update_mirrors_handler() -> AnyStr:
         session.query(Subnet).delete()
         session.query(mirrors_urls).delete()
         session.query(mirrors_subnets).delete()
+        subnets = get_aws_subnets()
+        subnets.update(get_azure_subnets())
+        for mirror_info in all_mirrors:
+            set_subnets_for_hyper_cloud_mirror(
+                subnets=subnets,
+                mirror_info=mirror_info,
+            )
+            update_mirror_in_db(
+                mirror_info,
+                versions,
+                repos,
+                config['allowed_outdate'],
+                session,
+            )
+            sleep(1)
+
         session.flush()
-    subnets = get_aws_subnets()
-    subnets.update(get_azure_subnets())
-    for mirror_info in all_mirrors:
-        set_subnets_for_hyper_cloud_mirror(
-            subnets=subnets,
-            mirror_info=mirror_info,
-        )
-        update_mirror_in_db(
-            mirror_info,
-            versions,
-            repos,
-            config['allowed_outdate'],
-        )
-        sleep(1)
     return 'Done'
 
 

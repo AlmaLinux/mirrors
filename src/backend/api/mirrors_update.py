@@ -17,7 +17,7 @@ from typing import (
     Optional,
 )
 
-from sqlalchemy.exc import NoResultFound
+from sqlalchemy.orm import Session
 from uwsgidecorators import thread
 from jsonschema import (
     ValidationError,
@@ -268,6 +268,7 @@ def update_mirror_in_db(
         versions: List[AnyStr],
         repos: List[Dict[AnyStr, Union[Dict, AnyStr]]],
         allowed_outdate: AnyStr,
+        session: Session,
 ) -> None:
     """
     Update record about a mirror in DB in background thread.
@@ -299,47 +300,47 @@ def update_mirror_in_db(
             type=url_type,
         ) for url_type, url in mirror_info.urls.items()
     ]
-    with session_scope() as session:
-        for url_to_create in urls_to_create:
-            session.add(url_to_create)
-        mirror_to_create = Mirror(
-            name=mirror_info.name,
-            continent=mirror_info.continent,
-            country=mirror_info.country,
-            ip=mirror_info.ip,
-            latitude=mirror_info.location.latitude,
-            longitude=mirror_info.location.longitude,
-            is_expired=mirror_info.is_expired,
-            update_frequency=dateparser.parse(
-                mirror_info.update_frequency
-            ),
-            sponsor_name=mirror_info.sponsor_name,
-            sponsor_url=mirror_info.sponsor_url,
-            email=mirror_info.email,
-            cloud_type=mirror_info.cloud_type,
-            cloud_region=mirror_info.cloud_region,
-            urls=urls_to_create,
-        )
-        mirror_to_create.asn = mirror_info.asn
-        if mirror_info.subnets:
-            subnets_to_create = [
-                Subnet(
-                    subnet=subnet,
-                ) for subnet in mirror_info.subnets
-            ]
-            for subnet_to_create in subnets_to_create:
-                session.add(subnet_to_create)
-            mirror_to_create.subnets = subnets_to_create
-        logger.debug(
-            'Mirror "%s" is created',
-            mirror_name,
-        )
-        session.add(mirror_to_create)
-        session.flush()
-        logger.debug(
-            'Mirror "%s" is addded',
-            mirror_name,
-        )
+    # with session_scope() as session:
+    for url_to_create in urls_to_create:
+        session.add(url_to_create)
+    mirror_to_create = Mirror(
+        name=mirror_info.name,
+        continent=mirror_info.continent,
+        country=mirror_info.country,
+        ip=mirror_info.ip,
+        latitude=mirror_info.location.latitude,
+        longitude=mirror_info.location.longitude,
+        is_expired=mirror_info.is_expired,
+        update_frequency=dateparser.parse(
+            mirror_info.update_frequency
+        ),
+        sponsor_name=mirror_info.sponsor_name,
+        sponsor_url=mirror_info.sponsor_url,
+        email=mirror_info.email,
+        cloud_type=mirror_info.cloud_type,
+        cloud_region=mirror_info.cloud_region,
+        urls=urls_to_create,
+    )
+    mirror_to_create.asn = mirror_info.asn
+    if mirror_info.subnets:
+        subnets_to_create = [
+            Subnet(
+                subnet=subnet,
+            ) for subnet in mirror_info.subnets
+        ]
+        for subnet_to_create in subnets_to_create:
+            session.add(subnet_to_create)
+        mirror_to_create.subnets = subnets_to_create
+    logger.debug(
+        'Mirror "%s" is created',
+        mirror_name,
+    )
+    session.add(mirror_to_create)
+    # session.flush()
+    logger.debug(
+        'Mirror "%s" is addded',
+        mirror_name,
+    )
 
 
 def set_geo_data(

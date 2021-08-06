@@ -4,4 +4,9 @@ pushd {{ config_root }}/mirrors/updates
 git fetch --all
 git reset --hard origin/master
 popd
+# healthcheck, 10 minutes
+for i in $(seq 1 40); do
+        curl -I http://127.0.0.1:{{ backend_port }} && break
+        sleep 15
+done
 curl --cookie 'AUTH_KEY={{ auth_key }}' -X POST http://127.0.0.1:{{ backend_port }}/update_mirrors

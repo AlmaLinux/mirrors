@@ -41,6 +41,13 @@ init_sentry_client()
 logger = get_logger(__name__)
 
 
+def _get_request_ip() -> AnyStr:
+    ip_address = request.headers.get('X-Forwarded-For') or request.remote_addr
+    if ',' in ip_address:
+        ip_address = [item.strip() for item in ip_address.split(',')][0]
+    return ip_address
+
+
 @app.route(
     '/mirrorlist/<version>/<repository>',
     methods=('GET',),
@@ -51,7 +58,7 @@ def get_mirror_list(
         version: AnyStr,
         repository: AnyStr,
 ):
-    ip_address = request.headers.get('X-Forwarded-For') or request.remote_addr
+    ip_address = _get_request_ip()
     return get_mirrors_list(
         ip_address=ip_address,
         version=version,
@@ -100,7 +107,7 @@ def isos(
 
         return render_template('isos_main.html', **data)
     else:
-        ip_address = request.headers.get('X-Forwarded-For') or request.remote_addr
+        ip_address = _get_request_ip()
         mirrors_by_countries, nearest_mirrors = get_isos_list_by_countries(
             arch=arch,
             version=version,
