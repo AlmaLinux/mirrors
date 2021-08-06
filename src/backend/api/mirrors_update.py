@@ -165,10 +165,10 @@ def mirror_available(
     logger.info('Checking mirror "%s"...', mirror_name)
     try:
         urls = mirror_info.urls  # type: Dict[AnyStr, AnyStr]
-        mirror_url = next(iter([
+        mirror_url = next(
             address for protocol_type, address in urls.items()
             if protocol_type in REQUIRED_MIRROR_PROTOCOLS
-        ]))
+        )
     except StopIteration:
         logger.error(
             'Mirror "%s" has no one address with protocols "%s"',
@@ -216,10 +216,10 @@ def set_repo_status(
     """
 
     urls = mirror_info.urls
-    mirror_url = next(iter([
+    mirror_url = next(
         url for url_type, url in urls.items()
         if url_type in REQUIRED_MIRROR_PROTOCOLS
-    ]))
+    )
     timestamp_url = os.path.join(
         mirror_url,
         'TIME',

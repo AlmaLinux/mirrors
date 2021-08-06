@@ -1,5 +1,6 @@
 # coding=utf-8
 
+import requests
 import logging
 import multiprocessing
 import os
@@ -7,6 +8,21 @@ from typing import Optional
 
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
+
+
+def get_aws_instance_api() -> str:
+    """
+    Get IP of a current AWS instance
+    """
+
+    meta_data_url = 'http://169.254.169.254/latest/meta-data/public-ipv4'
+    try:
+        req = requests.get(url=meta_data_url)
+        req.raise_for_status()
+        return req.text
+    except (requests.ConnectionError, requests.RequestException):
+        return 'ItIsNotAWSInstance'
 
 
 def init_sentry_client(dsn: Optional[str] = None) -> None:
@@ -28,8 +44,11 @@ def init_sentry_client(dsn: Optional[str] = None) -> None:
         ],
         integrations=[
             FlaskIntegration(),
+            RedisIntegration(),
         ],
     )
+    with sentry_sdk.configure_scope() as scope:
+        scope.set_tag('aws_instance_ip', get_aws_instance_api())
 
 
 def get_logger(logger_name: str):

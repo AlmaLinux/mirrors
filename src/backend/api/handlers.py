@@ -279,11 +279,14 @@ def get_mirrors_list(
     config = get_config()
     versions = [str(version) for version in config['versions']]
     if version not in versions:
-        raise BadRequestFormatExceptioin(
-            'Unknown version "%s". Allowed list of versions "%s"',
-            version,
-            ', '.join(versions),
-        )
+        try:
+            version = next(ver for ver in versions if version.startswith(ver))
+        except StopIteration:
+            raise BadRequestFormatExceptioin(
+                'Unknown version "%s". Allowed list of versions "%s"',
+                version,
+                ', '.join(versions),
+            )
     repos = {repo['name']: repo['path'] for repo in config['repos']}
     if repository not in repos:
         raise BadRequestFormatExceptioin(
@@ -312,11 +315,11 @@ def _set_isos_link_for_mirror(
         arch: AnyStr,
 ):
     urls = mirror_info.urls
-    mirror_url = next(iter([
+    mirror_url = next(
         address for protocol_type, address in
         urls.items()
         if protocol_type in REQUIRED_MIRROR_PROTOCOLS
-    ]))
+    )
     mirror_info.isos_link = os.path.join(
         mirror_url,
         str(version),
