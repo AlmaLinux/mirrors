@@ -9,7 +9,7 @@ from typing import (
     Tuple,
 )
 
-from api.exceptions import BadRequestFormatExceptioin
+from api.exceptions import UnknownRepositoryOrVersion
 from api.mirrors_update import (
     get_config,
     REQUIRED_MIRROR_PROTOCOLS,
@@ -282,14 +282,14 @@ def get_mirrors_list(
         try:
             version = next(ver for ver in versions if version.startswith(ver))
         except StopIteration:
-            raise BadRequestFormatExceptioin(
+            raise UnknownRepositoryOrVersion(
                 'Unknown version "%s". Allowed list of versions "%s"',
                 version,
                 ', '.join(versions),
             )
     repos = {repo['name']: repo['path'] for repo in config['repos']}
     if repository not in repos:
-        raise BadRequestFormatExceptioin(
+        raise UnknownRepositoryOrVersion(
             'Unknown repository "%s". Allowed list of repositories "%s"',
             repository,
             ', '.join(repos.keys()),

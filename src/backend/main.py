@@ -12,7 +12,7 @@ from werkzeug.exceptions import InternalServerError
 from api.exceptions import (
     BaseCustomException,
     AuthException,
-    BadRequestFormatExceptioin,
+    UnknownRepositoryOrVersion,
 )
 from api.handlers import (
     update_mirrors_handler,
@@ -168,9 +168,11 @@ def handle_internal_server_error(error: InternalServerError) -> Response:
     )
 
 
-@app.errorhandler(BadRequestFormatExceptioin)
-def handle_bad_request_format(error: BadRequestFormatExceptioin) -> Response:
-    logger.exception(error.message, *error.args)
+@app.errorhandler(UnknownRepositoryOrVersion)
+def handle_unknown_repository_or_version(
+        error: UnknownRepositoryOrVersion,
+) -> Response:
+    logger.info(error.message, *error.args)
     return jsonify_response(
         status='error',
         result={
