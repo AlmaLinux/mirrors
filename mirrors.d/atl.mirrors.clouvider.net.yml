@@ -5,6 +5,6 @@ address:
   https: https://atl.mirrors.clouvider.net/almalinux/
 update_frequency: 3h
 sponsor: Clouvider
-sponsor_url: https://www.clouvider.co.uk
+sponsor_url: https://www.clouvider.com
 email: tech@clouvider.co.uk
 ...
