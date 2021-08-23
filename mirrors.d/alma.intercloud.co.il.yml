@@ -1,0 +1,9 @@
+---
+name: alma.chi.mirror.heficed.com
+address:
+  http: http://alma.intercloud.co.il/
+update_frequency: 3h
+sponsor: Intercloud
+sponsor_url: https://intercloud.co.il/
+email: support@intercloud.co.il
+...
