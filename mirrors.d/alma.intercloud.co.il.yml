@@ -5,8 +5,6 @@ address:
   https: https://alma.intercloud.co.il/
 update_frequency: 3h
 sponsor: Intercloud Hosting LTD
-update_frequency: 3h
-sponsor: Intercloud
 sponsor_url: https://intercloud.co.il/
 email: support@intercloud.co.il
 ...
