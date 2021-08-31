@@ -10,6 +10,7 @@ from typing import (
     Union,
 )
 
+from aiohttp import ClientSession
 from sqlalchemy.orm import Session
 
 from api.exceptions import UnknownRepositoryOrVersion
@@ -225,7 +226,8 @@ async def _process_mirror(
         versions: List[AnyStr],
         repos: List[Dict[AnyStr, Union[Dict, AnyStr]]],
         allowed_outdate: AnyStr,
-        session: Session,
+        db_session: Session,
+        http_session: ClientSession,
 ):
     set_subnets_for_hyper_cloud_mirror(
         subnets=subnets,
@@ -237,7 +239,8 @@ async def _process_mirror(
         versions=versions,
         repos=repos,
         allowed_outdate=allowed_outdate,
-        session=session,
+        db_session=db_session,
+        http_session=http_session,
     )
 
 
@@ -256,26 +259,32 @@ async def update_mirrors_handler() -> AnyStr:
         mirrors_dir=mirrors_dir,
     )
 
-    with session_scope() as session:
-        session.query(Mirror).delete()
-        session.query(Subnet).delete()
-        session.query(mirrors_urls).delete()
-        session.query(mirrors_subnets).delete()
+    with session_scope() as db_session:
+        db_session.query(Mirror).delete()
+        db_session.query(Subnet).delete()
+        db_session.query(mirrors_urls).delete()
+        db_session.query(mirrors_subnets).delete()
         subnets = get_aws_subnets()
         subnets.update(get_azure_subnets())
-        await asyncio.gather(*(
-            asyncio.ensure_future(
-                _process_mirror(
-                    subnets=subnets,
-                    mirror_info=mirror_info,
-                    versions=versions,
-                    repos=repos,
-                    allowed_outdate=config['allowed_outdate'],
-                    session=session
-                )
-            ) for mirror_info in all_mirrors
-        ))
-        session.flush()
+        len_list = len(all_mirrors)
+        procs = 30
+        async with ClientSession() as http_session:
+            for start in range(0, len_list + 1, procs):
+                end = start + procs if start + procs <= len_list else len_list
+                await asyncio.gather(*(
+                    asyncio.ensure_future(
+                        _process_mirror(
+                            subnets=subnets,
+                            mirror_info=mirror_info,
+                            versions=versions, repos=repos,
+                            allowed_outdate=config[
+                                'allowed_outdate'],
+                            db_session=db_session,
+                            http_session=http_session,
+                        )
+                    ) for mirror_info in all_mirrors[start:end]
+                ))
+        db_session.flush()
 
     return 'Done'
 

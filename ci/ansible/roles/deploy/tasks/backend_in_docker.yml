@@ -8,14 +8,24 @@
     published_ports: "{{ (deploy_environment is defined and deploy_environment in nginx_environments) | ternary(['127.0.0.1:{{ backend_port }}', uwsgi_port] | join(':'), [backend_port, uwsgi_port] | join(':')) }}"
 
 
+- name: Build docker image
+  docker_image:
+    name: "python38-mirrors-service"
+    build:
+      path: "{{ source_path }}/ci/"
+      pull: yes
+      network: host
+    source: build
+    force_source: yes
+
+
 - name: Up the backend container from docker image
   docker_container:
     name: "{{ container_env_prefix }}_backend"
-    image: "almalinux/mirror_service:latest"
+    image: "python38-mirrors-service"
     state: started
     restart: yes
     restart_policy: unless-stopped
-    pull: yes
     hostname: backend
     networks:
       - name: backend

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import asyncio
 import os
 from dataclasses import asdict
 
@@ -17,6 +18,7 @@ from typing import (
     Optional,
 )
 
+from aiohttp import ClientSession, ClientError
 from sqlalchemy.orm import Session
 from jsonschema import (
     ValidationError,
@@ -148,10 +150,11 @@ def get_mirrors_info(
     return result
 
 
-def mirror_available(
+async def mirror_available(
         mirror_info: MirrorData,
         versions: List[AnyStr],
         repos: List[Dict[AnyStr, Union[Dict, AnyStr]]],
+        http_session: ClientSession,
 ) -> Tuple[AnyStr, bool]:
     """
     Check mirror availability
@@ -185,9 +188,13 @@ def mirror_available(
                 'repodata/repomd.xml',
             )
             try:
-                request = requests.get(check_url, headers=HEADERS, timeout=15)
-                request.raise_for_status()
-            except (requests.RequestException, HTTPError, Exception):
+                async with http_session.get(
+                    check_url,
+                    headers=HEADERS,
+                    timeout=15,
+                ) as resp:
+                    await resp.text()
+            except (ClientError, asyncio.TimeoutError):
                 logger.warning(
                     'Mirror "%s" is not available for version '
                     '"%s" and repo path "%s"',
@@ -266,7 +273,8 @@ async def update_mirror_in_db(
         versions: List[AnyStr],
         repos: List[Dict[AnyStr, Union[Dict, AnyStr]]],
         allowed_outdate: AnyStr,
-        session: Session,
+        db_session: Session,
+        http_session: ClientSession,
 ) -> None:
     """
     Update record about a mirror in DB in background thread.
@@ -284,10 +292,11 @@ async def update_mirror_in_db(
         mirror_info.is_expired = False
         is_available = True
     else:
-        mirror_name, is_available = mirror_available(
+        mirror_name, is_available = await mirror_available(
             mirror_info=mirror_info,
             versions=versions,
             repos=repos,
+            http_session=http_session,
         )
     if not is_available:
         return
@@ -300,7 +309,7 @@ async def update_mirror_in_db(
     ]
     # with session_scope() as session:
     for url_to_create in urls_to_create:
-        session.add(url_to_create)
+        db_session.add(url_to_create)
     mirror_to_create = Mirror(
         name=mirror_info.name,
         continent=mirror_info.continent,
@@ -327,13 +336,13 @@ async def update_mirror_in_db(
             ) for subnet in mirror_info.subnets
         ]
         for subnet_to_create in subnets_to_create:
-            session.add(subnet_to_create)
+            db_session.add(subnet_to_create)
         mirror_to_create.subnets = subnets_to_create
     logger.debug(
         'Mirror "%s" is created',
         mirror_name,
     )
-    session.add(mirror_to_create)
+    db_session.add(mirror_to_create)
     logger.debug(
         'Mirror "%s" is addded',
         mirror_name,

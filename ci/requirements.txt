@@ -1,5 +1,6 @@
 alembic==1.7.1
 beautifulsoup4==4.9.3
+blinker==1.4
 dataclasses==0.6
 dateparser==1.0.0
 Flask-BS4==5.0.0.1
