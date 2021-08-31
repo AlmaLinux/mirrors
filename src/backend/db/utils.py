@@ -25,6 +25,7 @@ def session_scope() -> Session:
     """
     session = Session(
         bind=Engine.get_instance(),
+        autocommit=False,
         autoflush=False,
     )
     try:

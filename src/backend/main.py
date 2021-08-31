@@ -35,7 +35,7 @@ from common.sentry import (
 from flask_bs4 import Bootstrap
 
 
-app = Flask(__name__)
+app = Flask('app')
 Bootstrap(app)
 init_sentry_client()
 logger = get_logger(__name__)
@@ -73,8 +73,9 @@ def get_mirror_list(
 @success_result
 @error_result
 @auth_key_required
-def update_mirrors():
-    return update_mirrors_handler()
+async def update_mirrors():
+    result = await update_mirrors_handler()
+    return result
 
 
 @app.route(

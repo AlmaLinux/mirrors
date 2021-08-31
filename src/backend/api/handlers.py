@@ -1,13 +1,16 @@
 # coding=utf-8
+import asyncio
 import os
 from collections import defaultdict
-from time import sleep
 from typing import (
     AnyStr,
     List,
     Dict,
     Tuple,
+    Union,
 )
+
+from sqlalchemy.orm import Session
 
 from api.exceptions import UnknownRepositoryOrVersion
 from api.mirrors_update import (
@@ -38,6 +41,7 @@ from db.models import (
     Subnet,
     mirrors_subnets,
     mirrors_urls,
+    MirrorYamlData,
 )
 from db.utils import session_scope
 from sqlalchemy.sql.expression import (
@@ -215,7 +219,29 @@ def _get_nearest_mirrors(
     return suitable_mirrors
 
 
-def update_mirrors_handler() -> AnyStr:
+async def _process_mirror(
+        subnets: Dict[AnyStr, List[AnyStr]],
+        mirror_info: MirrorYamlData,
+        versions: List[AnyStr],
+        repos: List[Dict[AnyStr, Union[Dict, AnyStr]]],
+        allowed_outdate: AnyStr,
+        session: Session,
+):
+    set_subnets_for_hyper_cloud_mirror(
+        subnets=subnets,
+        mirror_info=mirror_info,
+
+    )
+    await update_mirror_in_db(
+        mirror_info=mirror_info,
+        versions=versions,
+        repos=repos,
+        allowed_outdate=allowed_outdate,
+        session=session,
+    )
+
+
+async def update_mirrors_handler() -> AnyStr:
     config = get_config()
     versions = config['versions']
     repos = config['repos']
@@ -237,21 +263,20 @@ def update_mirrors_handler() -> AnyStr:
         session.query(mirrors_subnets).delete()
         subnets = get_aws_subnets()
         subnets.update(get_azure_subnets())
-        for mirror_info in all_mirrors:
-            set_subnets_for_hyper_cloud_mirror(
-                subnets=subnets,
-                mirror_info=mirror_info,
-            )
-            update_mirror_in_db(
-                mirror_info,
-                versions,
-                repos,
-                config['allowed_outdate'],
-                session,
-            )
-            sleep(1)
-
+        await asyncio.gather(*(
+            asyncio.ensure_future(
+                _process_mirror(
+                    subnets=subnets,
+                    mirror_info=mirror_info,
+                    versions=versions,
+                    repos=repos,
+                    allowed_outdate=config['allowed_outdate'],
+                    session=session
+                )
+            ) for mirror_info in all_mirrors
+        ))
         session.flush()
+
     return 'Done'
 
 

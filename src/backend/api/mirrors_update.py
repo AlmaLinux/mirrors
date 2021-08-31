@@ -18,7 +18,6 @@ from typing import (
 )
 
 from sqlalchemy.orm import Session
-from uwsgidecorators import thread
 from jsonschema import (
     ValidationError,
     validate,
@@ -262,8 +261,7 @@ def set_repo_status(
         return
 
 
-@thread
-def update_mirror_in_db(
+async def update_mirror_in_db(
         mirror_info: MirrorYamlData,
         versions: List[AnyStr],
         repos: List[Dict[AnyStr, Union[Dict, AnyStr]]],
@@ -336,7 +334,6 @@ def update_mirror_in_db(
         mirror_name,
     )
     session.add(mirror_to_create)
-    # session.flush()
     logger.debug(
         'Mirror "%s" is addded',
         mirror_name,

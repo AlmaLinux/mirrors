@@ -1,4 +1,5 @@
 # coding=utf-8
+import inspect
 import os
 
 import time
@@ -90,8 +91,10 @@ def success_result(f):
     """
 
     @wraps(f)
-    def decorated_function(*args, **kwargs):
+    async def decorated_function(*args, **kwargs):
         result = f(*args, **kwargs)
+        if inspect.isawaitable(result):
+            result = await result
         if request.method == 'POST':
             return jsonify_response(
                 status='success',
