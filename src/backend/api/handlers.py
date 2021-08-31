@@ -121,6 +121,10 @@ def _get_nearest_mirrors_by_geo_data(
         all_mirrors_query = session.query(Mirror).filter(
             Mirror.is_expired == false(),
             )
+        if empty_for_unknown_ip:
+            all_mirrors_query = session.query(Mirror).filter(
+                Mirror.cloud_type == null(),
+            )
         # We return all of mirrors if we can't
         # determine geo data of a request's IP
         if match is None:
