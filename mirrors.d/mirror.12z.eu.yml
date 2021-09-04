@@ -1,0 +1,11 @@
+---
+name: mirror.12z.eu
+address:
+  http: http://mirror.12z.eu/pub/linux/almalinux/
+  https: https://mirror.12z.eu/pub/linux/almalinux/
+update_frequency: 3h
+sponsor: Zbigniew Czechowski
+sponsor_url: https://12z.eu/
+email: zibi.czechowski@gmail.com
+...
+
