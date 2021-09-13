@@ -30,4 +30,3 @@
     log_options:
       max-size: "200m"
       max-file: "5"
-  when: deploy_environment | default('Development') in nginx_environments
