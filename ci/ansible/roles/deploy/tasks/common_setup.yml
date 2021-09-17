@@ -10,8 +10,8 @@
     name: "{{ dnf_packages }}"
     state: present
 
-#- name: Disable SELinux
-#  shell: setenforce 0
+- name: Disable SELinux
+  shell: setenforce 0
 
 - name: Set config_root
   set_fact:
