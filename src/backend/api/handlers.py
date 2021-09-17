@@ -253,10 +253,8 @@ async def update_mirrors_handler() -> AnyStr:
     versions = config['versions']
     repos = config['repos']
     mirrors_dir = os.path.join(
-        os.path.dirname(
-            os.path.abspath(__file__),
-        ),
-        '../../../mirrors/updates',
+        os.getenv('CONFIG_ROOT'),
+        'mirrors/updates',
         config['mirrors_dir'],
     )
     all_mirrors = get_mirrors_info(

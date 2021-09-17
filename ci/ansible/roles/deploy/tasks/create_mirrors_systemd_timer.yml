@@ -3,8 +3,8 @@
   template:
     src: "{{ mirrors_timer_name }}_script.j2"
     dest: "{{ update_mirrors_list_script_path }}"
-    owner: root
-    group: root
+    group: "{{ service_user }}"
+    owner: "{{ service_user }}"
     mode: 0740
     force: 'yes'
 
@@ -12,8 +12,8 @@
   template:
     src: "{{ item.src }}"
     dest: "/etc/systemd/system/{{ item.dst }}"
-    owner: root
-    group: root
+    group: "{{ service_user }}"
+    owner: "{{ service_user }}"
     mode: 0640
     force: 'yes'
   vars:

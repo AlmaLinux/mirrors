@@ -36,6 +36,9 @@ def init_sentry_client(dsn: Optional[str] = None) -> None:
         logging.warning('Sentry is disabled')
         return
 
+    if dsn is None:
+        dsn = os.getenv('SENTRY_DSN')
+    print('DSN: ', dsn)
     sentry_sdk.init(
         dsn=dsn,
         environment=os.getenv('DEPLOY_ENVIRONMENT'),

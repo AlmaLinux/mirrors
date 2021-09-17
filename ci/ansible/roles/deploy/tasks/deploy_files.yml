@@ -3,6 +3,8 @@
   synchronize:
     src: "{{ item }}"
     dest: "{{ source_path }}"
+    owner: no
+    group: no
   with_items:
     - "../../../ci"
     - "../../../src"

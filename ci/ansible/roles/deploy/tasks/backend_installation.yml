@@ -1,0 +1,42 @@
+---
+- name: Prepare Python virtual environment
+  pip:
+    state: present
+    name: "{{ python_packages }}"
+    virtualenv: "{{ source_path }}"
+    virtualenv_command: "python3.9 -m venv"
+
+- name: Prepare uwsgi.ini
+  template:
+    dest: "{{ source_path }}/src/backend/uwsgi.ini"
+    src: uwsgi.ini.j2
+    owner: "{{ service_user }}"
+    group: "{{ service_user }}"
+    mode: 0600
+    force: yes
+
+- name: Prepare started script of backend service
+  template:
+    dest: "/usr/local/bin/mirror_service_backend.sh"
+    src: mirror_service_backend.sh.j2
+    owner: "{{ service_user }}"
+    group: "{{ service_user }}"
+    mode: 0755
+    force: yes
+
+- name: Install systemd service of uWSGI backend
+  template:
+    dest: "/etc/systemd/system/mirror_service_backend.service"
+    src: mirror_service_backend.service.j2
+    group: "{{ service_user }}"
+    owner: "{{ service_user }}"
+    mode: 0640
+    force: 'yes'
+
+- name: Enable systemd service of uWSGI backend
+  systemd:
+    name: mirror_service_backend.service
+    state: restarted
+    enabled: yes
+    masked: no
+    daemon_reload: yes

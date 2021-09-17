@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+export SQLITE_PATH={{ config_root }}/data/mirrors.db
+export PYTHONPATH={{ source_path }}/src/backend/
+pushd {{ source_path }}/src/backend/
+{{ source_path }}/bin/python db/db_actions.py create_db
+{{ source_path }}/bin/python db/db_actions.py migrate
+popd

@@ -2,5 +2,7 @@
 Description={{ description }} Service
 
 [Service]
+User={{ service_user }}
+Group={{ service_user }}
 Type=oneshot
 ExecStart="{{ update_maxmind_dbs_script_path }}"

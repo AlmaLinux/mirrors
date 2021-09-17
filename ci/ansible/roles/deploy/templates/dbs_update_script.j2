@@ -15,5 +15,4 @@ tar xzvf "${asn_tar_archive_name}"
 rm -rf GeoLite2*
 rm -f "${geo_tar_archive_name}"
 rm -f "${asn_tar_archive_name}"
-docker restart "{{ container_env_prefix }}_backend"
 popd

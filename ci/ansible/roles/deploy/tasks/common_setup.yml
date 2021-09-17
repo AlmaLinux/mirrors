@@ -1,4 +1,18 @@
 ---
+
+- name: Create new user for service
+  user:
+    name: "{{ service_user }}"
+    create_home: yes
+
+- name: Install dnf packages
+  dnf:
+    name: "{{ dnf_packages }}"
+    state: present
+
+#- name: Disable SELinux
+#  shell: setenforce 0
+
 - name: Set config_root
   set_fact:
     config_root: "/etc/mirrors_service/{{ container_env_prefix }}"
@@ -7,6 +21,8 @@
   file:
     name: "{{ config_root }}"
     state: directory
+    group: "{{ service_user }}"
+    owner: "{{ service_user }}"
     mode: '0755'
 
 
@@ -14,35 +30,9 @@
   file:
     name: "{{ config_root }}/data"
     state: directory
+    group: "{{ service_user }}"
+    owner: "{{ service_user }}"
     mode: '0755'
-
-- name: Add repository "docker-ce"
-  get_url:
-    url: "https://download.docker.com/linux/centos/docker-ce.repo"
-    dest: "/etc/yum.repos.d/docker-ce.repo"
-    owner: root
-    mode: 0644
-    force: yes
-
-- name: Install dnf packages
-  dnf:
-    name:
-      - python3-pip
-      - git
-      - docker-ce
-    state: present
-
-- name: Install python docker SDK
-  pip:
-    name:
-      - docker
-    state: present
-
-- name: Enable and start docker service
-  systemd:
-    name: docker
-    state: started
-    enabled: yes
 
 - name: Sysctl option `net.core.somaxconn`
   sysctl:
