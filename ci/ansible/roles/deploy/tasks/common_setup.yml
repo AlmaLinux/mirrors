@@ -43,3 +43,11 @@
     name: docker
     state: started
     enabled: yes
+
+- name: Sysctl option `net.core.somaxconn`
+  sysctl:
+    name: "net.core.somaxconn"
+    value: "65535"
+    state: present
+    sysctl_set: yes
+    reload: yes

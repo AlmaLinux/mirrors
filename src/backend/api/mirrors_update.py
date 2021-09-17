@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import asyncio
 import os
 from dataclasses import asdict
 
@@ -17,8 +18,8 @@ from typing import (
     Optional,
 )
 
-from sqlalchemy.exc import NoResultFound
-from uwsgidecorators import thread
+from aiohttp import ClientSession, ClientError
+from sqlalchemy.orm import Session
 from jsonschema import (
     ValidationError,
     validate,
@@ -149,10 +150,11 @@ def get_mirrors_info(
     return result
 
 
-def mirror_available(
+async def mirror_available(
         mirror_info: MirrorData,
         versions: List[AnyStr],
         repos: List[Dict[AnyStr, Union[Dict, AnyStr]]],
+        http_session: ClientSession,
 ) -> Tuple[AnyStr, bool]:
     """
     Check mirror availability
@@ -165,10 +167,10 @@ def mirror_available(
     logger.info('Checking mirror "%s"...', mirror_name)
     try:
         urls = mirror_info.urls  # type: Dict[AnyStr, AnyStr]
-        mirror_url = next(iter([
+        mirror_url = next(
             address for protocol_type, address in urls.items()
             if protocol_type in REQUIRED_MIRROR_PROTOCOLS
-        ]))
+        )
     except StopIteration:
         logger.error(
             'Mirror "%s" has no one address with protocols "%s"',
@@ -186,9 +188,13 @@ def mirror_available(
                 'repodata/repomd.xml',
             )
             try:
-                request = requests.get(check_url, headers=HEADERS, timeout=15)
-                request.raise_for_status()
-            except (requests.RequestException, HTTPError, Exception):
+                async with http_session.get(
+                    check_url,
+                    headers=HEADERS,
+                    timeout=15,
+                ) as resp:
+                    await resp.text()
+            except (ClientError, asyncio.TimeoutError):
                 logger.warning(
                     'Mirror "%s" is not available for version '
                     '"%s" and repo path "%s"',
@@ -216,10 +222,10 @@ def set_repo_status(
     """
 
     urls = mirror_info.urls
-    mirror_url = next(iter([
+    mirror_url = next(
         url for url_type, url in urls.items()
         if url_type in REQUIRED_MIRROR_PROTOCOLS
-    ]))
+    )
     timestamp_url = os.path.join(
         mirror_url,
         'TIME',
@@ -262,12 +268,13 @@ def set_repo_status(
         return
 
 
-@thread
-def update_mirror_in_db(
+async def update_mirror_in_db(
         mirror_info: MirrorYamlData,
         versions: List[AnyStr],
         repos: List[Dict[AnyStr, Union[Dict, AnyStr]]],
         allowed_outdate: AnyStr,
+        db_session: Session,
+        http_session: ClientSession,
 ) -> None:
     """
     Update record about a mirror in DB in background thread.
@@ -285,10 +292,11 @@ def update_mirror_in_db(
         mirror_info.is_expired = False
         is_available = True
     else:
-        mirror_name, is_available = mirror_available(
+        mirror_name, is_available = await mirror_available(
             mirror_info=mirror_info,
             versions=versions,
             repos=repos,
+            http_session=http_session,
         )
     if not is_available:
         return
@@ -299,47 +307,46 @@ def update_mirror_in_db(
             type=url_type,
         ) for url_type, url in mirror_info.urls.items()
     ]
-    with session_scope() as session:
-        for url_to_create in urls_to_create:
-            session.add(url_to_create)
-        mirror_to_create = Mirror(
-            name=mirror_info.name,
-            continent=mirror_info.continent,
-            country=mirror_info.country,
-            ip=mirror_info.ip,
-            latitude=mirror_info.location.latitude,
-            longitude=mirror_info.location.longitude,
-            is_expired=mirror_info.is_expired,
-            update_frequency=dateparser.parse(
-                mirror_info.update_frequency
-            ),
-            sponsor_name=mirror_info.sponsor_name,
-            sponsor_url=mirror_info.sponsor_url,
-            email=mirror_info.email,
-            cloud_type=mirror_info.cloud_type,
-            cloud_region=mirror_info.cloud_region,
-            urls=urls_to_create,
-        )
-        mirror_to_create.asn = mirror_info.asn
-        if mirror_info.subnets:
-            subnets_to_create = [
-                Subnet(
-                    subnet=subnet,
-                ) for subnet in mirror_info.subnets
-            ]
-            for subnet_to_create in subnets_to_create:
-                session.add(subnet_to_create)
-            mirror_to_create.subnets = subnets_to_create
-        logger.debug(
-            'Mirror "%s" is created',
-            mirror_name,
-        )
-        session.add(mirror_to_create)
-        session.flush()
-        logger.debug(
-            'Mirror "%s" is addded',
-            mirror_name,
-        )
+    # with session_scope() as session:
+    for url_to_create in urls_to_create:
+        db_session.add(url_to_create)
+    mirror_to_create = Mirror(
+        name=mirror_info.name,
+        continent=mirror_info.continent,
+        country=mirror_info.country,
+        ip=mirror_info.ip,
+        latitude=mirror_info.location.latitude,
+        longitude=mirror_info.location.longitude,
+        is_expired=mirror_info.is_expired,
+        update_frequency=dateparser.parse(
+            mirror_info.update_frequency
+        ),
+        sponsor_name=mirror_info.sponsor_name,
+        sponsor_url=mirror_info.sponsor_url,
+        email=mirror_info.email,
+        cloud_type=mirror_info.cloud_type,
+        cloud_region=mirror_info.cloud_region,
+        urls=urls_to_create,
+    )
+    mirror_to_create.asn = mirror_info.asn
+    if mirror_info.subnets:
+        subnets_to_create = [
+            Subnet(
+                subnet=subnet,
+            ) for subnet in mirror_info.subnets
+        ]
+        for subnet_to_create in subnets_to_create:
+            db_session.add(subnet_to_create)
+        mirror_to_create.subnets = subnets_to_create
+    logger.debug(
+        'Mirror "%s" is created',
+        mirror_name,
+    )
+    db_session.add(mirror_to_create)
+    logger.debug(
+        'Mirror "%s" is addded',
+        mirror_name,
+    )
 
 
 def set_geo_data(

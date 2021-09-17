@@ -3,9 +3,8 @@ Description={{ description }} Service
 
 [Timer]
 OnStartupSec=1m
-OnCalendar=daily
+OnCalendar=*-*-* 20:00:00
 Persistent=true
-AccuracySec=15s
 
 [Install]
 WantedBy=timers.target

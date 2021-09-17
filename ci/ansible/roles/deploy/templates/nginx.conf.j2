@@ -1,11 +1,15 @@
 #jinja2: lstrip_blocks: "True"
+worker_rlimit_nofile 20000;
+worker_processes auto;
 events {
-        worker_connections 1024;
+        worker_connections 10000;
 }
 
 http {
         include  mime.types;
+        limit_conn_zone $binary_remote_addr zone=addr:10m;
         server {
+                limit_conn addr 500;
                 gzip on;
                 gzip_comp_level 6;
                 gzip_types

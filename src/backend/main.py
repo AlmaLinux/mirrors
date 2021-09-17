@@ -12,7 +12,7 @@ from werkzeug.exceptions import InternalServerError
 from api.exceptions import (
     BaseCustomException,
     AuthException,
-    BadRequestFormatExceptioin,
+    UnknownRepositoryOrVersion,
 )
 from api.handlers import (
     update_mirrors_handler,
@@ -35,10 +35,17 @@ from common.sentry import (
 from flask_bs4 import Bootstrap
 
 
-app = Flask(__name__)
+app = Flask('app')
 Bootstrap(app)
 init_sentry_client()
 logger = get_logger(__name__)
+
+
+def _get_request_ip() -> AnyStr:
+    ip_address = request.headers.get('X-Forwarded-For') or request.remote_addr
+    if ',' in ip_address:
+        ip_address = [item.strip() for item in ip_address.split(',')][0]
+    return ip_address
 
 
 @app.route(
@@ -51,7 +58,7 @@ def get_mirror_list(
         version: AnyStr,
         repository: AnyStr,
 ):
-    ip_address = request.headers.get('X-Forwarded-For') or request.remote_addr
+    ip_address = _get_request_ip()
     return get_mirrors_list(
         ip_address=ip_address,
         version=version,
@@ -66,8 +73,9 @@ def get_mirror_list(
 @success_result
 @error_result
 @auth_key_required
-def update_mirrors():
-    return update_mirrors_handler()
+async def update_mirrors():
+    result = await update_mirrors_handler()
+    return result
 
 
 @app.route(
@@ -100,7 +108,7 @@ def isos(
 
         return render_template('isos_main.html', **data)
     else:
-        ip_address = request.headers.get('X-Forwarded-For') or request.remote_addr
+        ip_address = _get_request_ip()
         mirrors_by_countries, nearest_mirrors = get_isos_list_by_countries(
             arch=arch,
             version=version,
@@ -161,9 +169,11 @@ def handle_internal_server_error(error: InternalServerError) -> Response:
     )
 
 
-@app.errorhandler(BadRequestFormatExceptioin)
-def handle_bad_request_format(error: BadRequestFormatExceptioin) -> Response:
-    logger.exception(error.message, *error.args)
+@app.errorhandler(UnknownRepositoryOrVersion)
+def handle_unknown_repository_or_version(
+        error: UnknownRepositoryOrVersion,
+) -> Response:
+    logger.info(error.message, *error.args)
     return jsonify_response(
         status='error',
         result={

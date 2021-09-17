@@ -3,6 +3,8 @@
 {% block metas %}
     {{ super() }}
     <meta charset="UTF-8">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/fav/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/fav/favicon-16x16.png') }}">
 {% endblock metas%}
 
 {%- block styles %}
@@ -56,11 +58,19 @@
             <div class="col-sm">
                 <h1>{{ main_title }}</h1>
                 <p class="lead">
-                {% block text %}
-                {% endblock %}
+                {% block text_1 %}
+                {% endblock text_1 %}
+                </p>
+                <blockquote class="blockquote text-center">
+                {% block sponsor_link %}
+                {% endblock sponsor_link %}
+                </blockquote>
+                <p class="lead">
+                {% block text_2 %}
+                {% endblock text_2 %}
                 </p>
                 {% block table %}
-                {% endblock table%}
+                {% endblock table %}
             </div>
             <div class="col-sm">
                 &nbsp;

@@ -1,15 +1,19 @@
 # coding=utf-8
+import asyncio
 import os
 from collections import defaultdict
-from time import sleep
 from typing import (
     AnyStr,
     List,
     Dict,
     Tuple,
+    Union,
 )
 
-from api.exceptions import BadRequestFormatExceptioin
+from aiohttp import ClientSession
+from sqlalchemy.orm import Session
+
+from api.exceptions import UnknownRepositoryOrVersion
 from api.mirrors_update import (
     get_config,
     REQUIRED_MIRROR_PROTOCOLS,
@@ -38,6 +42,7 @@ from db.models import (
     Subnet,
     mirrors_subnets,
     mirrors_urls,
+    MirrorYamlData,
 )
 from db.utils import session_scope
 from sqlalchemy.sql.expression import (
@@ -76,7 +81,7 @@ def _get_nearest_mirrors_by_network_data(
                 subnets=mirror.get_subnets(),
             ):
                 suitable_mirrors.append(mirror.to_dataclass())
-        if len(suitable_mirrors) < LENGTH_CLOUD_MIRRORS_LIST\
+        if 1 <= len(suitable_mirrors) < LENGTH_CLOUD_MIRRORS_LIST\
                 and match is not None:
             continent, country, latitude, longitude = match
             nearest_mirrors = session.query(Mirror).filter(
@@ -115,6 +120,10 @@ def _get_nearest_mirrors_by_geo_data(
     with session_scope() as session:
         all_mirrors_query = session.query(Mirror).filter(
             Mirror.is_expired == false(),
+            )
+        if empty_for_unknown_ip:
+            all_mirrors_query = session.query(Mirror).filter(
+                Mirror.cloud_type == null(),
             )
         # We return all of mirrors if we can't
         # determine geo data of a request's IP
@@ -215,7 +224,31 @@ def _get_nearest_mirrors(
     return suitable_mirrors
 
 
-def update_mirrors_handler() -> AnyStr:
+async def _process_mirror(
+        subnets: Dict[AnyStr, List[AnyStr]],
+        mirror_info: MirrorYamlData,
+        versions: List[AnyStr],
+        repos: List[Dict[AnyStr, Union[Dict, AnyStr]]],
+        allowed_outdate: AnyStr,
+        db_session: Session,
+        http_session: ClientSession,
+):
+    set_subnets_for_hyper_cloud_mirror(
+        subnets=subnets,
+        mirror_info=mirror_info,
+
+    )
+    await update_mirror_in_db(
+        mirror_info=mirror_info,
+        versions=versions,
+        repos=repos,
+        allowed_outdate=allowed_outdate,
+        db_session=db_session,
+        http_session=http_session,
+    )
+
+
+async def update_mirrors_handler() -> AnyStr:
     config = get_config()
     versions = config['versions']
     repos = config['repos']
@@ -230,26 +263,33 @@ def update_mirrors_handler() -> AnyStr:
         mirrors_dir=mirrors_dir,
     )
 
-    with session_scope() as session:
-        session.query(Mirror).delete()
-        session.query(Subnet).delete()
-        session.query(mirrors_urls).delete()
-        session.query(mirrors_subnets).delete()
-        session.flush()
-    subnets = get_aws_subnets()
-    subnets.update(get_azure_subnets())
-    for mirror_info in all_mirrors:
-        set_subnets_for_hyper_cloud_mirror(
-            subnets=subnets,
-            mirror_info=mirror_info,
-        )
-        update_mirror_in_db(
-            mirror_info,
-            versions,
-            repos,
-            config['allowed_outdate'],
-        )
-        sleep(1)
+    with session_scope() as db_session:
+        db_session.query(Mirror).delete()
+        db_session.query(Subnet).delete()
+        db_session.query(mirrors_urls).delete()
+        db_session.query(mirrors_subnets).delete()
+        subnets = get_aws_subnets()
+        subnets.update(get_azure_subnets())
+        len_list = len(all_mirrors)
+        procs = 30
+        async with ClientSession() as http_session:
+            for start in range(0, len_list + 1, procs):
+                end = start + procs if start + procs <= len_list else len_list
+                await asyncio.gather(*(
+                    asyncio.ensure_future(
+                        _process_mirror(
+                            subnets=subnets,
+                            mirror_info=mirror_info,
+                            versions=versions, repos=repos,
+                            allowed_outdate=config[
+                                'allowed_outdate'],
+                            db_session=db_session,
+                            http_session=http_session,
+                        )
+                    ) for mirror_info in all_mirrors[start:end]
+                ))
+        db_session.flush()
+
     return 'Done'
 
 
@@ -277,14 +317,17 @@ def get_mirrors_list(
     config = get_config()
     versions = [str(version) for version in config['versions']]
     if version not in versions:
-        raise BadRequestFormatExceptioin(
-            'Unknown version "%s". Allowed list of versions "%s"',
-            version,
-            ', '.join(versions),
-        )
+        try:
+            version = next(ver for ver in versions if version.startswith(ver))
+        except StopIteration:
+            raise UnknownRepositoryOrVersion(
+                'Unknown version "%s". Allowed list of versions "%s"',
+                version,
+                ', '.join(versions),
+            )
     repos = {repo['name']: repo['path'] for repo in config['repos']}
     if repository not in repos:
-        raise BadRequestFormatExceptioin(
+        raise UnknownRepositoryOrVersion(
             'Unknown repository "%s". Allowed list of repositories "%s"',
             repository,
             ', '.join(repos.keys()),
@@ -310,11 +353,11 @@ def _set_isos_link_for_mirror(
         arch: AnyStr,
 ):
     urls = mirror_info.urls
-    mirror_url = next(iter([
+    mirror_url = next(
         address for protocol_type, address in
         urls.items()
         if protocol_type in REQUIRED_MIRROR_PROTOCOLS
-    ]))
+    )
     mirror_info.isos_link = os.path.join(
         mirror_url,
         str(version),

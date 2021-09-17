@@ -4,21 +4,33 @@
     uwsgi_processes: "{{ (uwsgi_processes is defined) | ternary(uwsgi_processes, 4) }}"
     deploy_env: "{{ deploy_environment | default('Development') }}"
     test_ip_addr: "{{ test_ip_address | default('') }}"
-    sentry_disabled: "{{ (deploy_environment is defined and deploy_environment == 'Production') | ternary('False', 'True') }}"
-    published_ports: "{{ (deploy_environment is defined and deploy_environment == 'Production') | ternary(['127.0.0.1:{{ backend_port }}', uwsgi_port] | join(':'), [backend_port, uwsgi_port] | join(':')) }}"
+    sentry_disabled: "{{ (deploy_environment is defined and deploy_environment in sentry_environments) | ternary('False', 'True') }}"
+    published_ports: "{{ ['127.0.0.1:{{ backend_port }}', uwsgi_port] | join(':') }}"
+
+
+- name: Build docker image
+  docker_image:
+    name: "python38-mirrors-service"
+    build:
+      path: "{{ source_path }}/ci/"
+      pull: yes
+      network: host
+    source: build
+    force_source: yes
 
 
 - name: Up the backend container from docker image
   docker_container:
     name: "{{ container_env_prefix }}_backend"
-    image: "almalinux/mirror_service:latest"
+    image: "python38-mirrors-service"
     state: started
     restart: yes
     restart_policy: unless-stopped
-    pull: yes
     hostname: backend
     networks:
       - name: backend
+    sysctls:
+      net.core.somaxconn: 65535
     env:
       GEOIP_PATH: "/mirrors/geoip_db.mmdb"
       ASN_PATH: "/mirrors/asn_db.mmdb"
