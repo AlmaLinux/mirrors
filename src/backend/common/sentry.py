@@ -2,7 +2,6 @@
 
 import requests
 import logging
-import multiprocessing
 import os
 from typing import Optional
 
@@ -62,7 +61,7 @@ def get_logger(logger_name: str):
     """
 
     # create logger or get existing
-    logger = multiprocessing.get_logger()
+    logger = logging.Logger(logger_name)
     # Set handler if it doesn't exist
     if not len(logger.handlers):
         deploy_environment = os.getenv('DEPLOY_ENVIRONMENT', '')

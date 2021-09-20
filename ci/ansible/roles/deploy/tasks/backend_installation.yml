@@ -5,6 +5,8 @@
     name: "{{ python_packages }}"
     virtualenv: "{{ source_path }}"
     virtualenv_command: "python3.9 -m venv"
+  become: yes
+  become_user: "{{ service_user }}"
 
 - name: Prepare uwsgi.ini
   template:

@@ -1,5 +1,5 @@
 [uwsgi]
-http = [::1]:3031
+http = [::1]:{{ uwsgi_port }}
 listen = 10000
 module = main:app
 master = true

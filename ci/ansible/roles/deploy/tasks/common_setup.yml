@@ -10,8 +10,11 @@
     name: "{{ dnf_packages }}"
     state: present
 
-- name: Disable SELinux
-  shell: setenforce 0
+- name: Set SELinux option
+  seboolean:
+    state: yes
+    name: httpd_can_network_connect
+    persistent: yes
 
 - name: Set config_root
   set_fact:
