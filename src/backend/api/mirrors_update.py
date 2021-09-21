@@ -68,10 +68,8 @@ logger = get_logger(__name__)
 
 def get_config(
         path_to_config: AnyStr = os.path.join(
-            os.path.dirname(
-                os.path.abspath(__file__),
-            ),
-            '../../../mirrors/updates/config.yml'
+            os.getenv('CONFIG_ROOT'),
+            'mirrors/updates/config.yml'
         )
 ) -> Dict:
     """

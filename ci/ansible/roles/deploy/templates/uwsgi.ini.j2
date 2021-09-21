@@ -1,0 +1,28 @@
+[uwsgi]
+http = [::1]:{{ uwsgi_port }}
+listen = 10000
+module = main:app
+master = true
+processes = {{ uwsgi_processes }}
+uid = {{ service_user }}
+gid = {{ service_user }}
+http-timeout = 1800
+enable-threads = true
+log-x-forwarded-for = true
+# disable OS/IO errors in logs when a client closed connection
+ignore-sigpipe = true
+ignore-write-errors = true
+disable-write-exception = true
+# application's environment variables
+env = GEOIP_PATH={{ config_root }}/mirrors/geoip_db.mmdb
+env = ASN_PATH={{ config_root }}/mirrors/asn_db.mmdb
+env = SQLITE_PATH={{ config_root }}/data/mirrors.db
+env = SENTRY_DSN={{ sentry_dsn }}
+env = PYTHONPATH={{ source_path }}/src/backend/
+env = CONFIG_ROOT={{ config_root }}
+env = DEPLOY_ENVIRONMENT={{ deploy_environment }}
+env = TEST_IP_ADDRESS={{ test_ip_address }}
+env = AUTH_KEY={{ auth_key }}
+env = SENTRY_DISABLED={{ (deploy_environment is defined and deploy_environment in sentry_environments) | ternary('False', 'True') }}
+env = REDIS_PORT=6379
+env = REDIS_HOST=127.0.0.1

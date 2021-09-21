@@ -6,3 +6,11 @@
   with_items:
     - "../../../ci"
     - "../../../src"
+
+- name: Update permissions of sources
+  file:
+    path: "{{ source_path }}"
+    recurse: yes
+    owner: "{{ service_user }}"
+    group: "{{ service_user }}"
+    state: directory

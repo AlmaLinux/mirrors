@@ -1,0 +1,17 @@
+[Unit]
+Description=AlmaLinux mirrors service (uWSGI backend)
+After=syslog.target
+
+[Service]
+User={{ service_user }}
+Group={{ service_user }}
+Type=simple
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=10
+WorkingDirectory={{ source_path }}/src/backend
+ExecStartPre=/usr/local/bin/mirror_service_backend.sh
+ExecStart={{ source_path }}/bin/uwsgi --ini {{ source_path }}/src/backend/uwsgi.ini
+
+[Install]
+WantedBy=multi-user.target

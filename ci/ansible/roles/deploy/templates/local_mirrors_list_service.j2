@@ -2,5 +2,7 @@
 Description={{ description }} Service
 
 [Service]
+User={{ service_user }}
+Group={{ service_user }}
 Type=oneshot
 ExecStart="{{ update_mirrors_list_script_path }}"

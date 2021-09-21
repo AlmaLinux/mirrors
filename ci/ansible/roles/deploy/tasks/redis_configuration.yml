@@ -1,0 +1,15 @@
+---
+- name: Enable persistent storage for Redis
+  lineinfile:
+    path: /etc/redis.conf
+    regexp: '^appendonly no$'
+    line: 'appendonly yes'
+    state: present
+    insertbefore: BOF
+
+- name: Start Redis
+  systemd:
+    enabled: yes
+    masked: no
+    state: started
+    name: redis

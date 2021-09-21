@@ -11,6 +11,8 @@
 * Ansible version is 2.10 or newer
 * Ansible community.docker collection
     * Use command `ansible-galaxy collection install community.docker` for installing it
+* Ansible ssh-reconnect collection
+    * Use command `ansible-galaxy collection install udondan.ssh-reconnect` for installing it
 
 ## Deploying
 
