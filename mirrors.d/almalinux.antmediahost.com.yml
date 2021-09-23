@@ -3,7 +3,7 @@ name: almalinux.antmediahost.com
 address:
   http: http://almalinux.antmediahost.com
   https: https://almalinux.antmediahost.com
-update_frequency: 1h
+update_frequency: 3h
 sponsor: AntMediaHost
 sponsor_url: https://www.antmediahost.com
 email: sa@semutdata.co.id
