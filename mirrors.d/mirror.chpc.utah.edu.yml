@@ -1,0 +1,11 @@
+---
+name: mirror.chpc.utah.edu
+address:
+  http: http://mirror.chpc.utah.edu/pub/almalinux/
+  https: https://mirror.chpc.utah.edu/pub/almalinux/
+  rsync: rsync://mirror.chpc.utah.edu/pub/almalinux
+update_frequency: 6h
+sponsor: University of Utah CHPC
+sponsor_url: https://www.chpc.utah.edu/
+email: david.richardson@utah.edu
+...
