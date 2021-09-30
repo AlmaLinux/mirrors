@@ -1,0 +1,11 @@
+---
+name: mirror.hostduplex.com
+address:
+  http: http://mirror.hostduplex.com/almalinux/
+  https: https://mirror.hostduplex.com/almalinux/
+  rsync: rsync://mirror.hostduplex.com/almalinux
+update_frequency: 3h
+sponsor: Host Duplex
+sponsor_url: https://www.hostduplex.com/
+email: noc@hostduplex.com
+...
