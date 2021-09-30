@@ -333,8 +333,9 @@ def get_mirrors_list(
     repo_path = repos[repository]
     nearest_mirrors = _get_nearest_mirrors(ip_address=ip_address)
     for mirror in nearest_mirrors:
-        mirror_url = mirror.urls.get(REQUIRED_MIRROR_PROTOCOLS[0]) or \
-                     mirror.urls.get(REQUIRED_MIRROR_PROTOCOLS[1])
+        # use http by default if it's available. otherwise - use https.
+        mirror_url = mirror.urls.get(REQUIRED_MIRROR_PROTOCOLS[1]) or \
+                     mirror.urls.get(REQUIRED_MIRROR_PROTOCOLS[0])
         full_mirror_path = os.path.join(
             mirror_url,
             version,
