@@ -6,7 +6,7 @@ master = true
 processes = {{ uwsgi_processes }}
 uid = {{ service_user }}
 gid = {{ service_user }}
-http-timeout = 1800
+http-timeout = 3600
 enable-threads = true
 log-x-forwarded-for = true
 # disable OS/IO errors in logs when a client closed connection

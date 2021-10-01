@@ -49,8 +49,9 @@ def init_sentry_client(dsn: Optional[str] = None) -> None:
             RedisIntegration(),
         ],
     )
-    with sentry_sdk.configure_scope() as scope:
-        scope.set_tag('aws_instance_ip', get_aws_instance_api())
+    if os.getenv('SKIP_AWS_CHECKING', 'False') != 'True':
+        with sentry_sdk.configure_scope() as scope:
+            scope.set_tag('aws_instance_ip', get_aws_instance_api())
 
 
 def get_logger(logger_name: str):

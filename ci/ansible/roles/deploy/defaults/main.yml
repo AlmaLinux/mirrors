@@ -19,6 +19,8 @@ dnf_packages:
   - redis
   - nginx
   - gcc
+  # for testing purposes
+  - sqlite
 python_packages:
   - alembic==1.7.1
   - beautifulsoup4==4.10.0

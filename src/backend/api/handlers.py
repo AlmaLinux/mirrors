@@ -263,9 +263,6 @@ async def update_mirrors_handler() -> AnyStr:
 
     with session_scope() as db_session:
         db_session.query(Mirror).delete()
-        db_session.query(Subnet).delete()
-        db_session.query(mirrors_urls).delete()
-        db_session.query(mirrors_subnets).delete()
         subnets = get_aws_subnets()
         subnets.update(get_azure_subnets())
         len_list = len(all_mirrors)

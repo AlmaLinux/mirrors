@@ -8,6 +8,8 @@ from typing import List
 from alembic import command, script
 from alembic.config import Config
 from alembic.runtime.migration import MigrationContext
+from sqlalchemy import event
+from sqlalchemy.engine import Engine as SAEngine
 from sqlalchemy.exc import OperationalError
 
 from db.db_engine import Engine
@@ -16,6 +18,13 @@ from sqlalchemy.engine.reflection import Inspector
 from sqlalchemy.orm import Session
 
 BASE_REVISION = 'base'
+
+
+@event.listens_for(SAEngine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA foreign_keys=ON")
+    cursor.close()
 
 
 @contextmanager
