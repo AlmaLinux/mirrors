@@ -6,3 +6,10 @@
     clone: yes
     update: yes
     accept_hostkey: yes
+
+- name: Change owner of local repo
+  file:
+    path: "{{ config_root }}/mirrors/updates"
+    owner: "{{ service_user }}"
+    group: "{{ service_user }}"
+    recurse: yes

@@ -189,16 +189,17 @@ async def mirror_available(
                 async with http_session.get(
                     check_url,
                     headers=HEADERS,
-                    timeout=15,
+                    timeout=45,
                 ) as resp:
                     await resp.text()
-            except (ClientError, asyncio.TimeoutError):
-                logger.warning(
+            except (ClientError, asyncio.TimeoutError) as err:
+                logger.error(
                     'Mirror "%s" is not available for version '
-                    '"%s" and repo path "%s"',
+                    '"%s" and repo path "%s" because "%s"',
                     mirror_name,
                     version,
                     repo_path,
+                    err,
                 )
                 return mirror_name, False
     logger.info(

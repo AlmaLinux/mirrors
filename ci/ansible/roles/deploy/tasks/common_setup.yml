@@ -44,3 +44,18 @@
     state: present
     sysctl_set: yes
     reload: yes
+
+- name: Enable persistent journald
+  ini_file:
+    section: Journal
+    path: /etc/systemd/journald.conf
+    option: Storage
+    value: persistant
+  register:
+    persistent_journald
+
+- name: Restart journald
+  systemd:
+    state: restarted
+    name: systemd-journald
+  when: persistent_journald.changed
