@@ -49,7 +49,7 @@ def init_sentry_client(dsn: Optional[str] = None) -> None:
             RedisIntegration(),
         ],
     )
-    if os.getenv('SKIP_AWS_CHECKING', 'False') != 'True':
+    if not os.getenv('SKIP_AWS_CHECKING'):
         with sentry_sdk.configure_scope() as scope:
             scope.set_tag('aws_instance_ip', get_aws_instance_api())
 
