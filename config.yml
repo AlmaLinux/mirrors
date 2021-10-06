@@ -8,6 +8,9 @@ versions:
   - 8
 duplicated_versions:
   - 8
+architectures:
+  - x86_64
+  - aarch64
 repos:
   - name: baseos
     path: BaseOS/$basearch/os/
@@ -45,4 +48,16 @@ repos:
     path: HighAvailability/debug/$basearch/
   - name: devel-debuginfo
     path: devel/debug/$basearch/
+  - name: raspberrypi
+    path: raspberrypi/$basearch/os/
+    arches:
+      - aarch64
+  - name: raspberrypi-source
+    path: raspberrypi/Source
+    arches:
+      - aarch64
+  - name: raspberrypi-debuginfo
+    path: raspberrypi/debug/$basearch/
+    arches:
+      - aarch64
 ...
