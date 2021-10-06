@@ -11,6 +11,10 @@ duplicated_versions:
 arches:
   - x86_64
   - aarch64
+# one of them should be in a mirror's config
+required_protocols:
+  - http
+  - https
 repos:
   - name: baseos
     path: BaseOS/$basearch/os/
