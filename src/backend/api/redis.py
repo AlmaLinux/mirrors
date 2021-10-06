@@ -10,7 +10,6 @@ from typing import (
 from db.db_engine import RedisEngine
 from db.models import (
     MirrorData,
-    DataClassesJSONDecoder,
     DataClassesJSONEncoder,
 )
 from common.sentry import (
@@ -23,7 +22,7 @@ CACHE_EXPIRED_TIME = 24 * 3600  # 24 hours
 
 
 def get_mirrors_from_cache(
-        key: AnyStr
+        key: AnyStr,
 ) -> Optional[List[MirrorData]]:
     """
     Get a cached list of mirrors for specified IP
@@ -32,7 +31,11 @@ def get_mirrors_from_cache(
     redis_engine = RedisEngine.get_instance()
     mirrors_string = redis_engine.get(key)
     if mirrors_string is not None:
-        return json.loads(mirrors_string, cls=DataClassesJSONDecoder)
+        mirrors_json = json.loads(
+            mirrors_string,
+        )
+        return [MirrorData.load_from_json(mirror_json)
+                for mirror_json in mirrors_json]
 
 
 def set_mirrors_to_cache(

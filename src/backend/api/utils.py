@@ -19,7 +19,7 @@ from bs4 import BeautifulSoup
 from geoip2.errors import AddressNotFoundError
 
 from db.db_engine import GeoIPEngine
-from db.models import (
+from db.data_models import (
     MirrorYamlData,
 )
 from api.exceptions import (
@@ -212,7 +212,8 @@ def get_azure_subnets():
     for value in values:
         if value['name'].startswith('AzureCloud.'):
             properties = value['properties']
-            subnets[properties['region'].lower()] = properties['addressPrefixes']
+            subnets[properties['region'].lower()] = \
+                properties['addressPrefixes']
     return subnets
 
 
