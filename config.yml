@@ -54,8 +54,6 @@ repos:
       - aarch64
   - name: raspberrypi-source
     path: raspberrypi/Source
-    arches:
-      - aarch64
   - name: raspberrypi-debuginfo
     path: raspberrypi/debug/$basearch/
     arches:
