@@ -8,7 +8,7 @@ versions:
   - 8
 duplicated_versions:
   - 8
-architectures:
+arches:
   - x86_64
   - aarch64
 repos:
