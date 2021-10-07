@@ -7,7 +7,6 @@ from typing import (
     List,
     Dict,
     Tuple,
-    Union,
 )
 
 from aiohttp import ClientSession
@@ -16,9 +15,7 @@ from sqlalchemy.orm import Session
 from api.exceptions import UnknownRepositoryOrVersion
 from api.mirrors_update import (
     get_config,
-    REQUIRED_MIRROR_PROTOCOLS,
     get_mirrors_info,
-    ARCHS,
     update_mirror_in_db,
 )
 from api.redis import (
@@ -33,6 +30,10 @@ from api.utils import (
     get_azure_subnets,
     set_subnets_for_hyper_cloud_mirror,
 )
+from db.data_models import (
+    RepoData,
+    MainConfig,
+)
 from db.models import (
     Url,
     Mirror,
@@ -40,10 +41,8 @@ from db.models import (
     get_asn_by_ip,
     is_ip_in_any_subnet,
     Subnet,
-    mirrors_subnets,
-    mirrors_urls,
-    MirrorYamlData,
 )
+from db.data_models import MirrorYamlData
 from db.utils import session_scope
 from sqlalchemy.sql.expression import (
     null,
@@ -228,10 +227,12 @@ async def _process_mirror(
         subnets: Dict[AnyStr, List[AnyStr]],
         mirror_info: MirrorYamlData,
         versions: List[AnyStr],
-        repos: List[Dict[AnyStr, Union[Dict, AnyStr]]],
+        repos: List[RepoData],
         allowed_outdate: AnyStr,
         db_session: Session,
         http_session: ClientSession,
+        arches: List[AnyStr],
+        required_protocols: List[AnyStr],
 ):
     set_subnets_for_hyper_cloud_mirror(
         subnets=subnets,
@@ -245,17 +246,17 @@ async def _process_mirror(
         allowed_outdate=allowed_outdate,
         db_session=db_session,
         http_session=http_session,
+        arches=arches,
+        required_protocols=required_protocols,
     )
 
 
 async def update_mirrors_handler() -> AnyStr:
     config = get_config()
-    versions = config['versions']
-    repos = config['repos']
     mirrors_dir = os.path.join(
         os.getenv('CONFIG_ROOT'),
         'mirrors/updates',
-        config['mirrors_dir'],
+        config.mirrors_dir,
     )
     all_mirrors = get_mirrors_info(
         mirrors_dir=mirrors_dir,
@@ -263,6 +264,8 @@ async def update_mirrors_handler() -> AnyStr:
 
     with session_scope() as db_session:
         db_session.query(Mirror).delete()
+        db_session.query(Url).delete()
+        db_session.query(Subnet).delete()
         subnets = get_aws_subnets()
         subnets.update(get_azure_subnets())
         len_list = len(all_mirrors)
@@ -275,11 +278,13 @@ async def update_mirrors_handler() -> AnyStr:
                         _process_mirror(
                             subnets=subnets,
                             mirror_info=mirror_info,
-                            versions=versions, repos=repos,
-                            allowed_outdate=config[
-                                'allowed_outdate'],
+                            versions=config.versions,
+                            repos=config.repos,
+                            allowed_outdate=config.allowed_outdate,
                             db_session=db_session,
                             http_session=http_session,
+                            arches=config.arches,
+                            required_protocols=config.required_protocols,
                         )
                     ) for mirror_info in all_mirrors[start:end]
                 ))
@@ -310,7 +315,7 @@ def get_mirrors_list(
 ) -> AnyStr:
     mirrors_list = []
     config = get_config()
-    versions = [str(version) for version in config['versions']]
+    versions = [str(version) for version in config.versions]
     if version not in versions:
         try:
             version = next(ver for ver in versions if version.startswith(ver))
@@ -320,19 +325,20 @@ def get_mirrors_list(
                 version,
                 ', '.join(versions),
             )
-    repos = {repo['name']: repo['path'] for repo in config['repos']}
+    repos = {
+        repo.name: repo for repo in config.repos
+    }  # type: Dict[AnyStr, RepoData]
     if repository not in repos:
         raise UnknownRepositoryOrVersion(
             'Unknown repository "%s". Allowed list of repositories "%s"',
             repository,
             ', '.join(repos.keys()),
         )
-    repo_path = repos[repository]
+    repo_path = repos[repository].path
     nearest_mirrors = _get_nearest_mirrors(ip_address=ip_address)
     for mirror in nearest_mirrors:
-        # use http by default if it's available. otherwise - use https.
-        mirror_url = mirror.urls.get(REQUIRED_MIRROR_PROTOCOLS[1]) or \
-                     mirror.urls.get(REQUIRED_MIRROR_PROTOCOLS[0])
+        mirror_url = mirror.urls.get(config.required_protocols[0]) or \
+                     mirror.urls.get(config.required_protocols[1])
         full_mirror_path = os.path.join(
             mirror_url,
             version,
@@ -347,12 +353,13 @@ def _set_isos_link_for_mirror(
         mirror_info: MirrorData,
         version: AnyStr,
         arch: AnyStr,
+        config: MainConfig,
 ):
     urls = mirror_info.urls
     mirror_url = next(
         address for protocol_type, address in
         urls.items()
-        if protocol_type in REQUIRED_MIRROR_PROTOCOLS
+        if protocol_type in config.required_protocols
     )
     mirror_info.isos_link = os.path.join(
         mirror_url,
@@ -366,6 +373,7 @@ def get_isos_list_by_countries(
         arch: AnyStr,
         version: AnyStr,
         ip_address: AnyStr,
+        config: MainConfig,
 ) -> Tuple[Dict[AnyStr, List[MirrorData]], List[MirrorData]]:
     mirrors_by_countries = defaultdict(list)
     for mirror_info in get_all_mirrors():
@@ -377,7 +385,8 @@ def get_isos_list_by_countries(
         _set_isos_link_for_mirror(
             mirror_info=mirror_info,
             version=version,
-            arch=arch
+            arch=arch,
+            config=config,
         )
         mirrors_by_countries[mirror_info.country].append(mirror_info)
     nearest_mirrors = _get_nearest_mirrors(
@@ -388,19 +397,17 @@ def get_isos_list_by_countries(
         _set_isos_link_for_mirror(
             mirror_info=nearest_mirror,
             version=version,
-            arch=arch
+            arch=arch,
+            config=config,
         )
     return mirrors_by_countries, nearest_mirrors
 
 
-def get_main_isos_table() -> Dict[AnyStr, List[AnyStr]]:
+def get_main_isos_table(config) -> Dict[AnyStr, List[AnyStr]]:
     result = defaultdict(list)
-    config = get_config()
-    versions = config['versions']
-    duplicated_versions = config['duplicated_versions']
-    for arch in ARCHS:
-        result[arch] = [version for version in versions
-                        if version not in duplicated_versions]
+    for arch in config.arches:
+        result[arch] = [version for version in config.versions
+                        if version not in config.duplicated_versions]
 
     return result
 

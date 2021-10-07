@@ -13,7 +13,6 @@ from typing import (
     Dict,
     AnyStr,
     List,
-    Union,
     Tuple,
     Optional,
 )
@@ -32,18 +31,19 @@ from common.sentry import (
 )
 from urllib3.exceptions import HTTPError
 
+from db.data_models import MainConfig, RepoData
 from db.models import (
     Mirror,
     Url,
     Subnet,
     MirrorData,
     LocationData,
-    MirrorYamlData,
-    REQUIRED_MIRROR_PROTOCOLS,
-    ARCHS,
-    MIRROR_CONFIG_SCHEMA,
 )
-from db.utils import session_scope
+from db.data_models import MirrorYamlData
+from db.json_schemas import (
+    MIRROR_CONFIG_SCHEMA,
+    MAIN_CONFIG,
+)
 
 # set User-Agent for python-requests
 HEADERS = {
@@ -71,13 +71,47 @@ def get_config(
             os.getenv('CONFIG_ROOT'),
             'mirrors/updates/config.yml'
         )
-) -> Dict:
+) -> Optional[MainConfig]:
     """
     Read, parse and return mirrorlist config
     """
 
     with open(path_to_config, mode='r') as config_file:
-        return yaml.safe_load(config_file)
+        config = yaml.safe_load(config_file)
+        try:
+            validate(
+                config,
+                MAIN_CONFIG,
+            )
+            repos = []
+            for repo in config['repos']:
+                for repo_arch in repo.get('arches', []):
+                    if repo_arch not in config['arches']:
+                        raise ValidationError(
+                            message=f'Arch "{repo_arch}" of repo '
+                                    f'"{repo["name"]}" is absent '
+                                    'in the main list of arches'
+                        )
+                repos.append(RepoData(
+                    name=repo['name'],
+                    path=repo['path'],
+                    arches=repo.get('arches', []),
+                ))
+            return MainConfig(
+                allowed_outdate=config['allowed_outdate'],
+                mirrors_dir=config['mirrors_dir'],
+                versions=config['versions'],
+                duplicated_versions=config['duplicated_versions'],
+                arches=config['arches'],
+                required_protocols=config['required_protocols'],
+                repos=repos,
+            )
+        except ValidationError as err:
+            logger.error(
+                'Main config of mirror service is not valid, because "%s"',
+                err,
+            )
+            return
 
 
 def _load_mirror_info_from_yaml_file(
@@ -151,8 +185,10 @@ def get_mirrors_info(
 async def mirror_available(
         mirror_info: MirrorData,
         versions: List[AnyStr],
-        repos: List[Dict[AnyStr, Union[Dict, AnyStr]]],
+        repos: List[RepoData],
         http_session: ClientSession,
+        arches: List[AnyStr],
+        required_protocols: List[AnyStr],
 ) -> Tuple[AnyStr, bool]:
     """
     Check mirror availability
@@ -160,6 +196,10 @@ async def mirror_available(
                         (name, address, update frequency, sponsor info, email)
     :param versions: the list of versions which should be provided by a mirror
     :param repos: the list of repos which should be provided by a mirror
+    :param arches: list of default arches which are supported by a mirror
+    :param http_session: async HTTP session
+    :param required_protocols: list of network protocols any of them
+                               should be supported by a mirror
     """
     mirror_name = mirror_info.name
     logger.info('Checking mirror "%s"...', mirror_name)
@@ -167,18 +207,19 @@ async def mirror_available(
         urls = mirror_info.urls  # type: Dict[AnyStr, AnyStr]
         mirror_url = next(
             address for protocol_type, address in urls.items()
-            if protocol_type in REQUIRED_MIRROR_PROTOCOLS
+            if protocol_type in required_protocols
         )
     except StopIteration:
         logger.error(
             'Mirror "%s" has no one address with protocols "%s"',
             mirror_name,
-            REQUIRED_MIRROR_PROTOCOLS,
+            required_protocols,
         )
         return mirror_name, False
     for version in versions:
-        for repo_info in repos:
-            repo_path = repo_info['path'].replace('$basearch', ARCHS[0])
+        for repo_data in repos:
+            arches = repo_data.arches or arches
+            repo_path = repo_data.path.replace('$basearch', arches[0])
             check_url = os.path.join(
                 mirror_url,
                 str(version),
@@ -210,20 +251,23 @@ async def mirror_available(
 
 
 def set_repo_status(
-        mirror_info: MirrorData,
-        allowed_outdate: AnyStr
+    mirror_info: MirrorData,
+    allowed_outdate: AnyStr,
+    required_protocols: List[AnyStr],
 ) -> None:
     """
     Return status of a mirror
     :param mirror_info: info about a mirror
     :param allowed_outdate: allowed mirror lag
+    :param required_protocols: list of network protocols any of them
+                               should be supported by a mirror
     :return: Status of a mirror: expired or ok
     """
 
     urls = mirror_info.urls
     mirror_url = next(
         url for url_type, url in urls.items()
-        if url_type in REQUIRED_MIRROR_PROTOCOLS
+        if url_type in required_protocols
     )
     timestamp_url = os.path.join(
         mirror_url,
@@ -270,10 +314,12 @@ def set_repo_status(
 async def update_mirror_in_db(
         mirror_info: MirrorYamlData,
         versions: List[AnyStr],
-        repos: List[Dict[AnyStr, Union[Dict, AnyStr]]],
+        repos: List[RepoData],
         allowed_outdate: AnyStr,
         db_session: Session,
         http_session: ClientSession,
+        arches: List[AnyStr],
+        required_protocols: List[AnyStr]
 ) -> None:
     """
     Update record about a mirror in DB in background thread.
@@ -283,6 +329,11 @@ async def update_mirror_in_db(
     :param versions: the list of versions which should be provided by mirrors
     :param repos: the list of repos which should be provided by mirrors
     :param allowed_outdate: allowed mirror lag
+    :param arches: list of default arches which are supported by a mirror
+    :param required_protocols: list of network protocols any of them
+                               should be supported by a mirror
+    :param db_session: session to DB
+    :param http_session: async HTTP session
     """
 
     mirror_info = set_geo_data(mirror_info)
@@ -296,17 +347,22 @@ async def update_mirror_in_db(
             versions=versions,
             repos=repos,
             http_session=http_session,
+            arches=arches,
+            required_protocols=required_protocols,
         )
     if not is_available:
         return
-    set_repo_status(mirror_info, allowed_outdate)
+    set_repo_status(
+        mirror_info=mirror_info,
+        allowed_outdate=allowed_outdate,
+        required_protocols=required_protocols,
+    )
     urls_to_create = [
         Url(
             url=url,
             type=url_type,
         ) for url_type, url in mirror_info.urls.items()
     ]
-    # with session_scope() as session:
     for url_to_create in urls_to_create:
         db_session.add(url_to_create)
     mirror_to_create = Mirror(

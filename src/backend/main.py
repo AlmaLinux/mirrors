@@ -22,6 +22,7 @@ from api.handlers import (
     get_isos_list_by_countries,
     get_main_isos_table,
 )
+from api.mirrors_update import get_config
 from api.utils import (
     success_result,
     error_result,
@@ -101,9 +102,10 @@ def isos(
     data = {
         'main_title': 'AlmaLinux ISOs links'
     }
+    config = get_config()
     if arch is None or version is None:
         data.update({
-            'isos_list': get_main_isos_table(),
+            'isos_list': get_main_isos_table(config=config),
         })
 
         return render_template('isos_main.html', **data)
@@ -113,6 +115,7 @@ def isos(
             arch=arch,
             version=version,
             ip_address=ip_address,
+            config=config,
         )
         data.update({
             'arch': arch,
