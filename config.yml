@@ -52,4 +52,14 @@ repos:
     path: HighAvailability/debug/$basearch/
   - name: devel-debuginfo
     path: devel/debug/$basearch/
+  - name: raspberrypi
+    path: raspberrypi/$basearch/os/
+    arches:
+      - aarch64
+  - name: raspberrypi-source
+    path: raspberrypi/Source
+  - name: raspberrypi-debuginfo
+    path: raspberrypi/debug/$basearch/
+    arches:
+      - aarch64
 ...
