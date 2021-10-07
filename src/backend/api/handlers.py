@@ -40,6 +40,7 @@ from db.models import (
     MirrorData,
     get_asn_by_ip,
     is_ip_in_any_subnet,
+    Subnet,
 )
 from db.data_models import MirrorYamlData
 from db.utils import session_scope
@@ -263,6 +264,8 @@ async def update_mirrors_handler() -> AnyStr:
 
     with session_scope() as db_session:
         db_session.query(Mirror).delete()
+        db_session.query(Url).delete()
+        db_session.query(Subnet).delete()
         subnets = get_aws_subnets()
         subnets.update(get_azure_subnets())
         len_list = len(all_mirrors)
