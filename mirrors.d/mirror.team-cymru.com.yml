@@ -1,0 +1,9 @@
+---
+name: repo.almalinux.org
+address:
+  http: http://mirror.team-cymru.com/almalinux/h
+update_frequency: 12h
+sponsor: Team Cymru
+sponsor_url: https://team-cymru.com
+email: support@cymru.com
+...
