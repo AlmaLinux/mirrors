@@ -3,6 +3,7 @@
 pushd {{ config_root }}/mirrors/updates
 git fetch --all
 git reset --hard origin/master
+git pull
 popd
 # healthcheck, 10 minutes
 for i in $(seq 1 40); do
