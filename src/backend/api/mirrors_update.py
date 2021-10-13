@@ -78,6 +78,13 @@ def get_config(
 
     with open(path_to_config, mode='r') as config_file:
         config = yaml.safe_load(config_file)
+        if 'versions' in config:
+            versions = config['versions']
+            config['versions'] = [str(version) for version in versions]
+        if 'duplicated_versions' in config:
+            dup_versions = config['duplicated_versions']
+            config['duplicated_versions'] = [str(version) for version
+                                             in dup_versions]
         try:
             validate(
                 config,

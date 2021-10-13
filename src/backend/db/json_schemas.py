@@ -116,13 +116,13 @@ MAIN_CONFIG = {
                 "versions": {
                     "type": "array",
                     "items": {
-                        "type": "number"
+                        "type": "string"
                     }
                 },
                 "duplicated_versions": {
                     "type": "array",
                     "items": {
-                        "type": "number"
+                        "type": "string"
                     }
                 },
                 "required_protocols": {
