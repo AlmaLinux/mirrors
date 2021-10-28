@@ -46,6 +46,8 @@ logger = get_logger(__name__)
 
 AUTH_KEY = os.environ.get('AUTH_KEY')
 
+RANDOMIZE_WITHIN_KM = 750
+
 
 def jsonify_response(
         status: str,
@@ -302,7 +304,7 @@ def sort_mirrors_by_distance(request_geo_data: Tuple[float, float], mirrors: lis
     return mirrors
 
 
-def randomize_mirrors_within_distance(mirrors: list, shuffle_distance: int = 750):
+def randomize_mirrors_within_distance(mirrors: list, shuffle_distance: int = RANDOMIZE_WITHIN_KM):
     mirrors_shuffled = []
     other_mirrors = []
     for mirror in mirrors:
