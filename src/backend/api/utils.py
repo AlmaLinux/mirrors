@@ -40,6 +40,7 @@ from common.sentry import (
     get_logger,
 )
 from haversine import haversine
+from socket import gaierror
 
 logger = get_logger(__name__)
 
@@ -264,18 +265,35 @@ def get_coords_by_city(
         city: AnyStr,
         state: Optional[AnyStr],
         country: AnyStr
-):
-    geo = geopy.geocoders.Nominatim(
-        user_agent="mirrors.almalinux.org"
-    )
-    result = geo.geocode(
-        query={
-            'city': city,
-            'state': state,
-            'country': country
-        },
-        exactly_one=True
-    )
+) -> Tuple[float, float]:
+    try:
+        geo = geopy.geocoders.Nominatim(
+            user_agent="mirrors.almalinux.org",
+            domain='nominatim.openstreetmap.org'
+        )
+        result = geo.geocode(
+            query={
+                'city': city,
+                'state': state,
+                'country': country
+            },
+            exactly_one=True
+        )
+    except geopy.exc.GeocoderServiceError as e:
+        logger.error(
+            'Error retrieving Nominatim data for "%s".  Exception: "%s"',
+            f'{city}, {state}, {country}',
+            e
+        )
+        return 0.0, 0.0
+    except Exception as e:
+        logger.error(
+            'Unknown except occured in geopy/nominatim lookup. Exception Type: "%s". Exception: "%s".',
+            type(e),
+            e
+        )
+        return 0.0, 0.0
+
     try:
         return result.latitude, result.longitude
     except AttributeError:
