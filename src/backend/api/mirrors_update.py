@@ -167,6 +167,7 @@ def _load_mirror_info_from_yaml_file(
             asn=mirror_info.get('asn'),
             cloud_type=mirror_info.get('cloud_type', ''),
             cloud_region=','.join(cloud_regions),
+            geolocation=mirror_info.get('geolocation', None)
         )
 
 
@@ -376,6 +377,8 @@ async def update_mirror_in_db(
         name=mirror_info.name,
         continent=mirror_info.continent,
         country=mirror_info.country,
+        state=mirror_info.state,
+        city=mirror_info.city,
         ip=mirror_info.ip,
         latitude=mirror_info.location.latitude,
         longitude=mirror_info.location.longitude,
@@ -428,6 +431,8 @@ def set_geo_data(
         ip = '0.0.0.0'
     logger.info('Set geo data for mirror "%s"', mirror_name)
     if match is None:
+        state = 'Unknown'
+        city = 'Unknown'
         country = 'Unknown'
         continent = 'Unknown'
         ip = ip
@@ -436,14 +441,23 @@ def set_geo_data(
             longitude=-181,  # outside range of longitude (-180 to 180)
         )
     else:
-        continent, country, latitude, longitude = match
+        continent, country, state, city, latitude, longitude = match
         location = LocationData(
             latitude=latitude,
             longitude=longitude,
         )
+    # try to get geo data from yaml
+    try:
+        country = mirror_info.geolocation['country']
+        state = mirror_info.geolocation['state_province']
+        city = mirror_info.geolocation['city']
+    except TypeError:
+        pass
     return MirrorData(
         continent=continent,
         country=country,
+        state=state,
+        city=city,
         ip=ip,
         location=location,
         **asdict(mirror_info),

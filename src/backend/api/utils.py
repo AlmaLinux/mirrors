@@ -132,7 +132,7 @@ def error_result(f):
 
 def get_geo_data_by_ip(
         ip: AnyStr
-) -> Optional[Tuple[AnyStr, AnyStr, float, float]]:
+) -> Optional[Tuple[AnyStr, AnyStr, AnyStr, AnyStr, float, float]]:
     """
     The function returns continent, country and locations of IP in English
     """
@@ -142,12 +142,20 @@ def get_geo_data_by_ip(
         city = db.city(ip)
     except AddressNotFoundError:
         return
+    try:
+        city_name = city.city.name
+    except AttributeError:
+        city_name = None
+    try:
+        state = city.subdivisions.most_specific.name
+    except AttributeError:
+        state = None
     country = city.country.name
     continent = city.continent.name
     latitude = city.location.latitude
     longitude = city.location.longitude
 
-    return continent, country, latitude, longitude
+    return continent, country, state, city_name, latitude, longitude
 
 
 def get_azure_subnets_json() -> Optional[Dict]:

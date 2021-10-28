@@ -123,6 +123,8 @@ class Mirror(Base):
     name = Column(String, nullable=False)
     continent = Column(String, nullable=False)
     country = Column(String, nullable=False)
+    state = Column(String, nullable=True)
+    city = Column(String, nullable=True)
     ip = Column(String, nullable=False)
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)
@@ -166,6 +168,8 @@ class Mirror(Base):
             name=self.name,
             continent=self.continent,
             country=self.country,
+            state=self.state,
+            city=self.city,
             ip=self.ip,
             location=LocationData(
                 latitude=self.latitude,

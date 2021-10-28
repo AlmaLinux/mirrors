@@ -82,7 +82,7 @@ def _get_nearest_mirrors_by_network_data(
                 suitable_mirrors.append(mirror.to_dataclass())
         if 1 <= len(suitable_mirrors) < LENGTH_CLOUD_MIRRORS_LIST\
                 and match is not None:
-            continent, country, latitude, longitude = match
+            continent, country, state, city, latitude, longitude = match
             nearest_mirrors = session.query(Mirror).filter(
                 Mirror.name.not_in([mirror.name for mirror in
                                     suitable_mirrors])
@@ -131,7 +131,7 @@ def _get_nearest_mirrors_by_geo_data(
                 mirror.to_dataclass() for mirror in all_mirrors_query.all()
             ]
             return all_mirrors
-        continent, country, latitude, longitude = match
+        continent, country, state, city, latitude, longitude = match
         # get n-mirrors in a request's country
         mirrors_by_country_query = session.query(Mirror).filter(
             Mirror.continent == continent,
