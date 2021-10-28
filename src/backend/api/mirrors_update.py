@@ -458,10 +458,11 @@ def set_geo_data(
         # nominatim api AUP is 1req/s
         time.sleep(1)
         latitude, longitude = get_coords_by_city(city=city, state=state, country=country)
-        location = LocationData(
-            latitude=latitude,
-            longitude=longitude
-        )
+        if (0.0, 0.0) != (latitude, longitude):
+            location = LocationData(
+                latitude=latitude,
+                longitude=longitude
+            )
     except TypeError:
         pass
     return MirrorData(

@@ -279,7 +279,7 @@ def get_coords_by_city(
     try:
         return result.latitude, result.longitude
     except AttributeError:
-        return False
+        return 0.0, 0.0
 
 
 def get_distance_in_km(
