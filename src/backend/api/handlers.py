@@ -122,6 +122,7 @@ def _get_nearest_mirrors_by_geo_data(
     with session_scope() as session:
         all_mirrors_query = session.query(Mirror).filter(
             Mirror.is_expired == false(),
+            Mirror.cloud_type == null(),
             )
         if empty_for_unknown_ip:
             all_mirrors_query = session.query(Mirror).filter(
@@ -140,6 +141,7 @@ def _get_nearest_mirrors_by_geo_data(
             Mirror.continent == continent,
             Mirror.country == country,
             Mirror.is_expired == false(),
+            Mirror.cloud_type == null(),
             )
         # get n-mirrors mirrors inside a request's continent
         # but outside a request's contry
@@ -147,6 +149,7 @@ def _get_nearest_mirrors_by_geo_data(
             Mirror.continent == continent,
             Mirror.country != country,
             Mirror.is_expired == false(),
+            Mirror.cloud_type == null(),
             ).order_by(
             Mirror.conditional_distance(
                 lon=longitude,
@@ -161,6 +164,7 @@ def _get_nearest_mirrors_by_geo_data(
             Mirror.is_expired == false(),
             Mirror.continent != continent,
             Mirror.country != country,
+            Mirror.cloud_type == null(),
             ).order_by(
             Mirror.conditional_distance(
                 lon=longitude,
