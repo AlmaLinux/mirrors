@@ -1,6 +1,7 @@
 # coding=utf-8
 import asyncio
 import os
+import random
 from collections import defaultdict
 from typing import (
     AnyStr,
@@ -29,6 +30,8 @@ from api.utils import (
     get_aws_subnets,
     get_azure_subnets,
     set_subnets_for_hyper_cloud_mirror,
+    sort_mirrors_by_distance,
+    randomize_mirrors_within_distance
 )
 from db.data_models import (
     RepoData,
@@ -137,14 +140,7 @@ def _get_nearest_mirrors_by_geo_data(
             Mirror.continent == continent,
             Mirror.country == country,
             Mirror.is_expired == false(),
-            ).order_by(
-            Mirror.conditional_distance(
-                lon=longitude,
-                lat=latitude,
             )
-        ).limit(
-            LENGTH_GEO_MIRRORS_LIST,
-        )
         # get n-mirrors mirrors inside a request's continent
         # but outside a request's contry
         mirrors_by_continent_query = session.query(Mirror).filter(
@@ -188,12 +184,32 @@ def _get_nearest_mirrors_by_geo_data(
         mirrors_by_continent = mirrors_by_continent_query.all()
         all_rest_mirrors = all_rest_mirrors_query.all()
 
-        suitable_mirrors = mirrors_by_country + \
-            mirrors_by_continent + \
+        # sort mirrors by distance and randomize those within specified distance
+        # to avoid the same mirrors handling the majority of traffic especially
+        # within larger cities
+        if city or state:
+            mirrors_by_country = randomize_mirrors_within_distance(
+                sort_mirrors_by_distance(
+                    (latitude, longitude),
+                    [mirror.to_dataclass() for mirror in mirrors_by_country]
+                )
+            )
+        # if we don't have city or state data for a requesting IP then geoip isn't
+        # very accurate anyway so let's give it a random mirror to spread the load.
+        # many IPs are missing this data and this prevents all of those requests from
+        # disproportionately hitting mirrors near the geographical center of the US
+        else:
+            mirrors_by_country = [mirror.to_dataclass() for mirror in mirrors_by_country]
+            random.shuffle(mirrors_by_country)
+
+        suitable_mirrors = mirrors_by_continent + \
             all_rest_mirrors
+
         suitable_mirrors = [mirror.to_dataclass() for mirror
                             in suitable_mirrors[:LENGTH_GEO_MIRRORS_LIST]]
-    return suitable_mirrors
+        suitable_mirrors = mirrors_by_country + suitable_mirrors
+
+    return suitable_mirrors[:LENGTH_GEO_MIRRORS_LIST]
 
 
 def _get_nearest_mirrors(

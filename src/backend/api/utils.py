@@ -3,6 +3,7 @@ import inspect
 import os
 
 import time
+import random
 from collections import defaultdict
 from functools import wraps
 from typing import (
@@ -38,6 +39,7 @@ from werkzeug.exceptions import InternalServerError
 from common.sentry import (
     get_logger,
 )
+from haversine import haversine
 
 logger = get_logger(__name__)
 
@@ -276,3 +278,38 @@ def get_coords_by_city(
         return result.latitude, result.longitude
     except AttributeError:
         return False
+
+
+def get_distance_in_km(
+    mirror_coords: Tuple[float, float],
+    request_coords: Tuple[float, float]
+):
+    km = int(haversine(mirror_coords, request_coords))
+    return km
+
+
+def sort_mirrors_by_distance(request_geo_data: Tuple[float, float], mirrors: list):
+    mirrors_sorted = []
+    for mirror in mirrors:
+        mirrors_sorted.append({
+            'distance': get_distance_in_km(
+                mirror_coords=(mirror.location.latitude, mirror.location.longitude),
+                request_coords=request_geo_data
+            ),
+            'mirror': mirror
+        })
+    mirrors = sorted(mirrors_sorted, key=lambda i: i['distance'])
+    return mirrors
+
+
+def randomize_mirrors_within_distance(mirrors: list, shuffle_distance: int = 750):
+    mirrors_shuffled = []
+    other_mirrors = []
+    for mirror in mirrors:
+        if mirror['distance'] <= shuffle_distance:
+            mirrors_shuffled.append(mirror['mirror'])
+        else:
+            other_mirrors.append(mirror['mirror'])
+
+    random.shuffle(mirrors_shuffled)
+    return mirrors_shuffled + other_mirrors
