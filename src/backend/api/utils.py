@@ -151,7 +151,7 @@ def get_geo_data_by_ip(
         state = city.subdivisions.most_specific.name
     except AttributeError:
         state = None
-    country = city.country.name
+    country = city.country.iso_code
     continent = city.continent.name
     latitude = city.location.latitude
     longitude = city.location.longitude
