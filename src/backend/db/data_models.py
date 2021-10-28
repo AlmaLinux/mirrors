@@ -69,9 +69,9 @@ class MirrorData(
         return MirrorData(
             name=dct['name'],
             continent=dct['continent'],
-            country=dct['geolocation']['country'],
-            state=dct['geolocation']['state'],
-            city=dct['geolocation']['city'],
+            country=dct['country'],
+            state=dct['state'],
+            city=dct['city'],
             ip=dct['ip'],
             location=LocationData(
                 latitude=dct['location']['latitude'],
