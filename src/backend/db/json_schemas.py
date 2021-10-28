@@ -45,6 +45,20 @@ MIRROR_CONFIG_SCHEMA = {
                 },
             ],
         },
+        "geolocation": {
+            "type": "object",
+            "properties": {
+                "country": {
+                    "type": "string"
+                },
+                "state_province": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+            }
+        },
         "update_frequency": {
             "type": "string"
         },
