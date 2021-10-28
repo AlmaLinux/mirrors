@@ -137,7 +137,12 @@ def _get_nearest_mirrors_by_geo_data(
             Mirror.continent == continent,
             Mirror.country == country,
             Mirror.is_expired == false(),
-            ).limit(
+            ).order_by(
+            Mirror.conditional_distance(
+                lon=longitude,
+                lat=latitude,
+            )
+        ).limit(
             LENGTH_GEO_MIRRORS_LIST,
         )
         # get n-mirrors mirrors inside a request's continent

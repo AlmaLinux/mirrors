@@ -15,6 +15,7 @@ from typing import (
 )
 
 import requests
+import geopy
 from bs4 import BeautifulSoup
 from geoip2.errors import AddressNotFoundError
 
@@ -253,3 +254,25 @@ def set_subnets_for_hyper_cloud_mirror(
             for cloud_region in cloud_regions:
                 total_subnets.extend(subnets.get(cloud_region, []))
             mirror_info.subnets = total_subnets
+
+
+def get_coords_by_city(
+        city: AnyStr,
+        state: Optional[AnyStr],
+        country: AnyStr
+):
+    geo = geopy.geocoders.Nominatim(
+        user_agent="mirrors.almalinux.org"
+    )
+    result = geo.geocode(
+        query={
+            'city': city,
+            'state': state,
+            'country': country
+        },
+        exactly_one=True
+    )
+    try:
+        return result.latitude, result.longitude
+    except AttributeError:
+        return False

@@ -7,6 +7,7 @@ import requests
 import yaml
 import dateparser
 import socket
+import time
 
 from pathlib import Path
 from typing import (
@@ -24,7 +25,10 @@ from jsonschema import (
     validate,
 )
 
-from api.utils import get_geo_data_by_ip
+from api.utils import (
+    get_geo_data_by_ip,
+    get_coords_by_city
+)
 
 from common.sentry import (
     get_logger,
@@ -451,6 +455,13 @@ def set_geo_data(
         country = mirror_info.geolocation['country']
         state = mirror_info.geolocation['state_province']
         city = mirror_info.geolocation['city']
+        # nominatim api AUP is 1req/s
+        time.sleep(1)
+        latitude, longitude = get_coords_by_city(city=city, state=state, country=country)
+        location = LocationData(
+            latitude=latitude,
+            longitude=longitude
+        )
     except TypeError:
         pass
     return MirrorData(

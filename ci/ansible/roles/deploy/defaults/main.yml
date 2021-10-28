@@ -27,6 +27,7 @@ python_packages:
   - blinker==1.4
   - dataclasses==0.6
   - dateparser==1.0.0
+  - geopy==2.2.0
   - Flask-BS4==5.0.0.1
   - flask==2.0.1
   - flask[async]==2.0.1

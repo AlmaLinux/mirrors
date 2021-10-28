@@ -23,7 +23,7 @@ class _MirrorYamlDataBase:
     sponsor_name: AnyStr
     sponsor_url: AnyStr
     email: AnyStr
-    geolocation: Optional[dict]
+    geolocation: Optional[dict] = field(default_factory=dict)
 
 
 @dataclass
@@ -69,9 +69,9 @@ class MirrorData(
         return MirrorData(
             name=dct['name'],
             continent=dct['continent'],
-            country=dct['country'],
-            state=dct['state'],
-            city=dct['city'],
+            country=dct['geolocation']['country'],
+            state=dct['geolocation']['state'],
+            city=dct['geolocation']['city'],
             ip=dct['ip'],
             location=LocationData(
                 latitude=dct['location']['latitude'],
