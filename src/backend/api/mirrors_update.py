@@ -215,7 +215,6 @@ async def mirror_available(
     """
     mirror_name = mirror_info.name
     logger.info('Checking mirror "%s"...', mirror_name)
-    has_valid_version_and_arch = False
     try:
         urls = mirror_info.urls  # type: Dict[AnyStr, AnyStr]
         mirror_url = next(
@@ -247,7 +246,12 @@ async def mirror_available(
                 ) as resp:
                     await resp.text()
                     if resp.status == 200:
-                        has_valid_version_and_arch = True
+                        # if mirror has at least one valid version/arch combo
+                        logger.info(
+                            'Mirror "%s" is available',
+                            mirror_name,
+                        )
+                        return mirror_name, True
             except (ClientError, asyncio.TimeoutError) as err:
                 logger.error(
                     'Mirror "%s" is not available for version '
@@ -258,15 +262,6 @@ async def mirror_available(
                     err,
                 )
                 return mirror_name, False
-
-    # if mirror has at least one valid version/arch combo
-    if has_valid_version_and_arch:
-        logger.info(
-            'Mirror "%s" is available',
-            mirror_name,
-        )
-        return mirror_name, True
-
     # if mirror has no valid version/arch combos it is dead
     logger.error(
         'Mirror "%s" has no valid repositories',
