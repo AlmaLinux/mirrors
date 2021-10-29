@@ -2,6 +2,10 @@
 name: alma.davies-tech.com
 address:
   http: http://alma.davies-tech.com
+geolocation:
+  country: US
+  state_province: Tennessee
+  city: Memphis
 update_frequency: 3h
 sponsor: Davies Technologies
 sponsor_url: https://www.davies-technologies.com
