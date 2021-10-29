@@ -171,7 +171,7 @@ def _load_mirror_info_from_yaml_file(
             asn=mirror_info.get('asn'),
             cloud_type=mirror_info.get('cloud_type', ''),
             cloud_region=','.join(cloud_regions),
-            geolocation=mirror_info.get('geolocation')
+            geolocation=mirror_info.get('geolocation', {})
         )
 
 
@@ -452,9 +452,9 @@ def set_geo_data(
         )
     # try to get geo data from yaml
     try:
-        country = mirror_info.geolocation['country']
-        state = mirror_info.geolocation['state_province']
-        city = mirror_info.geolocation['city']
+        country = mirror_info.geolocation.get('country') or country
+        state = mirror_info.geolocation.get('state_province') or state
+        city = mirror_info.geolocation.get('city') or city
         # nominatim api AUP is 1req/s
         time.sleep(1)
         latitude, longitude = get_coords_by_city(city=city, state=state, country=country)

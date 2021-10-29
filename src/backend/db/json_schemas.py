@@ -52,10 +52,10 @@ MIRROR_CONFIG_SCHEMA = {
                     "type": "string"
                 },
                 "state_province": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "city": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
             }
         },
