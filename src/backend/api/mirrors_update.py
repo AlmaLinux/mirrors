@@ -453,8 +453,8 @@ def set_geo_data(
     # try to get geo data from yaml
     try:
         country = mirror_info.geolocation.get('country') or country
-        state = mirror_info.geolocation.get('state_province') or state
-        city = mirror_info.geolocation.get('city') or city
+        state = mirror_info.geolocation.get('state_province') or state or ''
+        city = mirror_info.geolocation.get('city') or city or ''
         # nominatim api AUP is 1req/s
         time.sleep(1)
         latitude, longitude = get_coords_by_city(city=city, state=state, country=country)
