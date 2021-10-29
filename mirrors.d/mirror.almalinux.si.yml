@@ -5,7 +5,7 @@ address:
   https: https://mirror.almalinux.si
 geolocation:
   country: SI
-  state_province: Osrednjeslovenska regija
+  state_province: Domzale
   city: Domzale
 update_frequency: 4h
 sponsor: tomas-si
