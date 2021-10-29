@@ -1,0 +1,13 @@
+---
+name: mirrors-nyj.hawkhost.com
+address:
+  https: https://mirrors-nyj.hawkhost.com/almalinux
+geolocation:
+  country: US
+  state_province: New Jersey
+  city: Newark
+update_frequency: 2h
+sponsor: Hawk Host Inc.
+sponsor_url: https://www.hawkhost.com
+email: almalinux@hawkhost.com
+...
