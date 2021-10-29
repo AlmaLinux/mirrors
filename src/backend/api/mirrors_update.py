@@ -171,7 +171,7 @@ def _load_mirror_info_from_yaml_file(
             asn=mirror_info.get('asn'),
             cloud_type=mirror_info.get('cloud_type', ''),
             cloud_region=','.join(cloud_regions),
-            geolocation=mirror_info.get('geolocation', None)
+            geolocation=mirror_info.get('geolocation')
         )
 
 
