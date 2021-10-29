@@ -1,5 +1,7 @@
 [Unit]
 Description={{ description }} Service
+After=network-online.target
+Wants=network-online.target
 
 [Timer]
 OnStartupSec=1m
