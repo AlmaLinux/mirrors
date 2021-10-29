@@ -1,0 +1,10 @@
+---
+name: mirror.almalinux.si
+address:
+  http: http://mirror.almalinux.si
+  https: https://mirror.almalinux.si
+update_frequency: 4h
+sponsor: tomas-si
+sponsor_url: https://almalinux.si
+email: mirror@almalinux.si
+...
