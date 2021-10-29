@@ -5,6 +5,6 @@ address:
   https: https://mirror.previder.nl/almalinux/
 update_frequency: 3h
 sponsor: Previder B.V.
-sponsor_url: https://previder.com
+sponsor_url: https://www.previder.com
 email: unix@previder.net
 ...
