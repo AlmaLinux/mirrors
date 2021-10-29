@@ -7,6 +7,7 @@ import requests
 import yaml
 import dateparser
 import socket
+import time
 
 from pathlib import Path
 from typing import (
@@ -24,7 +25,10 @@ from jsonschema import (
     validate,
 )
 
-from api.utils import get_geo_data_by_ip
+from api.utils import (
+    get_geo_data_by_ip,
+    get_coords_by_city
+)
 
 from common.sentry import (
     get_logger,
@@ -167,6 +171,7 @@ def _load_mirror_info_from_yaml_file(
             asn=mirror_info.get('asn'),
             cloud_type=mirror_info.get('cloud_type', ''),
             cloud_region=','.join(cloud_regions),
+            geolocation=mirror_info.get('geolocation', {})
         )
 
 
@@ -376,6 +381,8 @@ async def update_mirror_in_db(
         name=mirror_info.name,
         continent=mirror_info.continent,
         country=mirror_info.country,
+        state=mirror_info.state,
+        city=mirror_info.city,
         ip=mirror_info.ip,
         latitude=mirror_info.location.latitude,
         longitude=mirror_info.location.longitude,
@@ -428,6 +435,8 @@ def set_geo_data(
         ip = '0.0.0.0'
     logger.info('Set geo data for mirror "%s"', mirror_name)
     if match is None:
+        state = 'Unknown'
+        city = 'Unknown'
         country = 'Unknown'
         continent = 'Unknown'
         ip = ip
@@ -436,14 +445,31 @@ def set_geo_data(
             longitude=-181,  # outside range of longitude (-180 to 180)
         )
     else:
-        continent, country, latitude, longitude = match
+        continent, country, state, city, latitude, longitude = match
         location = LocationData(
             latitude=latitude,
             longitude=longitude,
         )
+    # try to get geo data from yaml
+    try:
+        country = mirror_info.geolocation.get('country') or country
+        state = mirror_info.geolocation.get('state_province') or state or ''
+        city = mirror_info.geolocation.get('city') or city or ''
+        # nominatim api AUP is 1req/s
+        time.sleep(1)
+        latitude, longitude = get_coords_by_city(city=city, state=state, country=country)
+        if (0.0, 0.0) != (latitude, longitude):
+            location = LocationData(
+                latitude=latitude,
+                longitude=longitude
+            )
+    except TypeError:
+        pass
     return MirrorData(
         continent=continent,
         country=country,
+        state=state,
+        city=city,
         ip=ip,
         location=location,
         **asdict(mirror_info),

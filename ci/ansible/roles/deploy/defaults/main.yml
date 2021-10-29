@@ -27,11 +27,13 @@ python_packages:
   - blinker==1.4
   - dataclasses==0.6
   - dateparser==1.0.0
+  - geopy==2.2.0
   - Flask-BS4==5.0.0.1
   - flask==2.0.1
   - flask[async]==2.0.1
   - flask_api==3.0.post1
   - geoip2==4.2.0
+  - haversine==2.5.1
   - jsonschema==3.2.0
   - Jinja2==3.0.1
   - lxml==4.6.3

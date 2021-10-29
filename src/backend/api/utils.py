@@ -3,6 +3,7 @@ import inspect
 import os
 
 import time
+import random
 from collections import defaultdict
 from functools import wraps
 from typing import (
@@ -15,6 +16,7 @@ from typing import (
 )
 
 import requests
+import geopy
 from bs4 import BeautifulSoup
 from geoip2.errors import AddressNotFoundError
 
@@ -37,11 +39,15 @@ from werkzeug.exceptions import InternalServerError
 from common.sentry import (
     get_logger,
 )
+from haversine import haversine
+from socket import gaierror
 
 logger = get_logger(__name__)
 
 
 AUTH_KEY = os.environ.get('AUTH_KEY')
+
+RANDOMIZE_WITHIN_KM = 750
 
 
 def jsonify_response(
@@ -132,7 +138,7 @@ def error_result(f):
 
 def get_geo_data_by_ip(
         ip: AnyStr
-) -> Optional[Tuple[AnyStr, AnyStr, float, float]]:
+) -> Optional[Tuple[AnyStr, AnyStr, AnyStr, AnyStr, float, float]]:
     """
     The function returns continent, country and locations of IP in English
     """
@@ -142,12 +148,20 @@ def get_geo_data_by_ip(
         city = db.city(ip)
     except AddressNotFoundError:
         return
-    country = city.country.name
+    try:
+        city_name = city.city.name
+    except AttributeError:
+        city_name = None
+    try:
+        state = city.subdivisions.most_specific.name
+    except AttributeError:
+        state = None
+    country = city.country.iso_code
     continent = city.continent.name
     latitude = city.location.latitude
     longitude = city.location.longitude
 
-    return continent, country, latitude, longitude
+    return continent, country, state, city_name, latitude, longitude
 
 
 def get_azure_subnets_json() -> Optional[Dict]:
@@ -245,3 +259,77 @@ def set_subnets_for_hyper_cloud_mirror(
             for cloud_region in cloud_regions:
                 total_subnets.extend(subnets.get(cloud_region, []))
             mirror_info.subnets = total_subnets
+
+
+def get_coords_by_city(
+        city: AnyStr,
+        state: Optional[AnyStr],
+        country: AnyStr
+) -> Tuple[float, float]:
+    try:
+        geo = geopy.geocoders.Nominatim(
+            user_agent="mirrors.almalinux.org",
+            domain='nominatim.openstreetmap.org'
+        )
+        result = geo.geocode(
+            query={
+                'city': city,
+                'state': state,
+                'country': country
+            },
+            exactly_one=True
+        )
+    except geopy.exc.GeocoderServiceError as e:
+        logger.error(
+            'Error retrieving Nominatim data for "%s".  Exception: "%s"',
+            f'{city}, {state}, {country}',
+            e
+        )
+        return 0.0, 0.0
+    except Exception as e:
+        logger.error(
+            'Unknown except occured in geopy/nominatim lookup. Exception Type: "%s". Exception: "%s".',
+            type(e),
+            e
+        )
+        return 0.0, 0.0
+
+    try:
+        return result.latitude, result.longitude
+    except AttributeError:
+        return 0.0, 0.0
+
+
+def get_distance_in_km(
+    mirror_coords: Tuple[float, float],
+    request_coords: Tuple[float, float]
+):
+    km = int(haversine(mirror_coords, request_coords))
+    return km
+
+
+def sort_mirrors_by_distance(request_geo_data: Tuple[float, float], mirrors: list):
+    mirrors_sorted = []
+    for mirror in mirrors:
+        mirrors_sorted.append({
+            'distance': get_distance_in_km(
+                mirror_coords=(mirror.location.latitude, mirror.location.longitude),
+                request_coords=request_geo_data
+            ),
+            'mirror': mirror
+        })
+    mirrors = sorted(mirrors_sorted, key=lambda i: i['distance'])
+    return mirrors
+
+
+def randomize_mirrors_within_distance(mirrors: list, shuffle_distance: int = RANDOMIZE_WITHIN_KM):
+    mirrors_shuffled = []
+    other_mirrors = []
+    for mirror in mirrors:
+        if mirror['distance'] <= shuffle_distance:
+            mirrors_shuffled.append(mirror['mirror'])
+        else:
+            other_mirrors.append(mirror['mirror'])
+
+    random.shuffle(mirrors_shuffled)
+    return mirrors_shuffled + other_mirrors
