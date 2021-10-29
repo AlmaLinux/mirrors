@@ -1,0 +1,10 @@
+---
+name: mirror.previder.nl
+address:
+  http: http://mirror.previder.nl/almalinux/
+  https: https://mirror.previder.nl/almalinux/
+update_frequency: 3h
+sponsor: Previder B.V.
+sponsor_url: https://previder.com
+email: unix@previder.net
+...
