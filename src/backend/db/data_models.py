@@ -10,6 +10,7 @@ from dataclasses import (
     field,
 )
 
+
 @dataclass
 class LocationData:
     latitude: float
@@ -33,6 +34,7 @@ class _MirrorYamlDataDefaultBase:
     asn: Optional[AnyStr] = None
     cloud_type: AnyStr = ''
     cloud_region: AnyStr = ''
+    private: bool = False
 
 
 @dataclass

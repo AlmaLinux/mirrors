@@ -93,6 +93,9 @@ MIRROR_CONFIG_SCHEMA = {
                     "type": "string",
                 }
             ]
+        },
+        'private': {
+            'type': 'boolean'
         }
     },
     "required": [
@@ -100,8 +103,13 @@ MIRROR_CONFIG_SCHEMA = {
         "address",
         "update_frequency",
         "sponsor",
-        "sponsor_url",
+        "sponsor_url"
     ],
+    'dependentRequired': {
+        'private': [
+            'subnets'
+        ]
+    },
     "dependencies": {
         "cloud_type": {"required": ["cloud_regions"]}
     }
