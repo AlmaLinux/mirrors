@@ -2,7 +2,7 @@
 import os
 
 from geoip2.database import Reader
-from redis import Redis
+import aioredis
 from sqlalchemy import create_engine
 
 GEOIP_PATH = os.environ.get('GEOIP_PATH')
@@ -71,13 +71,5 @@ class RedisEngine:
     __instance = None
 
     @classmethod
-    def get_instance(cls):
-        if not cls.__instance:
-            cls.__instance = Redis(
-                host=REDIS_HOST,
-                port=REDIS_PORT,
-                db=REDIS_DB,
-                charset="utf-8",
-                decode_responses=True
-            )
-        return cls.__instance
+    async def get_instance(cls):
+        return aioredis.from_url("redis://%s:%s/%s" % (REDIS_HOST, REDIS_PORT, REDIS_DB))

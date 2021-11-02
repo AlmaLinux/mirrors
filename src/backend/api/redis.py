@@ -5,6 +5,8 @@ from typing import (
     AnyStr,
     Optional,
     List,
+    Tuple,
+    Dict
 )
 
 from db.db_engine import RedisEngine
@@ -21,15 +23,15 @@ logger = get_logger(__name__)
 CACHE_EXPIRED_TIME = 24 * 3600  # 24 hours
 
 
-def get_mirrors_from_cache(
+async def get_mirrors_from_cache(
         key: AnyStr,
 ) -> Optional[List[MirrorData]]:
     """
     Get a cached list of mirrors for specified IP
     """
     key = str(key)
-    redis_engine = RedisEngine.get_instance()
-    mirrors_string = redis_engine.get(key)
+    redis_engine = await RedisEngine.get_instance()
+    mirrors_string = await redis_engine.get(key)
     if mirrors_string is not None:
         mirrors_json = json.loads(
             mirrors_string,
@@ -38,7 +40,7 @@ def get_mirrors_from_cache(
                 for mirror_json in mirrors_json]
 
 
-def set_mirrors_to_cache(
+async def set_mirrors_to_cache(
         key: AnyStr,
         mirrors: List[MirrorData],
 ) -> None:
@@ -46,22 +48,39 @@ def set_mirrors_to_cache(
     Save a mirror list for specified IP to cache
     """
     key = str(key)
-    redis_engine = RedisEngine.get_instance()
+    redis_engine = await RedisEngine.get_instance()
     mirrors = json.dumps(mirrors, cls=DataClassesJSONEncoder)
-    redis_engine.set(
+    await redis_engine.set(
         key,
         mirrors,
         CACHE_EXPIRED_TIME,
     )
 
 
-def get_url_types_from_cache() -> List[AnyStr]:
-    redis_engine = RedisEngine.get_instance()
-    url_types_string = redis_engine.get('url_types')
+async def get_geolocation_from_cache(key: AnyStr) -> Optional[Dict]:
+    key = str(key)
+    redis_engine = await RedisEngine.get_instance()
+    coords = await redis_engine.get(key)
+    if coords:
+        return json.loads(coords)
+
+
+async def set_geolocation_to_cache(key: AnyStr, coords: Tuple) -> None:
+    key = str(key)
+    redis_engine = await RedisEngine.get_instance()
+    await redis_engine.set(
+        key,
+        json.dumps(coords)
+    )
+
+
+async def get_url_types_from_cache() -> List[AnyStr]:
+    redis_engine = await RedisEngine.get_instance()
+    url_types_string = await redis_engine.get('url_types')
     if url_types_string is not None:
         return json.loads(url_types_string)
 
 
-def set_url_types_to_cache(url_types: List[AnyStr]):
-    redis_engine = RedisEngine.get_instance()
-    redis_engine.set('url_types', json.dumps(url_types), CACHE_EXPIRED_TIME)
+async def set_url_types_to_cache(url_types: List[AnyStr]):
+    redis_engine = await RedisEngine.get_instance()
+    await redis_engine.set('url_types', json.dumps(url_types), CACHE_EXPIRED_TIME)

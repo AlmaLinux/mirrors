@@ -41,7 +41,11 @@ from common.sentry import (
     get_logger,
 )
 from haversine import haversine
-from socket import gaierror
+from sqlalchemy.orm import Session
+from api.redis import (
+    get_geolocation_from_cache,
+    set_geolocation_to_cache
+)
 
 logger = get_logger(__name__)
 
@@ -282,6 +286,10 @@ async def get_coords_by_city(
         country: AnyStr,
         sem: asyncio.Semaphore
 ) -> Tuple[float, float]:
+    geolocation_from_cache = await get_geolocation_from_cache('nominatim_%s_%s_%s' % (country, state, city))
+    if geolocation_from_cache:
+        return geolocation_from_cache['latitude'], geolocation_from_cache['longitude']
+
     try:
         async with sem:
             async with geopy.geocoders.Nominatim(
@@ -297,8 +305,12 @@ async def get_coords_by_city(
                     },
                     exactly_one=True
                 )
+                await set_geolocation_to_cache('nominatim_%s_%s_%s' %
+                                               (country, state, city),
+                                               {'latitude': result.latitude, 'longitude': result.longitude}
+                                               )
             # nominatim api AUP is 1req/s
-            await asyncio.sleep(1)
+            await asyncio.sleep(2)
     except geopy.exc.GeocoderServiceError as e:
         logger.error(
             'Error retrieving Nominatim data for "%s".  Exception: "%s"',

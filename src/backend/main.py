@@ -55,12 +55,12 @@ def _get_request_ip() -> AnyStr:
 )
 @success_result
 @error_result
-def get_mirror_list(
+async def get_mirror_list(
         version: AnyStr,
         repository: AnyStr,
 ):
     ip_address = _get_request_ip()
-    return get_mirrors_list(
+    return await get_mirrors_list(
         ip_address=ip_address,
         version=version,
         repository=repository,
@@ -95,7 +95,7 @@ async def update_mirrors():
     '/isos/<arch>/<version>.html',
     methods=('GET',),
 )
-def isos(
+async def isos(
         arch: AnyStr = None,
         version: AnyStr = None,
 ):
@@ -111,7 +111,7 @@ def isos(
         return render_template('isos_main.html', **data)
     else:
         ip_address = _get_request_ip()
-        mirrors_by_countries, nearest_mirrors = get_isos_list_by_countries(
+        mirrors_by_countries, nearest_mirrors = await get_isos_list_by_countries(
             arch=arch,
             version=version,
             ip_address=ip_address,
@@ -130,8 +130,8 @@ def isos(
     '/',
     methods=('GET',),
 )
-def mirrors_table():
-    url_types = sorted(get_url_types())
+async def mirrors_table():
+    url_types = sorted(await get_url_types())
     data = {
         'column_names': [
             'Name',
@@ -190,5 +190,5 @@ if __name__ == '__main__':
     app.run(
         debug=True,
         host='0.0.0.0',
-        port=8082,
+        port=8080,
     )

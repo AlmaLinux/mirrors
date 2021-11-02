@@ -255,7 +255,7 @@ async def mirror_available(
                     if resp.status != 200:
                         # if mirror has no valid version/arch combos it is dead
                         logger.error(
-                            'Mirror "%s" has one or more invalid repositories',
+                            'Mirror "%s" has no valid repositories',
                             mirror_name
                         )
                         return mirror_name, False
@@ -447,11 +447,13 @@ async def update_mirror_in_db(
 
 async def set_geo_data(
         mirror_info: MirrorYamlData,
-        sem,
+        sem: asyncio.Semaphore
 ) -> MirrorData:
     """
     Set geo data by IP of a mirror
     :param mirror_info: Dict with info about a mirror
+    :param sem: asyncio Semaphore
+    :param db: db session
     """
     mirror_name = mirror_info.name
     try:
@@ -487,7 +489,9 @@ async def set_geo_data(
         city = mirror_info.geolocation.get('city') or city or ''
         # we don't need to do lookups except when geolocation is set in yaml
         if mirror_info.geolocation:
-            coords = await asyncio.create_task(get_coords_by_city(city=city, state=state, country=country, sem=sem))
+            coords = await get_coords_by_city(
+                city=city, state=state, country=country, sem=sem
+            )
             latitude, longitude = coords
             if (0.0, 0.0) != (latitude, longitude):
                 location = LocationData(
