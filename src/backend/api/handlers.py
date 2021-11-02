@@ -10,7 +10,7 @@ from typing import (
     Tuple,
 )
 
-from aiohttp import ClientSession
+from aiohttp import ClientSession, TCPConnector
 from sqlalchemy.orm import Session
 
 from api.exceptions import UnknownRepositoryOrVersion
@@ -262,22 +262,26 @@ async def _process_mirror(
         http_session: ClientSession,
         arches: List[AnyStr],
         required_protocols: List[AnyStr],
+        nominatim_sem: asyncio.Semaphore,
+        mirror_check_sem: asyncio.Semaphore
 ):
     set_subnets_for_hyper_cloud_mirror(
         subnets=subnets,
         mirror_info=mirror_info,
 
     )
-    await update_mirror_in_db(
-        mirror_info=mirror_info,
-        versions=versions,
-        repos=repos,
-        allowed_outdate=allowed_outdate,
-        db_session=db_session,
-        http_session=http_session,
-        arches=arches,
-        required_protocols=required_protocols,
-    )
+    async with mirror_check_sem:
+        await update_mirror_in_db(
+            mirror_info=mirror_info,
+            versions=versions,
+            repos=repos,
+            allowed_outdate=allowed_outdate,
+            db_session=db_session,
+            http_session=http_session,
+            arches=arches,
+            required_protocols=required_protocols,
+            sem=nominatim_sem
+        )
 
 
 async def update_mirrors_handler() -> AnyStr:
@@ -291,32 +295,36 @@ async def update_mirrors_handler() -> AnyStr:
         mirrors_dir=mirrors_dir,
     )
 
+    # semaphore for nominatim
+    nominatim_sem = asyncio.Semaphore(1)
+
     with session_scope() as db_session:
         db_session.query(Mirror).delete()
         db_session.query(Url).delete()
         db_session.query(Subnet).delete()
-        subnets = get_aws_subnets()
-        subnets.update(get_azure_subnets())
         len_list = len(all_mirrors)
-        procs = 30
-        async with ClientSession() as http_session:
-            for start in range(0, len_list + 1, procs):
-                end = start + procs if start + procs <= len_list else len_list
-                await asyncio.gather(*(
-                    asyncio.ensure_future(
-                        _process_mirror(
-                            subnets=subnets,
-                            mirror_info=mirror_info,
-                            versions=config.versions,
-                            repos=config.repos,
-                            allowed_outdate=config.allowed_outdate,
-                            db_session=db_session,
-                            http_session=http_session,
-                            arches=config.arches,
-                            required_protocols=config.required_protocols,
-                        )
-                    ) for mirror_info in all_mirrors[start:end]
-                ))
+        mirror_check_sem = asyncio.Semaphore(100)
+        conn = TCPConnector(limit=10000, force_close=True)
+        async with ClientSession(connector=conn, headers={"Connection": "close"}) as http_session:
+            subnets = await get_aws_subnets(http_session=http_session)
+            subnets.update(await get_azure_subnets(http_session=http_session))
+            await asyncio.gather(*(
+                asyncio.ensure_future(
+                    _process_mirror(
+                        subnets=subnets,
+                        mirror_info=mirror_info,
+                        versions=config.versions,
+                        repos=config.repos,
+                        allowed_outdate=config.allowed_outdate,
+                        db_session=db_session,
+                        http_session=http_session,
+                        arches=config.arches,
+                        required_protocols=config.required_protocols,
+                        nominatim_sem=nominatim_sem,
+                        mirror_check_sem=mirror_check_sem,
+                    )
+                ) for mirror_info in all_mirrors
+            ))
         db_session.flush()
 
     return 'Done'

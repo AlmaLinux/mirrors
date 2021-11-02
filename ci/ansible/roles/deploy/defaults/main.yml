@@ -22,6 +22,7 @@ dnf_packages:
   # for testing purposes
   - sqlite
 python_packages:
+  - aiodns==3.0.0
   - alembic==1.7.1
   - beautifulsoup4==4.10.0
   - blinker==1.4

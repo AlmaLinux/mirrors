@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 import asyncio
+import aiodns
 import os
 from dataclasses import asdict
 
 import requests
 import yaml
 import dateparser
-import socket
 import time
 
 from pathlib import Path
@@ -249,17 +249,19 @@ async def mirror_available(
                 async with http_session.get(
                     check_url,
                     headers=HEADERS,
-                    timeout=45,
+                    timeout=30,
                 ) as resp:
                     await resp.text()
-                    if resp.status == 200:
-                        # if mirror has at least one valid version/arch combo
-                        logger.info(
-                            'Mirror "%s" is available',
-                            mirror_name,
+                    if resp.status != 200:
+                        # if mirror has no valid version/arch combos it is dead
+                        logger.error(
+                            'Mirror "%s" has one or more invalid repositories',
+                            mirror_name
                         )
-                        return mirror_name, True
-            except (ClientError, asyncio.TimeoutError) as err:
+                        return mirror_name, False
+            except (ClientError, asyncio.exceptions.TimeoutError) as err:
+                if type(err) == asyncio.exceptions.TimeoutError:
+                    err = type(err)
                 logger.error(
                     'Mirror "%s" is not available for version '
                     '"%s" and repo path "%s" because "%s"',
@@ -269,18 +271,19 @@ async def mirror_available(
                     err,
                 )
                 return mirror_name, False
-    # if mirror has no valid version/arch combos it is dead
-    logger.error(
-        'Mirror "%s" has no valid repositories',
-        mirror_name
+    # if mirror has at least one valid version/arch combo
+    logger.info(
+        'Mirror "%s" is available',
+        mirror_name,
     )
-    return mirror_name, False
+    return mirror_name, True
 
 
-def set_repo_status(
+async def set_repo_status(
     mirror_info: MirrorData,
     allowed_outdate: AnyStr,
     required_protocols: List[AnyStr],
+    http_session: ClientSession
 ) -> None:
     """
     Return status of a mirror
@@ -304,11 +307,13 @@ def set_repo_status(
         'TIME',
     )
     try:
-        request = requests.get(
-            url=timestamp_url,
+        async with http_session.get(
+            timestamp_url,
             headers=HEADERS,
-        )
-        request.raise_for_status()
+            timeout=30,
+            raise_for_status=True
+        ) as resp:
+            timestamp_response = await resp.text()
     except (requests.RequestException, HTTPError):
         logger.error(
             'Mirror "%s" has no timestamp file by url "%s"',
@@ -322,7 +327,7 @@ def set_repo_status(
             f'now-{allowed_outdate} UTC'
         ).timestamp()
         try:
-            mirror_last_updated = float(request.content)
+            mirror_last_updated = float(timestamp_response)
         except ValueError:
             logger.info(
                 'Mirror "%s" has broken timestamp file by url "%s"',
@@ -349,7 +354,8 @@ async def update_mirror_in_db(
         db_session: Session,
         http_session: ClientSession,
         arches: List[AnyStr],
-        required_protocols: List[AnyStr]
+        required_protocols: List[AnyStr],
+        sem: asyncio.Semaphore
 ) -> None:
     """
     Update record about a mirror in DB in background thread.
@@ -364,9 +370,10 @@ async def update_mirror_in_db(
                                should be supported by a mirror
     :param db_session: session to DB
     :param http_session: async HTTP session
+    :param sem: asyncio Semaphore object
     """
 
-    mirror_info = set_geo_data(mirror_info)
+    mirror_info = await set_geo_data(mirror_info, sem)
     mirror_name = mirror_info.name
     if mirror_name in WHITELIST_MIRRORS:
         mirror_info.is_expired = False
@@ -382,10 +389,11 @@ async def update_mirror_in_db(
         )
     if not is_available:
         return
-    set_repo_status(
+    await set_repo_status(
         mirror_info=mirror_info,
         allowed_outdate=allowed_outdate,
         required_protocols=required_protocols,
+        http_session=http_session,
     )
     urls_to_create = [
         Url(
@@ -437,8 +445,9 @@ async def update_mirror_in_db(
     )
 
 
-def set_geo_data(
+async def set_geo_data(
         mirror_info: MirrorYamlData,
+        sem,
 ) -> MirrorData:
     """
     Set geo data by IP of a mirror
@@ -446,10 +455,12 @@ def set_geo_data(
     """
     mirror_name = mirror_info.name
     try:
-        ip = socket.gethostbyname(mirror_name)
+        resolver = aiodns.DNSResolver(timeout=5, tries=2)
+        dns = await resolver.query(mirror_name, 'A')
+        ip = dns[0].host
         match = get_geo_data_by_ip(ip)
-    except socket.gaierror:
-        logger.error('Can\'t get IP of mirror %s', mirror_name)
+    except aiodns.error.DNSError as e:
+        logger.error('Can\'t get IP of mirror %s: %s', mirror_name, e)
         match = None
         ip = '0.0.0.0'
     logger.info('Set geo data for mirror "%s"', mirror_name)
@@ -474,16 +485,19 @@ def set_geo_data(
         country = mirror_info.geolocation.get('country') or country
         state = mirror_info.geolocation.get('state_province') or state or ''
         city = mirror_info.geolocation.get('city') or city or ''
-        # nominatim api AUP is 1req/s
-        time.sleep(1)
-        latitude, longitude = get_coords_by_city(city=city, state=state, country=country)
-        if (0.0, 0.0) != (latitude, longitude):
-            location = LocationData(
-                latitude=latitude,
-                longitude=longitude
-            )
+        # we don't need to do lookups except when geolocation is set in yaml
+        if mirror_info.geolocation:
+            coords = await asyncio.create_task(get_coords_by_city(city=city, state=state, country=country, sem=sem))
+            latitude, longitude = coords
+            if (0.0, 0.0) != (latitude, longitude):
+                location = LocationData(
+                    latitude=latitude,
+                    longitude=longitude
+                )
     except TypeError:
-        pass
+        logger.error(
+            'Nominatim likely blocked us'
+        )
     return MirrorData(
         continent=continent,
         country=country,

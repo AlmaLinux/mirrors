@@ -1,6 +1,7 @@
 # coding=utf-8
 import inspect
 import os
+import asyncio
 
 import time
 import random
@@ -15,7 +16,7 @@ from typing import (
     List,
 )
 
-import requests
+from aiohttp import ClientSession, client_exceptions
 import geopy
 from bs4 import BeautifulSoup
 from geoip2.errors import AddressNotFoundError
@@ -164,23 +165,28 @@ def get_geo_data_by_ip(
     return continent, country, state, city_name, latitude, longitude
 
 
-def get_azure_subnets_json() -> Optional[Dict]:
+async def get_azure_subnets_json(http_session: ClientSession) -> Optional[Dict]:
     url = 'https://www.microsoft.com/en-us/download/confirmation.aspx?id=56519'
     link_attributes = {
         'data-bi-id': 'downloadretry',
     }
-    req = requests.get(url)
     try:
-        req.raise_for_status()
-    except requests.RequestException as err:
+        async with http_session.get(
+                url,
+                timeout=30,
+                raise_for_status=True
+        ) as resp:
+            response_text = await resp.text()
+    except client_exceptions.ClientConnectorError as err:
         logger.error(
-            'Cannot get json with Azure subnets by url "%s" because "%s"',
+            'Cannot get json with Azure subnets by url "%s" because "%s": %s',
             url,
             err,
+            type(err)
         )
         return
     try:
-        soup = BeautifulSoup(req.content, features='lxml')
+        soup = BeautifulSoup(response_text, features='lxml')
         link_tag = soup.find('a', attrs=link_attributes)
         link_to_json_url = link_tag.attrs['href']
     except (ValueError, KeyError) as err:
@@ -191,34 +197,43 @@ def get_azure_subnets_json() -> Optional[Dict]:
         )
         return
     try:
-        req = requests.get(link_to_json_url)
-        req.raise_for_status()
-    except requests.RequestException as err:
+        async with http_session.get(
+            link_to_json_url,
+            timeout=30,
+            raise_for_status=True
+        ) as resp:
+            response_json = await resp.json(content_type='application/octet-stream')
+    except Exception as err:
         logger.error(
             'Cannot get json with Azure subnets by url "%s" because "%s"',
             link_to_json_url,
             err,
         )
-    return req.json()
+    return response_json
 
 
-def get_aws_subnets_json() -> Optional[Dict]:
+async def get_aws_subnets_json(http_session: ClientSession) -> Optional[Dict]:
     url = 'https://ip-ranges.amazonaws.com/ip-ranges.json'
     try:
-        req = requests.get(url)
-        req.raise_for_status()
-    except requests.RequestException as err:
+        async with http_session.get(
+            url,
+            timeout=30,
+            raise_for_status=True
+        ) as resp:
+            response_json = await resp.json()
+    except aiohttp.client_exceptions.ClientConnectorError as err:
         logger.error(
-            'Cannot get json with AWS subnets by url "%s" because "%s"',
+            'Cannot get json with AWS subnets by url "%s" because "%s": %s',
             url,
             err,
+            type(err)
         )
         return
-    return req.json()
+    return response_json
 
 
-def get_azure_subnets():
-    data_json = get_azure_subnets_json()
+async def get_azure_subnets(http_session: ClientSession):
+    data_json = await get_azure_subnets_json(http_session=http_session)
     if data_json is None:
         return
     values = data_json['values']
@@ -231,8 +246,8 @@ def get_azure_subnets():
     return subnets
 
 
-def get_aws_subnets():
-    data_json = get_aws_subnets_json()
+async def get_aws_subnets(http_session: ClientSession):
+    data_json = await get_aws_subnets_json(http_session=http_session)
     subnets = defaultdict(list)
     if data_json is None:
         return
@@ -261,24 +276,29 @@ def set_subnets_for_hyper_cloud_mirror(
             mirror_info.subnets = total_subnets
 
 
-def get_coords_by_city(
+async def get_coords_by_city(
         city: AnyStr,
         state: Optional[AnyStr],
-        country: AnyStr
+        country: AnyStr,
+        sem: asyncio.Semaphore
 ) -> Tuple[float, float]:
     try:
-        geo = geopy.geocoders.Nominatim(
-            user_agent="mirrors.almalinux.org",
-            domain='nominatim.openstreetmap.org'
-        )
-        result = geo.geocode(
-            query={
-                'city': city,
-                'state': state,
-                'country': country
-            },
-            exactly_one=True
-        )
+        async with sem:
+            async with geopy.geocoders.Nominatim(
+                user_agent="mirrors.almalinux.org",
+                domain='nominatim.openstreetmap.org',
+                adapter_factory=geopy.adapters.AioHTTPAdapter
+            ) as geo:
+                result = await geo.geocode(
+                    query={
+                        'city': city,
+                        'state': state,
+                        'country': country
+                    },
+                    exactly_one=True
+                )
+            # nominatim api AUP is 1req/s
+            await asyncio.sleep(1)
     except geopy.exc.GeocoderServiceError as e:
         logger.error(
             'Error retrieving Nominatim data for "%s".  Exception: "%s"',
