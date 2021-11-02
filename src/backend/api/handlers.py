@@ -50,6 +50,7 @@ from db.utils import session_scope
 from sqlalchemy.sql.expression import (
     null,
     false,
+    or_,
 )
 from common.sentry import (
     get_logger,
@@ -75,7 +76,10 @@ def _get_nearest_mirrors_by_network_data(
     suitable_mirrors = []
     with session_scope() as session:
         mirrors = session.query(Mirror).filter(
-            (Mirror.asn != null()) | (Mirror.subnets != null())
+            or_(
+                Mirror.asn != null(),
+                Mirror.subnets != null(),
+            ),
         ).all()
         for mirror in mirrors:
             if (asn and asn == mirror.asn) or is_ip_in_any_subnet(
@@ -321,12 +325,19 @@ async def update_mirrors_handler() -> AnyStr:
 def get_all_mirrors() -> List[MirrorData]:
     mirrors_list = []
     with session_scope() as session:
-        mirrors = session.query(
+        mirrors_query = session.query(
             Mirror
         ).order_by(
             Mirror.continent,
             Mirror.country,
-        ).all()
+        )
+        mirrors_query = mirrors_query.filter(
+            or_(
+                Mirror.private == false(),
+                Mirror.private == null()
+            ),
+        )
+        mirrors = mirrors_query.all()
         for mirror in mirrors:
             mirror_data = mirror.to_dataclass()
             mirrors_list.append(mirror_data)

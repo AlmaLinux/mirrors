@@ -136,6 +136,7 @@ class Mirror(Base):
     asn = Column(String, nullable=True)
     cloud_type = Column(String, nullable=True)
     cloud_region = Column(String, nullable=True)
+    private = Column(Boolean, nullable=True, default=False)
     urls = relationship(
         'Url',
         secondary=mirrors_urls,
@@ -187,6 +188,7 @@ class Mirror(Base):
             subnets=[subnet.subnet for subnet in self.subnets],
             cloud_type=self.cloud_type,
             cloud_region=self.cloud_region,
+            private=False if self.private is None else self.private
         )
 
     def get_subnets(self) -> List[AnyStr]:

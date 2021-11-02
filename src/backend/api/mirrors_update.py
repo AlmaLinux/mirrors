@@ -171,7 +171,8 @@ def _load_mirror_info_from_yaml_file(
             asn=mirror_info.get('asn'),
             cloud_type=mirror_info.get('cloud_type', ''),
             cloud_region=','.join(cloud_regions),
-            geolocation=mirror_info.get('geolocation', {})
+            geolocation=mirror_info.get('geolocation', {}),
+            private=mirror_info.get('private', False)
         )
 
 
@@ -215,6 +216,12 @@ async def mirror_available(
     """
     mirror_name = mirror_info.name
     logger.info('Checking mirror "%s"...', mirror_name)
+    if mirror_info.private:
+        logger.info(
+            'Mirror "%s" is private and won\'t be checked',
+            mirror_name,
+        )
+        return mirror_name, True
     try:
         urls = mirror_info.urls  # type: Dict[AnyStr, AnyStr]
         mirror_url = next(
@@ -284,6 +291,9 @@ def set_repo_status(
     :return: Status of a mirror: expired or ok
     """
 
+    if mirror_info.private:
+        mirror_info.is_expired = False
+        return
     urls = mirror_info.urls
     mirror_url = next(
         url for url_type, url in urls.items()
@@ -404,6 +414,7 @@ async def update_mirror_in_db(
         cloud_type=mirror_info.cloud_type,
         cloud_region=mirror_info.cloud_region,
         urls=urls_to_create,
+        private=mirror_info.private,
     )
     mirror_to_create.asn = mirror_info.asn
     if mirror_info.subnets:
@@ -421,7 +432,7 @@ async def update_mirror_in_db(
     )
     db_session.add(mirror_to_create)
     logger.debug(
-        'Mirror "%s" is addded',
+        'Mirror "%s" is added',
         mirror_name,
     )
 
