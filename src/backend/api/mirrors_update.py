@@ -249,7 +249,7 @@ async def mirror_available(
                 async with http_session.get(
                     check_url,
                     headers=HEADERS,
-                    timeout=30,
+                    timeout=15,
                 ) as resp:
                     await resp.text()
                     if resp.status != 200:
@@ -310,7 +310,7 @@ async def set_repo_status(
         async with http_session.get(
             timestamp_url,
             headers=HEADERS,
-            timeout=30,
+            timeout=15,
             raise_for_status=True
         ) as resp:
             timestamp_response = await resp.text()
