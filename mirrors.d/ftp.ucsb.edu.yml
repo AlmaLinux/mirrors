@@ -4,7 +4,7 @@ address:
   ftp: ftp://ftp.ucsb.edu/pub/mirrors/linux/almalinux/
   http: http://ftp.ucsb.edu/pub/mirrors/linux/almalinux/
   https: https://ftp.ucsb.edu/pub/mirrors/linux/almalinux/
-update_frequency: 24h
+update_frequency: 3h
 sponsor: University of California, Santa Barbara
 sponsor_url: https://www.ucsb.edu
 email: mtc@ucsb.edu
