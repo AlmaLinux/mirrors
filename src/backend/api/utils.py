@@ -225,7 +225,7 @@ async def get_aws_subnets_json(http_session: ClientSession) -> Optional[Dict]:
             raise_for_status=True
         ) as resp:
             response_json = await resp.json()
-    except aiohttp.client_exceptions.ClientConnectorError as err:
+    except (aiohttp.client_exceptions.ClientConnectorError, asyncio.exceptions.TimeoutError) as err:
         logger.error(
             'Cannot get json with AWS subnets by url "%s" because "%s": %s',
             url,

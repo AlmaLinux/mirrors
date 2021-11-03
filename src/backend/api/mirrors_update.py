@@ -314,7 +314,7 @@ async def set_repo_status(
             raise_for_status=True
         ) as resp:
             timestamp_response = await resp.text()
-    except (requests.RequestException, HTTPError):
+    except (asyncio.exceptions.TimeoutError, HTTPError):
         logger.error(
             'Mirror "%s" has no timestamp file by url "%s"',
             mirror_info.name,
