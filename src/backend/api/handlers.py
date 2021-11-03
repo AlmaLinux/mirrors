@@ -464,5 +464,5 @@ async def get_url_types() -> List[AnyStr]:
         url_types = sorted(value[0] for value in session.query(
             Url.type
         ).distinct())
-        set_url_types_to_cache(url_types)
+        await set_url_types_to_cache(url_types)
         return url_types
