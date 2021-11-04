@@ -1,5 +1,5 @@
 ---
-name: repo.almalinux.org
+name: mirror.team-cymru.com
 address:
   http: http://mirror.team-cymru.com/almalinux
 update_frequency: 12h
