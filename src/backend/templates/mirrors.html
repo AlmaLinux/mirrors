@@ -82,7 +82,7 @@
                                 <a href="{{ mirror.urls.get(url_type, '') }}"
                                    target="_blank"
                                    class="link-success text-decoration-none">
-                                    {% if url_type == 'http' or url_type == 'https' %}
+                                    {% if url_type in ['http','https'] %}
                                         Mirror
                                     {% else %}
                                         Link
@@ -94,6 +94,11 @@
                             {% endif %}
                         </td>
                     {% endfor %}
+                    <td>
+                        {% if mirror.ipv6 %}
+                        <span>&check;</span>
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

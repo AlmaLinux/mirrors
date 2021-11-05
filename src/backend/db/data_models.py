@@ -49,6 +49,7 @@ class _MirrorDataBase:
     state: AnyStr
     city: AnyStr
     ip: AnyStr
+    ipv6: bool
     location: LocationData
 
 
@@ -75,6 +76,7 @@ class MirrorData(
             state=dct['state'],
             city=dct['city'],
             ip=dct['ip'],
+            ipv6=dct['ipv6'],
             location=LocationData(
                 latitude=dct['location']['latitude'],
                 longitude=dct['location']['longitude'],

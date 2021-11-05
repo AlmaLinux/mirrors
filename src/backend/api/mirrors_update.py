@@ -410,6 +410,7 @@ async def update_mirror_in_db(
         state=mirror_info.state,
         city=mirror_info.city,
         ip=mirror_info.ip,
+        ipv6=mirror_info.ipv6,
         latitude=mirror_info.location.latitude,
         longitude=mirror_info.location.longitude,
         is_expired=mirror_info.is_expired,
@@ -465,6 +466,15 @@ async def set_geo_data(
         logger.error('Can\'t get IP of mirror %s: %s', mirror_name, e)
         match = None
         ip = '0.0.0.0'
+    try:
+        resolver = aiodns.DNSResolver(timeout=5, tries=2)
+        dns = await resolver.query(mirror_name, 'AAAA')
+        if dns:
+            ipv6 = True
+        else:
+            ipv6 = False
+    except aiodns.error.DNSError:
+        ipv6 = False
     logger.info('Set geo data for mirror "%s"', mirror_name)
     if match is None:
         state = 'Unknown'
@@ -508,6 +518,7 @@ async def set_geo_data(
         state=state,
         city=city,
         ip=ip,
+        ipv6=ipv6,
         location=location,
         **asdict(mirror_info),
     )

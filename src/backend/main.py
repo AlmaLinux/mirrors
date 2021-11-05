@@ -140,9 +140,10 @@ async def mirrors_table():
             'Continent',
             'Region',
             *(item.upper() for item in url_types),
+            'IPv6'
         ],
         'url_types': url_types,
-        'mirror_list': get_all_mirrors(),
+        'mirror_list': await get_all_mirrors(no_relationships=True),
         'main_title': 'AlmaLinux Mirrors',
     }
     return render_template('mirrors.html', **data)
