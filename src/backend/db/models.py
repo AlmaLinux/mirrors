@@ -128,7 +128,7 @@ class Mirror(Base):
     ip = Column(String, nullable=False)
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)
-    is_expired = Column(Boolean, nullable=False, default=False)
+    status = Column(String, nullable=False)
     update_frequency = Column(DateTime, nullable=False)
     sponsor_name = Column(String, nullable=False)
     sponsor_url = Column(String, nullable=False)
@@ -177,7 +177,7 @@ class Mirror(Base):
                 latitude=self.latitude,
                 longitude=self.longitude,
             ),
-            is_expired=self.is_expired,
+            status=self.status,
             update_frequency=self.update_frequency.strftime('%H'),
             sponsor_name=self.sponsor_name,
             sponsor_url=self.sponsor_url,

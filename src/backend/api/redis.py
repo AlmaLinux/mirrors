@@ -17,6 +17,7 @@ from db.models import (
 from common.sentry import (
     get_logger,
 )
+from datetime import datetime
 
 logger = get_logger(__name__)
 
@@ -84,3 +85,16 @@ async def get_url_types_from_cache() -> List[AnyStr]:
 async def set_url_types_to_cache(url_types: List[AnyStr]):
     redis_engine = await RedisEngine.get_instance()
     await redis_engine.set('url_types', json.dumps(url_types), CACHE_EXPIRED_TIME)
+
+
+async def log_mirror_offline(mirror_name: AnyStr):
+    redis_engine = await RedisEngine.get_instance()
+    await redis_engine.set(
+        'mirror_offline_%s' % mirror_name,
+        int(datetime.utcnow().timestamp()),
+        43200
+    )
+
+async def get_mirror_flapped(mirror_name: AnyStr) -> bool:
+    redis_engine = await RedisEngine.get_instance()
+    return await redis_engine.get('mirror_offline_%s' % mirror_name)

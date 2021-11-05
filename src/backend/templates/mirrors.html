@@ -73,7 +73,7 @@
                             {{ mirror.sponsor_name }}
                         </a> {% include "snipets/link_icon.html" %}
                     </td>
-                    <td>{% if mirror.is_expired %}expired{% else %}ok{% endif %}</td>
+                    <td>{{ mirror.status }}</td>
                     <td>{{ mirror.continent }}</td>
                     <td>{{ mirror.country }}</td>
                     {% for url_type in url_types %}

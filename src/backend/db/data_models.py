@@ -3,7 +3,7 @@ from typing import (
     Dict,
     AnyStr,
     List,
-    Optional,
+    Optional
 )
 from dataclasses import (
     dataclass,
@@ -55,8 +55,8 @@ class _MirrorDataBase:
 
 @dataclass
 class _MirrorDataDefaultBase:
+    status: AnyStr = "ok"
     isos_link: Optional[AnyStr] = None
-    is_expired: Optional[bool] = None
 
 
 @dataclass
@@ -81,7 +81,7 @@ class MirrorData(
                 latitude=dct['location']['latitude'],
                 longitude=dct['location']['longitude'],
             ),
-            is_expired=dct['is_expired'],
+            status=dct['status'],
             update_frequency=dct['update_frequency'],
             sponsor_name=dct['sponsor_name'],
             sponsor_url=dct['sponsor_url'],

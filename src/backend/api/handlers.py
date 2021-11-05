@@ -24,6 +24,7 @@ from api.redis import (
     set_mirrors_to_cache,
     get_url_types_from_cache,
     set_url_types_to_cache,
+    get_mirror_flapped
 )
 from api.utils import (
     get_geo_data_by_ip,
@@ -125,7 +126,7 @@ def _get_nearest_mirrors_by_geo_data(
     match = get_geo_data_by_ip(ip_address)
     with session_scope() as session:
         all_mirrors_query = session.query(Mirror).filter(
-            Mirror.is_expired == false(),
+            Mirror.status == "ok",
             Mirror.cloud_type == '',
             )
         if empty_for_unknown_ip:
@@ -144,7 +145,7 @@ def _get_nearest_mirrors_by_geo_data(
         mirrors_by_country_query = session.query(Mirror).filter(
             Mirror.continent == continent,
             Mirror.country == country,
-            Mirror.is_expired == false(),
+            Mirror.status == "ok",
             Mirror.cloud_type == '',
             )
         # get n-mirrors mirrors inside a request's continent
@@ -152,7 +153,7 @@ def _get_nearest_mirrors_by_geo_data(
         mirrors_by_continent_query = session.query(Mirror).filter(
             Mirror.continent == continent,
             Mirror.country != country,
-            Mirror.is_expired == false(),
+            Mirror.status == "ok",
             Mirror.cloud_type == '',
             ).order_by(
             Mirror.conditional_distance(
@@ -165,7 +166,7 @@ def _get_nearest_mirrors_by_geo_data(
         # get n-mirrors mirrors from all of mirrors outside
         # a request's country and continent
         all_rest_mirrors_query = session.query(Mirror).filter(
-            Mirror.is_expired == false(),
+            Mirror.status == "ok",
             Mirror.continent != continent,
             Mirror.country != country,
             Mirror.cloud_type == '',
