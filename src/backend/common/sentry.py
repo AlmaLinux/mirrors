@@ -7,7 +7,7 @@ from typing import Optional
 
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
-from sentry_sdk.integrations.redis import RedisIntegration
+from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 
 
 def get_aws_instance_api() -> str:
@@ -45,7 +45,8 @@ def init_sentry_client(dsn: Optional[str] = None) -> None:
         ],
         integrations=[
             FlaskIntegration(),
-            RedisIntegration(),
+            AioHttpIntegration()
+
         ],
     )
     if not os.getenv('SKIP_AWS_CHECKING'):
