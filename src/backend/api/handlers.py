@@ -11,7 +11,7 @@ from typing import (
 )
 
 from aiohttp import ClientSession, TCPConnector
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload, noload
 
 from api.exceptions import UnknownRepositoryOrVersion
 from api.mirrors_update import (
@@ -330,15 +330,28 @@ async def update_mirrors_handler() -> AnyStr:
     return 'Done'
 
 
-def get_all_mirrors() -> List[MirrorData]:
+async def get_all_mirrors(no_relationships: bool = False) -> List[MirrorData]:
     mirrors_list = []
     with session_scope() as session:
         mirrors_query = session.query(
             Mirror
+        ).options(
+            joinedload(Mirror.urls),
+            joinedload(Mirror.subnets)
         ).order_by(
             Mirror.continent,
             Mirror.country,
         )
+        if no_relationships:
+            mirrors_query = session.query(
+                Mirror
+            ).options(
+                noload(Mirror.urls),
+                noload(Mirror.subnets),
+            ).order_by(
+                Mirror.continent,
+                Mirror.country,
+            )
         mirrors_query = mirrors_query.filter(
             or_(
                 Mirror.private == false(),
@@ -420,7 +433,7 @@ async def get_isos_list_by_countries(
         config: MainConfig,
 ) -> Tuple[Dict[AnyStr, List[MirrorData]], List[MirrorData]]:
     mirrors_by_countries = defaultdict(list)
-    for mirror_info in get_all_mirrors():
+    for mirror_info in await get_all_mirrors():
         # Hyper clouds (like AWS/Azure) don't have isos, because they traffic
         # is too expensive
         if mirror_info.cloud_type in ('aws', 'azure'):
