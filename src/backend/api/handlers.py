@@ -350,7 +350,7 @@ async def update_mirrors_handler() -> AnyStr:
     return 'Done'
 
 
-async def get_all_mirrors(no_relationships: bool = False) -> List[MirrorData]:
+async def get_all_mirrors(no_subnets: bool = False) -> List[MirrorData]:
     mirrors_list = []
     with session_scope() as session:
         mirrors_query = session.query(
@@ -362,12 +362,12 @@ async def get_all_mirrors(no_relationships: bool = False) -> List[MirrorData]:
             Mirror.continent,
             Mirror.country,
         )
-        if no_relationships:
+        if no_subnets:
             mirrors_query = session.query(
                 Mirror
             ).options(
-                noload(Mirror.urls),
-                noload(Mirror.subnets),
+                joinedload(Mirror.urls),
+                noload(Mirror.subnets)
             ).order_by(
                 Mirror.continent,
                 Mirror.country,

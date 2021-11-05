@@ -143,7 +143,7 @@ async def mirrors_table():
             'IPv6'
         ],
         'url_types': url_types,
-        'mirror_list': await get_all_mirrors(no_relationships=True),
+        'mirror_list': await get_all_mirrors(no_subnets=True),
         'main_title': 'AlmaLinux Mirrors',
     }
     return render_template('mirrors.html', **data)
