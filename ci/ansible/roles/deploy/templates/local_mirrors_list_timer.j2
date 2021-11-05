@@ -5,7 +5,8 @@ Wants=network-online.target
 
 [Timer]
 OnStartupSec=1m
-OnCalendar=*-*-* 20:00:00
+OnUnitActiveSec=3600
+RandomizedDelaySec=300
 Persistent=true
 
 [Install]
