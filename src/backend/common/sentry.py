@@ -37,6 +37,11 @@ def init_sentry_client(dsn: Optional[str] = None) -> None:
 
     if dsn is None:
         dsn = os.getenv('SENTRY_DSN')
+    # sentry performance monitoring
+    if os.getenv('DEPLOY_ENVIRONMENT') == 'Production':
+        traces_sample_rate = 0.1
+    else:
+        traces_sample_rate = 1.0
     sentry_sdk.init(
         dsn=dsn,
         environment=os.getenv('DEPLOY_ENVIRONMENT'),
@@ -48,6 +53,8 @@ def init_sentry_client(dsn: Optional[str] = None) -> None:
             AioHttpIntegration()
 
         ],
+
+        traces_sample_rate=traces_sample_rate
     )
     if not os.getenv('SKIP_AWS_CHECKING'):
         with sentry_sdk.configure_scope() as scope:
