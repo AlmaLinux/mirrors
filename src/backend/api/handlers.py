@@ -91,7 +91,10 @@ def _get_nearest_mirrors_by_network_data(
         if 1 <= len(suitable_mirrors) < LENGTH_CLOUD_MIRRORS_LIST\
                 and match is not None:
             continent, country, _, _, latitude, longitude = match
-            nearest_mirrors = session.query(Mirror).filter(
+            nearest_mirrors = session.query(Mirror).options(
+                joinedload(Mirror.urls),
+                joinedload(Mirror.subnets)
+            ).filter(
                 Mirror.name.not_in([mirror.name for mirror in
                                     suitable_mirrors])
             ).order_by(
@@ -125,12 +128,19 @@ def _get_nearest_mirrors_by_geo_data(
     """
     match = get_geo_data_by_ip(ip_address)
     with session_scope() as session:
-        all_mirrors_query = session.query(Mirror).filter(
+        all_mirrors_query = session.query(Mirror).options(
+            joinedload(Mirror.urls),
+            joinedload(Mirror.subnets)
+        ).filter(
             Mirror.status == "ok",
             Mirror.cloud_type == '',
             )
         if empty_for_unknown_ip:
-            all_mirrors_query = session.query(Mirror).filter(
+            all_mirrors_query = session.query(Mirror).options(
+                joinedload(Mirror.urls),
+                joinedload(Mirror.subnets)
+            ).filter(
+                Mirror.status == "ok",
                 Mirror.cloud_type == '',
             )
         # We return all of mirrors if we can't
@@ -142,7 +152,10 @@ def _get_nearest_mirrors_by_geo_data(
             return all_mirrors
         continent, country, state, city, latitude, longitude = match
         # get n-mirrors in a request's country
-        mirrors_by_country_query = session.query(Mirror).filter(
+        mirrors_by_country_query = session.query(Mirror).options(
+            joinedload(Mirror.urls),
+            joinedload(Mirror.subnets)
+        ).filter(
             Mirror.continent == continent,
             Mirror.country == country,
             Mirror.status == "ok",
@@ -150,7 +163,10 @@ def _get_nearest_mirrors_by_geo_data(
             )
         # get n-mirrors mirrors inside a request's continent
         # but outside a request's contry
-        mirrors_by_continent_query = session.query(Mirror).filter(
+        mirrors_by_continent_query = session.query(Mirror).options(
+            joinedload(Mirror.urls),
+            joinedload(Mirror.subnets)
+        ).filter(
             Mirror.continent == continent,
             Mirror.country != country,
             Mirror.status == "ok",
@@ -165,7 +181,10 @@ def _get_nearest_mirrors_by_geo_data(
         )
         # get n-mirrors mirrors from all of mirrors outside
         # a request's country and continent
-        all_rest_mirrors_query = session.query(Mirror).filter(
+        all_rest_mirrors_query = session.query(Mirror).options(
+            joinedload(Mirror.urls),
+            joinedload(Mirror.subnets)
+        ).filter(
             Mirror.status == "ok",
             Mirror.continent != continent,
             Mirror.country != country,
