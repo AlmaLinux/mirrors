@@ -71,5 +71,5 @@ class RedisEngine:
     __instance = None
 
     @classmethod
-    async def get_instance(cls):
+    def get_instance(cls):
         return aioredis.from_url("redis://%s:%s/%s" % (REDIS_HOST, REDIS_PORT, REDIS_DB))
