@@ -4,6 +4,10 @@ address:
   http: http://mirror.cedia.org.ec/almalinux/
   https: https://mirror.cedia.org.ec/almalinux/
   rsync: rsync://mirror.cedia.org.ec/almalinux
+geolocation:
+  country: EC
+  state_province: Azuay
+  city: Cuenca
 update_frequency: 1h
 sponsor: CEDIA
 sponsor_url: https://www.cedia.edu.ec
