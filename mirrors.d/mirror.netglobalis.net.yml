@@ -3,6 +3,10 @@ name: mirror.netglobalis.net
 address:
   http: http://mirror.netglobalis.net/almalinux/
   https: https://mirror.netglobalis.net/almalinux/
+geolocation:
+  country: CL
+  state_province: Region Metropolitana
+  city: Santiago
 update_frequency: 3h
 sponsor: Netglobalis S.A.
 sponsor_url: https://www.netglobalis.net
