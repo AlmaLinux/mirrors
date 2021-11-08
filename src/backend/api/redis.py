@@ -30,6 +30,7 @@ async def get_mirrors_from_cache(
     Get a cached list of mirrors for specified IP
     """
     key = str(key)
+    # TODO use aioredis context manager when https://github.com/aio-libs/aioredis-py/issues/1103 is fixed
     redis_engine = RedisEngine.get_instance()
     mirrors_string = await redis_engine.get(key)
     await redis_engine.close()
@@ -50,6 +51,7 @@ async def set_mirrors_to_cache(
     Save a mirror list for specified IP to cache
     """
     key = str(key)
+    # TODO use aioredis context manager when https://github.com/aio-libs/aioredis-py/issues/1103 is fixed
     redis_engine = RedisEngine.get_instance()
     mirrors = json.dumps(mirrors, cls=DataClassesJSONEncoder)
     await redis_engine.set(
@@ -63,6 +65,7 @@ async def set_mirrors_to_cache(
 
 async def get_geolocation_from_cache(key: AnyStr) -> Optional[Dict]:
     key = str(key)
+    # TODO use aioredis context manager when https://github.com/aio-libs/aioredis-py/issues/1103 is fixed
     redis_engine = RedisEngine.get_instance()
     coords = await redis_engine.get(key)
     await redis_engine.close()
@@ -73,6 +76,7 @@ async def get_geolocation_from_cache(key: AnyStr) -> Optional[Dict]:
 
 async def set_geolocation_to_cache(key: AnyStr, coords: tuple[float]) -> None:
     key = str(key)
+    # TODO use aioredis context manager when https://github.com/aio-libs/aioredis-py/issues/1103 is fixed
     redis_engine = RedisEngine.get_instance()
     await redis_engine.set(
         key,
@@ -83,6 +87,7 @@ async def set_geolocation_to_cache(key: AnyStr, coords: tuple[float]) -> None:
 
 
 async def get_url_types_from_cache() -> List[AnyStr]:
+    # TODO use aioredis context manager when https://github.com/aio-libs/aioredis-py/issues/1103 is fixed
     redis_engine = RedisEngine.get_instance()
     url_types_string = await redis_engine.get('url_types')
     await redis_engine.close()
@@ -92,6 +97,7 @@ async def get_url_types_from_cache() -> List[AnyStr]:
 
 
 async def set_url_types_to_cache(url_types: List[AnyStr]):
+    # TODO use aioredis context manager when https://github.com/aio-libs/aioredis-py/issues/1103 is fixed
     redis_engine = RedisEngine.get_instance()
     await redis_engine.set('url_types', json.dumps(url_types), CACHE_EXPIRED_TIME)
     await redis_engine.close()
@@ -99,6 +105,7 @@ async def set_url_types_to_cache(url_types: List[AnyStr]):
 
 
 async def log_mirror_offline(mirror_name: AnyStr):
+    # TODO use aioredis context manager when https://github.com/aio-libs/aioredis-py/issues/1103 is fixed
     redis_engine = RedisEngine.get_instance()
     await redis_engine.set(
         'mirror_offline_%s' % mirror_name,
@@ -110,6 +117,7 @@ async def log_mirror_offline(mirror_name: AnyStr):
 
 
 async def get_mirror_flapped(mirror_name: AnyStr) -> bool:
+    # TODO use aioredis context manager when https://github.com/aio-libs/aioredis-py/issues/1103 is fixed
     redis_engine = RedisEngine.get_instance()
     flapped = await redis_engine.get('mirror_offline_%s' % mirror_name)
     await redis_engine.close()
@@ -118,6 +126,7 @@ async def get_mirror_flapped(mirror_name: AnyStr) -> bool:
 
 
 async def set_mirror_list(mirrors: List[MirrorData]) -> None:
+    # TODO use aioredis context manager when https://github.com/aio-libs/aioredis-py/issues/1103 is fixed
     redis_engine = RedisEngine.get_instance()
     mirrors = json.dumps(mirrors, cls=DataClassesJSONEncoder)
     await redis_engine.set('mirror_list', mirrors, 5400)
@@ -126,6 +135,7 @@ async def set_mirror_list(mirrors: List[MirrorData]) -> None:
 
 
 async def get_mirror_list() -> Optional[List]:
+    # TODO use aioredis context manager when https://github.com/aio-libs/aioredis-py/issues/1103 is fixed
     redis_engine = RedisEngine.get_instance()
     mirrorlist = await redis_engine.get('mirror_list')
     await redis_engine.close()
