@@ -5,7 +5,6 @@ from typing import (
     AnyStr,
     Optional,
     List,
-    Tuple,
     Dict
 )
 
@@ -71,7 +70,7 @@ async def get_geolocation_from_cache(key: AnyStr) -> Optional[Dict]:
         return json.loads(coords)
 
 
-async def set_geolocation_to_cache(key: AnyStr, coords: Tuple) -> None:
+async def set_geolocation_to_cache(key: AnyStr, coords: tuple[float]) -> None:
     key = str(key)
     redis_engine = RedisEngine.get_instance()
     await redis_engine.set(
