@@ -9,6 +9,7 @@ from dataclasses import (
     dataclass,
     field,
 )
+import json
 
 
 @dataclass
@@ -89,8 +90,11 @@ class MirrorData(
             asn=dct['asn'],
             urls=dct['urls'],
             subnets=dct['subnets'],
+            cloud_type=dct['cloud_type'],
         )
 
+    def to_json(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
 
 @dataclass
 class RepoData:
