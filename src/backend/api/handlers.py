@@ -220,7 +220,7 @@ def _get_nearest_mirrors_by_geo_data(
     return suitable_mirrors[:LENGTH_GEO_MIRRORS_LIST]
 
 
-def _get_nearest_mirrors(
+async def _get_nearest_mirrors(
         ip_address: AnyStr,
         empty_for_unknown_ip: bool = False,
 ) -> List[MirrorData]:
@@ -234,7 +234,7 @@ def _get_nearest_mirrors(
         ip_address = os.environ.get(
             'TEST_IP_ADDRESS',
         ) or '195.123.213.149'
-    suitable_mirrors = get_mirrors_from_cache(ip_address)
+    suitable_mirrors = await get_mirrors_from_cache(ip_address)
     if suitable_mirrors is not None:
         return suitable_mirrors
     suitable_mirrors = _get_nearest_mirrors_by_network_data(
@@ -245,7 +245,7 @@ def _get_nearest_mirrors(
             ip_address=ip_address,
             empty_for_unknown_ip=empty_for_unknown_ip,
         )
-    set_mirrors_to_cache(
+    await set_mirrors_to_cache(
         ip_address,
         suitable_mirrors,
     )
@@ -352,7 +352,7 @@ def get_all_mirrors() -> List[MirrorData]:
     return mirrors_list
 
 
-def get_mirrors_list(
+async def get_mirrors_list(
         ip_address: AnyStr,
         version: AnyStr,
         repository: AnyStr,
@@ -379,7 +379,7 @@ def get_mirrors_list(
             ', '.join(repos.keys()),
         )
     repo_path = repos[repository].path
-    nearest_mirrors = _get_nearest_mirrors(ip_address=ip_address)
+    nearest_mirrors = await _get_nearest_mirrors(ip_address=ip_address)
     for mirror in nearest_mirrors:
         mirror_url = mirror.urls.get(config.required_protocols[0]) or \
                      mirror.urls.get(config.required_protocols[1])
@@ -413,7 +413,7 @@ def _set_isos_link_for_mirror(
     )
 
 
-def get_isos_list_by_countries(
+async def get_isos_list_by_countries(
         arch: AnyStr,
         version: AnyStr,
         ip_address: AnyStr,
@@ -433,7 +433,7 @@ def get_isos_list_by_countries(
             config=config,
         )
         mirrors_by_countries[mirror_info.country].append(mirror_info)
-    nearest_mirrors = _get_nearest_mirrors(
+    nearest_mirrors = await _get_nearest_mirrors(
         ip_address=ip_address,
         empty_for_unknown_ip=True,
     )
@@ -456,13 +456,13 @@ def get_main_isos_table(config) -> Dict[AnyStr, List[AnyStr]]:
     return result
 
 
-def get_url_types() -> List[AnyStr]:
-    url_types = get_url_types_from_cache()
+async def get_url_types() -> List[AnyStr]:
+    url_types = await get_url_types_from_cache()
     if url_types is not None:
         return url_types
     with session_scope() as session:
         url_types = sorted(value[0] for value in session.query(
             Url.type
         ).distinct())
-        set_url_types_to_cache(url_types)
+        await set_url_types_to_cache(url_types)
         return url_types

@@ -315,7 +315,7 @@ async def set_repo_status(
             raise_for_status=True
         ) as resp:
             timestamp_response = await resp.text()
-    except (requests.RequestException, HTTPError):
+    except (asyncio.exceptions.TimeoutError, HTTPError):
         logger.error(
             'Mirror "%s" has no timestamp file by url "%s"',
             mirror_info.name,
@@ -489,7 +489,9 @@ async def set_geo_data(
         city = mirror_info.geolocation.get('city') or city or ''
         # we don't need to do lookups except when geolocation is set in yaml
         if mirror_info.geolocation:
-            coords = await asyncio.create_task(get_coords_by_city(city=city, state=state, country=country, sem=sem))
+            coords = await get_coords_by_city(
+                city=city, state=state, country=country, sem=sem
+            )
             latitude, longitude = coords
             if (0.0, 0.0) != (latitude, longitude):
                 location = LocationData(
