@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import asyncio
+from asyncio.exceptions import TimeoutError
 import aiodns
 import os
 from dataclasses import asdict
@@ -65,6 +66,7 @@ WHITELIST_MIRRORS = (
     'repo.almalinux.org',
 )
 NUMBER_OF_PROCESSES_FOR_MIRRORS_CHECK = 15
+AIOHTTP_TIMEOUT = 30
 
 
 logger = get_logger(__name__)
@@ -249,18 +251,18 @@ async def mirror_available(
                 async with http_session.get(
                     check_url,
                     headers=HEADERS,
-                    timeout=15,
+                    timeout=AIOHTTP_TIMEOUT,
                 ) as resp:
                     await resp.text()
                     if resp.status != 200:
                         # if mirror has no valid version/arch combos it is dead
                         logger.error(
-                            'Mirror "%s" has no valid repositories',
+                            'Mirror "%s" has one or more invalid repositories',
                             mirror_name
                         )
                         return mirror_name, False
-            except (ClientError, asyncio.exceptions.TimeoutError) as err:
-                if type(err) == asyncio.exceptions.TimeoutError:
+            except (ClientError, TimeoutError) as err:
+                if isinstance(err, TimeoutError):
                     err = type(err)
                 logger.error(
                     'Mirror "%s" is not available for version '
@@ -271,7 +273,6 @@ async def mirror_available(
                     err,
                 )
                 return mirror_name, False
-    # if mirror has at least one valid version/arch combo
     logger.info(
         'Mirror "%s" is available',
         mirror_name,
@@ -310,7 +311,7 @@ async def set_repo_status(
         async with http_session.get(
             timestamp_url,
             headers=HEADERS,
-            timeout=15,
+            timeout=AIOHTTP_TIMEOUT,
             raise_for_status=True
         ) as resp:
             timestamp_response = await resp.text()
@@ -447,13 +448,12 @@ async def update_mirror_in_db(
 
 async def set_geo_data(
         mirror_info: MirrorYamlData,
-        sem: asyncio.Semaphore
+        sem: asyncio.Semaphore,
 ) -> MirrorData:
     """
     Set geo data by IP of a mirror
     :param mirror_info: Dict with info about a mirror
     :param sem: asyncio Semaphore
-    :param db: db session
     """
     mirror_name = mirror_info.name
     try:
