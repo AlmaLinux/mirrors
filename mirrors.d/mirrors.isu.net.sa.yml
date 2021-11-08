@@ -1,8 +1,8 @@
 ---
 name: KACST - MAEEN
 address:
-  http: mirrors.isu.net.sa/almalinuxos-mirror/
-  ftp: mirrors.isu.net.sa/almalinuxos-mirror/
+  http: http://mirrors.isu.net.sa/almalinuxos-mirror/
+  ftp: ftp://mirrors.isu.net.sa/almalinuxos-mirror/
 geolocation:
   country: SA
   state_province: Riyadh
