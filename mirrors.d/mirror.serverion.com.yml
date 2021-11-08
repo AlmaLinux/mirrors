@@ -4,7 +4,7 @@ address:
   http: http://mirror.serverion.com/almalinux/
   https: https://mirror.serverion.com/almalinux/
   rsync: rsync://mirror.serverion.com/almalinux
-  geolocation:
+geolocation:
   country: NL
   state_province: North Holland
   city: Amsterdam
