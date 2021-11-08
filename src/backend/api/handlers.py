@@ -158,7 +158,8 @@ async def _get_nearest_mirrors_by_geo_data(
     # many IPs are missing this data and this prevents all of those requests from
     # disproportionately hitting mirrors near the geographical center of the US
     else:
-        mirrors = [mirror.to_dataclass() for mirror in mirrors]
+        mirrors = [mirror for mirror in mirrors if mirror.cloud_type == '' and mirror.status == "ok"]
+        # TODO prefer mirrors from the same country, then continent first if possible.
         random.shuffle(mirrors)
 
     suitable_mirrors = mirrors
@@ -173,13 +174,6 @@ async def _get_nearest_mirrors(
     """
     Get nearest mirrors by geo-data or by subnet/ASN
     """
-    if os.environ.get('DEPLOY_ENVIRONMENT').lower() in (
-        'dev',
-        'development',
-    ):
-        ip_address = os.environ.get(
-            'TEST_IP_ADDRESS',
-        ) or '195.123.213.149'
     suitable_mirrors = await get_mirrors_from_cache(ip_address)
     if suitable_mirrors is not None:
         return suitable_mirrors
