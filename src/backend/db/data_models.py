@@ -93,6 +93,8 @@ class MirrorData(
             cloud_type=dct['cloud_type'],
         )
 
+    def to_json(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
 
 @dataclass
 class RepoData:
