@@ -96,7 +96,7 @@ async def _get_nearest_mirrors_by_network_data(
         for mirror in mirrors:
             if mirror.name in [mirror.name for mirror in suitable_mirrors]:
                 continue
-            suitable_mirrors.extend(mirror)
+            suitable_mirrors.append(mirror)
 
         suitable_mirrors = randomize_mirrors_within_distance(
             sort_mirrors_by_distance(
