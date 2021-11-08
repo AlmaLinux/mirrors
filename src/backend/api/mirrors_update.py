@@ -66,6 +66,7 @@ WHITELIST_MIRRORS = (
     'repo.almalinux.org',
 )
 NUMBER_OF_PROCESSES_FOR_MIRRORS_CHECK = 15
+AIOHTTP_TIMEOUT = 30
 
 
 logger = get_logger(__name__)
@@ -250,7 +251,7 @@ async def mirror_available(
                 async with http_session.get(
                     check_url,
                     headers=HEADERS,
-                    timeout=30,
+                    timeout=AIOHTTP_TIMEOUT,
                 ) as resp:
                     await resp.text()
                     if resp.status != 200:
@@ -310,7 +311,7 @@ async def set_repo_status(
         async with http_session.get(
             timestamp_url,
             headers=HEADERS,
-            timeout=30,
+            timeout=AIOHTTP_TIMEOUT,
             raise_for_status=True
         ) as resp:
             timestamp_response = await resp.text()

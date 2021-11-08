@@ -50,6 +50,8 @@ AUTH_KEY = os.environ.get('AUTH_KEY')
 
 RANDOMIZE_WITHIN_KM = 750
 
+AIOHTTP_TIMEOUT=30
+
 
 def jsonify_response(
         status: str,
@@ -173,7 +175,7 @@ async def get_azure_subnets_json(http_session: ClientSession) -> Optional[Dict]:
     try:
         async with http_session.get(
                 url,
-                timeout=30,
+                timeout=AIOHTTP_TIMEOUT,
                 raise_for_status=True
         ) as resp:
             response_text = await resp.text()
@@ -199,7 +201,7 @@ async def get_azure_subnets_json(http_session: ClientSession) -> Optional[Dict]:
     try:
         async with http_session.get(
             link_to_json_url,
-            timeout=30,
+            timeout=AIOHTTP_TIMEOUT,
             raise_for_status=True
         ) as resp:
             response_json = await resp.json(content_type='application/octet-stream')
@@ -217,7 +219,7 @@ async def get_aws_subnets_json(http_session: ClientSession) -> Optional[Dict]:
     try:
         async with http_session.get(
             url,
-            timeout=30,
+            timeout=AIOHTTP_TIMEOUT,
             raise_for_status=True
         ) as resp:
             response_json = await resp.json()
