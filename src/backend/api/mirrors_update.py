@@ -447,11 +447,12 @@ async def update_mirror_in_db(
 
 async def set_geo_data(
         mirror_info: MirrorYamlData,
-        sem,
+        sem: asyncio.Semaphore,
 ) -> MirrorData:
     """
     Set geo data by IP of a mirror
     :param mirror_info: Dict with info about a mirror
+    :param sem: asyncio Semaphore
     """
     mirror_name = mirror_info.name
     try:
