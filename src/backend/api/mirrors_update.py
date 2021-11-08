@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import asyncio
+from asyncio.exceptions import TimeoutError
 import aiodns
 import os
 from dataclasses import asdict
@@ -259,8 +260,8 @@ async def mirror_available(
                             mirror_name
                         )
                         return mirror_name, False
-            except (ClientError, asyncio.exceptions.TimeoutError) as err:
-                if type(err) == asyncio.exceptions.TimeoutError:
+            except (ClientError, TimeoutError) as err:
+                if isinstance(err, TimeoutError):
                     err = type(err)
                 logger.error(
                     'Mirror "%s" is not available for version '
@@ -271,7 +272,6 @@ async def mirror_available(
                     err,
                 )
                 return mirror_name, False
-    # if mirror has at least one valid version/arch combo
     logger.info(
         'Mirror "%s" is available',
         mirror_name,
