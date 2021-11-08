@@ -21,7 +21,7 @@ from datetime import datetime
 
 logger = get_logger(__name__)
 
-CACHE_EXPIRED_TIME = 24 * 3600  # 24 hours
+CACHE_EXPIRED_TIME = 3600  # 24 hours
 
 
 async def get_mirrors_from_cache(
