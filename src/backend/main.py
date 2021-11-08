@@ -16,6 +16,7 @@ from api.exceptions import (
 )
 from api.handlers import (
     update_mirrors_handler,
+    refresh_mirrors_cache,
     get_mirrors_list,
     get_all_mirrors,
     get_url_types,
@@ -76,6 +77,18 @@ async def get_mirror_list(
 @auth_key_required
 async def update_mirrors():
     result = await update_mirrors_handler()
+    return result
+
+
+@app.route(
+    '/refresh_mirror_list_cache',
+    methods=('POST',)
+)
+@success_result
+@error_result
+@auth_key_required
+async def refresh_mirror_list_cache():
+    result = await refresh_mirrors_cache()
     return result
 
 
@@ -143,7 +156,7 @@ async def mirrors_table():
             'IPv6'
         ],
         'url_types': url_types,
-        'mirror_list': await get_all_mirrors(no_subnets=True),
+        'mirror_list': await get_all_mirrors(),
         'main_title': 'AlmaLinux Mirrors',
     }
     return render_template('mirrors.html', **data)

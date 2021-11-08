@@ -9,6 +9,7 @@ from dataclasses import (
     dataclass,
     field,
 )
+import json
 
 
 @dataclass
@@ -89,6 +90,7 @@ class MirrorData(
             asn=dct['asn'],
             urls=dct['urls'],
             subnets=dct['subnets'],
+            cloud_type=dct['cloud_type'],
         )
 
 

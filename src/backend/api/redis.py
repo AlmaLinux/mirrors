@@ -116,3 +116,20 @@ async def get_mirror_flapped(mirror_name: AnyStr) -> bool:
     await redis_engine.close()
     await redis_engine.connection_pool.disconnect()
     return flapped
+
+
+async def set_mirror_list(mirrors: List[MirrorData]) -> None:
+    redis_engine = RedisEngine.get_instance()
+    mirrors = json.dumps(mirrors, cls=DataClassesJSONEncoder)
+    await redis_engine.set('mirror_list', mirrors, 5400)
+    await redis_engine.close()
+    await redis_engine.connection_pool.disconnect()
+
+
+async def get_mirror_list() -> Optional[List]:
+    redis_engine = RedisEngine.get_instance()
+    mirrorlist = await redis_engine.get('mirror_list')
+    await redis_engine.close()
+    await redis_engine.connection_pool.disconnect()
+    if mirrorlist is not None:
+        return [MirrorData.load_from_json(json.loads(mirror)) for mirror in json.loads(mirrorlist)]

@@ -2,6 +2,7 @@
 import asyncio
 import os
 import random
+import json
 from collections import defaultdict
 from typing import (
     AnyStr,
@@ -24,7 +25,9 @@ from api.redis import (
     set_mirrors_to_cache,
     get_url_types_from_cache,
     set_url_types_to_cache,
-    get_mirror_flapped
+    get_mirror_flapped,
+    set_mirror_list,
+    get_mirror_list
 )
 from api.utils import (
     get_geo_data_by_ip,
@@ -64,54 +67,47 @@ LENGTH_GEO_MIRRORS_LIST = 10
 LENGTH_CLOUD_MIRRORS_LIST = 5
 
 
-def _get_nearest_mirrors_by_network_data(
+async def _get_nearest_mirrors_by_network_data(
         ip_address: AnyStr,
 ) -> List[MirrorData]:
     """
     The function returns mirrors which are in the same subnet or have the same
     ASN as a request's IP
     """
-
     match = get_geo_data_by_ip(ip_address)
     asn = get_asn_by_ip(ip_address)
     suitable_mirrors = []
-    with session_scope() as session:
-        mirrors = session.query(Mirror).filter(
-            or_(
-                Mirror.asn != null(),
-                Mirror.subnets != null(),
-            ),
-        ).all()
+    mirrors = await get_mirror_list()
+    if not mirrors:
+        await refresh_mirrors_cache()
+        mirrors = await get_mirror_list()
+    for mirror in mirrors:
+        if mirror.status != "ok":
+            continue
+        if (asn and asn == mirror.asn) or is_ip_in_any_subnet(
+            ip_address=ip_address,
+            subnets=mirror.subnets,
+        ):
+            suitable_mirrors.append(mirror.to_dataclass())
+    if 1 <= len(suitable_mirrors) < LENGTH_CLOUD_MIRRORS_LIST\
+            and match is not None:
+        continent, country, _, _, latitude, longitude = match
+
         for mirror in mirrors:
-            if (asn and asn == mirror.asn) or is_ip_in_any_subnet(
-                ip_address=ip_address,
-                subnets=mirror.get_subnets(),
-            ):
-                suitable_mirrors.append(mirror.to_dataclass())
-        if 1 <= len(suitable_mirrors) < LENGTH_CLOUD_MIRRORS_LIST\
-                and match is not None:
-            continent, country, _, _, latitude, longitude = match
-            nearest_mirrors = session.query(Mirror).options(
-                joinedload(Mirror.urls),
-                joinedload(Mirror.subnets)
-            ).filter(
-                Mirror.name.not_in([mirror.name for mirror in
-                                    suitable_mirrors])
-            ).order_by(
-                Mirror.conditional_distance(
-                    lon=longitude,
-                    lat=latitude,
-                )
-            ).limit(
-                LENGTH_CLOUD_MIRRORS_LIST - len(suitable_mirrors)
-            )  # type: List[Mirror]
-            suitable_mirrors.extend(
-                mirror.to_dataclass() for mirror in nearest_mirrors
+            if mirror.name in [mirror.name for mirror in suitable_mirrors]:
+                continue
+            suitable_mirrors.extend(mirror)
+
+        suitable_mirrors = randomize_mirrors_within_distance(
+            sort_mirrors_by_distance(
+                (latitude, longitude),
+                suitable_mirrors
             )
-        return suitable_mirrors
+        )
+    return suitable_mirrors
 
 
-def _get_nearest_mirrors_by_geo_data(
+async def _get_nearest_mirrors_by_geo_data(
         ip_address: AnyStr,
         empty_for_unknown_ip: bool = False,
 ) -> List[MirrorData]:
@@ -127,115 +123,45 @@ def _get_nearest_mirrors_by_geo_data(
         the function returns empty list
     """
     match = get_geo_data_by_ip(ip_address)
-    with session_scope() as session:
-        all_mirrors_query = session.query(Mirror).options(
-            joinedload(Mirror.urls),
-            joinedload(Mirror.subnets)
-        ).filter(
-            Mirror.status == "ok",
-            Mirror.cloud_type == '',
+    mirrors = [mirror for mirror in await get_mirror_list() if mirror.cloud_type == '' and mirror.status == "ok"]
+    if not mirrors:
+        await refresh_mirrors_cache()
+        mirrors = [mirror for mirror in await get_mirror_list() if mirror.cloud_type == '' and mirror.status == "ok"]
+    # We return all of mirrors if we can't
+    # determine geo data of a request's IP
+    if match is None:
+        return mirrors
+    continent, country, state, city, latitude, longitude = match
+
+
+    # TODO: SQLAlchemy adds brackets around queries. And it looks like
+    # TODO: incorrect query for SQLite
+    # suitable_mirrors_query = mirrors_by_country_query.union_all(
+    #     mirrors_by_continent_query,
+    # ).union_all(
+    #     all_rest_mirrors_query,
+    # ).limit(MAX_LENGTH_OF_MIRRORS_LIST)
+    # suitable_mirrors = suitable_mirrors_query.all()
+
+    # sort mirrors by distance and randomize those within specified distance
+    # to avoid the same mirrors handling the majority of traffic especially
+    # within larger cities
+    if city or state:
+        mirrors = randomize_mirrors_within_distance(
+            sort_mirrors_by_distance(
+                (latitude, longitude),
+                mirrors
             )
-        if empty_for_unknown_ip:
-            all_mirrors_query = session.query(Mirror).options(
-                joinedload(Mirror.urls),
-                joinedload(Mirror.subnets)
-            ).filter(
-                Mirror.status == "ok",
-                Mirror.cloud_type == '',
-            )
-        # We return all of mirrors if we can't
-        # determine geo data of a request's IP
-        if match is None:
-            all_mirrors = [] if empty_for_unknown_ip else [
-                mirror.to_dataclass() for mirror in all_mirrors_query.all()
-            ]
-            return all_mirrors
-        continent, country, state, city, latitude, longitude = match
-        # get n-mirrors in a request's country
-        mirrors_by_country_query = session.query(Mirror).options(
-            joinedload(Mirror.urls),
-            joinedload(Mirror.subnets)
-        ).filter(
-            Mirror.continent == continent,
-            Mirror.country == country,
-            Mirror.status == "ok",
-            Mirror.cloud_type == '',
-            )
-        # get n-mirrors mirrors inside a request's continent
-        # but outside a request's contry
-        mirrors_by_continent_query = session.query(Mirror).options(
-            joinedload(Mirror.urls),
-            joinedload(Mirror.subnets)
-        ).filter(
-            Mirror.continent == continent,
-            Mirror.country != country,
-            Mirror.status == "ok",
-            Mirror.cloud_type == '',
-            ).order_by(
-            Mirror.conditional_distance(
-                lon=longitude,
-                lat=latitude,
-            )
-        ).limit(
-            LENGTH_GEO_MIRRORS_LIST,
         )
-        # get n-mirrors mirrors from all of mirrors outside
-        # a request's country and continent
-        all_rest_mirrors_query = session.query(Mirror).options(
-            joinedload(Mirror.urls),
-            joinedload(Mirror.subnets)
-        ).filter(
-            Mirror.status == "ok",
-            Mirror.continent != continent,
-            Mirror.country != country,
-            Mirror.cloud_type == '',
-            ).order_by(
-            Mirror.conditional_distance(
-                lon=longitude,
-                lat=latitude,
-            )
-        ).limit(
-            LENGTH_GEO_MIRRORS_LIST,
-        )
+    # if we don't have city or state data for a requesting IP then geoip isn't
+    # very accurate anyway so let's give it a random mirror to spread the load.
+    # many IPs are missing this data and this prevents all of those requests from
+    # disproportionately hitting mirrors near the geographical center of the US
+    else:
+        mirrors = [mirror.to_dataclass() for mirror in mirrors]
+        random.shuffle(mirrors)
 
-        # TODO: SQLAlchemy adds brackets around queries. And it looks like
-        # TODO: incorrect query for SQLite
-        # suitable_mirrors_query = mirrors_by_country_query.union_all(
-        #     mirrors_by_continent_query,
-        # ).union_all(
-        #     all_rest_mirrors_query,
-        # ).limit(MAX_LENGTH_OF_MIRRORS_LIST)
-        # suitable_mirrors = suitable_mirrors_query.all()
-
-        # return n-nearest mirrors
-        mirrors_by_country = mirrors_by_country_query.all()
-        mirrors_by_continent = mirrors_by_continent_query.all()
-        all_rest_mirrors = all_rest_mirrors_query.all()
-
-        # sort mirrors by distance and randomize those within specified distance
-        # to avoid the same mirrors handling the majority of traffic especially
-        # within larger cities
-        if city or state:
-            mirrors_by_country = randomize_mirrors_within_distance(
-                sort_mirrors_by_distance(
-                    (latitude, longitude),
-                    [mirror.to_dataclass() for mirror in mirrors_by_country]
-                )
-            )
-        # if we don't have city or state data for a requesting IP then geoip isn't
-        # very accurate anyway so let's give it a random mirror to spread the load.
-        # many IPs are missing this data and this prevents all of those requests from
-        # disproportionately hitting mirrors near the geographical center of the US
-        else:
-            mirrors_by_country = [mirror.to_dataclass() for mirror in mirrors_by_country]
-            random.shuffle(mirrors_by_country)
-
-        suitable_mirrors = mirrors_by_continent + \
-            all_rest_mirrors
-
-        suitable_mirrors = [mirror.to_dataclass() for mirror
-                            in suitable_mirrors[:LENGTH_GEO_MIRRORS_LIST]]
-        suitable_mirrors = mirrors_by_country + suitable_mirrors
+    suitable_mirrors = mirrors
 
     return suitable_mirrors[:LENGTH_GEO_MIRRORS_LIST]
 
@@ -257,11 +183,11 @@ async def _get_nearest_mirrors(
     suitable_mirrors = await get_mirrors_from_cache(ip_address)
     if suitable_mirrors is not None:
         return suitable_mirrors
-    suitable_mirrors = _get_nearest_mirrors_by_network_data(
+    suitable_mirrors = await _get_nearest_mirrors_by_network_data(
         ip_address=ip_address,
     )
     if not suitable_mirrors:
-        suitable_mirrors = _get_nearest_mirrors_by_geo_data(
+        suitable_mirrors = await _get_nearest_mirrors_by_geo_data(
             ip_address=ip_address,
             empty_for_unknown_ip=empty_for_unknown_ip,
         )
@@ -346,11 +272,29 @@ async def update_mirrors_handler() -> AnyStr:
                 ) for mirror_info in all_mirrors
             ))
         db_session.flush()
-
+    await refresh_mirrors_cache()
     return 'Done'
 
 
-async def get_all_mirrors(no_subnets: bool = False) -> List[MirrorData]:
+async def refresh_mirrors_cache() -> AnyStr:
+    mirrors = await get_all_mirrors_db()
+    mirror_list = []
+    for mirror in mirrors:
+        mirror_list.append(mirror.to_json())
+    await set_mirror_list(mirrors=mirror_list)
+    return 'Done'
+
+
+async def get_all_mirrors() -> List[MirrorData]:
+    mirrors = await get_mirror_list()
+    if not mirrors:
+        await refresh_mirrors_cache()
+        mirrors = await get_mirror_list()
+
+    return [mirror for mirror in mirrors]
+
+
+async def get_all_mirrors_db() -> List[MirrorData]:
     mirrors_list = []
     with session_scope() as session:
         mirrors_query = session.query(
@@ -362,16 +306,6 @@ async def get_all_mirrors(no_subnets: bool = False) -> List[MirrorData]:
             Mirror.continent,
             Mirror.country,
         )
-        if no_subnets:
-            mirrors_query = session.query(
-                Mirror
-            ).options(
-                joinedload(Mirror.urls),
-                noload(Mirror.subnets)
-            ).order_by(
-                Mirror.continent,
-                Mirror.country,
-            )
         mirrors_query = mirrors_query.filter(
             or_(
                 Mirror.private == false(),
@@ -471,6 +405,10 @@ async def get_isos_list_by_countries(
         empty_for_unknown_ip=True,
     )
     for nearest_mirror in nearest_mirrors:
+        # Hyper clouds (like AWS/Azure) don't have isos, because they traffic
+        # is too expensive
+        if nearest_mirror.cloud_type in ('aws', 'azure'):
+            continue
         _set_isos_link_for_mirror(
             mirror_info=nearest_mirror,
             version=version,
