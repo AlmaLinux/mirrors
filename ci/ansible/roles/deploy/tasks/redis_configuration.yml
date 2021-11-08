@@ -7,6 +7,22 @@
     state: present
     insertbefore: BOF
 
+- name: Enable redis socket
+  lineinfile:
+    path: /etc/redis.conf
+    regexp: '^unixsocket'
+    line: unixsocket {{ redis_socket_path }}
+    state: present
+    insertbefore: BOF
+
+- name: Set redis socket perms
+  lineinfile:
+    path: /etc/redis.conf
+    regex: '^unixsocketperm'
+    line: unixsocketperm 777
+    state: present
+    insertbefore: BOF
+
 - name: Start Redis
   systemd:
     enabled: yes

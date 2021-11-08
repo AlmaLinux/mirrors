@@ -24,5 +24,4 @@ env = DEPLOY_ENVIRONMENT={{ deploy_environment }}
 env = TEST_IP_ADDRESS={{ test_ip_address }}
 env = AUTH_KEY={{ auth_key }}
 env = SENTRY_DISABLED={{ (deploy_environment is defined and deploy_environment in sentry_environments) | ternary('False', 'True') }}
-env = REDIS_PORT=6379
-env = REDIS_HOST=127.0.0.1
+env = REDIS_SOCKET=/var/run/redis/redis.sock

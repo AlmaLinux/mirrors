@@ -16,6 +16,7 @@ from db.models import (
 from common.sentry import (
     get_logger,
 )
+from datetime import datetime
 
 logger = get_logger(__name__)
 

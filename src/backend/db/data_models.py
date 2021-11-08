@@ -3,7 +3,7 @@ from typing import (
     Dict,
     AnyStr,
     List,
-    Optional,
+    Optional
 )
 from dataclasses import (
     dataclass,
@@ -49,13 +49,14 @@ class _MirrorDataBase:
     state: AnyStr
     city: AnyStr
     ip: AnyStr
+    ipv6: bool
     location: LocationData
 
 
 @dataclass
 class _MirrorDataDefaultBase:
+    status: AnyStr = "ok"
     isos_link: Optional[AnyStr] = None
-    is_expired: Optional[bool] = None
 
 
 @dataclass
@@ -75,11 +76,12 @@ class MirrorData(
             state=dct['state'],
             city=dct['city'],
             ip=dct['ip'],
+            ipv6=dct['ipv6'],
             location=LocationData(
                 latitude=dct['location']['latitude'],
                 longitude=dct['location']['longitude'],
             ),
-            is_expired=dct['is_expired'],
+            status=dct['status'],
             update_frequency=dct['update_frequency'],
             sponsor_name=dct['sponsor_name'],
             sponsor_url=dct['sponsor_url'],

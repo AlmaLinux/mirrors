@@ -25,7 +25,10 @@ from jsonschema import (
     ValidationError,
     validate,
 )
-
+from api.redis import (
+    log_mirror_offline,
+    get_mirror_flapped
+)
 from api.utils import (
     get_geo_data_by_ip,
     get_coords_by_city
@@ -296,7 +299,10 @@ async def set_repo_status(
     """
 
     if mirror_info.private:
-        mirror_info.is_expired = False
+        mirror_info.status = "ok"
+        return
+    if await get_mirror_flapped(mirror_name=mirror_info.name):
+        mirror_info.status = "flapping"
         return
     urls = mirror_info.urls
     mirror_url = next(
@@ -321,7 +327,7 @@ async def set_repo_status(
             mirror_info.name,
             timestamp_url,
         )
-        mirror_info.is_expired = True
+        mirror_info.status = "expired"
         return
     try:
         mirror_should_updated_at = dateparser.parse(
@@ -335,15 +341,15 @@ async def set_repo_status(
                 mirror_info.name,
                 timestamp_url,
             )
-            mirror_info.is_expired = True
+            mirror_info.status = "expired"
             return
         if mirror_last_updated > mirror_should_updated_at:
-            mirror_info.is_expired = False
+            mirror_info.status = "ok"
         else:
-            mirror_info.is_expired = True
+            mirror_info.status = "expired"
         return
     except AttributeError:
-        mirror_info.is_expired = True
+        mirror_info.status = "expired"
         return
 
 
@@ -377,7 +383,7 @@ async def update_mirror_in_db(
     mirror_info = await set_geo_data(mirror_info, sem)
     mirror_name = mirror_info.name
     if mirror_name in WHITELIST_MIRRORS:
-        mirror_info.is_expired = False
+        mirror_info.status = "ok"
         is_available = True
     else:
         mirror_name, is_available = await mirror_available(
@@ -389,6 +395,7 @@ async def update_mirror_in_db(
             required_protocols=required_protocols,
         )
     if not is_available:
+        await log_mirror_offline(mirror_name=mirror_name)
         return
     await set_repo_status(
         mirror_info=mirror_info,
@@ -411,9 +418,10 @@ async def update_mirror_in_db(
         state=mirror_info.state,
         city=mirror_info.city,
         ip=mirror_info.ip,
+        ipv6=mirror_info.ipv6,
         latitude=mirror_info.location.latitude,
         longitude=mirror_info.location.longitude,
-        is_expired=mirror_info.is_expired,
+        status=mirror_info.status,
         update_frequency=dateparser.parse(
             mirror_info.update_frequency
         ),
@@ -465,6 +473,15 @@ async def set_geo_data(
         logger.error('Can\'t get IP of mirror %s: %s', mirror_name, e)
         match = None
         ip = '0.0.0.0'
+    try:
+        resolver = aiodns.DNSResolver(timeout=5, tries=2)
+        dns = await resolver.query(mirror_name, 'AAAA')
+        if dns:
+            ipv6 = True
+        else:
+            ipv6 = False
+    except aiodns.error.DNSError:
+        ipv6 = False
     logger.info('Set geo data for mirror "%s"', mirror_name)
     if match is None:
         state = 'Unknown'
@@ -508,6 +525,7 @@ async def set_geo_data(
         state=state,
         city=city,
         ip=ip,
+        ipv6=ipv6,
         location=location,
         **asdict(mirror_info),
     )

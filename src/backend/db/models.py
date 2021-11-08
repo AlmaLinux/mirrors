@@ -128,7 +128,7 @@ class Mirror(Base):
     ip = Column(String, nullable=False)
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)
-    is_expired = Column(Boolean, nullable=False, default=False)
+    status = Column(String, nullable=False)
     update_frequency = Column(DateTime, nullable=False)
     sponsor_name = Column(String, nullable=False)
     sponsor_url = Column(String, nullable=False)
@@ -137,6 +137,7 @@ class Mirror(Base):
     cloud_type = Column(String, nullable=True)
     cloud_region = Column(String, nullable=True)
     private = Column(Boolean, nullable=True, default=False)
+    ipv6 = Column(Boolean, nullable=False, default=False)
     urls = relationship(
         'Url',
         secondary=mirrors_urls,
@@ -176,7 +177,7 @@ class Mirror(Base):
                 latitude=self.latitude,
                 longitude=self.longitude,
             ),
-            is_expired=self.is_expired,
+            status=self.status,
             update_frequency=self.update_frequency.strftime('%H'),
             sponsor_name=self.sponsor_name,
             sponsor_url=self.sponsor_url,
@@ -188,7 +189,8 @@ class Mirror(Base):
             subnets=[subnet.subnet for subnet in self.subnets],
             cloud_type=self.cloud_type,
             cloud_region=self.cloud_region,
-            private=False if self.private is None else self.private
+            private=False if self.private is None else self.private,
+            ipv6=self.ipv6
         )
 
     def get_subnets(self) -> List[AnyStr]:

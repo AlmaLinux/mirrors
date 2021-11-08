@@ -8,8 +8,7 @@ from sqlalchemy import create_engine
 GEOIP_PATH = os.environ.get('GEOIP_PATH')
 ASN_PATH = os.environ.get('ASN_PATH')
 SQLITE_PATH = os.environ.get('SQLITE_PATH')
-REDIS_HOST = os.environ.get('REDIS_HOST')
-REDIS_PORT = os.environ.get('REDIS_PORT')
+REDIS_SOCKET = os.environ.get('REDIS_SOCKET')
 REDIS_DB = 0
 
 if GEOIP_PATH:
@@ -72,4 +71,4 @@ class RedisEngine:
 
     @classmethod
     def get_instance(cls):
-        return aioredis.from_url(f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}")
+        return aioredis.from_url(f"unix://{REDIS_SOCKET}", db=REDIS_DB)

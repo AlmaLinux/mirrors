@@ -11,7 +11,7 @@ from typing import (
 )
 
 from aiohttp import ClientSession, TCPConnector
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload, noload
 
 from api.exceptions import UnknownRepositoryOrVersion
 from api.mirrors_update import (
@@ -24,6 +24,7 @@ from api.redis import (
     set_mirrors_to_cache,
     get_url_types_from_cache,
     set_url_types_to_cache,
+    get_mirror_flapped
 )
 from api.utils import (
     get_geo_data_by_ip,
@@ -90,7 +91,10 @@ def _get_nearest_mirrors_by_network_data(
         if 1 <= len(suitable_mirrors) < LENGTH_CLOUD_MIRRORS_LIST\
                 and match is not None:
             continent, country, _, _, latitude, longitude = match
-            nearest_mirrors = session.query(Mirror).filter(
+            nearest_mirrors = session.query(Mirror).options(
+                joinedload(Mirror.urls),
+                joinedload(Mirror.subnets)
+            ).filter(
                 Mirror.name.not_in([mirror.name for mirror in
                                     suitable_mirrors])
             ).order_by(
@@ -124,12 +128,19 @@ def _get_nearest_mirrors_by_geo_data(
     """
     match = get_geo_data_by_ip(ip_address)
     with session_scope() as session:
-        all_mirrors_query = session.query(Mirror).filter(
-            Mirror.is_expired == false(),
+        all_mirrors_query = session.query(Mirror).options(
+            joinedload(Mirror.urls),
+            joinedload(Mirror.subnets)
+        ).filter(
+            Mirror.status == "ok",
             Mirror.cloud_type == '',
             )
         if empty_for_unknown_ip:
-            all_mirrors_query = session.query(Mirror).filter(
+            all_mirrors_query = session.query(Mirror).options(
+                joinedload(Mirror.urls),
+                joinedload(Mirror.subnets)
+            ).filter(
+                Mirror.status == "ok",
                 Mirror.cloud_type == '',
             )
         # We return all of mirrors if we can't
@@ -141,18 +152,24 @@ def _get_nearest_mirrors_by_geo_data(
             return all_mirrors
         continent, country, state, city, latitude, longitude = match
         # get n-mirrors in a request's country
-        mirrors_by_country_query = session.query(Mirror).filter(
+        mirrors_by_country_query = session.query(Mirror).options(
+            joinedload(Mirror.urls),
+            joinedload(Mirror.subnets)
+        ).filter(
             Mirror.continent == continent,
             Mirror.country == country,
-            Mirror.is_expired == false(),
+            Mirror.status == "ok",
             Mirror.cloud_type == '',
             )
         # get n-mirrors mirrors inside a request's continent
         # but outside a request's contry
-        mirrors_by_continent_query = session.query(Mirror).filter(
+        mirrors_by_continent_query = session.query(Mirror).options(
+            joinedload(Mirror.urls),
+            joinedload(Mirror.subnets)
+        ).filter(
             Mirror.continent == continent,
             Mirror.country != country,
-            Mirror.is_expired == false(),
+            Mirror.status == "ok",
             Mirror.cloud_type == '',
             ).order_by(
             Mirror.conditional_distance(
@@ -164,8 +181,11 @@ def _get_nearest_mirrors_by_geo_data(
         )
         # get n-mirrors mirrors from all of mirrors outside
         # a request's country and continent
-        all_rest_mirrors_query = session.query(Mirror).filter(
-            Mirror.is_expired == false(),
+        all_rest_mirrors_query = session.query(Mirror).options(
+            joinedload(Mirror.urls),
+            joinedload(Mirror.subnets)
+        ).filter(
+            Mirror.status == "ok",
             Mirror.continent != continent,
             Mirror.country != country,
             Mirror.cloud_type == '',
@@ -330,15 +350,28 @@ async def update_mirrors_handler() -> AnyStr:
     return 'Done'
 
 
-def get_all_mirrors() -> List[MirrorData]:
+async def get_all_mirrors(no_subnets: bool = False) -> List[MirrorData]:
     mirrors_list = []
     with session_scope() as session:
         mirrors_query = session.query(
             Mirror
+        ).options(
+            joinedload(Mirror.urls),
+            joinedload(Mirror.subnets)
         ).order_by(
             Mirror.continent,
             Mirror.country,
         )
+        if no_subnets:
+            mirrors_query = session.query(
+                Mirror
+            ).options(
+                joinedload(Mirror.urls),
+                noload(Mirror.subnets)
+            ).order_by(
+                Mirror.continent,
+                Mirror.country,
+            )
         mirrors_query = mirrors_query.filter(
             or_(
                 Mirror.private == false(),
@@ -420,7 +453,7 @@ async def get_isos_list_by_countries(
         config: MainConfig,
 ) -> Tuple[Dict[AnyStr, List[MirrorData]], List[MirrorData]]:
     mirrors_by_countries = defaultdict(list)
-    for mirror_info in get_all_mirrors():
+    for mirror_info in await get_all_mirrors():
         # Hyper clouds (like AWS/Azure) don't have isos, because they traffic
         # is too expensive
         if mirror_info.cloud_type in ('aws', 'azure'):
