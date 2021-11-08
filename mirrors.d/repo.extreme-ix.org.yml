@@ -4,6 +4,10 @@ address:
   http: http://repo.extreme-ix.org/alma/
   https: https://repo.extreme-ix.org/alma/
   rsync: rsync://repo.extreme-ix.org/alma
+geolocation:
+  country: IN
+  state_province: Delhi
+  city: Delhi
 update_frequency: 3h
 sponsor: Extreme IX
 sponsor_url: https://extreme-ix.org/
