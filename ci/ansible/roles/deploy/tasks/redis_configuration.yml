@@ -11,7 +11,7 @@
   lineinfile:
     path: /etc/redis.conf
     regexp: '^unixsocket'
-    line: unixsocket /var/run/redis/redis.sock
+    line: unixsocket {{ redis_socket_path }}
     state: present
     insertbefore: BOF
 

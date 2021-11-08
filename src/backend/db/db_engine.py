@@ -71,4 +71,4 @@ class RedisEngine:
 
     @classmethod
     def get_instance(cls):
-        return aioredis.from_url("unix://%s" % REDIS_SOCKET, db=REDIS_DB)
+        return aioredis.from_url(f"unix://{REDIS_SOCKET}", db=REDIS_DB)

@@ -5,6 +5,7 @@ update_mirrors_list_script_path: "/usr/bin/{{ mirrors_timer_name }}.sh"
 update_maxmind_dbs_script_path: "/usr/bin/{{ dbs_timer_name }}.sh"
 service_user: "mirror-service"
 source_path: "/home/{{ service_user }}/mirrors_service"
+redis_socket_path: /var/run/redis/redis.sock
 sentry_environments:
   - "Production"
   - "Staging"
