@@ -72,4 +72,4 @@ class RedisEngine:
 
     @classmethod
     def get_instance(cls):
-        return aioredis.from_url("redis://%s:%s/%s" % (REDIS_HOST, REDIS_PORT, REDIS_DB))
+        return aioredis.from_url(f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}")
