@@ -307,6 +307,8 @@ async def get_coords_by_city(
                     },
                     exactly_one=True
                 )
+                if result is None:
+                    return 0.0, 0.0
                 await set_geolocation_to_cache('nominatim_%s_%s_%s' %
                                                (country, state, city),
                                                {'latitude': result.latitude, 'longitude': result.longitude}

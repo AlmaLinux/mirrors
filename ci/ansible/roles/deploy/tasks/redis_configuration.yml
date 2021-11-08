@@ -27,5 +27,5 @@
   systemd:
     enabled: yes
     masked: no
-    state: started
+    state: restarted
     name: redis
