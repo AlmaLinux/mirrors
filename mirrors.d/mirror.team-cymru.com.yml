@@ -1,7 +1,11 @@
 ---
-name: repo.almalinux.org
+name: mirror.team-cymru.com
 address:
   http: http://mirror.team-cymru.com/almalinux
+geolocation:
+  country: US
+  state_province: Illinois
+  city: Chicago
 update_frequency: 12h
 sponsor: Team Cymru
 sponsor_url: https://team-cymru.com
