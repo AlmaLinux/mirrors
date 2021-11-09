@@ -1,5 +1,5 @@
 ---
-name: repo.almalinux.org
+name: mirror.sjtu.edu.cn
 address:
   https: https://mirror.sjtu.edu.cn/almalinux/
 geolocation:
