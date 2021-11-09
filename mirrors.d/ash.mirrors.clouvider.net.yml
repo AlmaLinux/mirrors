@@ -1,0 +1,10 @@
+address:
+   http: http://ash.mirrors.clouvider.net/almalinux/
+   https: https://ash.mirrors.clouvider.net/almalinux/
+ geolocation:
+   country: US
+   state_province: Georgia
+   city: Ashburn
+ update_frequency: 3h
+ sponsor: Clouvider
+ sponsor_url: https://www.clouvider.com
