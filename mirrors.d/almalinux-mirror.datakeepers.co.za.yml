@@ -4,7 +4,7 @@ address:
   http: http://almalinux-mirror.datakeepers.co.za/
   https: https://almalinux-mirror.datakeepers.co.za/
 update_frequency: 3h
-sponsor: datakeepers
+sponsor: DataKeepers
 sponsor_url: https://datakeepers.co.za/
 email: mirrors@datakeepers.co.za
 ...

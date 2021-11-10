@@ -1,0 +1,11 @@
+---
+name: almalinux-mirror.tpa.hivelocity.net
+address:
+  http: http://almalinux-mirror.tpa.hivelocity.net/
+  https: https://almalinux-mirror.tpa.hivelocity.net/
+  rsync: rsync://almalinux-mirror.tpa.hivelocity.net
+update_frequency: 3h
+sponsor: Hivelocity Hosting
+sponsor_url: https://hivelocity.net/
+email: devops@hivelocity.net
+...

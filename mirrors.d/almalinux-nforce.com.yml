@@ -1,0 +1,8 @@
+name: mirror.nforce.com
+address:
+  http: http://mirror.nforce.com/pub/linux/almalinux/
+  https: https://mirror.nforce.com/pub/linux/almalinux/
+update_frequency: 3h
+sponsor: NFOrce Internet Services B.V.
+sponsor_url: https://www.nforce.com/
+email: noc@nforce.com

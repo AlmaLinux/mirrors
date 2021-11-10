@@ -1,0 +1,9 @@
+---
+name: almalinux.secureax.com
+address:
+  http: http://almalinux.secureax.com/
+update_frequency: 1h
+sponsor: SecureAX Pte Ltd
+sponsor_url: https://www.secureax.com/
+email: support@secureax.com
+...

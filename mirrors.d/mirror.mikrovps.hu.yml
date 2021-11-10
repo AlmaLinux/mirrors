@@ -1,0 +1,14 @@
+---
+name: mirror.mikrovps.hu
+address:
+  http: http://mirror.mikrovps.hu/almalinux/
+  https: https://mirror.mikrovps.hu/almalinux/
+geolocation:
+  country: HU
+  state_province: Budapest
+  city: Budapest
+update_frequency: 3h
+sponsor: MikroVPS
+sponsor_url: https://www.mikrovps.net
+email: info@mikrovps.net
+...

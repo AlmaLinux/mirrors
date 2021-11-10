@@ -1,0 +1,14 @@
+---
+name: mirror.vtti.vt.edu
+address:
+  http: http://mirror.vtti.vt.edu/almalinux/
+  https: https://mirror.vtti.vt.edu/almalinux/
+geolocation:
+  country: US
+  state_province: Virginia
+  city:
+update_frequency: 3h
+sponsor: Virginia Tech Transportation Institute
+sponsor_url: https://www.vtti.vt.edu
+email: mirror@vtti.vt.edu
+...

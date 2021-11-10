@@ -1,0 +1,10 @@
+---
+name: mirror.mijn.host
+address:
+  http: http://mirror.mijn.host/almalinux/
+  https: https://mirror.mijn.host/almalinux/
+update_frequency: 1h
+sponsor: mijn.host
+sponsor_url: https://mijn.host
+email: support@mijn.host
+...

@@ -1,0 +1,11 @@
+---
+name: mirror.23m.com
+address:
+  http: http://mirror.23m.com/almalinux/
+  https: https://mirror.23m.com/almalinux/
+  rsync: rsync://mirror.23m.com/almalinux
+update_frequency: 1h
+sponsor: 23media GmbH
+sponsor_url: https://23m.com
+email: mirror@23m.com
+...
