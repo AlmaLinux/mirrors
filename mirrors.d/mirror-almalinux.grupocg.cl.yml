@@ -3,6 +3,10 @@ name: mirror-almalinux.grupocg.cl
 address:
   http: http://mirror-almalinux.grupocg.cl/almalinux/
   https: https://mirror-almalinux.grupocg.cl/almalinux/
+geolocation:
+  country: CL
+  state_province: Region Metropolitana
+  city: Las Condes
 update_frequency: 2h
 sponsor: Grupo CG
 sponsor_url: https://www.grupocg.cl
