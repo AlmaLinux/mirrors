@@ -3,6 +3,10 @@ name: almalinux-mirror.datakeepers.co.za
 address:
   http: http://almalinux-mirror.datakeepers.co.za/
   https: https://almalinux-mirror.datakeepers.co.za/
+geolocation:
+  country: ZA
+  state_province: Gauteng
+  city: Johannesburg
 update_frequency: 3h
 sponsor: DataKeepers
 sponsor_url: https://datakeepers.co.za/
