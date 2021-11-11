@@ -2,6 +2,10 @@
 name: almalinux.secureax.com
 address:
   http: http://almalinux.secureax.com/
+geolocation:
+  country: SG
+  state_province:
+  city: Singapore
 update_frequency: 1h
 sponsor: SecureAX Pte Ltd
 sponsor_url: https://www.secureax.com/
