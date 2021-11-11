@@ -5,7 +5,7 @@ address:
   https: https://ftp.yjsoft.xyz/almalinux/
 geolocation:
   country: KR
-  state_province: Geumcheon-gu
+  state_province:
   city: Seoul
 update_frequency: 3h
 sponsor: YJSoft
