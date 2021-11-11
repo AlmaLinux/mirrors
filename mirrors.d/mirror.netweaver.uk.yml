@@ -4,6 +4,10 @@ address:
   http: http://mirror.netweaver.uk/almalinux/
   https: https://mirror.netweaver.uk/almalinux/
 update_frequency: 3h
+geolocation:
+  country: GB
+  state_province:
+  city: London
 sponsor: NetWeaver
 sponsor_url: https://www.netweaver.uk
 email: mirror@netweaver.uk
