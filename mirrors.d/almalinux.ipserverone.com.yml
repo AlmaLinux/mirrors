@@ -1,9 +1,9 @@
 ---
-name: almalinux.ipserverone.com
+name: mirrors.ipserverone.com
 address:
-  http: http://almalinux.ipserverone.com/almalinux/
-  https: https://almalinux.ipserverone.com/almalinux/
-  rsync: rsync://almalinux.ipserverone.com/almalinux/
+  http: http://mirrors.ipserverone.com/almalinux/
+  https: https://mirrors.ipserverone.com/almalinux/
+  rsync: rsync://mirrors.ipserverone.com/almalinux/
 update_frequency: 1h
 sponsor: IP Serverone Solutions Sdn Bhd
 sponsor_url: https://www.ipserverone.com/
