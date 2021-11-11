@@ -4,7 +4,7 @@ address:
   http: http://mirror.misakamikoto.network/almalinux/
   https: https://mirror.misakamikoto.network/almalinux/
 update_frequency: 6h
-sponsor: Kwabang
-sponsor_url: https://kwabang.net
+sponsor: Streamload
+sponsor_url: https://streamload.kr/
 email: kwabang2827@gmail.com
 ...
