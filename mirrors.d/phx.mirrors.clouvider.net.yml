@@ -1,3 +1,4 @@
+name: phx.mirrors.clouvider.net
 address:
    http: http://phx.mirrors.clouvider.net/almalinux/
    https: https://phx.mirrors.clouvider.net/almalinux/
@@ -8,3 +9,4 @@ address:
  update_frequency: 3h
  sponsor: Clouvider
  sponsor_url: https://www.clouvider.com
+...
