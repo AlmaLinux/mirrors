@@ -5,7 +5,7 @@ address:
   https: https://mirror.domainhizmetleri.com/almalinux/
 geolocation:
   country: TR
-  state_province: Levent
+  state_province: Istanbul
   city: Istanbul
 update_frequency: 1h
 sponsor: Domainhizmetleri.com Hosting
