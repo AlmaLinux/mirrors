@@ -6,7 +6,7 @@ address:
   rsync: rsync://rsync.repo.almalinux.org/almalinux
 geolocation:
   country: DE
-  state_province: Bavaria
+  state_province: Saxony
   city: Falkenstein
 update_frequency: 1h
 sponsor: AlmaLinux OS Foundation
