@@ -3,8 +3,9 @@ address:
    https: https://ash.mirrors.clouvider.net/almalinux/
  geolocation:
    country: US
-   state_province: Georgia
+   state_province: Virginia
    city: Ashburn
  update_frequency: 3h
  sponsor: Clouvider
  sponsor_url: https://www.clouvider.com
+...
