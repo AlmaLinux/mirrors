@@ -3,6 +3,10 @@ name: mirror.almalinux.ikoula.com
 address:
   http: http://mirror.almalinux.ikoula.com/
   https: https://mirror.almalinux.ikoula.com/
+geolocation:
+  country: FR
+  state_province: Grand Est
+  city: Reims
 update_frequency: 3h
 sponsor: Ikoula
 sponsor_url: https://www.ikoula.com/
