@@ -28,6 +28,10 @@ repos:
     path: HighAvailability/$basearch/os/
   - name: devel
     path: devel/$basearch/os/
+  - name: resilientstorage
+    path: ResilientStorage/$basearch/os/
+  - name: plus
+    path: plus/$basearch/os/
   - name: baseos-source
     path: BaseOS/Source/
   - name: appstream-source
@@ -40,6 +44,10 @@ repos:
     path: HighAvailability/Source/
   - name: devel-source
     path: devel/Source/
+  - name: resilientstorage-source
+    path: ResilientStorage/Source/
+  - name: plus-source
+    path: plus/Source/
   - name: baseos-debuginfo
     path: BaseOS/debug/$basearch/
   - name: appstream-debuginfo
@@ -52,6 +60,10 @@ repos:
     path: HighAvailability/debug/$basearch/
   - name: devel-debuginfo
     path: devel/debug/$basearch/
+  - name: resilientstorage-debuginfo
+    path: ResilientStorage/debug/$basearch/
+  - name: plus-debuginfo
+    path: plus/debug/$basearch/
   - name: raspberrypi
     path: raspberrypi/$basearch/os/
     arches:
