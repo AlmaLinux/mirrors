@@ -4,6 +4,10 @@ address:
   http: http://mirror.uepg.br/almalinux/
   https: https://mirror.uepg.br/almalinux/
   rsync: rsync://mirror.uepg.br/almalinux
+geolocation:
+  country: BR
+  state_province: Parana
+  city: Ponta Grossa
 update_frequency: 2h
 sponsor: Universidade Estadual de Ponta Grossa
 sponsor_url: https://uepg.br/nti
