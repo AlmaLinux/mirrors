@@ -4,6 +4,10 @@ address:
   http: http://almalinux.uib.no/
   https: https://almalinux.uib.no/
   rsync: rsync://almalinux.uib.no/
+geolocation:
+  country: NO
+  state_province: Vestland
+  city: Bergen
 update_frequency: 3h
 sponsor: University of Bergen
 sponsor_url: https://www.uib.no
