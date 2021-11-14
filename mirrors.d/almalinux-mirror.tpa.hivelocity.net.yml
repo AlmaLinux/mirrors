@@ -4,6 +4,10 @@ address:
   http: http://almalinux-mirror.tpa.hivelocity.net/
   https: https://almalinux-mirror.tpa.hivelocity.net/
   rsync: rsync://almalinux-mirror.tpa.hivelocity.net
+geolocation:
+  country: US
+  state_province: Florida
+  city: Tampa
 update_frequency: 3h
 sponsor: Hivelocity Hosting
 sponsor_url: https://hivelocity.net/

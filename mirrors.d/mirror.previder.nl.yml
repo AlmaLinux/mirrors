@@ -1,0 +1,14 @@
+---
+name: mirror.previder.nl
+address:
+  http: http://mirror.previder.nl/almalinux/
+  https: https://mirror.previder.nl/almalinux/
+geolocation:
+  country: NL
+  state_province: North Holland
+  city: Amsterdam
+update_frequency: 3h
+sponsor: Previder B.V.
+sponsor_url: https://www.previder.com
+email: unix@previder.net
+...

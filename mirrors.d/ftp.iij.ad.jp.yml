@@ -4,6 +4,10 @@ address:
   http: http://ftp.iij.ad.jp/pub/linux/almalinux/
   https: https://ftp.iij.ad.jp/pub/linux/almalinux/
   rsync: rsync://ftp.iij.ad.jp/pub/linux/almalinux
+geolocation:
+  country: JP
+  state_province: Chiba Prefecture
+  city: Shiroi
 update_frequency: 4h
 sponsor: Internet Initiative Japan Inc.
 sponsor_url: https://www.iij.ad.jp/en/

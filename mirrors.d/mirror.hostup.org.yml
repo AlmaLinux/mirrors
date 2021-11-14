@@ -4,6 +4,10 @@ address:
   http: http://mirror.hostup.org/almalinux/
   https: https://mirror.hostup.org/almalinux/
   rsync: rsync://mirror.hostup.org/almalinux/
+geolocation:
+  country: US
+  state_province: Texas
+  city: Spring
 update_frequency: 6h
 sponsor: Hostup AB
 sponsor_url: https://hostup.se/

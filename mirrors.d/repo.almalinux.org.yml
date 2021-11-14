@@ -4,6 +4,10 @@ address:
   http: http://repo.almalinux.org/almalinux/
   https: https://repo.almalinux.org/almalinux/
   rsync: rsync://rsync.repo.almalinux.org/almalinux
+geolocation:
+  country: DE
+  state_province: Saxony
+  city: Falkenstein
 update_frequency: 1h
 sponsor: AlmaLinux OS Foundation
 sponsor_url: https://www.almalinux.org

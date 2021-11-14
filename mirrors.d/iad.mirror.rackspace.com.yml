@@ -4,6 +4,10 @@ address:
   http: http://iad.mirror.rackspace.com/almalinux/
   https: https://iad.mirror.rackspace.com/almalinux/
   rsync: rsync://iad.mirror.rackspace.com/almalinux
+geolocation:
+  country: US
+  state_province: Virginia
+  city: Ashburn
 update_frequency: 4h
 sponsor: Rackspace Technology
 sponsor_url: https://www.rackspace.com

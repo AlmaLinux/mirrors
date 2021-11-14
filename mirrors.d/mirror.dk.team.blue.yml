@@ -3,6 +3,10 @@ name: mirror.dk.team.blue
 address:
   http: http://mirror.dk.team.blue/almalinux/
   https: https://mirror.dk.team.blue/almalinux/
+geolocation:
+  country: DK
+  state_province: Central Denmark Region
+  city: Skanderborg
 update_frequency: 1h
 sponsor: team.blue Denmark
 sponsor_url: https://team.blue

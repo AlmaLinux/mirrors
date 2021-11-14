@@ -3,6 +3,10 @@ name: mirror.cloudcone.net
 address:
   http: http://mirror.cloudcone.net/almalinux
   https: https://mirror.cloudcone.net/almalinux
+geolocation:
+  country: US
+  state_province: California
+  city: Los Angeles
 update_frequency: 6h
 sponsor: CloudCone
 sponsor_url: https://cloudcone.com/
