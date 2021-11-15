@@ -25,17 +25,19 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Install python3.9
-        run: sudo apt-get install python3.9 python3.9-venv
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
 
       - name: Create Python venv
         run: python3.9 -m venv --system-site-packages ~/.ci_venv
 
-      - name: Activate Python venv
-        run: source ~/.ci_venv/bin/activate
-
-      - name: Debug step
-        run: echo `which pip3`
-
       - name: Install Python packages into venv
-        run: pip3 install -r ci/req.txt
+        run: ~/.ci_venv/bin/pip3 install -r ci/req.txt
+
+      - id: files
+        uses: jitterbit/get-changed-files@v1
+
+      - name: Check a pushed mirror config
+        run: |
+          for 
