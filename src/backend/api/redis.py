@@ -143,17 +143,13 @@ async def set_mirror_list(
     Save a list of mirrors to cache
     :param are_ok_and_not_from_clouds: Save a list of not expired and not cloud
            mirrors if the param is True, else - save all mirrors
+    :param mirrors: list of cached mirrors
     """
     async with redis_context() as redis_engine:
         mirrors = json.dumps(mirrors, cls=DataClassesJSONEncoder)
-        if are_ok_and_not_from_clouds:
-            await redis_engine.set('mirror_list', mirrors, 5400)
-        else:
-            await redis_engine.set(
-                'mirror_list_are_ok_and_not_from_clouds',
-                mirrors,
-                5400,
-            )
+        redis_key = 'mirror_list_are_ok_and_not_from_clouds' \
+            if are_ok_and_not_from_clouds else 'mirror_list'
+        await redis_engine.set(redis_key, mirrors, 5400)
 
 
 async def get_mirror_list(
@@ -165,12 +161,9 @@ async def get_mirror_list(
            mirrors if the param is True, else - get all mirrors
     """
     async with redis_context() as redis_engine:
-        if are_ok_and_not_from_clouds:
-            mirror_list = await redis_engine.get(
-                'mirror_list_are_ok_and_not_from_clouds',
-            )
-        else:
-            mirror_list = await redis_engine.get('mirror_list')
+        redis_key = 'mirror_list_are_ok_and_not_from_clouds' \
+            if are_ok_and_not_from_clouds else 'mirror_list'
+        mirror_list = await redis_engine.get(redis_key)
     if mirror_list is not None:
         return [
             MirrorData.load_from_json(json.loads(mirror))

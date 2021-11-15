@@ -1,7 +1,6 @@
 .idea
 .venv
 mirrors/*
-ci/ansible/inventory/*
 !ci/ansible/inventory/template
 mirrors.db
 src/backend/db/geoip_db.mmdb

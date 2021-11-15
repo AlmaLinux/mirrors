@@ -183,7 +183,7 @@ MAIN_CONFIG = {
         },
         "Repo": {
             "type": "object",
-            "additionalProperties": false,
+            "additionalProperties": False,
             "properties": {
                 "name": {
                     "type": "string"
