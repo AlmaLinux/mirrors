@@ -1,7 +1,7 @@
 ---
 name: mirror.karneval.cz
 address:
-  https: http://mirror.karneval.cz/pub/linux/almalinux/
+  https: https://mirror.karneval.cz/pub/linux/almalinux/
   rsync: rsync://mirror.karneval.cz/almalinux/
 geolocation:
   country: CZ
