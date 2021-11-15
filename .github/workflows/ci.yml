@@ -40,4 +40,4 @@ jobs:
 
       - name: Check a pushed mirror config
         run: |
-          for 
+          for
