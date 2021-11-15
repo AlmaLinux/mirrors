@@ -16,7 +16,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  config_checker:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -25,6 +25,14 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
       - name: Install python3.9
         run: sudo apt-get install python3.9
+
+      - name: Create Python venv
+        run: python3.9 -m venv --system-site-packages ~/.ci_venv
+
+      - name: Activate Python venv
+        run: source ~/.ci_venv/bin/activate
+
+      - name: Install Python packages into venv
+        run: pip install -r ci/req.txt
