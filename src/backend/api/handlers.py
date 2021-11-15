@@ -276,7 +276,7 @@ async def get_all_mirrors(
             are_ok_and_not_from_clouds=are_ok_and_not_from_clouds,
         )
 
-        return [mirror for mirror in mirrors]
+    return [mirror for mirror in mirrors]
 
 
 async def get_all_mirrors_db(
