@@ -1,5 +1,7 @@
 # coding=utf-8
 
+# coding=utf-8
+
 MIRROR_CONFIG_SCHEMA = {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
@@ -94,8 +96,8 @@ MIRROR_CONFIG_SCHEMA = {
                 }
             ]
         },
-        'private': {
-            'type': 'boolean'
+        "private": {
+            "type": "boolean"
         }
     },
     "required": [
@@ -105,9 +107,9 @@ MIRROR_CONFIG_SCHEMA = {
         "sponsor",
         "sponsor_url"
     ],
-    'dependentRequired': {
-        'private': [
-            'subnets'
+    "dependentRequired": {
+        "private": [
+            "subnets"
         ]
     },
     "dependencies": {
@@ -181,7 +183,7 @@ MAIN_CONFIG = {
         },
         "Repo": {
             "type": "object",
-            "additionalProperties": False,
+            "additionalProperties": false,
             "properties": {
                 "name": {
                     "type": "string"
@@ -204,3 +206,4 @@ MAIN_CONFIG = {
         }
     }
 }
+
