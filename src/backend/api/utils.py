@@ -20,6 +20,8 @@ from aiohttp import ClientSession, client_exceptions
 import geopy
 from bs4 import BeautifulSoup
 from geoip2.errors import AddressNotFoundError
+from geopy.adapters import AioHTTPAdapter
+from geopy.exc import GeocoderServiceError
 
 from db.db_engine import GeoIPEngine
 from db.data_models import (
@@ -52,9 +54,9 @@ logger = get_logger(__name__)
 
 AUTH_KEY = os.environ.get('AUTH_KEY')
 
-RANDOMIZE_WITHIN_KM = 750
+RANDOMIZE_WITHIN_KM = 1000
 
-AIOHTTP_TIMEOUT=30
+AIOHTTP_TIMEOUT = 30
 
 
 def jsonify_response(
@@ -185,10 +187,9 @@ async def get_azure_subnets_json(http_session: ClientSession) -> Optional[Dict]:
             response_text = await resp.text()
     except client_exceptions.ClientConnectorError as err:
         logger.error(
-            'Cannot get json with Azure subnets by url "%s" because "%s": %s',
+            'Cannot get json with Azure subnets by url "%s" because "%s"',
             url,
             err,
-            type(err)
         )
         return
     try:
@@ -229,10 +230,9 @@ async def get_aws_subnets_json(http_session: ClientSession) -> Optional[Dict]:
             response_json = await resp.json()
     except (aiohttp.client_exceptions.ClientConnectorError, asyncio.exceptions.TimeoutError) as err:
         logger.error(
-            'Cannot get json with AWS subnets by url "%s" because "%s": %s',
+            'Cannot get json with AWS subnets by url "%s" because "%s"',
             url,
             err,
-            type(err)
         )
         return
     return response_json
@@ -283,21 +283,23 @@ def set_subnets_for_hyper_cloud_mirror(
 
 
 async def get_coords_by_city(
-        city: AnyStr,
-        state: Optional[AnyStr],
-        country: AnyStr,
+        city: str,
+        state: Optional[str],
+        country: str,
         sem: asyncio.Semaphore
-) -> Tuple[float, float]:
-    geolocation_from_cache = await get_geolocation_from_cache('nominatim_%s_%s_%s' % (country, state, city))
-    if geolocation_from_cache:
-        return geolocation_from_cache['latitude'], geolocation_from_cache['longitude']
+) -> tuple[float, float]:
+    cached_latitude, cached_longitude = await get_geolocation_from_cache(
+        f'nominatim_{country}_{state}_{city}'
+    )
+    if cached_latitude is not None and cached_longitude is not None:
+        return cached_latitude, cached_longitude
 
     try:
         async with sem:
             async with geopy.geocoders.Nominatim(
                 user_agent="mirrors.almalinux.org",
                 domain='nominatim.openstreetmap.org',
-                adapter_factory=geopy.adapters.AioHTTPAdapter
+                adapter_factory=AioHTTPAdapter,
             ) as geo:
                 result = await geo.geocode(
                     query={
@@ -309,25 +311,24 @@ async def get_coords_by_city(
                 )
                 if result is None:
                     return 0.0, 0.0
-                await set_geolocation_to_cache('nominatim_%s_%s_%s' %
-                                               (country, state, city),
-                                               {'latitude': result.latitude, 'longitude': result.longitude}
-                                               )
+                await set_geolocation_to_cache(
+                    f'nominatim_{country}_{state}_{city}',
+                    {
+                        'latitude': result.latitude,
+                        'longitude': result.longitude,
+                    }
+               )
             # nominatim api AUP is 1req/s
             await asyncio.sleep(2)
-    except geopy.exc.GeocoderServiceError as e:
-        logger.error(
+    except GeocoderServiceError as err:
+        logger.warning(
             'Error retrieving Nominatim data for "%s".  Exception: "%s"',
             f'{city}, {state}, {country}',
-            e
+            err
         )
         return 0.0, 0.0
-    except Exception as e:
-        logger.error(
-            'Unknown except occured in geopy/nominatim lookup. Exception Type: "%s". Exception: "%s".',
-            type(e),
-            e
-        )
+    except:
+        logger.exception('Unknown except occurred in geopy/nominatim lookup')
         return 0.0, 0.0
 
     try:
@@ -337,28 +338,41 @@ async def get_coords_by_city(
 
 
 def get_distance_in_km(
-    mirror_coords: Tuple[float, float],
-    request_coords: Tuple[float, float]
+    mirror_coords: tuple[float, float],
+    request_coords: tuple[float, float]
 ):
     km = int(haversine(mirror_coords, request_coords))
     return km
 
 
-def sort_mirrors_by_distance(request_geo_data: Tuple[float, float], mirrors: list):
+def sort_mirrors_by_distance_and_country(
+        request_geo_data: Tuple[float, float],
+        mirrors: list,
+        country: str,
+):
     mirrors_sorted = []
     for mirror in mirrors:
         mirrors_sorted.append({
             'distance': get_distance_in_km(
-                mirror_coords=(mirror.location.latitude, mirror.location.longitude),
+                mirror_coords=(
+                    mirror.location.latitude,
+                    mirror.location.longitude,
+                ),
                 request_coords=request_geo_data
             ),
             'mirror': mirror
         })
-    mirrors = sorted(mirrors_sorted, key=lambda i: i['distance'])
+    mirrors = sorted(
+        mirrors_sorted,
+        key=lambda i: (i['mirror'].country != country, i['distance'])
+    )
     return mirrors
 
 
-def randomize_mirrors_within_distance(mirrors: list, shuffle_distance: int = RANDOMIZE_WITHIN_KM):
+def randomize_mirrors_within_distance(
+        mirrors: list,
+        shuffle_distance: int = RANDOMIZE_WITHIN_KM,
+):
     mirrors_shuffled = []
     other_mirrors = []
     for mirror in mirrors:

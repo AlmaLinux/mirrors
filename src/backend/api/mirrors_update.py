@@ -26,7 +26,7 @@ from jsonschema import (
     validate,
 )
 from api.redis import (
-    log_mirror_offline,
+    set_mirror_flapped,
     get_mirror_flapped
 )
 from api.utils import (
@@ -395,7 +395,7 @@ async def update_mirror_in_db(
             required_protocols=required_protocols,
         )
     if not is_available:
-        await log_mirror_offline(mirror_name=mirror_name)
+        await set_mirror_flapped(mirror_name=mirror_name)
         return
     await set_repo_status(
         mirror_info=mirror_info,
@@ -506,10 +506,9 @@ async def set_geo_data(
         city = mirror_info.geolocation.get('city') or city or ''
         # we don't need to do lookups except when geolocation is set in yaml
         if mirror_info.geolocation:
-            coords = await get_coords_by_city(
+            latitude, longitude = await get_coords_by_city(
                 city=city, state=state, country=country, sem=sem
             )
-            latitude, longitude = coords
             if (0.0, 0.0) != (latitude, longitude):
                 location = LocationData(
                     latitude=latitude,

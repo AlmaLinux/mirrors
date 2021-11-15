@@ -1,4 +1,5 @@
 # coding=utf-8
+import os
 from typing import AnyStr
 
 from flask import (
@@ -204,5 +205,5 @@ if __name__ == '__main__':
     app.run(
         debug=True,
         host='0.0.0.0',
-        port=8080,
+        port=int(os.getenv('LOCAL_FLASK_PORT', 8080)),
     )
