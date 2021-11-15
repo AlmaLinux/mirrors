@@ -27,4 +27,4 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Install python3.9
-        run: apt-get install python3.9
+        run: sudo apt-get install python3.9
