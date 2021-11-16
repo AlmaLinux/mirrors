@@ -38,6 +38,6 @@ jobs:
       - id: files
         uses: jitterbit/get-changed-files@v1
 
-      - name: Check a pushed mirror config
+      - name: Check a service config
         run: |
-          for
+          echo "${{ steps.files.outputs.all }}"
