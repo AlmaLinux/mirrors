@@ -1,0 +1,4 @@
+[submodule "yaml_snippets"]
+	path = yaml_snippets
+	url = git@github.com:AlmaLinux/mirrors.git
+	branch = yaml_snippets
