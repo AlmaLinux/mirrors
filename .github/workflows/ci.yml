@@ -41,6 +41,7 @@ jobs:
       - name: Check a service config
         run: |
           ls -la
+          pwd
           mirror_regexp="mirrors.d/.*.yml"
           if ! echo "${{ steps.files.outputs.all }}" | grep -E "${mirror_regexp}"; then
             ~/.ci_venv/bin/python3 ci/config_checker.py -sc config.yml -ss ci/json_schemas/service_config.json
