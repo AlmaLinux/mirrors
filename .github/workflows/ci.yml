@@ -41,7 +41,7 @@ jobs:
       - name: Check a service config
         run: |
           if ! echo "${{ steps.files.outputs.all }}" | grep -E "mirrors.d/*.yml"; then
-            ~/.ci_venv/bin/python3 ci/config_checker.py -sc config.yml -ss ci/json_schemas/service_config.yml
+            ~/.ci_venv/bin/python3 ci/config_checker.py -sc config.yml -ss ci/json_schemas/service_config.json
           else
             changed_files=""
             for changed_file in ${{ steps.files.outputs.all }}; do
@@ -49,5 +49,5 @@ jobs:
                 changed_files="${changed_files} ${changed_file}"
               fi
             done
-            ~/.ci_venv/bin/python3 ci/config_checker.py -sc config.yml -ss ci/json_schemas/service_config.yml -ms ci/json_schemas/mirror_config.yml -mc="${changed_files}"
+            ~/.ci_venv/bin/python3 ci/config_checker.py -sc config.yml -ss ci/json_schemas/service_config.json -ms ci/json_schemas/mirror_config.json -mc="${changed_files}"
           fi
