@@ -97,7 +97,7 @@ def config_validation(
         )
         return True, None
     except jsonschema.ValidationError as err:
-        return False, str(err)
+        return False, err.message
 
 
 def main(args):
