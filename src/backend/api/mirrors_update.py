@@ -250,13 +250,16 @@ async def mirror_available(
                             mirror_name
                         )
                         return mirror_name, False
-            except (ClientError, TimeoutError):
-                logger.exception(
+            except (ClientError, TimeoutError) as err:
+                # We want to unified error message so I used logging
+                # level `error` instead logging level `exception`
+                logger.error(
                     'Mirror "%s" is not available for version '
-                    '"%s" and repo path "%s"',
+                    '"%s" and repo path "%s" because "%s"',
                     mirror_name,
                     version,
                     repo_path,
+                    err,
                 )
                 return mirror_name, False
     logger.info(
