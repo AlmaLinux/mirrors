@@ -48,7 +48,7 @@ jobs:
             changed_files=""
             for changed_file in ${{ steps.files.outputs.all }}; do
               if echo "${changed_file}" | grep -E "${mirror_regexp}"; then
-                changed_files="../${changed_file} ${changed_files}"
+                changed_files="$(pwd)/${changed_file} ${changed_files}"
               fi
             done
             ~/.ci_venv/bin/python3 ci/config_checker.py -sc config.yml -ss ci/json_schemas/service_config.json -ms ci/json_schemas/mirror_config.json -mc="${changed_files}"
