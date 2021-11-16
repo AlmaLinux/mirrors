@@ -1,5 +1,7 @@
 .idea
 .venv
-mirrors/*
-ci/ansible/inventory/*
+mirrors
 !ci/ansible/inventory/template
+mirrors.db
+src/backend/db/geoip_db.mmdb
+src/backend/db/asn_db.mmdb

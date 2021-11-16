@@ -8,22 +8,25 @@ import random
 from collections import defaultdict
 from functools import wraps
 from typing import (
-    Dict,
     Any,
-    AnyStr,
-    Tuple,
     Optional,
-    List,
+    Union,
 )
 
-from aiohttp import ClientSession, client_exceptions
+from aiohttp import (
+    ClientSession,
+    ClientConnectorError,
+)
 import geopy
 from bs4 import BeautifulSoup
 from geoip2.errors import AddressNotFoundError
+from geopy.adapters import AioHTTPAdapter
+from geopy.exc import GeocoderServiceError
 
 from db.db_engine import GeoIPEngine
 from db.data_models import (
     MirrorYamlData,
+    MirrorData,
 )
 from api.exceptions import (
     BaseCustomException,
@@ -41,7 +44,6 @@ from common.sentry import (
     get_logger,
 )
 from haversine import haversine
-from sqlalchemy.orm import Session
 from api.redis import (
     get_geolocation_from_cache,
     set_geolocation_to_cache
@@ -52,14 +54,14 @@ logger = get_logger(__name__)
 
 AUTH_KEY = os.environ.get('AUTH_KEY')
 
-RANDOMIZE_WITHIN_KM = 750
+RANDOMIZE_WITHIN_KM = 1000
 
-AIOHTTP_TIMEOUT=30
+AIOHTTP_TIMEOUT = 30
 
 
 def jsonify_response(
         status: str,
-        result: Dict[str, Any],
+        result: dict[str, Any],
         status_code: int,
 ) -> Response:
     return make_response(
@@ -73,7 +75,7 @@ def jsonify_response(
 
 
 def textify_response(
-        content: AnyStr,
+        content: str,
         status_code: int,
 ) -> Response:
     response = make_response(
@@ -144,8 +146,8 @@ def error_result(f):
 
 
 def get_geo_data_by_ip(
-        ip: AnyStr
-) -> Optional[Tuple[AnyStr, AnyStr, AnyStr, AnyStr, float, float]]:
+        ip: str
+) -> Optional[tuple[str, str, str, str, float, float]]:
     """
     The function returns continent, country and locations of IP in English
     """
@@ -171,7 +173,7 @@ def get_geo_data_by_ip(
     return continent, country, state, city_name, latitude, longitude
 
 
-async def get_azure_subnets_json(http_session: ClientSession) -> Optional[Dict]:
+async def get_azure_subnets_json(http_session: ClientSession) -> Optional[dict]:
     url = 'https://www.microsoft.com/en-us/download/confirmation.aspx?id=56519'
     link_attributes = {
         'data-bi-id': 'downloadretry',
@@ -183,23 +185,19 @@ async def get_azure_subnets_json(http_session: ClientSession) -> Optional[Dict]:
                 raise_for_status=True
         ) as resp:
             response_text = await resp.text()
-    except client_exceptions.ClientConnectorError as err:
-        logger.error(
-            'Cannot get json with Azure subnets by url "%s" because "%s": %s',
-            url,
+    except ClientConnectorError as err:
+        logger.exception(
+            'Cannot get json with Azure subnets by url "%s"',
             err,
-            type(err)
         )
         return
     try:
         soup = BeautifulSoup(response_text, features='lxml')
         link_tag = soup.find('a', attrs=link_attributes)
         link_to_json_url = link_tag.attrs['href']
-    except (ValueError, KeyError) as err:
-        logger.error(
-            'Cannot get json link with Azure '
-            'subnets from page content because "%s"',
-            err,
+    except (ValueError, KeyError):
+        logger.exception(
+            'Cannot get json link with Azure subnets from page content',
         )
         return
     try:
@@ -209,16 +207,15 @@ async def get_azure_subnets_json(http_session: ClientSession) -> Optional[Dict]:
             raise_for_status=True
         ) as resp:
             response_json = await resp.json(content_type='application/octet-stream')
-    except Exception as err:
-        logger.error(
-            'Cannot get json with Azure subnets by url "%s" because "%s"',
+    except:
+        logger.exception(
+            'Cannot get json with Azure subnets by url "%s"',
             link_to_json_url,
-            err,
         )
     return response_json
 
 
-async def get_aws_subnets_json(http_session: ClientSession) -> Optional[Dict]:
+async def get_aws_subnets_json(http_session: ClientSession) -> Optional[dict]:
     url = 'https://ip-ranges.amazonaws.com/ip-ranges.json'
     try:
         async with http_session.get(
@@ -227,13 +224,8 @@ async def get_aws_subnets_json(http_session: ClientSession) -> Optional[Dict]:
             raise_for_status=True
         ) as resp:
             response_json = await resp.json()
-    except (aiohttp.client_exceptions.ClientConnectorError, asyncio.exceptions.TimeoutError) as err:
-        logger.error(
-            'Cannot get json with AWS subnets by url "%s" because "%s": %s',
-            url,
-            err,
-            type(err)
-        )
+    except (ClientConnectorError, TimeoutError):
+        logger.exception('Cannot get json with AWS subnets by url "%s"', url)
         return
     return response_json
 
@@ -265,7 +257,7 @@ async def get_aws_subnets(http_session: ClientSession):
 
 
 def set_subnets_for_hyper_cloud_mirror(
-        subnets: Dict[AnyStr, List[AnyStr]],
+        subnets: dict[str, list[str]],
         mirror_info: MirrorYamlData,
 ):
     cloud_regions = mirror_info.cloud_region.lower().split(',')
@@ -283,21 +275,23 @@ def set_subnets_for_hyper_cloud_mirror(
 
 
 async def get_coords_by_city(
-        city: AnyStr,
-        state: Optional[AnyStr],
-        country: AnyStr,
+        city: str,
+        state: Optional[str],
+        country: str,
         sem: asyncio.Semaphore
-) -> Tuple[float, float]:
-    geolocation_from_cache = await get_geolocation_from_cache('nominatim_%s_%s_%s' % (country, state, city))
-    if geolocation_from_cache:
-        return geolocation_from_cache['latitude'], geolocation_from_cache['longitude']
+) -> tuple[float, float]:
+    cached_latitude, cached_longitude = await get_geolocation_from_cache(
+        f'nominatim_{country}_{state}_{city}'
+    )
+    if cached_latitude is not None and cached_longitude is not None:
+        return cached_latitude, cached_longitude
 
     try:
         async with sem:
             async with geopy.geocoders.Nominatim(
                 user_agent="mirrors.almalinux.org",
                 domain='nominatim.openstreetmap.org',
-                adapter_factory=geopy.adapters.AioHTTPAdapter
+                adapter_factory=AioHTTPAdapter,
             ) as geo:
                 result = await geo.geocode(
                     query={
@@ -309,25 +303,24 @@ async def get_coords_by_city(
                 )
                 if result is None:
                     return 0.0, 0.0
-                await set_geolocation_to_cache('nominatim_%s_%s_%s' %
-                                               (country, state, city),
-                                               {'latitude': result.latitude, 'longitude': result.longitude}
-                                               )
+                await set_geolocation_to_cache(
+                    f'nominatim_{country}_{state}_{city}',
+                    {
+                        'latitude': result.latitude,
+                        'longitude': result.longitude,
+                    }
+               )
             # nominatim api AUP is 1req/s
             await asyncio.sleep(2)
-    except geopy.exc.GeocoderServiceError as e:
-        logger.error(
+    except GeocoderServiceError as err:
+        logger.warning(
             'Error retrieving Nominatim data for "%s".  Exception: "%s"',
             f'{city}, {state}, {country}',
-            e
+            err
         )
         return 0.0, 0.0
-    except Exception as e:
-        logger.error(
-            'Unknown except occured in geopy/nominatim lookup. Exception Type: "%s". Exception: "%s".',
-            type(e),
-            e
-        )
+    except:
+        logger.exception('Unknown except occurred in geopy/nominatim lookup')
         return 0.0, 0.0
 
     try:
@@ -337,35 +330,65 @@ async def get_coords_by_city(
 
 
 def get_distance_in_km(
-    mirror_coords: Tuple[float, float],
-    request_coords: Tuple[float, float]
+    mirror_coords: tuple[float, float],
+    request_coords: tuple[float, float]
 ):
     km = int(haversine(mirror_coords, request_coords))
     return km
 
 
-def sort_mirrors_by_distance(request_geo_data: Tuple[float, float], mirrors: list):
+def sort_mirrors_by_distance_and_country(
+        request_geo_data: tuple[float, float],
+        mirrors: list[MirrorData],
+        country: str,
+) -> list[dict[str, Union[int, MirrorData]]]:
     mirrors_sorted = []
     for mirror in mirrors:
         mirrors_sorted.append({
             'distance': get_distance_in_km(
-                mirror_coords=(mirror.location.latitude, mirror.location.longitude),
+                mirror_coords=(
+                    mirror.location.latitude,
+                    mirror.location.longitude,
+                ),
                 request_coords=request_geo_data
             ),
-            'mirror': mirror
+            'mirror': mirror,
         })
-    mirrors = sorted(mirrors_sorted, key=lambda i: i['distance'])
+    mirrors = sorted(
+        mirrors_sorted,
+        key=lambda i: (i['mirror'].country != country, i['distance'])
+    )
     return mirrors
 
 
-def randomize_mirrors_within_distance(mirrors: list, shuffle_distance: int = RANDOMIZE_WITHIN_KM):
-    mirrors_shuffled = []
-    other_mirrors = []
-    for mirror in mirrors:
-        if mirror['distance'] <= shuffle_distance:
-            mirrors_shuffled.append(mirror['mirror'])
-        else:
-            other_mirrors.append(mirror['mirror'])
-
-    random.shuffle(mirrors_shuffled)
-    return mirrors_shuffled + other_mirrors
+def randomize_mirrors_within_distance(
+        mirrors: list[dict[str, Union[int, MirrorData]]],
+        country: str,
+        shuffle_distance: int = RANDOMIZE_WITHIN_KM,
+):
+    mirrors_in_country_shuffled = [
+        mirror['mirror'] for mirror in mirrors if
+        mirror['distance'] <= shuffle_distance and
+        mirror['mirror'].country == country
+    ]
+    mirrors_in_country = [
+        mirror['mirror'] for mirror in mirrors if
+        mirror['distance'] > shuffle_distance and
+        mirror['mirror'].country == country
+    ]
+    other_mirrors_shuffled = [
+        mirror['mirror'] for mirror in mirrors if
+        mirror['distance'] <= shuffle_distance and
+        mirror['mirror'].country != country
+    ]
+    other_mirrors = [
+        mirror['mirror'] for mirror in mirrors if
+        mirror['distance'] > shuffle_distance and
+        mirror['mirror'].country != country
+    ]
+    random.shuffle(mirrors_in_country_shuffled)
+    random.shuffle(other_mirrors_shuffled)
+    return mirrors_in_country_shuffled + \
+        mirrors_in_country + \
+        other_mirrors_shuffled + \
+        other_mirrors

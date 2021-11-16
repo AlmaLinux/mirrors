@@ -1,5 +1,5 @@
 # coding=utf-8
-from typing import AnyStr
+import os
 
 from flask import (
     Flask,
@@ -16,7 +16,6 @@ from api.exceptions import (
 )
 from api.handlers import (
     update_mirrors_handler,
-    refresh_mirrors_cache,
     get_mirrors_list,
     get_all_mirrors,
     get_url_types,
@@ -43,11 +42,12 @@ init_sentry_client()
 logger = get_logger(__name__)
 
 
-def _get_request_ip() -> AnyStr:
+def _get_request_ip() -> str:
+    test_ip_address = os.getenv('TEST_IP_ADDRESS', None)
     ip_address = request.headers.get('X-Forwarded-For') or request.remote_addr
     if ',' in ip_address:
         ip_address = [item.strip() for item in ip_address.split(',')][0]
-    return ip_address
+    return test_ip_address or ip_address
 
 
 @app.route(
@@ -57,8 +57,8 @@ def _get_request_ip() -> AnyStr:
 @success_result
 @error_result
 async def get_mirror_list(
-        version: AnyStr,
-        repository: AnyStr,
+        version: str,
+        repository: str,
 ):
     ip_address = _get_request_ip()
     return await get_mirrors_list(
@@ -81,18 +81,6 @@ async def update_mirrors():
 
 
 @app.route(
-    '/refresh_mirror_list_cache',
-    methods=('POST',)
-)
-@success_result
-@error_result
-@auth_key_required
-async def refresh_mirror_list_cache():
-    result = await refresh_mirrors_cache()
-    return result
-
-
-@app.route(
     '/isos',
     methods=('GET',),
 )
@@ -109,8 +97,8 @@ async def refresh_mirror_list_cache():
     methods=('GET',),
 )
 async def isos(
-        arch: AnyStr = None,
-        version: AnyStr = None,
+        arch: str = None,
+        version: str = None,
 ):
     data = {
         'main_title': 'AlmaLinux ISOs links'
@@ -204,5 +192,5 @@ if __name__ == '__main__':
     app.run(
         debug=True,
         host='0.0.0.0',
-        port=8080,
+        port=int(os.getenv('LOCAL_FLASK_PORT', 8080)),
     )

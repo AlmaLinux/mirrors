@@ -8,16 +8,9 @@ from dataclasses import asdict
 import requests
 import yaml
 import dateparser
-import time
 
 from pathlib import Path
-from typing import (
-    Dict,
-    AnyStr,
-    List,
-    Tuple,
-    Optional,
-)
+from typing import Optional
 
 from aiohttp import ClientSession, ClientError
 from sqlalchemy.orm import Session
@@ -26,7 +19,7 @@ from jsonschema import (
     validate,
 )
 from api.redis import (
-    log_mirror_offline,
+    set_mirror_flapped,
     get_mirror_flapped
 )
 from api.utils import (
@@ -34,9 +27,7 @@ from api.utils import (
     get_coords_by_city
 )
 
-from common.sentry import (
-    get_logger,
-)
+from common.sentry import get_logger
 from urllib3.exceptions import HTTPError
 
 from db.data_models import MainConfig, RepoData
@@ -76,7 +67,7 @@ logger = get_logger(__name__)
 
 
 def get_config(
-        path_to_config: AnyStr = os.path.join(
+        path_to_config: str = os.path.join(
             os.getenv('CONFIG_ROOT'),
             'mirrors/updates/config.yml'
         )
@@ -122,11 +113,8 @@ def get_config(
                 required_protocols=config['required_protocols'],
                 repos=repos,
             )
-        except ValidationError as err:
-            logger.error(
-                'Main config of mirror service is not valid, because "%s"',
-                err,
-            )
+        except ValidationError:
+            logger.exception('Main config of mirror service is not valid')
             return
 
 
@@ -140,11 +128,10 @@ def _load_mirror_info_from_yaml_file(
                 mirror_info,
                 MIRROR_CONFIG_SCHEMA,
             )
-        except ValidationError as err:
-            logger.error(
-                'Mirror by path "%s" is not valid, because "%s"',
+        except ValidationError:
+            logger.exception(
+                'Mirror by path "%s" is not valid',
                 config_path,
-                err,
             )
         subnets = mirror_info.get('subnets', [])
         if not isinstance(subnets, list):
@@ -152,13 +139,12 @@ def _load_mirror_info_from_yaml_file(
                 req = requests.get(subnets)
                 req.raise_for_status()
                 subnets = req.json()
-            except requests.RequestException as err:
-                logger.error(
+            except requests.RequestException:
+                logger.exception(
                     'Can not get the subnets of mirror "%s" '
-                    'by url "%s" because "%s"',
+                    'by url "%s"',
                     mirror_info['name'],
                     subnets,
-                    err,
                 )
                 subnets = []
         cloud_regions = mirror_info.get('cloud_regions', [])
@@ -182,8 +168,8 @@ def _load_mirror_info_from_yaml_file(
 
 
 def get_mirrors_info(
-        mirrors_dir: AnyStr,
-) -> List[MirrorYamlData]:
+        mirrors_dir: str,
+) -> list[MirrorYamlData]:
     """
     Extract info about all of mirrors from yaml files
     :param mirrors_dir: path to the directory which contains
@@ -202,12 +188,12 @@ def get_mirrors_info(
 
 async def mirror_available(
         mirror_info: MirrorData,
-        versions: List[AnyStr],
-        repos: List[RepoData],
+        versions: list[str],
+        repos: list[RepoData],
         http_session: ClientSession,
-        arches: List[AnyStr],
-        required_protocols: List[AnyStr],
-) -> Tuple[AnyStr, bool]:
+        arches: list[str],
+        required_protocols: list[str],
+) -> tuple[str, bool]:
     """
     Check mirror availability
     :param mirror_info: the dictionary which contains info about a mirror
@@ -228,7 +214,7 @@ async def mirror_available(
         )
         return mirror_name, True
     try:
-        urls = mirror_info.urls  # type: Dict[AnyStr, AnyStr]
+        urls = mirror_info.urls  # type: dict[str, str]
         mirror_url = next(
             address for protocol_type, address in urls.items()
             if protocol_type in required_protocols
@@ -265,8 +251,8 @@ async def mirror_available(
                         )
                         return mirror_name, False
             except (ClientError, TimeoutError) as err:
-                if isinstance(err, TimeoutError):
-                    err = type(err)
+                # We want to unified error message so I used logging
+                # level `error` instead logging level `exception`
                 logger.error(
                     'Mirror "%s" is not available for version '
                     '"%s" and repo path "%s" because "%s"',
@@ -285,17 +271,17 @@ async def mirror_available(
 
 async def set_repo_status(
     mirror_info: MirrorData,
-    allowed_outdate: AnyStr,
-    required_protocols: List[AnyStr],
+    allowed_outdate: str,
+    required_protocols: list[str],
     http_session: ClientSession
 ) -> None:
     """
-    Return status of a mirror
+    Set status of a mirror
     :param mirror_info: info about a mirror
     :param allowed_outdate: allowed mirror lag
     :param required_protocols: list of network protocols any of them
                                should be supported by a mirror
-    :return: Status of a mirror: expired or ok
+    :param http_session: async http session
     """
 
     if mirror_info.private:
@@ -355,13 +341,13 @@ async def set_repo_status(
 
 async def update_mirror_in_db(
         mirror_info: MirrorYamlData,
-        versions: List[AnyStr],
-        repos: List[RepoData],
-        allowed_outdate: AnyStr,
+        versions: list[str],
+        repos: list[RepoData],
+        allowed_outdate: str,
         db_session: Session,
         http_session: ClientSession,
-        arches: List[AnyStr],
-        required_protocols: List[AnyStr],
+        arches: list[str],
+        required_protocols: list[str],
         sem: asyncio.Semaphore
 ) -> None:
     """
@@ -395,7 +381,7 @@ async def update_mirror_in_db(
             required_protocols=required_protocols,
         )
     if not is_available:
-        await log_mirror_offline(mirror_name=mirror_name)
+        await set_mirror_flapped(mirror_name=mirror_name)
         return
     await set_repo_status(
         mirror_info=mirror_info,
@@ -460,7 +446,7 @@ async def set_geo_data(
 ) -> MirrorData:
     """
     Set geo data by IP of a mirror
-    :param mirror_info: Dict with info about a mirror
+    :param mirror_info: Dictionary with info about a mirror
     :param sem: asyncio Semaphore
     """
     mirror_name = mirror_info.name
@@ -469,8 +455,8 @@ async def set_geo_data(
         dns = await resolver.query(mirror_name, 'A')
         ip = dns[0].host
         match = get_geo_data_by_ip(ip)
-    except aiodns.error.DNSError as e:
-        logger.error('Can\'t get IP of mirror %s: %s', mirror_name, e)
+    except aiodns.error.DNSError:
+        logger.exception('Can\'t get IP of mirror %s', mirror_name)
         match = None
         ip = '0.0.0.0'
     try:
@@ -506,10 +492,9 @@ async def set_geo_data(
         city = mirror_info.geolocation.get('city') or city or ''
         # we don't need to do lookups except when geolocation is set in yaml
         if mirror_info.geolocation:
-            coords = await get_coords_by_city(
+            latitude, longitude = await get_coords_by_city(
                 city=city, state=state, country=country, sem=sem
             )
-            latitude, longitude = coords
             if (0.0, 0.0) != (latitude, longitude):
                 location = LocationData(
                     latitude=latitude,
