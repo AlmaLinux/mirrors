@@ -43,10 +43,11 @@ logger = get_logger(__name__)
 
 
 def _get_request_ip() -> str:
+    test_ip_address = os.getenv('TEST_IP_ADDRESS', None)
     ip_address = request.headers.get('X-Forwarded-For') or request.remote_addr
     if ',' in ip_address:
         ip_address = [item.strip() for item in ip_address.split(',')][0]
-    return ip_address
+    return test_ip_address or ip_address
 
 
 @app.route(

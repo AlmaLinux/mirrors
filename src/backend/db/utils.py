@@ -3,7 +3,6 @@ import logging
 import os
 import shutil
 from contextlib import contextmanager
-from typing import List
 
 from alembic import command, script
 from alembic.config import Config
@@ -73,7 +72,7 @@ def get_database_version() -> str:
     return current_rev or BASE_REVISION
 
 
-def get_revisions_list(config: Config) -> List[str]:
+def get_revisions_list(config: Config) -> list[str]:
     """
     Generates list of revisions
     """

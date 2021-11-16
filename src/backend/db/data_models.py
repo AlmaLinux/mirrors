@@ -1,10 +1,5 @@
 # coding=utf-8
-from typing import (
-    Dict,
-    AnyStr,
-    List,
-    Optional
-)
+from typing import Optional
 from dataclasses import (
     dataclass,
     field,
@@ -20,21 +15,21 @@ class LocationData:
 
 @dataclass
 class _MirrorYamlDataBase:
-    name: AnyStr
-    update_frequency: AnyStr
-    sponsor_name: AnyStr
-    sponsor_url: AnyStr
-    email: AnyStr
+    name: str
+    update_frequency: str
+    sponsor_name: str
+    sponsor_url: str
+    email: str
     geolocation: Optional[dict] = field(default_factory=dict)
 
 
 @dataclass
 class _MirrorYamlDataDefaultBase:
-    urls: Dict[AnyStr, AnyStr] = field(default_factory=dict)
-    subnets: List[AnyStr] = field(default_factory=list)
-    asn: Optional[AnyStr] = None
-    cloud_type: AnyStr = ''
-    cloud_region: AnyStr = ''
+    urls: dict[str, str] = field(default_factory=dict)
+    subnets: list[str] = field(default_factory=list)
+    asn: Optional[str] = None
+    cloud_type: str = ''
+    cloud_region: str = ''
     private: bool = False
 
 
@@ -45,19 +40,19 @@ class MirrorYamlData(_MirrorYamlDataDefaultBase, _MirrorYamlDataBase):
 
 @dataclass
 class _MirrorDataBase:
-    continent: AnyStr
-    country: AnyStr
-    state: AnyStr
-    city: AnyStr
-    ip: AnyStr
+    continent: str
+    country: str
+    state: str
+    city: str
+    ip: str
     ipv6: bool
     location: LocationData
 
 
 @dataclass
 class _MirrorDataDefaultBase:
-    status: AnyStr = "ok"
-    isos_link: Optional[AnyStr] = None
+    status: str = "ok"
+    isos_link: Optional[str] = None
 
 
 @dataclass
@@ -69,7 +64,7 @@ class MirrorData(
 ):
 
     @staticmethod
-    def load_from_json(dct: Dict):
+    def load_from_json(dct: dict):
         return MirrorData(
             name=dct['name'],
             continent=dct['continent'],
@@ -98,17 +93,17 @@ class MirrorData(
 
 @dataclass
 class RepoData:
-    name: AnyStr
-    path: AnyStr
-    arches: List[AnyStr] = field(default_factory=list)
+    name: str
+    path: str
+    arches: list[str] = field(default_factory=list)
 
 
 @dataclass
 class MainConfig:
-    allowed_outdate: AnyStr
-    mirrors_dir: AnyStr
-    versions: List[AnyStr] = field(default_factory=list)
-    duplicated_versions: List[AnyStr] = field(default_factory=list)
-    arches: List[AnyStr] = field(default_factory=list)
-    required_protocols: List[AnyStr] = field(default_factory=list)
-    repos: List[RepoData] = field(default_factory=list)
+    allowed_outdate: str
+    mirrors_dir: str
+    versions: list[str] = field(default_factory=list)
+    duplicated_versions: list[str] = field(default_factory=list)
+    arches: list[str] = field(default_factory=list)
+    required_protocols: list[str] = field(default_factory=list)
+    repos: list[RepoData] = field(default_factory=list)

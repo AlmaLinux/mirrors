@@ -24,12 +24,7 @@ from sqlalchemy import (
     func,
 )
 from sqlalchemy.ext.declarative import declarative_base
-from typing import (
-    Dict,
-    AnyStr,
-    List,
-    Optional,
-)
+from typing import Optional
 
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.hybrid import hybrid_method
@@ -75,7 +70,7 @@ class Url(Base):
     url = Column(String, nullable=False)
     type = Column(String, nullable=False)
 
-    def to_dict(self) -> Dict[AnyStr, AnyStr]:
+    def to_dict(self) -> dict[str, str]:
         return {
             self.type: self.url,
         }
@@ -193,13 +188,13 @@ class Mirror(Base):
             ipv6=self.ipv6
         )
 
-    def get_subnets(self) -> List[AnyStr]:
+    def get_subnets(self) -> list[str]:
         return [subnet.subnet for subnet in self.subnets]
 
 
 def get_asn_by_ip(
-        ip: AnyStr,
-) -> Optional[AnyStr]:
+        ip: str,
+) -> Optional[str]:
     """
     Get ASN by an IP
     """
@@ -212,8 +207,8 @@ def get_asn_by_ip(
 
 
 def is_ip_in_any_subnet(
-        ip_address: AnyStr,
-        subnets: List[AnyStr]
+        ip_address: str,
+        subnets: list[str]
 ) -> bool:
     ip_address = ip_network(ip_address)
     for subnet in subnets:

@@ -131,7 +131,10 @@ async def _get_nearest_mirrors_by_geo_data(
             mirrors=mirrors,
             country=country,
         )
-        mirrors = randomize_mirrors_within_distance(sorted_mirrors)
+        mirrors = randomize_mirrors_within_distance(
+            mirrors=sorted_mirrors,
+            country=country,
+        )
     # if we don't have city, country or state data for a requesting IP
     # then geoip isn't very accurate anyway so let's give it a random mirror
     # to spread the load. many IPs are missing this data and this prevents
@@ -140,9 +143,7 @@ async def _get_nearest_mirrors_by_geo_data(
     else:
         random.shuffle(mirrors)
 
-    suitable_mirrors = mirrors
-
-    return suitable_mirrors[:LENGTH_GEO_MIRRORS_LIST]
+    return mirrors[:LENGTH_GEO_MIRRORS_LIST]
 
 
 async def _get_nearest_mirrors(ip_address: str) -> list[MirrorData]:

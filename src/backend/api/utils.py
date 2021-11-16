@@ -10,6 +10,7 @@ from functools import wraps
 from typing import (
     Any,
     Optional,
+    Union,
 )
 
 from aiohttp import (
@@ -25,6 +26,7 @@ from geopy.exc import GeocoderServiceError
 from db.db_engine import GeoIPEngine
 from db.data_models import (
     MirrorYamlData,
+    MirrorData,
 )
 from api.exceptions import (
     BaseCustomException,
@@ -337,9 +339,9 @@ def get_distance_in_km(
 
 def sort_mirrors_by_distance_and_country(
         request_geo_data: tuple[float, float],
-        mirrors: list,
+        mirrors: list[MirrorData],
         country: str,
-):
+) -> list[dict[str, Union[int, MirrorData]]]:
     mirrors_sorted = []
     for mirror in mirrors:
         mirrors_sorted.append({
@@ -350,7 +352,7 @@ def sort_mirrors_by_distance_and_country(
                 ),
                 request_coords=request_geo_data
             ),
-            'mirror': mirror
+            'mirror': mirror,
         })
     mirrors = sorted(
         mirrors_sorted,
@@ -360,16 +362,33 @@ def sort_mirrors_by_distance_and_country(
 
 
 def randomize_mirrors_within_distance(
-        mirrors: list,
+        mirrors: list[dict[str, Union[int, MirrorData]]],
+        country: str,
         shuffle_distance: int = RANDOMIZE_WITHIN_KM,
 ):
-    mirrors_shuffled = []
-    other_mirrors = []
-    for mirror in mirrors:
-        if mirror['distance'] <= shuffle_distance:
-            mirrors_shuffled.append(mirror['mirror'])
-        else:
-            other_mirrors.append(mirror['mirror'])
-
-    random.shuffle(mirrors_shuffled)
-    return mirrors_shuffled + other_mirrors
+    mirrors_in_country_shuffled = [
+        mirror['mirror'] for mirror in mirrors if
+        mirror['distance'] <= shuffle_distance and
+        mirror['mirror'].country == country
+    ]
+    mirrors_in_country = [
+        mirror['mirror'] for mirror in mirrors if
+        mirror['distance'] > shuffle_distance and
+        mirror['mirror'].country == country
+    ]
+    other_mirrors_shuffled = [
+        mirror['mirror'] for mirror in mirrors if
+        mirror['distance'] <= shuffle_distance and
+        mirror['mirror'].country != country
+    ]
+    other_mirrors = [
+        mirror['mirror'] for mirror in mirrors if
+        mirror['distance'] > shuffle_distance and
+        mirror['mirror'].country != country
+    ]
+    random.shuffle(mirrors_in_country_shuffled)
+    random.shuffle(other_mirrors_shuffled)
+    return mirrors_in_country_shuffled + \
+        mirrors_in_country + \
+        other_mirrors_shuffled + \
+        other_mirrors

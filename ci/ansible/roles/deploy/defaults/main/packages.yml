@@ -1,0 +1,37 @@
+ansible_dnf_packages:
+  - python3
+  - python3-libselinux
+  - python3-libsemanage
+dnf_packages:
+  - python39
+  - python39-devel
+  - git
+  - redis
+  - nginx
+  - gcc
+  # for testing purposes
+  - sqlite
+python_packages:
+  - aiodns==3.0.0
+  - aioredis[hiredis]==2.0.0
+  - alembic==1.7.4
+  - beautifulsoup4==4.10.0
+  - blinker==1.4
+  - dataclasses==0.6
+  - dateparser==1.0.0
+  - geopy==2.2.0
+  - Flask-BS4==5.0.0.1
+  - flask==2.0.2
+  - flask[async]==2.0.2
+  - Flask-API==3.0.post1
+  - geoip2==4.4.0
+  - haversine==2.5.1
+  - jsonschema==3.2.0
+  - Jinja2==3.0.2
+  - lxml==4.6.3
+  - pyyaml==6.0
+  - requests==2.26.0
+  - sentry-sdk[flask]==1.4.3
+  - sqlalchemy==1.4.26
+  - uwsgi==2.0.20
+  - Werkzeug==2.0.2
