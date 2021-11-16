@@ -24,10 +24,7 @@ from geopy.adapters import AioHTTPAdapter
 from geopy.exc import GeocoderServiceError
 
 from db.db_engine import GeoIPEngine
-from db.data_models import (
-    MirrorYamlData,
-    MirrorData,
-)
+from db.data_models import MirrorData
 from api.exceptions import (
     BaseCustomException,
     AuthException,
@@ -258,7 +255,7 @@ async def get_aws_subnets(http_session: ClientSession):
 
 def set_subnets_for_hyper_cloud_mirror(
         subnets: dict[str, list[str]],
-        mirror_info: MirrorYamlData,
+        mirror_info: MirrorData,
 ):
     cloud_regions = mirror_info.cloud_region.lower().split(',')
     cloud_type = mirror_info.cloud_type.lower()
@@ -356,7 +353,10 @@ def sort_mirrors_by_distance_and_country(
         })
     mirrors = sorted(
         mirrors_sorted,
-        key=lambda i: (i['mirror'].country != country, i['distance'])
+        key=lambda i: (
+            i['mirror'].geolocation.country != country,
+            i['distance'],
+        )
     )
     return mirrors
 
@@ -369,22 +369,22 @@ def randomize_mirrors_within_distance(
     mirrors_in_country_shuffled = [
         mirror['mirror'] for mirror in mirrors if
         mirror['distance'] <= shuffle_distance and
-        mirror['mirror'].country == country
+        mirror['mirror'].geolocation.country == country
     ]
     mirrors_in_country = [
         mirror['mirror'] for mirror in mirrors if
         mirror['distance'] > shuffle_distance and
-        mirror['mirror'].country == country
+        mirror['mirror'].geolocation.country == country
     ]
     other_mirrors_shuffled = [
         mirror['mirror'] for mirror in mirrors if
         mirror['distance'] <= shuffle_distance and
-        mirror['mirror'].country != country
+        mirror['mirror'].geolocation.country != country
     ]
     other_mirrors = [
         mirror['mirror'] for mirror in mirrors if
         mirror['distance'] > shuffle_distance and
-        mirror['mirror'].country != country
+        mirror['mirror'].geolocation.country != country
     ]
     random.shuffle(mirrors_in_country_shuffled)
     random.shuffle(other_mirrors_shuffled)

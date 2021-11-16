@@ -30,7 +30,7 @@ from api.utils import (
 from common.sentry import get_logger
 from urllib3.exceptions import HTTPError
 
-from db.data_models import MainConfig, RepoData
+from db.data_models import MainConfig, RepoData, GeoLocationData
 from db.models import (
     Mirror,
     Url,
@@ -38,7 +38,6 @@ from db.models import (
     MirrorData,
     LocationData,
 )
-from db.data_models import MirrorYamlData
 from db.json_schemas import (
     MIRROR_CONFIG_SCHEMA,
     MAIN_CONFIG,
@@ -120,7 +119,7 @@ def get_config(
 
 def _load_mirror_info_from_yaml_file(
         config_path: Path,
-) -> Optional[MirrorYamlData]:
+) -> Optional[MirrorData]:
     with open(str(config_path), 'r') as config_file:
         mirror_info = yaml.safe_load(config_file)
         try:
@@ -149,7 +148,7 @@ def _load_mirror_info_from_yaml_file(
                 subnets = []
         cloud_regions = mirror_info.get('cloud_regions', [])
 
-        return MirrorYamlData(
+        return MirrorData(
             name=mirror_info['name'],
             update_frequency=mirror_info['update_frequency'],
             sponsor_name=mirror_info['sponsor'],
@@ -162,14 +161,16 @@ def _load_mirror_info_from_yaml_file(
             asn=mirror_info.get('asn'),
             cloud_type=mirror_info.get('cloud_type', ''),
             cloud_region=','.join(cloud_regions),
-            geolocation=mirror_info.get('geolocation', {}),
+            geolocation=GeoLocationData.load_from_json(
+                mirror_info.get('geolocation', {}),
+            ),
             private=mirror_info.get('private', False)
         )
 
 
 def get_mirrors_info(
         mirrors_dir: str,
-) -> list[MirrorYamlData]:
+) -> list[MirrorData]:
     """
     Extract info about all of mirrors from yaml files
     :param mirrors_dir: path to the directory which contains
@@ -340,7 +341,7 @@ async def set_repo_status(
 
 
 async def update_mirror_in_db(
-        mirror_info: MirrorYamlData,
+        mirror_info: MirrorData,
         versions: list[str],
         repos: list[RepoData],
         allowed_outdate: str,
@@ -399,10 +400,10 @@ async def update_mirror_in_db(
         db_session.add(url_to_create)
     mirror_to_create = Mirror(
         name=mirror_info.name,
-        continent=mirror_info.continent,
-        country=mirror_info.country,
-        state=mirror_info.state,
-        city=mirror_info.city,
+        continent=mirror_info.geolocation.continent,
+        country=mirror_info.geolocation.country,
+        state=mirror_info.geolocation.state,
+        city=mirror_info.geolocation.city,
         ip=mirror_info.ip,
         ipv6=mirror_info.ipv6,
         latitude=mirror_info.location.latitude,
@@ -441,7 +442,7 @@ async def update_mirror_in_db(
 
 
 async def set_geo_data(
-        mirror_info: MirrorYamlData,
+        mirror_info: MirrorData,
         sem: asyncio.Semaphore,
 ) -> MirrorData:
     """
@@ -456,7 +457,7 @@ async def set_geo_data(
         ip = dns[0].host
         match = get_geo_data_by_ip(ip)
     except aiodns.error.DNSError:
-        logger.exception('Can\'t get IP of mirror %s', mirror_name)
+        logger.warning('Can\'t get IP of mirror %s', mirror_name)
         match = None
         ip = '0.0.0.0'
     try:
@@ -487,9 +488,10 @@ async def set_geo_data(
         )
     # try to get geo data from yaml
     try:
-        country = mirror_info.geolocation.get('country') or country
-        state = mirror_info.geolocation.get('state_province') or state or ''
-        city = mirror_info.geolocation.get('city') or city or ''
+        continent = mirror_info.geolocation.continent or continent
+        country = mirror_info.geolocation.country or country
+        state = mirror_info.geolocation.state or state or ''
+        city = mirror_info.geolocation.city or city or ''
         # we don't need to do lookups except when geolocation is set in yaml
         if mirror_info.geolocation:
             latitude, longitude = await get_coords_by_city(
@@ -504,13 +506,13 @@ async def set_geo_data(
         logger.error(
             'Nominatim likely blocked us'
         )
-    return MirrorData(
+    mirror_info.location = location
+    mirror_info.geolocation = GeoLocationData(
         continent=continent,
         country=country,
         state=state,
         city=city,
-        ip=ip,
-        ipv6=ipv6,
-        location=location,
-        **asdict(mirror_info),
     )
+    mirror_info.ip = ip
+    mirror_info.ipv6 = ipv6
+    return mirror_info

@@ -41,7 +41,6 @@ from db.models import (
     is_ip_in_any_subnet,
     Subnet,
 )
-from db.data_models import MirrorYamlData
 from db.utils import session_scope
 from sqlalchemy.sql.expression import (
     null,
@@ -172,7 +171,7 @@ async def _get_nearest_mirrors(ip_address: str) -> list[MirrorData]:
 
 async def _process_mirror(
         subnets: dict[str, list[str]],
-        mirror_info: MirrorYamlData,
+        mirror_info: MirrorData,
         versions: list[str],
         repos: list[RepoData],
         allowed_outdate: str,
@@ -392,7 +391,7 @@ async def get_isos_list_by_countries(
             arch=arch,
             config=config,
         )
-        mirrors_by_countries[mirror_info.country].append(mirror_info)
+        mirrors_by_countries[mirror_info.geolocation.country].append(mirror_info)
     nearest_mirrors = await _get_nearest_mirrors(ip_address=ip_address)
     for nearest_mirror in nearest_mirrors:
         # Hyper clouds (like AWS/Azure) don't have isos, because they traffic

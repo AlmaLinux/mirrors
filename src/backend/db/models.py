@@ -3,13 +3,8 @@ from dataclasses import (
     is_dataclass,
     asdict,
 )
-from json import (
-    JSONEncoder,
-    JSONDecoder,
-)
-from ipaddress import (
-    ip_network,
-)
+from json import JSONEncoder
+from ipaddress import ip_network
 
 from geoip2.errors import AddressNotFoundError
 from sqlalchemy import (
@@ -29,12 +24,10 @@ from typing import Optional
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.hybrid import hybrid_method
 
-from common.sentry import (
-    get_logger,
-)
+from common.sentry import get_logger
 from db.data_models import (
     MirrorData,
-    LocationData,
+    LocationData, GeoLocationData,
 )
 from db.db_engine import AsnEngine
 
@@ -43,17 +36,6 @@ logger = get_logger(__name__)
 Base = declarative_base()
 
 CACHE_EXPIRED_TIME = 24 * 3600  # 24 hours
-
-
-class DataClassesJSONEncoder(JSONEncoder):
-    """
-    Custom JSON encoder for data classes
-    """
-
-    def default(self, o):
-        if is_dataclass(o):
-            return asdict(o)
-        return super().default(o)
 
 
 class Subnet(Base):
@@ -163,14 +145,16 @@ class Mirror(Base):
     def to_dataclass(self) -> MirrorData:
         return MirrorData(
             name=self.name,
-            continent=self.continent,
-            country=self.country,
-            state=self.state,
-            city=self.city,
             ip=self.ip,
             location=LocationData(
                 latitude=self.latitude,
                 longitude=self.longitude,
+            ),
+            geolocation=GeoLocationData(
+                continent=self.continent,
+                country=self.country,
+                state=self.state,
+                city=self.city,
             ),
             status=self.status,
             update_frequency=self.update_frequency.strftime('%H'),
