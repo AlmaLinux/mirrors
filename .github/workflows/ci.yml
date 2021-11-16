@@ -38,10 +38,11 @@ jobs:
       - id: files
         uses: jitterbit/get-changed-files@v1
 
-      - name: Check a service config
+      - name: Check YAML configs
         run: |
           mirror_regexp="mirrors.d/.*.yml"
           if ! echo "${{ steps.files.outputs.all }}" | grep -E "${mirror_regexp}" &> /dev/null; then
+            # we check only the main config if PR doesn't contain any mirror config
             ~/.ci_venv/bin/python3 ci/config_checker.py -sc config.yml -ss ci/json_schemas/service_config.json
           else
             changed_files=""
