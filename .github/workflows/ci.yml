@@ -52,5 +52,5 @@ jobs:
                 changed_files="$(pwd)/${changed_file} ${changed_files}"
               fi
             done
-            ~/.ci_venv/bin/python3 ci/config_checker.py -sc config.yml -ss ci/json_schemas/service_config.json -ms ci/json_schemas/mirror_config.json -mc="${changed_files}"
+            ~/.ci_venv/bin/python3 ci/config_checker.py -sc config.yml -ss ci/json_schemas/service_config.json -ms ci/json_schemas/mirror_config.json -mc=${changed_files}
           fi
