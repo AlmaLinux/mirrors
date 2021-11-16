@@ -28,20 +28,20 @@
         },
         "ftp": {
           "type": "string"
-        },
+        }
       },
       "anyOf": [
         {
           "required": [
-            "http",
-          ],
+            "http"
+          ]
         },
         {
           "required": [
-            "https",
-          ],
-        },
-      ],
+            "https"
+          ]
+        }
+      ]
     },
     "geolocation": {
       "type": "object",
@@ -54,7 +54,7 @@
         },
         "city": {
           "type": ["string", "null"]
-        },
+        }
       }
     },
     "update_frequency": {
@@ -72,7 +72,7 @@
     "asn": {
       "oneOf": [
         {
-          "type": "string",
+          "type": "string"
         },
         {
           "type": "integer"
@@ -88,7 +88,7 @@
           }
         },
         {
-          "type": "string",
+          "type": "string"
         }
       ]
     },

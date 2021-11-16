@@ -4,7 +4,7 @@
   "definitions": {
     "Welcome4": {
       "type": "object",
-      "additionalProperties": False,
+      "additionalProperties": false,
       "properties": {
         "allowed_outdate": {
           "type": "string"
@@ -21,13 +21,27 @@
         "versions": {
           "type": "array",
           "items": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
           }
         },
         "duplicated_versions": {
           "type": "array",
           "items": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
           }
         },
         "required_protocols": {
