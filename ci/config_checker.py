@@ -100,25 +100,35 @@ def config_validation(
         return False, str(err)
 
 
-def main(args) -> int:
+def main(args):
     is_validity, err = config_validation(
-        config_data=arguments.service_config['config_data'],
-        json_schema=arguments.service_config_json_schema,
+        config_data=args.service_config['config_data'],
+        json_schema=args.service_config_json_schema,
     )
-    if not is_validity:
+    if is_validity:
+        logger.info(
+            'Main config "%s" is valid',
+            args.service_config['config_path'],
+        )
+    else:
         logger.error(
             'Main config "%s" is invalid because "%s"',
-            arguments.service_config['config_path'],
+            args.service_config['config_path'],
             err,
         )
         exit(1)
     exit_code = 0
-    for mirror_config in arguments.mirror_configs:
+    for mirror_config in args.mirror_configs:
         is_validity, err = config_validation(
-            config_data=arguments.service_config['config_data'],
-            json_schema=arguments.service_config_json_schema,
+            config_data=args.service_config['config_data'],
+            json_schema=args.service_config_json_schema,
         )
-        if not is_validity:
+        if is_validity:
+            logger.info(
+                'The mirror config "%s" is valid',
+                mirror_config['config_path'],
+            )
+        else:
             logger.error(
                 'The mirror config "%s" is invalid because "%s"',
                 mirror_config['config_path'],
