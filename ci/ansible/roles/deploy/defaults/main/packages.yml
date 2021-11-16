@@ -32,6 +32,6 @@ python_packages:
   - pyyaml==6.0
   - requests==2.26.0
   - sentry-sdk[flask]==1.4.3
-  - sqlalchemy==1.4.26
+  - sqlalchemy==1.4.27
   - uwsgi==2.0.20
   - Werkzeug==2.0.2
