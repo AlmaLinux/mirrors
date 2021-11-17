@@ -21,7 +21,6 @@ python_packages:
   - dateparser==1.0.0
   - geopy==2.2.0
   - Flask-BS4==5.0.0.1
-  - flask==2.0.2
   - flask[async]==2.0.2
   - Flask-API==3.0.post1
   - geoip2==4.4.0

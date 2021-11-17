@@ -1,11 +1,14 @@
 ---
 - include_tasks: ansible_preparation.yml
-- include_tasks: common_setup.yml
-- include_tasks: deploy_files.yml
-- include_tasks: get_mirrors_repo.yml
-- include_tasks: create_mirrors_systemd_timer.yml
-- include_tasks: create_dbs_systemd_timer.yml
-- include_tasks: redis_configuration.yml
-- include_tasks: backend_installation.yml
-- include_tasks: nginx_configuration.yml
-- include_tasks: post_actions.yml
+- name: Main tasks
+  block:
+    - include_tasks: common_setup.yml
+    - include_tasks: deploy_files.yml
+    - include_tasks: get_mirrors_repo.yml
+    - include_tasks: create_dbs_systemd_timer.yml
+    - include_tasks: create_mirrors_systemd_timer.yml
+    - include_tasks: redis_configuration.yml
+    - include_tasks: backend_installation.yml
+    - include_tasks: nginx_configuration.yml
+  vars:
+    ansible_python_interpreter: "/usr/bin/python3.6"
