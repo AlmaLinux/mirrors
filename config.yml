@@ -5,6 +5,7 @@ mirrors_dir: mirrors.d
 mirrors_table: docs/internal/mirrors.md
 versions:
   - 8.5
+  - 8.4
   - 8
 duplicated_versions:
   - 8
@@ -30,8 +31,12 @@ repos:
     path: devel/$basearch/os/
   - name: resilientstorage
     path: ResilientStorage/$basearch/os/
+    versions:
+      - 8.5
   - name: plus
     path: plus/$basearch/os/
+    versions:
+      - 8.5
   - name: baseos-source
     path: BaseOS/Source/
   - name: appstream-source
@@ -46,8 +51,12 @@ repos:
     path: devel/Source/
   - name: resilientstorage-source
     path: ResilientStorage/Source/
+    versions:
+      - 8.5
   - name: plus-source
     path: plus/Source/
+    versions:
+      - 8.5
   - name: baseos-debuginfo
     path: BaseOS/debug/$basearch/
   - name: appstream-debuginfo
@@ -62,8 +71,12 @@ repos:
     path: devel/debug/$basearch/
   - name: resilientstorage-debuginfo
     path: ResilientStorage/debug/$basearch/
+    versions:
+      - 8.5
   - name: plus-debuginfo
     path: plus/debug/$basearch/
+    versions:
+      - 8.5
   - name: raspberrypi
     path: raspberrypi/$basearch/os/
     arches:
