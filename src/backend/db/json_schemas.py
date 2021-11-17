@@ -196,6 +196,19 @@ MAIN_CONFIG = {
                     "items": {
                         "type": "string"
                     }
+                },
+                "versions": {
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            {
+                                "type": "string",
+                            },
+                            {
+                                "type": "number"
+                            }
+                        ]
+                    }
                 }
             },
             "required": [
