@@ -103,6 +103,7 @@ def get_config(
                     name=repo['name'],
                     path=repo['path'],
                     arches=repo.get('arches', []),
+                    versions=[str(ver) for ver in repo.get('versions', [])],
                 ))
             return MainConfig(
                 allowed_outdate=config['allowed_outdate'],
@@ -229,6 +230,9 @@ async def mirror_available(
     for version in versions:
         for repo_data in repos:
             arches = repo_data.arches or arches
+            repo_versions = repo_data.versions
+            if repo_versions and version not in repo_versions:
+                continue
             repo_path = repo_data.path.replace('$basearch', arches[0])
             check_url = os.path.join(
                 mirror_url,
@@ -259,7 +263,7 @@ async def mirror_available(
                     mirror_name,
                     version,
                     repo_path,
-                    err,
+                    str(err) or type(err),
                 )
                 return mirror_name, False
     logger.info(
