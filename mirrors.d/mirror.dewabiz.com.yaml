@@ -2,6 +2,10 @@ name: mirror.dewabiz.com
 address:
   http: http://mirror.dewabiz.com/almalinux/
   https: https://mirror.dewabiz.com/almalinux/
+geolocation:
+  country: ID
+  state_province: DKI Jakarta
+  city: Kota Administrasi Jakarta Selatan
 update_frequency: 3h
 sponsor: DewaBiz (PT. DewaBisnis Digital)
 sponsor_url: http://dewabiz.com/
