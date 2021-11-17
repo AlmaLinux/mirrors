@@ -5,6 +5,10 @@ address:
   https: https://almalinux.mirror.liteserver.nl/
   rsync: rsync://mirror.liteserver.nl/almalinux
   ftp: ftp://mirror.liteserver.nl/almalinux
+geolocation:
+  country: NL
+  state_province: Flevoland
+  city: Dronten
 update_frequency: 3h
 sponsor: LiteServer
 sponsor_url: https://www.liteserver.nl/
