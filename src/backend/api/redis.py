@@ -7,10 +7,10 @@ from typing import (
     Union
 )
 
+from db.data_models import DataClassesJSONEncoder
 from db.db_engine import RedisEngine
 from db.models import (
     MirrorData,
-    DataClassesJSONEncoder,
 )
 from common.sentry import (
     get_logger,

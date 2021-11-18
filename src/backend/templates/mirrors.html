@@ -74,8 +74,8 @@
                         </a> {% include "snipets/link_icon.html" %}
                     </td>
                     <td>{{ mirror.status }}</td>
-                    <td>{{ mirror.continent }}</td>
-                    <td>{{ mirror.country }}</td>
+                    <td>{{ mirror.geolocation.continent }}</td>
+                    <td>{{ mirror.geolocation.country }}</td>
                     {% for url_type in url_types %}
                         <td>
                             {% if mirror.urls.get(url_type) %}

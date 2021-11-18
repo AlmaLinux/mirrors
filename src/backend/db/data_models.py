@@ -1,95 +1,105 @@
 # coding=utf-8
+from json import JSONEncoder
 from typing import Optional
 from dataclasses import (
     dataclass,
     field,
+    is_dataclass,
+    asdict,
 )
 import json
 
 
+class DataClassesJSONEncoder(JSONEncoder):
+    """
+    Custom JSON encoder for data classes
+    """
+
+    def default(self, o):
+        if is_dataclass(o):
+            return asdict(o)
+        return super().default(o)
+
+
 @dataclass
 class LocationData:
-    latitude: float
-    longitude: float
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+
+    @staticmethod
+    def load_from_json(dct: dict[str, float]):
+        return LocationData(
+            latitude=dct.get('latitude'),
+            longitude=dct.get('longitude'),
+        )
 
 
 @dataclass
-class _MirrorYamlDataBase:
-    name: str
-    update_frequency: str
-    sponsor_name: str
-    sponsor_url: str
-    email: str
-    geolocation: Optional[dict] = field(default_factory=dict)
+class GeoLocationData:
+    continent: Optional[str] = None
+    country: Optional[str] = None
+    state: Optional[str] = None
+    city: Optional[str] = None
+
+    @staticmethod
+    def load_from_json(dct: dict[str, str]):
+        return GeoLocationData(
+            continent=dct.get('continent'),
+            country=dct.get('country'),
+            state=dct.get('state_province'),
+            city=dct.get('city'),
+        )
 
 
 @dataclass
-class _MirrorYamlDataDefaultBase:
-    urls: dict[str, str] = field(default_factory=dict)
-    subnets: list[str] = field(default_factory=list)
-    asn: Optional[str] = None
+class MirrorData:
+    status: str = "ok"
     cloud_type: str = ''
     cloud_region: str = ''
     private: bool = False
-
-
-@dataclass
-class MirrorYamlData(_MirrorYamlDataDefaultBase, _MirrorYamlDataBase):
-    pass
-
-
-@dataclass
-class _MirrorDataBase:
-    continent: str
-    country: str
-    state: str
-    city: str
-    ip: str
-    ipv6: bool
-    location: LocationData
-
-
-@dataclass
-class _MirrorDataDefaultBase:
-    status: str = "ok"
+    location: Optional[LocationData] = None
+    geolocation: Optional[GeoLocationData] = None
+    name: Optional[str] = None
+    update_frequency: Optional[str] = None
+    sponsor_name: Optional[str] = None
+    sponsor_url: Optional[str] = None
+    email: Optional[str] = None
+    ip: Optional[str] = None
+    ipv6: Optional[bool] = None
     isos_link: Optional[str] = None
-
-
-@dataclass
-class MirrorData(
-    _MirrorDataDefaultBase,
-    _MirrorYamlDataDefaultBase,
-    _MirrorYamlDataBase,
-    _MirrorDataBase,
-):
+    asn: Optional[str] = None
+    urls: dict[str, str] = field(default_factory=dict)
+    subnets: list[str] = field(default_factory=list)
 
     @staticmethod
     def load_from_json(dct: dict):
         return MirrorData(
-            name=dct['name'],
-            continent=dct['continent'],
-            country=dct['country'],
-            state=dct['state'],
-            city=dct['city'],
-            ip=dct['ip'],
-            ipv6=dct['ipv6'],
-            location=LocationData(
-                latitude=dct['location']['latitude'],
-                longitude=dct['location']['longitude'],
+            status=dct.get('status'),
+            cloud_type=dct.get('cloud_type'),
+            cloud_region=dct.get('cloud_region'),
+            private=dct.get('private'),
+            location=LocationData.load_from_json(
+                dct=dct.get('location') or {},
             ),
-            status=dct['status'],
-            update_frequency=dct['update_frequency'],
-            sponsor_name=dct['sponsor_name'],
-            sponsor_url=dct['sponsor_url'],
-            email=dct['email'],
-            asn=dct['asn'],
-            urls=dct['urls'],
-            subnets=dct['subnets'],
-            cloud_type=dct['cloud_type'],
+            geolocation=GeoLocationData.load_from_json(
+                dct=dct.get('geolocation') or {},
+            ),
+            name=dct.get('name'),
+            update_frequency=dct.get('update_frequency'),
+            sponsor_name=dct.get('sponsor_name'),
+            sponsor_url=dct.get('sponsor_url'),
+            email=dct.get('email'),
+            ip=dct.get('ip'),
+            ipv6=dct.get('ipv6'),
+            isos_link=dct.get('isos_link'),
+            asn=dct.get('asn'),
+            urls=dct.get('urls'),
+            subnets=dct.get('subnets'),
         )
 
     def to_json(self):
-        return json.dumps(self, default=lambda o: o.__dict__)
+        return json.dumps(self, cls=DataClassesJSONEncoder)
+
 
 @dataclass
 class RepoData:
