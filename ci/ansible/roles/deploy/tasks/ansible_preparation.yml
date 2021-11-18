@@ -3,5 +3,3 @@
   dnf:
     name: "{{ ansible_dnf_packages }}"
     state: present
-  notify:
-    - Kill own ssh connections

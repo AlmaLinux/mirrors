@@ -8,6 +8,20 @@
   become: yes
   become_user: "{{ service_user }}"
 
+- name: Enable working uWSGI binary in home directory of an user
+  block:
+    - name: Set SELinux file context mapping definitions of uWSGI binary
+      sefcontext:
+        target: "{{ source_path }}/bin/uwsgi"
+        setype: bin_t
+        state: present
+
+    - name: Set SELinux security context of uWSGI binary
+      file:
+        path: "{{ source_path }}/bin/uwsgi"
+        setype: bin_t
+        seuser: system_u
+
 - name: Prepare uwsgi.ini
   template:
     dest: "{{ source_path }}/src/backend/uwsgi.ini"

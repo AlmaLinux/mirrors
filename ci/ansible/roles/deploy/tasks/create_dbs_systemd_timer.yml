@@ -31,3 +31,8 @@
     enabled: true
     masked: false
     daemon_reload: true
+
+- name: Run update MaxMind DBs
+  systemd:
+    name: "{{ dbs_timer_name }}.service"
+    state: restarted

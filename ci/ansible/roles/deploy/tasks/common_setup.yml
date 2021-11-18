@@ -5,12 +5,12 @@
     name: "{{ service_user }}"
     create_home: yes
 
-- name: Install dnf packages
+- name: Install DNF packages
   dnf:
     name: "{{ dnf_packages }}"
     state: present
 
-- name: Set SELinux option
+- name: Set SELinux option for right working of nginx + uWSGI
   seboolean:
     state: yes
     name: httpd_can_network_connect
@@ -28,10 +28,17 @@
     owner: "{{ service_user }}"
     mode: '0755'
 
-
 - name: Create db directory
   file:
     name: "{{ config_root }}/data"
+    state: directory
+    group: "{{ service_user }}"
+    owner: "{{ service_user }}"
+    mode: '0755'
+
+- name: Create MaxMind DBs directory
+  file:
+    name: "{{ config_root }}/mirrors"
     state: directory
     group: "{{ service_user }}"
     owner: "{{ service_user }}"
