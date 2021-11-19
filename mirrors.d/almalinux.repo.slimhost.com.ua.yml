@@ -1,0 +1,12 @@
+name: almalinux.repo.slimhost.com.ua
+address:
+  http: https://almalinux.repo.slimhost.com.ua/
+  https: https://almalinux.repo.slimhost.com.ua/
+geolocation:
+  country: DE
+  state_province: Bavaria
+  city: Nuremberg
+update_frequency: 1h
+sponsor: Slim Host
+sponsor_url: https://slimhost.com.ua
+email: admin@slimhost.com.ua
