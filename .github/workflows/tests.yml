@@ -75,6 +75,11 @@ jobs:
               echo $MATCHES
               if [[ "$MATCHES" == "0" ]]; then
                 echo "$file contains invalid geolocation data"
+                echo "Country: $COUNTRY"
+                echo "State: $STATE"
+                echo "City: $CITY"
+                echo "cURL Output:"
+                echo $NOMINATIM_LOOKUP
                 exit 1
               else
                 echo "Valid geolocation data found for $file"
