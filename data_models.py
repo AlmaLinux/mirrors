@@ -106,6 +106,7 @@ class RepoData:
     name: str
     path: str
     arches: list[str] = field(default_factory=list)
+    versions: list[str] = field(default_factory=list)
 
 
 @dataclass
