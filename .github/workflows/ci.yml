@@ -40,6 +40,10 @@ jobs:
 
       - name: Check YAML configs
         run: |
+          export PYTHONPATH=$PYTHONPATH:ci
+          echo ==========
+          echo $PYTHONPATH
+          echo ==========
           ls -a ~
           echo ==========
           ls -a
