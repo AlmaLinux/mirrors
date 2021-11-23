@@ -5,7 +5,22 @@ import logging
 import yaml
 import json
 
-from yaml_snippets.utils import config_validation
+from aiohttp import (
+    TCPConnector,
+    ClientSession,
+)
+from syncer import sync
+
+from yaml_snippets.data_models import (
+    MirrorData,
+    MainConfig,
+)
+from yaml_snippets.utils import (
+    config_validation,
+    process_main_config,
+    process_mirror_config,
+    mirror_available,
+)
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -85,6 +100,31 @@ def create_parser():
     return parser
 
 
+async def are_mirrors_available(
+        mirrors: list[MirrorData],
+        main_config: MainConfig,
+) -> int:
+    ret_code = 0
+    conn = TCPConnector(limit=10000, force_close=True)
+    async with ClientSession(
+            connector=conn,
+            headers={"Connection": "close"}
+    ) as http_session:
+        for mirror in mirrors:
+            mirror_name, is_available = await mirror_available(
+                mirror_info=mirror,
+                versions=main_config.versions,
+                repos=main_config.repos,
+                http_session=http_session,
+                arches=main_config.arches,
+                required_protocols=main_config.required_protocols,
+                logger=logger,
+            )
+            if not is_available:
+                ret_code = 1
+    return ret_code
+
+
 def main(args):
     is_validity, err = config_validation(
         yaml_data=args.service_config['config_data'],
@@ -122,6 +162,20 @@ def main(args):
             exit_code = 1
     if not exit_code:
         logger.info('All configs are valid')
+    mirrors = [
+        process_mirror_config(
+            yaml_data=mirror_config['config_data'],
+            logger=logger,
+        )
+        for mirror_config in args.mirror_configs
+    ]
+    main_config, err_msg = process_main_config(
+        yaml_data=args.service_config['config_data'],
+    )
+    exit_code = sync(are_mirrors_available(
+        mirrors=mirrors,
+        main_config=main_config,
+    ))
     exit(exit_code)
 
 
