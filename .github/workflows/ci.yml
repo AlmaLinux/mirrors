@@ -37,19 +37,17 @@ jobs:
 
       - name: Check YAML configs
         run: |
-          export PYTHONPATH=ci
+          export PYTHONPATH=gh_ci
           echo ==========
           echo $PYTHONPATH
           echo ==========
-          ls -a ~
-          echo ==========
           ls -a
           echo ==========
-          ls -a ci
+          ls -a gh_ci
           echo ==========
           python3.9 -c "help('modules')"
           echo ==========
-          python3.9 -c "import ci; dir(ci)"
+          python3.9 -c "import gh_ci; dir(gh_ci)"
           echo ==========
           python3.9 -c "import sys; print(sys.path)"
           echo ==========
