@@ -16,7 +16,7 @@ from jsonschema import (
     validate,
 )
 
-from data_models import (
+from .data_models import (
     MainConfig,
     RepoData,
     GeoLocationData,
