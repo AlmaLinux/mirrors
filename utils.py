@@ -16,7 +16,7 @@ from jsonschema import (
     validate,
 )
 
-from data_models import MainConfig, RepoData, GeoLocationData, MirrorData
+from .data_models import MainConfig, RepoData, GeoLocationData, MirrorData
 
 
 # set User-Agent for python-requests
@@ -129,7 +129,7 @@ def process_main_config(
 def get_config(
         logger: Logger,
         path_to_config: str = os.path.join(
-            os.getenv('CONFIG_ROOT'),
+            os.getenv('CONFIG_ROOT', '.'),
             'mirrors/updates/config.yml'
         ),
 ) -> Optional[MainConfig]:
