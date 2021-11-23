@@ -1,12 +1,11 @@
 #!/usr/bin/env python3.9
 import argparse
 import logging
-from typing import Optional
 
 import yaml
-import jsonschema
 import json
 
+from yaml_snippets.utils import config_validation
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -86,23 +85,9 @@ def create_parser():
     return parser
 
 
-def config_validation(
-        config_data: dict,
-        json_schema: dict,
-) -> tuple[bool, Optional[str]]:
-    try:
-        jsonschema.validate(
-            instance=config_data,
-            schema=json_schema,
-        )
-        return True, None
-    except jsonschema.ValidationError as err:
-        return False, err.message
-
-
 def main(args):
     is_validity, err = config_validation(
-        config_data=args.service_config['config_data'],
+        yaml_data=args.service_config['config_data'],
         json_schema=args.service_config_json_schema,
     )
     if is_validity:
@@ -120,7 +105,7 @@ def main(args):
     exit_code = 0
     for mirror_config in args.mirror_configs:
         is_validity, err = config_validation(
-            config_data=args.service_config['config_data'],
+            yaml_data=args.service_config['config_data'],
             json_schema=args.service_config_json_schema,
         )
         if is_validity:
