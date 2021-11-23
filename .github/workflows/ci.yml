@@ -49,7 +49,7 @@ jobs:
           echo ==========
           python3.9 -c "help('modules')"
           echo ==========
-          python3.9 -c "from ci.yaml_snippets.utils import config_validation"
+          python3.9 -c "import ci; dir(ci)"
           echo ==========
           python3.9 -c "import sys; print(sys.path)"
           echo ==========
