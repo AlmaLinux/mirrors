@@ -47,9 +47,7 @@ jobs:
           echo ==========
           ls -a ci
           echo ==========
-          python3.9 -c "help('modules')" | grep yaml
-          echo ==========
-          python3.9 -c "from yaml_snippets.utils import config_validation"
+          python3.9 -c "help('modules')"
           echo ==========
           python3.9 -c "from ci.yaml_snippets.utils import config_validation"
           echo ==========
