@@ -122,7 +122,7 @@ def process_main_config(
                         repo_attributes=[
                             str(ver) for ver in repo.get('versions', [])
                         ],
-                        attributes=yaml_data['arches']
+                        attributes=[str(ver) for ver in yaml_data['versions']]
                     ),
                 ) for repo in yaml_data['repos']
             ]
@@ -324,6 +324,9 @@ async def mirror_available(
     for version in versions:
         for repo_data in repos:
             arches = repo_data.arches or arches
+            repo_versions = repo_data.versions
+            if repo_versions and version not in repo_versions:
+                continue
             repo_path = repo_data.path.replace('$basearch', arches[0])
             check_url = os.path.join(
                 mirror_url,
@@ -337,7 +340,7 @@ async def mirror_available(
                         headers=HEADERS,
                         timeout=AIOHTTP_TIMEOUT,
                 ) as resp:
-                    await resp.text()
+                    text = await resp.text()
                     if resp.status != 200:
                         # if mirror has no valid version/arch combos it is dead
                         logger.error(
