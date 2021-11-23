@@ -40,7 +40,10 @@ jobs:
 
       - name: Check YAML configs
         run: |
+          echo ==========
           ls -a
+          echo ==========
+          ls -a ci
           PYTHONPATH=./ci ~/.ci_venv/bin/python3 -c "import sys; print(sys.path)"
           PYTHONPATH=./ci ~/.ci_venv/bin/python3 ci/config_checker.py -h
 #          mirror_regexp="mirrors.d/.*.yml"
