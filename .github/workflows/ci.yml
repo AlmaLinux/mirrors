@@ -44,8 +44,8 @@ jobs:
           ls -a
           echo ==========
           ls -a ci
-          PYTHONPATH=./ci ~/.ci_venv/bin/python3 -c "import sys; print(sys.path)"
-          PYTHONPATH=./ci ~/.ci_venv/bin/python3 ci/config_checker.py -h
+          PYTHONPATH=$PYTHONPATH:ci ~/.ci_venv/bin/python3 -c "import sys; print(sys.path)"
+          PYTHONPATH=$PYTHONPATH:ci ~/.ci_venv/bin/python3 ci/config_checker.py -h
 #          mirror_regexp="mirrors.d/.*.yml"
 #          if ! echo "${{ steps.files.outputs.all }}" | grep -E "${mirror_regexp}" &> /dev/null; then
 #            # we check only the main config if PR doesn't contain any mirror config
