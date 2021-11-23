@@ -16,7 +16,12 @@ from jsonschema import (
     validate,
 )
 
-from .data_models import MainConfig, RepoData, GeoLocationData, MirrorData
+from data_models import (
+    MainConfig,
+    RepoData,
+    GeoLocationData,
+    MirrorData,
+)
 
 
 # set User-Agent for python-requests
