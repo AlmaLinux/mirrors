@@ -45,13 +45,15 @@ jobs:
           echo ==========
           ls -a gh_ci
           echo ==========
+          ls -a gh_ci/yaml_snippets
+          echo ==========
           python3.9 -c "help('modules')"
           echo ==========
           python3.9 -c "import gh_ci; dir(gh_ci)"
           echo ==========
           python3.9 -c "import sys; print(sys.path)"
           echo ==========
-          python3.9 ci/config_checker.py -h
+          python3.9 gh_ci/config_checker.py -h
           echo ==========
 #          mirror_regexp="mirrors.d/.*.yml"
 #          if ! echo "${{ steps.files.outputs.all }}" | grep -E "${mirror_regexp}" &> /dev/null; then
