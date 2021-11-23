@@ -30,7 +30,7 @@ jobs:
           python-version: 3.9
 
       - name: Install Python packages into venv
-        run: python3.9 -m pip install -r ci/req.txt
+        run: python3.9 -m pip install -r gh_ci/req.txt
 
       - id: files
         uses: jitterbit/get-changed-files@v1
