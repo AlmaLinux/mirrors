@@ -5,7 +5,7 @@ import logging
 import yaml
 import json
 
-from yaml_snippets.utils import config_validation
+from .yaml_snippets.utils import config_validation
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
