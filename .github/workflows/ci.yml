@@ -40,7 +40,7 @@ jobs:
 
       - name: Check YAML configs
         run: |
-          export PYTHONPATH=$PYTHONPATH:ci
+          export PYTHONPATH=ci
           echo ==========
           echo $PYTHONPATH
           echo ==========
@@ -49,8 +49,10 @@ jobs:
           ls -a
           echo ==========
           ls -a ci
-          PYTHONPATH=$PYTHONPATH:ci ~/.ci_venv/bin/python3 -c "import sys; print(sys.path)"
-          PYTHONPATH=$PYTHONPATH:ci ~/.ci_venv/bin/python3 ci/config_checker.py -h
+          ~/.ci_venv/bin/python3 -c "help('modules')" | grep yaml
+          ~/.ci_venv/bin/python3 -c "from yaml_snippets.utils import config_validation"
+          ~/.ci_venv/bin/python3 -c "import sys; print(sys.path)"
+          ~/.ci_venv/bin/python3 ci/config_checker.py -h
 #          mirror_regexp="mirrors.d/.*.yml"
 #          if ! echo "${{ steps.files.outputs.all }}" | grep -E "${mirror_regexp}" &> /dev/null; then
 #            # we check only the main config if PR doesn't contain any mirror config
