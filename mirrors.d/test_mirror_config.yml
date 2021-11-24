@@ -1,22 +1,10 @@
 ---
-name: eastus.azure.repo.almalinux.org
+name: almalinux.mirror.letscloud.io
 address:
-  http: http://eastus.azure.repo.almalinux.org/almalinux/
-update_frequency: 1h
-sponsor: AlmaLinux OS Foundation
-sponsor_url: https://www.almalinux.org
-email: hello@almalinux.org
-cloud_type: azure
-cloud_regions:
-  - canadaeast
-  - centraluseuap
-  - eastus2euap
-  - eastus2
-  - eastusslv
-  - usstagee
-  - eastus
-  - northcentralus
-  - usstagec
-  - southcentralus
-  - westindia
+  http: http://almalinux.mirror.letscloud.io
+  https: https://almalinux.mirror.letscloud.io
+update_frequency: 3h
+sponsor: LetsCloud
+sponsor_url: https://www.letscloud.io
+email: noc@letscloud.io
 ...
