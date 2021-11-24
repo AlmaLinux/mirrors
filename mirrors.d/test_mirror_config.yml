@@ -1,10 +1,15 @@
 ---
-name: almalinux.mirror.letscloud.io
+name: mirror.lyrahosting.com
 address:
-  http: http://almalinux.mirror.letscloud.io
-  https: https://almalinux.mirror.letscloud.io
+  http: http://mirror.lyrahosting.com/almalinux/
+  https: https://mirror.lyrahosting.com/almalinux/
+  rsync: rsync://mirror.lyrahosting.com/almalinux/
+geolocation:
+  country: NL
+  state_province: Flevoland
+  city: Dronten
 update_frequency: 3h
-sponsor: LetsCloud
-sponsor_url: https://www.letscloud.io
-email: noc@letscloud.io
+sponsor: LyraHosting
+sponsor_url: https://lyrahosting.com
+email: mirror@lyrahosting.com
 ...
