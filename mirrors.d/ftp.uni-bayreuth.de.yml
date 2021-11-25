@@ -4,6 +4,10 @@ address:
   http: http://ftp.uni-bayreuth.de/linux/almalinux/
   https: https://ftp.uni-bayreuth.de/linux/almalinux/
   rsync: rsync://ftp.cwuni-bayreuth.de/almalinux
+geolocation:
+  country: DE
+  state_province: Bavaria
+  city: Bayreuth
 update_frequency: 3h
 sponsor: Universitaet Bayreuth
 sponsor_url: https://www.uni-bayreuth.de
