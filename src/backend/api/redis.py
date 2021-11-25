@@ -20,6 +20,8 @@ from datetime import datetime
 logger = get_logger(__name__)
 
 CACHE_EXPIRED_TIME = 3600  # 1 hour
+FLAPPED_EXPIRED_TIME = 3600 * 3  # 3 hours
+MIRRORS_LIST_EXPIRED_TIME = 5200  # 2 hours
 
 
 @asynccontextmanager
@@ -123,7 +125,7 @@ async def set_mirror_flapped(mirror_name: str):
         await redis_engine.set(
             f'mirror_offline_{mirror_name}',
             int(datetime.utcnow().timestamp()),
-            43200,  # 12 hours
+            FLAPPED_EXPIRED_TIME,
         )
 
 
@@ -149,7 +151,7 @@ async def set_mirror_list(
         mirrors = json.dumps(mirrors, cls=DataClassesJSONEncoder)
         redis_key = 'mirror_list_are_ok_and_not_from_clouds' \
             if are_ok_and_not_from_clouds else 'mirror_list'
-        await redis_engine.set(redis_key, mirrors, 5400)
+        await redis_engine.set(redis_key, mirrors, MIRRORS_LIST_EXPIRED_TIME)
 
 
 async def get_mirror_list(
