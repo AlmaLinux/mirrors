@@ -221,7 +221,7 @@ async def update_mirrors_handler() -> str:
         db_session.query(Url).delete()
         db_session.query(Subnet).delete()
         mirror_check_sem = asyncio.Semaphore(100)
-        conn = TCPConnector(limit=10000, force_close=True)
+        conn = TCPConnector(limit=10000, force_close=True, use_dns_cache=False)
         async with ClientSession(
                 connector=conn,
                 headers={"Connection": "close"}
