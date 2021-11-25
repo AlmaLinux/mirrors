@@ -5,7 +5,7 @@ address:
   https: https://almalinux.uib.no/
   rsync: rsync://almalinux.uib.no/
 geolocation:
-  country: NO
+  country: 'NO'
   state_province: Vestland
   city: Bergen
 update_frequency: 3h
