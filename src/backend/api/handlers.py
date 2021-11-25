@@ -90,11 +90,12 @@ async def _get_nearest_mirrors_by_network_data(
             suitable_mirrors.append(mirror)
 
         suitable_mirrors = randomize_mirrors_within_distance(
-            sort_mirrors_by_distance_and_country(
+            mirrors=sort_mirrors_by_distance_and_country(
                 request_geo_data=(latitude, longitude),
                 mirrors=suitable_mirrors,
                 country=country,
-            )
+            ),
+            country=country,
         )
     return suitable_mirrors
 
