@@ -69,6 +69,11 @@ jobs:
               echo "Checking geolocation data against Nominatim for $file"
               COUNTRY=$(cat ${{ github.workspace }}/$file | shyaml get-value geolocation.country)
               STATE=$(cat ${{ github.workspace }}/$file | shyaml get-value geolocation.state_province)
+              # shyaml will return "None" for blank values but that will make nominatim fail
+              if [ "$STATE" == "None" ];
+              then
+                STATE=""
+              fi
               CITY=$(cat ${{ github.workspace }}/$file | shyaml get-value geolocation.city)
               NOMINATIM_LOOKUP=$(curl -s --referer "https://github.com/$GITHUB_REPOSITORY CI" "https://nominatim.openstreetmap.org/search?city=$CITY&state=$STATE&country=$COUNTRY&format=json")
               MATCHES=$(echo $NOMINATIM_LOOKUP | jq length)
