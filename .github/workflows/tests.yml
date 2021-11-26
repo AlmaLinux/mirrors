@@ -75,7 +75,8 @@ jobs:
                 STATE=""
               fi
               CITY=$(cat ${{ github.workspace }}/$file | shyaml get-value geolocation.city)
-              NOMINATIM_LOOKUP=$(curl -s --referer "https://github.com/$GITHUB_REPOSITORY CI" "https://nominatim.openstreetmap.org/search?city=$CITY&state=$STATE&country=$COUNTRY&format=json")
+              NOMINATIM_URL="https://nominatim.openstreetmap.org/search?city=$CITY&state=$STATE&country=$COUNTRY&format=json"
+              NOMINATIM_LOOKUP=$(curl -s --referer "https://github.com/$GITHUB_REPOSITORY CI" $NOMINATIM_URL)
               MATCHES=$(echo $NOMINATIM_LOOKUP | jq length)
               echo $MATCHES
               if [[ "$MATCHES" == "0" ]]; then
@@ -83,6 +84,7 @@ jobs:
                 echo "Country: $COUNTRY"
                 echo "State: $STATE"
                 echo "City: $CITY"
+                echo "Nominatim URL: $NOMINATIM_URL"
                 echo "cURL Output:"
                 echo $NOMINATIM_LOOKUP
                 exit 1
