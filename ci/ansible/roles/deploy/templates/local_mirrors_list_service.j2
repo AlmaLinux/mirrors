@@ -4,7 +4,5 @@ Wants=network-online.target
 After=network.target network-online.target
 
 [Service]
-User={{ service_user }}
-Group={{ service_user }}
 Type=oneshot
 ExecStart="{{ update_mirrors_list_script_path }}"
