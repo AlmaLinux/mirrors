@@ -1,8 +1,0 @@
-name: mirrors.cloudfly.vn
-address:
-  http: http://mirrors.cloudfly.vn/almalinux/
-  https: https://mirrors.cloudfly.vn/almalinux/
-update_frequency: 3h
-sponsor: Cloudfly
-sponsor_url: https://cloudfly.vn/
-email: vuonglv@cloudfly.vn

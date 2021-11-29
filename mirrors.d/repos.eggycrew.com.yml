@@ -1,9 +1,0 @@
----
-name: repos.eggycrew.com
-address:
-  https: https://repos.eggycrew.com/almalinux
-update_frequency: 2h
-sponsor: EggyCrew
-sponsor_url: NA
-email: arjones85@gmail.com
-...

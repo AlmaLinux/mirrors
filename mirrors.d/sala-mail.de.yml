@@ -1,9 +1,0 @@
----
-name: sala-mail.de
-address:
-  https: https://sala-mail.de/pub/almalinux/
-update_frequency: 3h
-sponsor: SaLa
-sponsor_url: https://sala-mail.de
-email: info@sala-mail.de
-...

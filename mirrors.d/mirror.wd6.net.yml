@@ -1,9 +1,0 @@
-name: mirror.wd6.net
-address:
-  http: http://mirror.wd6.net/almalinux/
-  https: https://mirror.wd6.net/almalinux/
-  rsync: rsync://mirror.wd6.net/almalinux
-update_frequency: 2h
-sponsor: WD6.net 
-sponsor_url: https://www.wd6.net
-email: mirror@wd6.net

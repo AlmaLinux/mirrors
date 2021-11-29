@@ -1,9 +1,0 @@
----
-name: mirror.cepatcloud.id
-address:
-  http: http://mirror.cepatcloud.id/almalinux/
-update_frequency: 3h
-sponsor: Cepat Cloud Indonesia
-sponsor_url: http://cepatcloud.id
-email: admin@cepatcloud.id
-...
