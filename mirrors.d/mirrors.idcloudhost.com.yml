@@ -6,7 +6,7 @@ address:
   rsync: rsync://mirrors.idcloudhost.com/almalinux/
 geolocation:
   country: ID
-  state_province: DKI Jakarta
+  state_province:
   city: Jakarta
 update_frequency: 3h
 sponsor: PT Cloud Hosting Indonesia
