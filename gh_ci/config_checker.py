@@ -4,6 +4,7 @@ import logging
 
 import yaml
 import json
+import requests
 
 from aiohttp import (
     TCPConnector,
@@ -125,6 +126,52 @@ async def are_mirrors_available(
     return ret_code
 
 
+def do_mirrors_have_valid_geo_data(
+        mirrors: list[MirrorData],
+) -> int:
+    ret_code = 0
+    headers = {
+        'referer': 'https://github.com/AlmaLinux/mirrors:CI'
+    }
+    url = 'https://nominatim.openstreetmap.org/search'
+    for mirror in mirrors:
+        if any(getattr(mirror.geolocation, geo_attr) is None for geo_attr in (
+            'city', 'state', 'country'
+        )):
+            continue
+        params = {
+            'city': mirror.geolocation.city,
+            'state': mirror.geolocation.state,
+            'country': mirror.geolocation.country,
+            'format': 'json',
+        }
+        req = requests.get(
+            url=url,
+            params=params,
+            headers=headers,
+        )
+        try:
+            req.raise_for_status()
+            if req.json():
+                logger.info(
+                    'Mirror "%s" has valid geodata',
+                    mirror.name,
+                )
+            else:
+                logger.error(
+                    'Mirror "%s" has invalid geodata',
+                    mirror.name,
+                )
+                ret_code = 1
+        except requests.RequestException as err:
+            logger.warning(
+                'Cannot check validity of mirror "%s" geodata because "%s"',
+                mirror.name,
+                err,
+            )
+    return ret_code
+
+
 def main(args):
     is_validity, err = config_validation(
         yaml_data=args.service_config['config_data'],
@@ -172,7 +219,10 @@ def main(args):
     main_config, err_msg = process_main_config(
         yaml_data=args.service_config['config_data'],
     )
-    exit_code = sync(are_mirrors_available(
+    exit_code += do_mirrors_have_valid_geo_data(
+        mirrors=mirrors,
+    )
+    exit_code += sync(are_mirrors_available(
         mirrors=mirrors,
         main_config=main_config,
     ))
