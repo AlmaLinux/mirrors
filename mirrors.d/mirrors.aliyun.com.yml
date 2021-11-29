@@ -1,0 +1,13 @@
+---
+name: mirrors.aliyun.com
+address:
+  http: http://mirrors.aliyun.com/almalinux/
+  https: https://mirrors.aliyun.com/almalinux/
+geolocation:
+  country: CN
+  state_province: Zhejiang
+  city: Hangzhou
+update_frequency: 2h
+sponsor: Alibaba Cloud Computing Co.,Ltd.
+sponsor_url: https://www.aliyun.com/
+...
