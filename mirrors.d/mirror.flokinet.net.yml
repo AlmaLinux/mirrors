@@ -6,7 +6,7 @@ address:
   rsync: rsync://mirror.flokinet.net/almalinux
 geolocation:
   country: RO
-  state_province: Municipality of Bucharest
+  state_province: "Municipality of Bucharest"
   city: Bucharest
 update_frequency: 3h
 sponsor: FlokiNET
