@@ -134,6 +134,7 @@ def do_mirrors_have_valid_geo_data(
         'referer': 'https://github.com/AlmaLinux/mirrors:CI'
     }
     url = 'https://nominatim.openstreetmap.org/search'
+    ui_url = 'https://nominatim.openstreetmap.org/ui/details.html'
     for mirror in mirrors:
         if any(getattr(mirror.geolocation, geo_attr) is None for geo_attr in (
             'city', 'state', 'country'
@@ -159,8 +160,10 @@ def do_mirrors_have_valid_geo_data(
                 )
             else:
                 logger.error(
-                    'Mirror "%s" has invalid geodata',
+                    'Mirror "%s" has invalid geodata. '
+                    'Please check your data on "%s"',
                     mirror.name,
+                    ui_url,
                 )
                 ret_code = 1
         except requests.RequestException as err:
