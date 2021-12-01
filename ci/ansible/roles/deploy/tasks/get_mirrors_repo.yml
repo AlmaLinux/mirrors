@@ -6,6 +6,8 @@
     clone: yes
     update: yes
     accept_hostkey: yes
+    track_submodules: no
+
 
 - name: Change owner of local repo
   file:

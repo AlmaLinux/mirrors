@@ -140,31 +140,54 @@ async def get_mirror_flapped(mirror_name: str) -> bool:
 async def set_mirror_list(
         mirrors: list[MirrorData],
         are_ok_and_not_from_clouds: bool = False,
+        without_private_mirrors: bool = True,
 ) -> None:
     """
     Save a list of mirrors to cache
     :param are_ok_and_not_from_clouds: Save a list of not expired and not cloud
            mirrors if the param is True, else - save all mirrors
     :param mirrors: list of cached mirrors
+    :param without_private_mirrors: exclude private mirrors from a list
     """
+    redis_key = _get_redis_key_for_the_mirrors_list(
+        are_ok_and_not_from_clouds=are_ok_and_not_from_clouds,
+        without_private_mirrors=without_private_mirrors,
+    )
     async with redis_context() as redis_engine:
         mirrors = json.dumps(mirrors, cls=DataClassesJSONEncoder)
-        redis_key = 'mirror_list_are_ok_and_not_from_clouds' \
-            if are_ok_and_not_from_clouds else 'mirror_list'
         await redis_engine.set(redis_key, mirrors, MIRRORS_LIST_EXPIRED_TIME)
+
+
+def _get_redis_key_for_the_mirrors_list(
+        are_ok_and_not_from_clouds: bool = False,
+        without_private_mirrors: bool = True,
+) -> str:
+    if are_ok_and_not_from_clouds and without_private_mirrors:
+        redis_key = 'mirror_list_are_ok_and_not_from_clouds_without_private'
+    elif are_ok_and_not_from_clouds and not without_private_mirrors:
+        redis_key = 'mirror_list_are_ok_and_not_from_clouds_with_private'
+    elif not are_ok_and_not_from_clouds and without_private_mirrors:
+        redis_key = 'mirror_list_without_private'
+    else:
+        redis_key = 'mirror_list_with_private'
+    return redis_key
 
 
 async def get_mirror_list(
         are_ok_and_not_from_clouds: bool = False,
+        without_private_mirrors: bool = True,
 ) -> Optional[list[MirrorData]]:
     """
     Get a list of mirrors from cache
     :param are_ok_and_not_from_clouds: Get a list of not expired and not cloud
            mirrors if the param is True, else - get all mirrors
+    :param without_private_mirrors: exclude private mirrors from a list
     """
+    redis_key = _get_redis_key_for_the_mirrors_list(
+        are_ok_and_not_from_clouds=are_ok_and_not_from_clouds,
+        without_private_mirrors=without_private_mirrors,
+    )
     async with redis_context() as redis_engine:
-        redis_key = 'mirror_list_are_ok_and_not_from_clouds' \
-            if are_ok_and_not_from_clouds else 'mirror_list'
         mirror_list = await redis_engine.get(redis_key)
     if mirror_list is not None:
         return [

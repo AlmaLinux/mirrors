@@ -60,6 +60,7 @@ LENGTH_CLOUD_MIRRORS_LIST = 5
 
 async def _get_nearest_mirrors_by_network_data(
         ip_address: str,
+        without_private_mirrors: bool = True,
 ) -> list[MirrorData]:
     """
     The function returns mirrors which are in the same subnet or have the same
@@ -68,10 +69,16 @@ async def _get_nearest_mirrors_by_network_data(
     match = get_geo_data_by_ip(ip_address)
     asn = get_asn_by_ip(ip_address)
     suitable_mirrors = []
-    mirrors = await get_mirror_list()
+    mirrors = await get_mirror_list(
+        without_private_mirrors=without_private_mirrors,
+    )
     if not mirrors:
-        await refresh_mirrors_cache()
-        mirrors = await get_mirror_list()
+        await refresh_mirrors_cache(
+            without_private_mirrors=without_private_mirrors,
+        )
+        mirrors = await get_mirror_list(
+            without_private_mirrors=without_private_mirrors,
+        )
     for mirror in mirrors:
         if mirror.status != "ok":
             continue
@@ -83,27 +90,24 @@ async def _get_nearest_mirrors_by_network_data(
     if 1 <= len(suitable_mirrors) < LENGTH_CLOUD_MIRRORS_LIST\
             and match is not None:
         continent, country, _, _, latitude, longitude = match
-
-        for mirror in mirrors:
-            if mirror.name in [mirror.name for mirror in suitable_mirrors]:
-                continue
-            suitable_mirrors.append(mirror)
-
-        suitable_mirrors = randomize_mirrors_within_distance(
-            mirrors=sort_mirrors_by_distance_and_country(
+        suitable_mirrors.extend(
+            mirror['mirror'] for mirror in
+            sort_mirrors_by_distance_and_country(
                 request_geo_data=(latitude, longitude),
-                mirrors=suitable_mirrors,
+                mirrors=[mirror for mirror in mirrors
+                         if mirror not in suitable_mirrors],
                 country=country,
-            ),
-            country=country,
+            )[:LENGTH_CLOUD_MIRRORS_LIST - len(suitable_mirrors)]
         )
     return suitable_mirrors
 
 
 async def _get_nearest_mirrors_by_geo_data(
         ip_address: str,
+        without_private_mirrors: bool = True,
 ) -> list[MirrorData]:
     """
+    # TODO: docstring is obsolete
     The function returns N nearest mirrors towards a request's IP
     Firstly, it searches first N mirrors inside a request's country
     Secondly, it searches first N nearest mirrors by distance
@@ -115,6 +119,7 @@ async def _get_nearest_mirrors_by_geo_data(
     match = get_geo_data_by_ip(ip_address)
     mirrors = await get_all_mirrors(
         are_ok_and_not_from_clouds=True,
+        without_private_mirrors=without_private_mirrors,
     )
     # We return all of mirrors if we can't
     # determine geo data of a request's IP
@@ -146,7 +151,10 @@ async def _get_nearest_mirrors_by_geo_data(
     return mirrors[:LENGTH_GEO_MIRRORS_LIST]
 
 
-async def _get_nearest_mirrors(ip_address: str) -> list[MirrorData]:
+async def _get_nearest_mirrors(
+        ip_address: str,
+        without_private_mirrors: bool = True,
+) -> list[MirrorData]:
     """
     Get nearest mirrors by geo-data or by subnet/ASN
     """
@@ -158,10 +166,12 @@ async def _get_nearest_mirrors(ip_address: str) -> list[MirrorData]:
         return suitable_mirrors
     suitable_mirrors = await _get_nearest_mirrors_by_network_data(
         ip_address=ip_address,
+        without_private_mirrors=without_private_mirrors,
     )
     if not suitable_mirrors:
         suitable_mirrors = await _get_nearest_mirrors_by_geo_data(
             ip_address=ip_address,
+            without_private_mirrors=without_private_mirrors,
         )
     await set_mirrors_to_cache(
         ip_address,
@@ -252,22 +262,27 @@ async def update_mirrors_handler() -> str:
 
 async def refresh_mirrors_cache(
         are_ok_and_not_from_clouds: bool = False,
+        without_private_mirrors: bool = True,
 ):
     mirrors = await get_all_mirrors_db(
         are_ok_and_not_from_clouds=are_ok_and_not_from_clouds,
+        without_private_mirrors=without_private_mirrors,
     )
     mirror_list = [mirror.to_json() for mirror in mirrors]
     await set_mirror_list(
         mirrors=mirror_list,
         are_ok_and_not_from_clouds=are_ok_and_not_from_clouds,
+        without_private_mirrors=without_private_mirrors,
     )
 
 
 async def get_all_mirrors(
-        are_ok_and_not_from_clouds: bool = False
+        are_ok_and_not_from_clouds: bool = False,
+        without_private_mirrors: bool = True,
 ) -> list[MirrorData]:
     mirrors = await get_mirror_list(
         are_ok_and_not_from_clouds=are_ok_and_not_from_clouds,
+        without_private_mirrors=without_private_mirrors,
     )
     if not mirrors:
         await refresh_mirrors_cache(
@@ -281,7 +296,8 @@ async def get_all_mirrors(
 
 
 async def get_all_mirrors_db(
-        are_ok_and_not_from_clouds: bool = False
+        are_ok_and_not_from_clouds: bool = False,
+        without_private_mirrors: bool = True,
 ) -> list[MirrorData]:
     mirrors_list = []
     with session_scope() as session:
@@ -294,12 +310,13 @@ async def get_all_mirrors_db(
             Mirror.continent,
             Mirror.country,
         )
-        mirrors_query = mirrors_query.filter(
-            or_(
-                Mirror.private == false(),
-                Mirror.private == null()
-            ),
-        )
+        if without_private_mirrors:
+            mirrors_query = mirrors_query.filter(
+                or_(
+                    Mirror.private == false(),
+                    Mirror.private == null()
+                ),
+            )
         if are_ok_and_not_from_clouds:
             mirrors_query = mirrors_query.filter(
                 Mirror.status == 'ok',
@@ -339,7 +356,10 @@ async def get_mirrors_list(
             ', '.join(repos.keys()),
         )
     repo_path = repos[repository].path
-    nearest_mirrors = await _get_nearest_mirrors(ip_address=ip_address)
+    nearest_mirrors = await _get_nearest_mirrors(
+        ip_address=ip_address,
+        without_private_mirrors=False,
+    )
     for mirror in nearest_mirrors:
         mirror_url = mirror.urls.get(config.required_protocols[0]) or \
                      mirror.urls.get(config.required_protocols[1])
