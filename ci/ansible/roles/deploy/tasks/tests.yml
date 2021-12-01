@@ -1,0 +1,23 @@
+---
+
+- name: Check some mirrors in a request
+  uri:
+    url: "http://localhost/mirrorlist/8/baseos"
+    headers:
+      X-Forwarded-For: "{{ item.value }}"
+    method: GET
+    return_content: yes
+  register: result
+  failed_when: " item.key not in result.content"
+  loop: "{{ azure_mirrors | dict2items }}"
+  vars:
+    azure_mirrors:
+      # Azure mirrors
+      eastus.azure.repo.almalinux.org: "13.67.153.16"
+      germanywestcentral.azure.repo.almalinux.org: "13.104.156.0"
+      southeastasia.azure.repo.almalinux.org: "13.105.99.64"
+      westus2.azure.repo.almalinux.org: "13.67.128.0"
+      # CL private mirror
+      centos.corp.cloudlinux.com: "77.79.198.14"
+      # some public mirror
+      almalinux.ip-connect.vn.ua: "77.121.201.30"
