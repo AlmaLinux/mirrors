@@ -4,6 +4,7 @@ address:
   http: http://mirrors.aliyun.com/almalinux/
   https: https://mirrors.aliyun.com/almalinux/
 geolocation:
+  continent: Asia
   country: CN
   state_province: Zhejiang
   city: Hangzhou
