@@ -1,6 +1,6 @@
 name: almalinux.repo.slimhost.com.ua
 address:
-  http: https://almalinux.repo.slimhost.com.ua/
+  http: http://almalinux.repo.slimhost.com.ua/
   https: https://almalinux.repo.slimhost.com.ua/
 geolocation:
   country: DE
