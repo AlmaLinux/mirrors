@@ -1,0 +1,12 @@
+name: almalinux.turhost.com
+address:
+  http: http://almalinux.turhost.com/
+  https: https://almalinux.turhost.com/
+geolocation:
+  country: TR
+  state_province: Istanbul
+  city: Istanbul
+update_frequency: 3h
+sponsor: Turhost Hosting
+sponsor_url: https://www.turhost.com
+email: merkez@aerotek.com.tr
