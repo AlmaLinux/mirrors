@@ -3,6 +3,7 @@ name: alma.intercloud.co.il
 address:
   http: http://alma.intercloud.co.il/
   https: https://alma.intercloud.co.il/
+  rsync: rsync://alma.intercloud.co.il/
 update_frequency: 3h
 sponsor: Intercloud Hosting LTD
 sponsor_url: https://intercloud.co.il/
