@@ -3,6 +3,10 @@ name: mirror.domainhizmetleri.com
 address:
   http: http://mirror.domainhizmetleri.com/almalinux/
   https: https://mirror.domainhizmetleri.com/almalinux/
+geolocation:
+  country: TR
+  state_province: Istanbul
+  city: Istanbul
 update_frequency: 1h
 sponsor: Domainhizmetleri.com Hosting
 sponsor_url: https://www.domainhizmetleri.com

@@ -1,0 +1,10 @@
+---
+name: mirrors.ereznet.co.il
+address:
+  http: http://mirrors.ereznet.co.il/almalinux/
+  https: https://mirrors.ereznet.co.il/almalinux/
+update_frequency: 1h
+sponsor: Ereznet - Internet solutions
+sponsor_url: https://www.ereznet.co.il
+email: support@ereznet.co.il
+...

@@ -1,0 +1,11 @@
+---
+name: mirror.repository.id
+address:
+  http: http://mirror.repository.id/almalinux/
+  https: https://mirror.repository.id/almalinux/
+  rsync: rsync://mirror.repository.id/almalinux/
+update_frequency: 3h
+sponsor: repository.id
+sponsor_url: https://repository.id
+email: admin@repository.id
+...

@@ -4,6 +4,10 @@ address:
   http: http://dfw.mirror.rackspace.com/almalinux/
   https: https://dfw.mirror.rackspace.com/almalinux/
   rsync: rsync://dfw.mirror.rackspace.com/almalinux
+geolocation:
+  country: US
+  state_province: Texas
+  City: Dallas
 update_frequency: 4h
 sponsor: Rackspace Technology
 sponsor_url: https://www.rackspace.com

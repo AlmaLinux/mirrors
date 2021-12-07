@@ -2,3 +2,7 @@
 .venv
 .package-lock.json
 node_modules
+mirrors.db
+ci/ansible
+mirrors
+src

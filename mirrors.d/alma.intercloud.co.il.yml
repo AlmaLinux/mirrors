@@ -6,8 +6,8 @@ address:
   rsync: rsync://alma.intercloud.co.il/
 geolocation:
   country: IL
-  state_province: Tel Aviv
-  city: Lod
+  state_province:
+  city: Tel Aviv
 update_frequency: 3h
 sponsor: Intercloud Hosting LTD
 sponsor_url: https://intercloud.co.il/

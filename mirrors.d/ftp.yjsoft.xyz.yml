@@ -3,6 +3,10 @@ name: ftp.yjsoft.xyz
 address:
   http: http://ftp.yjsoft.xyz/almalinux/
   https: https://ftp.yjsoft.xyz/almalinux/
+geolocation:
+  country: KR
+  state_province:
+  city: Seoul
 update_frequency: 3h
 sponsor: YJSoft
 sponsor_url: https://yjsoft.xyz
