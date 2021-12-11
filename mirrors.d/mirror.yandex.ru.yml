@@ -4,6 +4,10 @@ address:
   http: http://mirror.yandex.ru/almalinux/
   https: https://mirror.yandex.ru/almalinux/
   rsync: rsync://mirror.yandex.ru/almalinux/
+geolocation:
+  country: RU
+  state_province: Moscow
+  city: Moscow
 update_frequency: 2h
 sponsor: Yandex
 sponsor_url: https://yandex.ru
