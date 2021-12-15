@@ -1,0 +1,15 @@
+---
+name: mirror.netsite.dk
+address:
+  http: http://mirror.netsite.dk/almalinux/
+  https: https://mirror.netsite.dk/almalinux/
+  rsync: rsync://mirror.netsite.dk/almalinux
+geolocation:
+  country: DK
+  state_province: Hovedstaden
+  city: Copenhagen
+update_frequency: 3h
+sponsor: Netsite A/S
+sponsor_url: https://www.netsite.dk
+email: mirror@netsite.dk 
+...
