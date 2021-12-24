@@ -1,3 +1,4 @@
+---
 name: mr.heru.id
 address:
   http: http://mr.heru.id/almalinux/
@@ -10,4 +11,4 @@ update_frequency: 4h
 sponsor: heru.id
 sponsor_url: https://heru.id/
 email: me@heru.id
-
+...
