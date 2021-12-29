@@ -6,7 +6,7 @@ address:
   rsync: 
 geolocation:
   country: PK
-  state_province: Capitol
+  state_province: Islamabad
   city: Islamabad
 update_frequency: 6h
 sponsor: Inara Technologies Pvt Ltd
