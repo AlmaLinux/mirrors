@@ -1,0 +1,15 @@
+---
+name: repo.inara.pk
+address:
+  http: http://repo.inara.pk/almalinux/
+  https: https://repo.inara.pk/almalinux/
+  rsync: 
+geolocation:
+  country: PK
+  state_province: Islamabad
+  city: Islamabad
+update_frequency: 6h
+sponsor: Inara Technologies Pvt Ltd
+sponsor_url: https://www.inara.pk
+email: ahrar.khan@inara.pk
+...
