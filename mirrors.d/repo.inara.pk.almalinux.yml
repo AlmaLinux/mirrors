@@ -3,7 +3,6 @@ name: repo.inara.pk
 address:
   http: http://repo.inara.pk/almalinux/
   https: https://repo.inara.pk/almalinux/
-  rsync: 
 geolocation:
   country: PK
   state_province: Islamabad
