@@ -6,7 +6,6 @@ mirrors_table: docs/internal/mirrors.md
 versions:
   - 8.5-beta
   - 8.5
-  - 8.4
   - 8
 duplicated_versions:
   - 8
