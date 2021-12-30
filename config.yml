@@ -116,7 +116,7 @@ repos:
   - name: resilientstorage-debuginfo
     path: ResilientStorage/debug/$basearch/
     versions:
-      - 8.5/
+      - 8.5
     arches:
       - x86_64
       - aarch64
