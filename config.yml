@@ -13,6 +13,7 @@ duplicated_versions:
 arches:
   - x86_64
   - aarch64
+  - ppc64le
 # one of them should be in a mirror's config
 required_protocols:
   - http
@@ -20,24 +21,48 @@ required_protocols:
 repos:
   - name: baseos
     path: BaseOS/$basearch/os/
+    arches:
+      - x86_64
+      - aarch64
   - name: appstream
     path: AppStream/$basearch/os/
+    arches:
+      - x86_64
+      - aarch64
   - name: powertools
     path: PowerTools/$basearch/os/
+    arches:
+      - x86_64
+      - aarch64
   - name: extras
     path: extras/$basearch/os/
+    arches:
+      - x86_64
+      - aarch64
   - name: ha
     path: HighAvailability/$basearch/os/
+    arches:
+      - x86_64
+      - aarch64
   - name: devel
     path: devel/$basearch/os/
+    arches:
+      - x86_64
+      - aarch64
   - name: resilientstorage
     path: ResilientStorage/$basearch/os/
     versions:
       - 8.5
+    arches:
+      - x86_64
+      - aarch64
   - name: plus
     path: plus/$basearch/os/
     versions:
       - 8.5
+    arches:
+      - x86_64
+      - aarch64
   - name: baseos-source
     path: BaseOS/Source/
   - name: appstream-source
@@ -60,24 +85,48 @@ repos:
       - 8.5
   - name: baseos-debuginfo
     path: BaseOS/debug/$basearch/
+    arches:
+      - x86_64
+      - aarch64
   - name: appstream-debuginfo
     path: AppStream/debug/$basearch/
+    arches:
+      - x86_64
+      - aarch64
   - name: powertools-debuginfo
     path: PowerTools/debug/$basearch/
+    arches:
+      - x86_64
+      - aarch64
   - name: extras-debuginfo
     path: extras/debug/$basearch/
+    arches:
+      - x86_64
+      - aarch64
   - name: ha-debuginfo
     path: HighAvailability/debug/$basearch/
+    arches:
+      - x86_64
+      - aarch64
   - name: devel-debuginfo
     path: devel/debug/$basearch/
+    arches:
+      - x86_64
+      - aarch64
   - name: resilientstorage-debuginfo
     path: ResilientStorage/debug/$basearch/
     versions:
       - 8.5
+    arches:
+      - x86_64
+      - aarch64
   - name: plus-debuginfo
     path: plus/debug/$basearch/
     versions:
       - 8.5
+    arches:
+      - x86_64
+      - aarch64
   - name: raspberrypi
     path: raspberrypi/$basearch/os/
     arches:
