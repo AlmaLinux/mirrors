@@ -1,0 +1,15 @@
+---
+name: muug.ca
+address:
+  http: http://muug.ca/almalinux/
+  https: https://muug.ca/almalinux/
+  rsync: rsync://muug.ca/almalinux
+geolocation:
+  country: CA
+  state_province: Manitoba
+  city: Winnipeg
+update_frequency: 1h
+sponsor: Manitoba UNIX User Group
+sponsor_url: http://muug.ca/
+email: mirror@muug.ca 
+...
