@@ -3,6 +3,7 @@ name: pkgs.interlinx.bc.ca
 address:
   http: http://pkgs.interlinx.bc.ca:3142/almalinux/
 sponsor: N/A
+sponsor_url: http://not-applicable.example.com/
 update_frequency: 1h
 email: info@interlinx.bc.ca
 private: true
