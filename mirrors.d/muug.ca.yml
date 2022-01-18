@@ -1,8 +1,8 @@
 ---
 name: muug.ca
 address:
-  http: http://muug.ca/almalinux/
-  https: https://muug.ca/almalinux/
+  http: http://muug.ca/mirror/almalinux/
+  https: https://muug.ca/mirror/almalinux/
   rsync: rsync://muug.ca/almalinux
 geolocation:
   country: CA
