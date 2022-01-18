@@ -1,5 +1,18 @@
 ---
+- name: Import NGINX Mainline repository
+  ansible.builtin.yum_repository:
+    name: nginx-mainline
+    description: nginx mainline repo
+    baseurl: "http://nginx.org/packages/mainline/centos/$releasever/$basearch/"
+    gpgcheck: yes
+    gpgkey: "https://nginx.org/keys/nginx_signing.key"
+    module_hotfixes: yes
+    seuser: system_u
+    serole: object_r
+    setype: system_conf_t
+
 - name: Install DNF packages for right works of Ansible
   dnf:
     name: "{{ ansible_dnf_packages }}"
     state: present
+    update_cache: yes
