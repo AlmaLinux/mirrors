@@ -1,0 +1,14 @@
+---
+name: pkgs.interlinx.bc.ca
+address:
+  http: http://pkgs.interlinx.bc.ca:3142/almalinux/
+sponsor: N/A
+sponsor_url: http://not-applicable.example.com/
+update_frequency: 1h
+email: info@interlinx.bc.ca
+private: true
+subnets:
+  - 69.165.217.196/32
+  - 135.23.51.187/32
+  - 2001:470:1c:6f8::/64
+  - 2607:f2c0:f00f:cd00::/64
