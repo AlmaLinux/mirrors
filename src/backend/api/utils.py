@@ -209,6 +209,7 @@ async def get_azure_subnets_json(http_session: ClientSession) -> Optional[dict]:
             'Cannot get json with Azure subnets by url "%s"',
             link_to_json_url,
         )
+        return
     return response_json
 
 
