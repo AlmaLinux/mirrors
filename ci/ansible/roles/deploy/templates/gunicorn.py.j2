@@ -1,6 +1,6 @@
 wsgi_app = 'main:app'
 bind = '[::1]:{{ gunicorn_port }}'
-workers = 4
+workers = {{ backend_workers }}
 threads = 2
 worker_connections = 10000
 user = '{{ service_user }}'

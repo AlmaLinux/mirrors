@@ -5,6 +5,7 @@
 container_env_prefix=prod
 sentry_dsn=<place here a DSN key of your Sentry>
 deploy_environment=Production
+backend_workers=4
 auth_key=<your auth key for access to the endpoint of updating mirrors list>
 test_ip_address=<ip_address_of_request_for_debugging>
 gunicorn_port=<port of uwsgi service>
