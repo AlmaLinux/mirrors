@@ -5,9 +5,8 @@
 container_env_prefix=prod
 sentry_dsn=<place here a DSN key of your Sentry>
 deploy_environment=Production
-uwsgi_processes=8
 auth_key=<your auth key for access to the endpoint of updating mirrors list>
 test_ip_address=<ip_address_of_request_for_debugging>
-uwsgi_port=<port of uwsgi service>
+gunicorn_port=<port of uwsgi service>
 license_key=<License key from MaxMind site>
 rsyslog_server=172.30.122.99
