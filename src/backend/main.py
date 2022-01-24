@@ -33,6 +33,7 @@ from common.sentry import (
     init_sentry_client,
     get_logger,
 )
+from flask_api.status import HTTP_200_OK
 from flask_bs4 import Bootstrap
 
 
@@ -48,6 +49,24 @@ def _get_request_ip() -> str:
     if ',' in ip_address:
         ip_address = [item.strip() for item in ip_address.split(',')][0]
     return test_ip_address or ip_address
+
+
+@app.route(
+    '/my_ip_and_headers',
+    methods=('GET',),
+)
+@error_result
+def my_ip_and_headers():
+    result = {
+        'my_ip': request.remote_addr,
+    }
+    result.update(request.headers)
+
+    return jsonify_response(
+        status='ok',
+        result=result,
+        status_code=HTTP_200_OK,
+    )
 
 
 @app.route(
