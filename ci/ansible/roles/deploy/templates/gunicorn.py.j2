@@ -1,0 +1,24 @@
+wsgi_app = 'main:app'
+bind = '[::1]:{{ gunicorn_port }}'
+workers = {{ backend_workers }}
+threads = 2
+worker_connections = 10000
+user = '{{ service_user }}'
+group = '{{ service_user }}'
+raw_env = [
+    'GEOIP_PATH={{ config_root }}/mirrors/geoip_db.mmdb',
+    'ASN_PATH={{ config_root }}/mirrors/asn_db.mmdb',
+    'SQLITE_PATH={{ config_root }}/data/mirrors.db',
+    'SENTRY_DSN={{ sentry_dsn }}',
+    'PYTHONPATH={{ source_path }}/src/backend/',
+    'CONFIG_ROOT={{ config_root }}',
+    'DEPLOY_ENVIRONMENT={{ deploy_environment }}',
+    'TEST_IP_ADDRESS={{ test_ip_address }}',
+    'AUTH_KEY={{ auth_key }}',
+    'SENTRY_DISABLED={{ (deploy_environment is defined and deploy_environment in sentry_environments) | ternary('False', 'True') }}',
+    'REDIS_SOCKET=/var/run/redis/redis.sock',
+]
+accesslog = '-'
+access_log_format = '"%({X-Forwarded-For}i)s" %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"'
+errorlog = '-'
+timeout = 900

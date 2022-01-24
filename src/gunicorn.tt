@@ -1,0 +1,22 @@
+
+module gunicorn 1.0;
+
+require {
+        type http_port_t;
+        type user_home_t;
+        type redis_t;
+        type init_t;
+        type etc_t;
+        class lnk_file read;
+        class tcp_socket name_connect;
+        class unix_stream_socket connectto;
+        class file write;
+}
+
+#============= init_t ==============
+allow init_t etc_t:file write;
+
+#!!!! This avc can be allowed using the boolean 'nis_enabled'
+allow init_t http_port_t:tcp_socket name_connect;
+allow init_t redis_t:unix_stream_socket connectto;
+allow init_t user_home_t:lnk_file read;

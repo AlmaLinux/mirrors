@@ -229,6 +229,8 @@ async def mirror_available(
         )
         return mirror_name, False
     for version in versions:
+        if mirror_info.cloud_type and 'beta' in version:
+            continue
         for repo_data in repos:
             arches = repo_data.arches or arches
             repo_versions = repo_data.versions
@@ -251,8 +253,10 @@ async def mirror_available(
                     if resp.status != 200:
                         # if mirror has no valid version/arch combos it is dead
                         logger.error(
-                            'Mirror "%s" has one or more invalid repositories',
-                            mirror_name
+                            'Mirror "%s" has one or more invalid '
+                            'repositories by path "%s"',
+                            mirror_name,
+                            repo_path,
                         )
                         return mirror_name, False
             except (ClientError, TimeoutError) as err:
@@ -455,24 +459,29 @@ async def set_geo_data(
     :param sem: asyncio Semaphore
     """
     mirror_name = mirror_info.name
-    try:
-        resolver = aiodns.DNSResolver(timeout=5, tries=2)
-        dns = await resolver.query(mirror_name, 'A')
-        ip = dns[0].host
-        match = get_geo_data_by_ip(ip)
-    except aiodns.error.DNSError:
-        logger.warning('Can\'t get IP of mirror %s', mirror_name)
-        match = None
-        ip = '0.0.0.0'
-    try:
-        resolver = aiodns.DNSResolver(timeout=5, tries=2)
-        dns = await resolver.query(mirror_name, 'AAAA')
-        if dns:
-            ipv6 = True
-        else:
-            ipv6 = False
-    except aiodns.error.DNSError:
+    if mirror_info.private:
         ipv6 = False
+        ip = '0.0.0.0'
+        match = None
+    else:
+        try:
+            resolver = aiodns.DNSResolver(timeout=5, tries=2)
+            dns = await resolver.query(mirror_name, 'A')
+            ip = dns[0].host
+            match = get_geo_data_by_ip(ip)
+        except aiodns.error.DNSError:
+            logger.warning('Can\'t get IP of mirror %s', mirror_name)
+            match = None
+            ip = '0.0.0.0'
+        try:
+            resolver = aiodns.DNSResolver(timeout=5, tries=2)
+            dns = await resolver.query(mirror_name, 'AAAA')
+            if dns:
+                ipv6 = True
+            else:
+                ipv6 = False
+        except aiodns.error.DNSError:
+            ipv6 = False
     logger.info('Set geo data for mirror "%s"', mirror_name)
     if match is None:
         state = 'Unknown'
