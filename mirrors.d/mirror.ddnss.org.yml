@@ -7,7 +7,7 @@ address:
 geolocation:
   country: DE
   state_province: Germany
-  city: Nuremberg
+  city: Karlsruhe
 update_frequency: 3h
 sponsor: Max Fiedler
 sponsor_url: https://mirror.ddnss.org/
