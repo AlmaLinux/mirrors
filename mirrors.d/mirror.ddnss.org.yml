@@ -1,0 +1,15 @@
+---
+name: mirror.ddnss.org
+address:
+  http: http://mirror.ddnss.org/almalinux/
+  https: https://mirror.ddnss.org/almalinux/
+  ftp: ftp://mirror.ddnss.org/almalinux/
+geolocation:
+  country: DE
+  state_province: Germany
+  city: Karlsruhe
+update_frequency: 3h
+sponsor: Max Fiedler
+sponsor_url: https://mirror.ddnss.org/
+email: max.fiedler1988+almalinux@pm.me
+...
