@@ -8,10 +8,10 @@ from aiohttp import ClientSession, TCPConnector
 from sqlalchemy.orm import Session, joinedload
 
 from api.exceptions import UnknownRepositoryOrVersion
-from api.mirrors_update import (
+from api.mirrors_update import update_mirror_in_db
+from yaml_snippets.utils import (
     get_config,
     get_mirrors_info,
-    update_mirror_in_db,
 )
 from api.redis import (
     set_mirrors_to_cache,
@@ -29,14 +29,14 @@ from api.utils import (
     sort_mirrors_by_distance_and_country,
     randomize_mirrors_within_distance,
 )
-from db.data_models import (
+from yaml_snippets.data_models import (
     RepoData,
     MainConfig,
+    MirrorData,
 )
 from db.models import (
     Url,
     Mirror,
-    MirrorData,
     get_asn_by_ip,
     is_ip_in_any_subnet,
     Subnet,
@@ -213,7 +213,17 @@ async def _process_mirror(
 
 
 async def update_mirrors_handler() -> str:
-    config = get_config()
+    config = get_config(
+        logger=logger,
+        path_to_config=os.path.join(
+            os.getenv('CONFIG_ROOT'),
+            'mirrors/updates/config.yml'
+        ),
+        path_to_json_schema=os.path.join(
+            os.environ['SOURCE_PATH'],
+            'src/backend/yaml_snippets/json_schemas/service_config.json'
+        )
+    )
     mirrors_dir = os.path.join(
         os.getenv('CONFIG_ROOT'),
         'mirrors/updates',
@@ -221,6 +231,11 @@ async def update_mirrors_handler() -> str:
     )
     all_mirrors = get_mirrors_info(
         mirrors_dir=mirrors_dir,
+        logger=logger,
+        path_to_json_schema=os.path.join(
+            os.environ['SOURCE_PATH'],
+            'src/backend/yaml_snippets/json_schemas/mirror_config.json',
+        )
     )
 
     # semaphore for nominatim
@@ -351,7 +366,17 @@ async def get_mirrors_list(
         repository: str,
 ) -> str:
     mirrors_list = []
-    config = get_config()
+    config = get_config(
+        logger=logger,
+        path_to_config=os.path.join(
+            os.getenv('CONFIG_ROOT'),
+            'mirrors/updates/config.yml'
+        ),
+        path_to_json_schema=os.path.join(
+            os.environ['SOURCE_PATH'],
+            'src/backend/yaml_snippets/json_schemas/service_config.json'
+        )
+    )
     versions = [str(version) for version in config.versions]
     if version not in versions:
         try:
@@ -417,7 +442,7 @@ async def get_isos_list_by_countries(
 ) -> tuple[dict[str, list[MirrorData]], list[MirrorData]]:
     mirrors_by_countries = defaultdict(list)
     for mirror_info in await get_all_mirrors():
-        # Hyper clouds (like AWS/Azure) don't have isos, because they traffic
+        # Hyper clouds (like AWS/Azure) don't have ISOs, because they traffic
         # is too expensive
         if mirror_info.cloud_type in ('aws', 'azure'):
             continue
@@ -428,10 +453,12 @@ async def get_isos_list_by_countries(
             arch=arch,
             config=config,
         )
-        mirrors_by_countries[mirror_info.geolocation.country].append(mirror_info)
+        mirrors_by_countries[
+            mirror_info.geolocation.country
+        ].append(mirror_info)
     nearest_mirrors = await _get_nearest_mirrors(ip_address=ip_address)
     for nearest_mirror in nearest_mirrors:
-        # Hyper clouds (like AWS/Azure) don't have isos, because they traffic
+        # Hyper clouds (like AWS/Azure) don't have ISOs, because they traffic
         # is too expensive
         if nearest_mirror.cloud_type in ('aws', 'azure'):
             continue

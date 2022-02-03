@@ -24,7 +24,7 @@ from geopy.adapters import AioHTTPAdapter
 from geopy.exc import GeocoderServiceError
 
 from db.db_engine import GeoIPEngine
-from db.data_models import MirrorData
+from yaml_snippets.data_models import MirrorData
 from api.exceptions import (
     BaseCustomException,
     AuthException,
@@ -182,9 +182,10 @@ async def get_azure_subnets_json(http_session: ClientSession) -> Optional[dict]:
                 raise_for_status=True
         ) as resp:
             response_text = await resp.text()
-    except ClientConnectorError as err:
-        logger.exception(
-            'Cannot get json with Azure subnets by url "%s"',
+    except (ClientConnectorError, TimeoutError) as err:
+        logger.error(
+            'Cannot get json with Azure subnets by url "%s" because "%s"',
+            url,
             err,
         )
         return
@@ -192,9 +193,11 @@ async def get_azure_subnets_json(http_session: ClientSession) -> Optional[dict]:
         soup = BeautifulSoup(response_text, features='lxml')
         link_tag = soup.find('a', attrs=link_attributes)
         link_to_json_url = link_tag.attrs['href']
-    except (ValueError, KeyError):
-        logger.exception(
-            'Cannot get json link with Azure subnets from page content',
+    except (ValueError, KeyError) as err:
+        logger.error(
+            'Cannot get json link with Azure '
+            'subnets from page content because "%s',
+            err,
         )
         return
     try:
@@ -203,11 +206,14 @@ async def get_azure_subnets_json(http_session: ClientSession) -> Optional[dict]:
             timeout=AIOHTTP_TIMEOUT,
             raise_for_status=True
         ) as resp:
-            response_json = await resp.json(content_type='application/octet-stream')
-    except:
-        logger.exception(
-            'Cannot get json with Azure subnets by url "%s"',
+            response_json = await resp.json(
+                content_type='application/octet-stream',
+            )
+    except (ClientConnectorError, TimeoutError) as err:
+        logger.error(
+            'Cannot get json with Azure subnets by url "%s" because "%s"',
             link_to_json_url,
+            err,
         )
         return
     return response_json
@@ -222,18 +228,22 @@ async def get_aws_subnets_json(http_session: ClientSession) -> Optional[dict]:
             raise_for_status=True
         ) as resp:
             response_json = await resp.json()
-    except (ClientConnectorError, TimeoutError):
-        logger.exception('Cannot get json with AWS subnets by url "%s"', url)
+    except (ClientConnectorError, TimeoutError) as err:
+        logger.error(
+            'Cannot get json with AWS subnets by url "%s" because "%s"',
+            url,
+            err,
+        )
         return
     return response_json
 
 
 async def get_azure_subnets(http_session: ClientSession):
     data_json = await get_azure_subnets_json(http_session=http_session)
+    subnets = dict()
     if data_json is None:
-        return
+        return subnets
     values = data_json['values']
-    subnets = {}
     for value in values:
         if value['name'].startswith('AzureCloud.'):
             properties = value['properties']
@@ -246,7 +256,7 @@ async def get_aws_subnets(http_session: ClientSession):
     data_json = await get_aws_subnets_json(http_session=http_session)
     subnets = defaultdict(list)
     if data_json is None:
-        return
+        return subnets
     for v4_prefix in data_json['prefixes']:
         subnets[v4_prefix['region'].lower()].append(v4_prefix['ip_prefix'])
     for v6_prefix in data_json['ipv6_prefixes']:

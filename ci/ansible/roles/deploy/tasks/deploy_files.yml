@@ -1,11 +1,8 @@
 ---
 - name: Send files
   synchronize:
-    src: "{{ item }}"
+    src: "../../../src"
     dest: "{{ source_path }}"
-  with_items:
-    - "../../../ci"
-    - "../../../src"
 
 - name: Update permissions of sources
   file:
