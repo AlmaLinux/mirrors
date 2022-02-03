@@ -104,8 +104,10 @@ def process_main_config(
         return MainConfig(
             allowed_outdate=yaml_data['allowed_outdate'],
             mirrors_dir=yaml_data['mirrors_dir'],
-            versions=yaml_data['versions'],
-            duplicated_versions=yaml_data['duplicated_versions'],
+            versions=[str(version) for version in yaml_data['versions']],
+            duplicated_versions=[
+                str(version) for version in yaml_data['duplicated_versions']
+            ],
             arches=yaml_data['arches'],
             required_protocols=yaml_data['required_protocols'],
             repos=[
@@ -137,15 +139,15 @@ def get_config(
             os.getenv('CONFIG_ROOT', '.'),
             'mirrors/updates/config.yml'
         ),
+        path_to_json_schema: str = os.path.join(
+            os.path.dirname(os.path.realpath(__file__)),
+            'json_schemas/service_config.json',
+        ),
 ) -> Optional[MainConfig]:
     """
     Read, validate, parse and return main config of the mirrors service
     """
 
-    path_to_json_schema = os.path.join(
-        os.path.dirname(os.path.realpath(__file__)),
-        'json_schemas/service_config.json',
-    )
     config_data = load_yaml(path=path_to_config)
     json_schema = load_json_schema(path=path_to_json_schema)
     is_valid, err_msg = config_validation(
@@ -197,7 +199,6 @@ def process_mirror_config(
                 )
                 return []
         return subnets_field
-
     return MirrorData(
         name=yaml_data['name'],
         update_frequency=yaml_data['update_frequency'],
@@ -213,7 +214,7 @@ def process_mirror_config(
         ),
         asn=yaml_data.get('asn'),
         cloud_type=yaml_data.get('cloud_type', ''),
-        cloud_region=','.join(yaml_data),
+        cloud_region=','.join(yaml_data.get('cloud_regions', [])),
         geolocation=GeoLocationData.load_from_json(
             yaml_data.get('geolocation', {}),
         ),
@@ -222,16 +223,16 @@ def process_mirror_config(
 
 
 def get_mirror_config(
-        path_to_config: Path,
         logger: Logger,
+        path_to_config: Path,
+        path_to_json_schema: str = os.path.join(
+            os.path.dirname(os.path.realpath(__file__)),
+            'json_schemas/service_config.json',
+        ),
 ) -> Optional[MirrorData]:
     """
     Read, validate, parse and return config of a mirror
     """
-    path_to_json_schema = os.path.join(
-        os.path.dirname(os.path.realpath(__file__)),
-        'json_schemas/mirror_config.json',
-    )
     mirror_data = load_yaml(path=str(path_to_config))
     json_schema = load_json_schema(path=path_to_json_schema)
     is_valid, err_msg = config_validation(
@@ -245,7 +246,10 @@ def get_mirror_config(
             err_msg,
         )
         return
-    config, err_msg = process_main_config(yaml_data=mirror_data)
+    config = process_mirror_config(
+        yaml_data=mirror_data,
+        logger=logger,
+    )
     if err_msg:
         logger.error(
             'Mirror config "%s" is invalid because "%s"',
@@ -259,12 +263,17 @@ def get_mirror_config(
 def get_mirrors_info(
         mirrors_dir: str,
         logger: Logger,
+        path_to_json_schema: str = os.path.join(
+            os.path.dirname(os.path.realpath(__file__)),
+            'json_schemas/service_config.json',
+        )
 ) -> list[MirrorData]:
     """
-    Extract info about all of mirrors from yaml files
+    Extract info about all mirrors from yaml files
     :param mirrors_dir: path to the directory which contains
            config files of mirrors
     :param logger: instance of Logger class
+    :param path_to_json_schema: path to JSON schema of a mirror's config
     """
     # global ALL_MIRROR_PROTOCOLS
     result = []
@@ -272,6 +281,7 @@ def get_mirrors_info(
         mirror_info = get_mirror_config(
             path_to_config=config_path,
             logger=logger,
+            path_to_json_schema=path_to_json_schema,
         )
         if mirror_info is not None:
             result.append(mirror_info)
@@ -322,6 +332,9 @@ async def mirror_available(
         )
         return mirror_name, False
     for version in versions:
+        # cloud mirrors (Azure/AWS) don't store beta versions
+        if mirror_info.cloud_type and 'beta' in version:
+            continue
         for repo_data in repos:
             arches = repo_data.arches or arches
             repo_versions = repo_data.versions
@@ -340,16 +353,18 @@ async def mirror_available(
                         headers=HEADERS,
                         timeout=AIOHTTP_TIMEOUT,
                 ) as resp:
-                    text = await resp.text()
+                    await resp.text()
                     if resp.status != 200:
                         # if mirror has no valid version/arch combos it is dead
                         logger.error(
-                            'Mirror "%s" has one or more invalid repositories',
-                            mirror_name
+                            'Mirror "%s" has one or more invalid '
+                            'repositories by path "%s"',
+                            mirror_name,
+                            repo_path,
                         )
                         return mirror_name, False
             except (ClientError, TimeoutError) as err:
-                # We want to unified error message so I used logging
+                # We want to unified error message, so I used logging
                 # level `error` instead logging level `exception`
                 logger.error(
                     'Mirror "%s" is not available for version '
@@ -357,7 +372,7 @@ async def mirror_available(
                     mirror_name,
                     version,
                     repo_path,
-                    err,
+                    str(err) or type(err),
                 )
                 return mirror_name, False
     logger.info(
