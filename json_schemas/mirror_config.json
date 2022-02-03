@@ -1,5 +1,5 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
     "properties": {
         "cloud_type": {
@@ -103,12 +103,28 @@
         "sponsor",
         "sponsor_url"
     ],
+    "allOf": [
+        {
+            "if": {
+                "properties": {
+                    "private": {
+                        "const": true
+                    }
+                },
+                "required": [
+                    "subnets"
+                ]
+            }
+        }
+    ],
     "dependentRequired": {
-        "private": [
-            "subnets"
+        "monopoly": [
+            "private"
         ]
     },
     "dependencies": {
-        "cloud_type": {"required": ["cloud_regions"]}
+        "cloud_type": {
+            "required": ["cloud_regions"]
+        }
     }
 }

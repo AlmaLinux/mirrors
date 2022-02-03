@@ -68,6 +68,7 @@ class MirrorData:
     ipv6: Optional[bool] = None
     isos_link: Optional[str] = None
     asn: Optional[str] = None
+    monopoly: bool = False
     urls: dict[str, str] = field(default_factory=dict)
     subnets: list[str] = field(default_factory=list)
 
@@ -95,6 +96,7 @@ class MirrorData:
             asn=dct.get('asn'),
             urls=dct.get('urls'),
             subnets=dct.get('subnets'),
+            monopoly=dct.get('monopoly')
         )
 
     def to_json(self):
