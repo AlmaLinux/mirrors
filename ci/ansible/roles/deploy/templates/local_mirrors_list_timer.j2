@@ -2,7 +2,7 @@
 Description={{ description }} Service
 Wants=network-online.target
 After=network.target network-online.target
-Requires=local_mirrors_list.service
+Requires={{ mirrors_timer_name }}.service
 
 [Timer]
 OnStartupSec=1m
