@@ -4,7 +4,7 @@ address:
   http: http://atl.mirrors.knownhost.com/almalinux
   https: https://atl.mirrors.knownhost.com/almalinux
   rsync: rsync://atl.mirrors.knownhost.com/almalinux
-update_frequency: 3h
+update_frequency: 1h
 geolocation:
   city: Atlanta
   state_province: Georgia
