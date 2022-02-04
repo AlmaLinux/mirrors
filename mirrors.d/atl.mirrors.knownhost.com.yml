@@ -1,9 +1,9 @@
 ---
 name: atl.mirrors.knownhost.com
 address:
-  http: http://atl.mirrors.knownhost.com/linux/almalinux
-  https: https://atl.mirrors.knownhost.com/linux/almalinux
-  rsync: rsync://atl.mirrors.knownhost.com/linux/almalinux
+  http: http://atl.mirrors.knownhost.com/almalinux
+  https: https://atl.mirrors.knownhost.com/almalinux
+  rsync: rsync://atl.mirrors.knownhost.com/almalinux
 update_frequency: 3h
 geolocation:
   city: Atlanta

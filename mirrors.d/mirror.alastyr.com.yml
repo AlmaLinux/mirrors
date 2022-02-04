@@ -1,0 +1,13 @@
+name: mirror.alastyr.com
+address:
+  http: http://mirror.alastyr.com/almalinux
+  https: https://mirror.alastyr.com/almalinux
+  rsync: rsync://mirror.alastyr.com/almalinux
+geolocation:
+  country: TR
+  state_province: Izmir
+  city: Izmir
+update_frequency: 1h
+sponsor: ALASTYR 
+sponsor_url: https://www.alastyr.com
+email: mirrors@alastyr.com

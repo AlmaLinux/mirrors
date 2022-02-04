@@ -1,0 +1,15 @@
+---
+name: mirror.ihost.md
+address:
+  http: http://mirror.ihost.md/almalinux/
+  https: https://mirror.ihost.md/almalinux/
+  rsync: rsync://mirror.ihost.md/almalinux
+geolocation:
+  country: MD
+  state_province: Chisinau
+  city: Chisinau
+update_frequency: 3h
+sponsor: iHost
+sponsor_url: https://ihost.md
+email: noc@ihost.md
+...
