@@ -1,0 +1,13 @@
+name: almalinux.mirror.x33u.org
+address:
+  http: http://almalinux.mirror.x33u.org/
+  https: https://almalinux.mirror.x33u.org/
+update_frequency: 3h
+sponsor: x33u
+sponsor_url: https://www.x33u.org
+email: almalinux_mirror@x33u.org
+geolocation:
+  continent: Europe
+  country: DE
+  state_province: Saxony
+  city: Falkenstein
