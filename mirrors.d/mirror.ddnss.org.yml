@@ -6,7 +6,7 @@ address:
   ftp: ftp://mirror.ddnss.org/almalinux/
 geolocation:
   country: DE
-  state_province: Germany
+  state_province: Baden-Württemberg
   city: Karlsruhe
 update_frequency: 3h
 sponsor: Max Fiedler
