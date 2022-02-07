@@ -56,6 +56,18 @@ logger = get_logger(__name__)
 
 LENGTH_GEO_MIRRORS_LIST = 10
 LENGTH_CLOUD_MIRRORS_LIST = 5
+SERVICE_CONFIG_PATH = os.path.join(
+    os.environ['SOURCE_PATH'],
+    'mirrors/updates/config.yml'
+)
+SERVICE_CONFIG_JSON_SCHEMA_PATH = os.path.join(
+    os.environ['SOURCE_PATH'],
+    'src/backend/yaml_snippets/json_schemas/service_config.json'
+)
+MIRROR_CONFIG_JSON_SCHEMA_PATH = os.path.join(
+    os.environ['SOURCE_PATH'],
+    'src/backend/yaml_snippets/json_schemas/mirror_config.json'
+)
 
 
 async def _get_nearest_mirrors_by_network_data(
@@ -215,14 +227,8 @@ async def _process_mirror(
 async def update_mirrors_handler() -> str:
     config = get_config(
         logger=logger,
-        path_to_config=os.path.join(
-            os.getenv('CONFIG_ROOT'),
-            'mirrors/updates/config.yml'
-        ),
-        path_to_json_schema=os.path.join(
-            os.environ['SOURCE_PATH'],
-            'src/backend/yaml_snippets/json_schemas/service_config.json'
-        )
+        path_to_config=SERVICE_CONFIG_PATH,
+        path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_PATH,
     )
     mirrors_dir = os.path.join(
         os.getenv('CONFIG_ROOT'),
@@ -232,10 +238,7 @@ async def update_mirrors_handler() -> str:
     all_mirrors = get_mirrors_info(
         mirrors_dir=mirrors_dir,
         logger=logger,
-        path_to_json_schema=os.path.join(
-            os.environ['SOURCE_PATH'],
-            'src/backend/yaml_snippets/json_schemas/mirror_config.json',
-        )
+        path_to_json_schema=MIRROR_CONFIG_JSON_SCHEMA_PATH,
     )
 
     # semaphore for nominatim
@@ -368,14 +371,8 @@ async def get_mirrors_list(
     mirrors_list = []
     config = get_config(
         logger=logger,
-        path_to_config=os.path.join(
-            os.getenv('CONFIG_ROOT'),
-            'mirrors/updates/config.yml'
-        ),
-        path_to_json_schema=os.path.join(
-            os.environ['SOURCE_PATH'],
-            'src/backend/yaml_snippets/json_schemas/service_config.json'
-        )
+        path_to_config=SERVICE_CONFIG_PATH,
+        path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_PATH,
     )
     versions = [str(version) for version in config.versions]
     if version not in versions:
