@@ -7,7 +7,7 @@ geolocation:
   country: TR
   state_province: Istanbul
   city: Istanbul
-update_frequency: 1h
+update_frequency: 2h
 sponsor: Natro Hosting
 sponsor_url: https://www.natro.com
 email: mirror@natro.com
