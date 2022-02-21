@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+echo "$$" > "/var/run/{{ mirrors_timer_name }}.pid"
 pushd {{ config_root }}/mirrors/updates
 git fetch --all
 git reset --hard origin/master
@@ -11,3 +12,4 @@ for i in $(seq 1 40); do
         sleep 15
 done
 curl --cookie 'AUTH_KEY={{ auth_key }}' -X POST http://[::1]:{{ gunicorn_port }}/update_mirrors
+rm -f "/var/run/{{ mirrors_timer_name }}.pid"

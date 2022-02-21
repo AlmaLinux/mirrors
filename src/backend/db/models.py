@@ -1,9 +1,4 @@
 # coding=utf-8
-from dataclasses import (
-    is_dataclass,
-    asdict,
-)
-from json import JSONEncoder
 from ipaddress import ip_network
 
 from geoip2.errors import AddressNotFoundError
@@ -25,9 +20,10 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.ext.hybrid import hybrid_method
 
 from common.sentry import get_logger
-from db.data_models import (
+from yaml_snippets.data_models import (
     MirrorData,
-    LocationData, GeoLocationData,
+    LocationData,
+    GeoLocationData,
 )
 from db.db_engine import AsnEngine
 

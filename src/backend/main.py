@@ -22,7 +22,7 @@ from api.handlers import (
     get_isos_list_by_countries,
     get_main_isos_table,
 )
-from api.mirrors_update import get_config
+from yaml_snippets.utils import get_config
 from api.utils import (
     success_result,
     error_result,
@@ -122,7 +122,17 @@ async def isos(
     data = {
         'main_title': 'AlmaLinux ISOs links'
     }
-    config = get_config()
+    config = get_config(
+        logger=logger,
+        path_to_config=os.path.join(
+            os.getenv('CONFIG_ROOT'),
+            'mirrors/updates/config.yml'
+        ),
+        path_to_json_schema=os.path.join(
+            os.environ['SOURCE_PATH'],
+            'src/backend/yaml_snippets/json_schemas/service_config.json'
+        )
+    )
     if arch is None or version is None:
         data.update({
             'isos_list': get_main_isos_table(config=config),
