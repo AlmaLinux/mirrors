@@ -2,8 +2,22 @@ name: mirrors.tino.org
 address:
   http: http://mirrors.tino.org/almalinux/
   https: https://mirrors.tino.org/almalinux/
-  rsync: rsync://mirrors.tino.org/almalinux
 update_frequency: 1h
 sponsor: TINO GROUP
 sponsor_url: https://tino.org/
 email: info@tino.org
+geolocation:
+  continent: Asia
+  country: VN
+  state_province: Ho Chi Minh
+  city: Ho Chi Minh
+private: false
+monopoly: true
+# The list will be required if a mirror is local or cloud.
+# It contains subnets behind which located a private mirror.
+# Also, it can be string and contains URL which returns json list with subnets
+# That parameter can specify ASN which is maintained by a mirror is located in cloud
+asn: AS135951
+# The list will be required if a mirror is located in Azure/AWS cloud
+cloud_regions:
+  - Ho Chi Minh
