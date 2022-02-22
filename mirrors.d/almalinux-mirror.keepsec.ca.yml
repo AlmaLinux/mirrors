@@ -2,6 +2,7 @@
 name: almalinux-mirror.keepsec.ca
 address:
   http: http://almalinux-mirror.keepsec.ca/
+  https: http://almalinux-mirror.keepsec.ca/
 update_frequency: 3h
 sponsor: KeepSec
 sponsor_url: https://www.keepsec.ca/
