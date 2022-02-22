@@ -218,7 +218,8 @@ def process_mirror_config(
         geolocation=GeoLocationData.load_from_json(
             yaml_data.get('geolocation', {}),
         ),
-        private=yaml_data.get('private', False)
+        private=yaml_data.get('private', False),
+        monopoly=yaml_data.get('monopoly', False),
     )
 
 
