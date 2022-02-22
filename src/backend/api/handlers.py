@@ -57,7 +57,7 @@ logger = get_logger(__name__)
 LENGTH_GEO_MIRRORS_LIST = 10
 LENGTH_CLOUD_MIRRORS_LIST = 5
 SERVICE_CONFIG_PATH = os.path.join(
-    os.environ['SOURCE_PATH'],
+    os.environ['CONFIG_ROOT'],
     'mirrors/updates/config.yml'
 )
 SERVICE_CONFIG_JSON_SCHEMA_PATH = os.path.join(
@@ -98,7 +98,10 @@ async def _get_nearest_mirrors_by_network_data(
             ip_address=ip_address,
             subnets=mirror.subnets,
         ):
-            suitable_mirrors.append(mirror)
+            if mirror.monopoly:
+                return [mirror]
+            else:
+                suitable_mirrors.append(mirror)
     if 1 <= len(suitable_mirrors) < LENGTH_CLOUD_MIRRORS_LIST\
             and match is not None:
         continent, country, _, _, latitude, longitude = match
