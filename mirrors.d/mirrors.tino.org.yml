@@ -12,7 +12,6 @@ geolocation:
   state_province: Ho Chi Minh
   city: Ho Chi Minh
 private: false
-monopoly: true
 # The list will be required if a mirror is local or cloud.
 # It contains subnets behind which located a private mirror.
 # Also, it can be string and contains URL which returns json list with subnets
