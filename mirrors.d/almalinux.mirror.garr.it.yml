@@ -1,0 +1,13 @@
+---
+name: almalinux.mirror.garr.it
+address:
+  http: http://almalinux.mirror.garr.it
+  https: https://almalinux.mirror.garr.it
+geolocation:
+  country: IT
+  state_province: Emilia-Romagna
+  city: Bologna
+update_frequency: 4h
+sponsor: Consortium GARR
+sponsor_url: https://www.garr.it
+email: mirror-service@garr.it
