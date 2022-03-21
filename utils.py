@@ -354,7 +354,15 @@ async def mirror_available(
                         headers=HEADERS,
                         timeout=AIOHTTP_TIMEOUT,
                 ) as resp:
-                    await resp.text()
+                    try:
+                        await resp.text()
+                    except Exception as err:
+                        logger.error(
+                            'Something went wrong with mirror "%s". '
+                            'Exception "%s"',
+                            mirror_name,
+                            err,
+                        )
                     if resp.status != 200:
                         # if mirror has no valid version/arch combos it is dead
                         logger.error(
