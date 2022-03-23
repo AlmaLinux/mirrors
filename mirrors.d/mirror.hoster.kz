@@ -1,0 +1,14 @@
+name: mirror.hoster.kz
+address:
+  http: http://mirror.hoster.kz/almalinux/
+  https: https://mirror.hoster.kz/almalinux/
+  rsync: rsync://mirror.hoster.kz/almalinux/
+geolocation:
+  country: KZ
+  state_province:
+  city: Almaty
+update_frequency: 3h
+sponsor: Hoster.KZ
+sponsor_url: https://hoster.kz/
+email: support@hoster.kz
+...
