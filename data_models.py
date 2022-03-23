@@ -115,8 +115,10 @@ class RepoData:
 class MainConfig:
     allowed_outdate: str
     mirrors_dir: str
+    vault_mirror: str
     versions: list[str] = field(default_factory=list)
     duplicated_versions: list[str] = field(default_factory=list)
+    vault_versions: list[str] = field(default_factory=list)
     arches: list[str] = field(default_factory=list)
     required_protocols: list[str] = field(default_factory=list)
     repos: list[RepoData] = field(default_factory=list)

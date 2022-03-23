@@ -104,9 +104,13 @@ def process_main_config(
         return MainConfig(
             allowed_outdate=yaml_data['allowed_outdate'],
             mirrors_dir=yaml_data['mirrors_dir'],
+            vault_mirror=yaml_data.get('vault_mirror'),
             versions=[str(version) for version in yaml_data['versions']],
             duplicated_versions=[
                 str(version) for version in yaml_data['duplicated_versions']
+            ],
+            vault_versions=[
+                str(version) for version in yaml_data.get('vault_versions', [])
             ],
             arches=yaml_data['arches'],
             required_protocols=yaml_data['required_protocols'],

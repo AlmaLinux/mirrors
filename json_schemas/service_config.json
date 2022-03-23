@@ -18,6 +18,9 @@
                 "mirrors_table": {
                     "type": "string"
                 },
+                "vault_mirror": {
+                    "type": "string"
+                },
                 "versions": {
                     "type": "array",
                     "items": {
@@ -32,6 +35,19 @@
                     }
                 },
                 "duplicated_versions": {
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "number"
+                            }
+                        ]
+                    }
+                },
+                "vault_versions": {
                     "type": "array",
                     "items": {
                         "oneOf": [
@@ -72,6 +88,8 @@
                 "mirrors_dir",
                 "mirrors_table",
                 "repos",
+                "vault_mirror",
+                "vault_versions",
                 "versions"
             ],
             "title": "Welcome4"
