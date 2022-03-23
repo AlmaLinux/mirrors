@@ -1,5 +1,6 @@
 # coding=utf-8
 import os
+from datetime import datetime
 
 from flask import (
     Flask,
@@ -41,6 +42,13 @@ app = Flask('app')
 Bootstrap(app)
 init_sentry_client()
 logger = get_logger(__name__)
+
+
+@app.context_processor
+def inject_now_date():
+    return {
+        'now': datetime.utcnow(),
+    }
 
 
 def _get_request_ip() -> str:

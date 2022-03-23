@@ -378,15 +378,8 @@ async def get_mirrors_list(
         path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_PATH,
     )
     versions = [str(version) for version in config.versions]
-    if version not in versions:
-        try:
-            version = next(ver for ver in versions if version.startswith(ver))
-        except StopIteration:
-            raise UnknownRepositoryOrVersion(
-                'Unknown version "%s". Allowed list of versions "%s"',
-                version,
-                ', '.join(versions),
-            )
+    vault_versions = [str(version) for version in config.vault_versions]
+    vault_mirror = config.vault_mirror
     repos = {
         repo.name: repo for repo in config.repos
     }  # type: dict[str, RepoData]
@@ -396,7 +389,24 @@ async def get_mirrors_list(
             repository,
             ', '.join(repos.keys()),
         )
+    if version not in versions:
+        try:
+            version = next(ver for ver in versions if version.startswith(ver))
+        except StopIteration:
+            raise UnknownRepositoryOrVersion(
+                'Unknown version "%s". Allowed list of versions "%s"',
+                version,
+                ', '.join(versions),
+            )
     repo_path = repos[repository].path
+
+    # if a client requests vault version
+    if version in vault_versions:
+        return os.path.join(
+            vault_mirror,
+            version,
+            repo_path,
+        )
     nearest_mirrors = await _get_nearest_mirrors(
         ip_address=ip_address,
         without_private_mirrors=False,
