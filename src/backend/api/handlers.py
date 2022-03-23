@@ -383,16 +383,12 @@ async def get_mirrors_list(
     repos = {
         repo.name: repo for repo in config.repos
     }  # type: dict[str, RepoData]
-    repo_path = repos[repository].path
-
-    # if a client requests vault version
-    if version in vault_versions:
-        return os.path.join(
-            vault_mirror,
-            version,
-            repo_path,
+    if repository not in repos:
+        raise UnknownRepositoryOrVersion(
+            'Unknown repository "%s". Allowed list of repositories "%s"',
+            repository,
+            ', '.join(repos.keys()),
         )
-
     if version not in versions:
         try:
             version = next(ver for ver in versions if version.startswith(ver))
@@ -402,11 +398,14 @@ async def get_mirrors_list(
                 version,
                 ', '.join(versions),
             )
-    if repository not in repos:
-        raise UnknownRepositoryOrVersion(
-            'Unknown repository "%s". Allowed list of repositories "%s"',
-            repository,
-            ', '.join(repos.keys()),
+    repo_path = repos[repository].path
+
+    # if a client requests vault version
+    if version in vault_versions:
+        return os.path.join(
+            vault_mirror,
+            version,
+            repo_path,
         )
     nearest_mirrors = await _get_nearest_mirrors(
         ip_address=ip_address,
