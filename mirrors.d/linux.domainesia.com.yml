@@ -1,0 +1,15 @@
+---
+name: linux.domainesia.com
+address:
+  http: http://linux.domainesia.com/almalinux
+  https: https://linux.domainesia.com/almalinux
+  rsync: rsync://linux.domainesia.com/almalinux
+update_frequency: 12h
+sponsor: DomaiNesia - PT Delta Neva Angkasa
+sponsor_url: https://domainesia.com
+email: support@domainesia.com
+geolocation:
+  country: ID
+  state_province: Special Capital Region of Jakarta
+  city: Jakarta Selatan
+...
