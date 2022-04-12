@@ -1,0 +1,15 @@
+---
+name: mirror.nevacloud.com
+address:
+  http: http://mirror.nevacloud.com/almalinux
+  https: https://mirror.nevacloud.com/almalinux
+  rsync: rsync://mirror.nevacloud.com/almalinux
+update_frequency: 12h
+sponsor: NevaCloud - PT Delta Awan Angkasa
+sponsor_url: https://nevacloud.com
+email: noc@nevacloud.com
+geolocation:
+  country: ID
+  state_province: Special Capital Region of Jakarta
+  city: Jakarta Selatan
+...
