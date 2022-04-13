@@ -1,8 +1,8 @@
 ---
 name: almalinux.mirror.myduniahost.com
 address:
-  http: http://almalinux.mirror.myduniahost.com/
-  rsync: rsync://rsync.almalinux.mirror.myduniahost.com/
+  http: http://almalinux.mirror.myduniahost.com/almalinux/
+  rsync: rsync://rsync.almalinux.mirror.myduniahost.com/almalinux/
 geolocation:
   country: MY
   state_province: Kuala Lumpur
@@ -10,5 +10,5 @@ geolocation:
 update_frequency: 3h
 sponsor: Rafatech System Sdn Bhd
 sponsor_url: https://www.rafatech.com.my/
-email: danish@rafatech.com.my
+email: tech@rafatech.com.my
 ...
