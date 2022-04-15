@@ -1,0 +1,15 @@
+---
+name: almalinux.schlundtech.de
+address:
+  https: https://almalinux.schlundtech.de
+  rsync: rsync://almalinux.schlundtech.de/almalinux
+  ftp: ftp://almalinux.schlundtech.de/almalinux
+geolocation:
+  country: DE
+  state_province: Bavaria
+  city: Munich
+update_frequency: 2h
+sponsor: Schlund Technologies GmbH
+sponsor_url: https://www.schlundtech.de
+email: mirror-admin@schlundtech.de
+...

@@ -4,11 +4,16 @@ mirrorlist_dir: docs/.vuepress/public/mirrorlist
 mirrors_dir: mirrors.d
 mirrors_table: docs/internal/mirrors.md
 versions:
-  - 8.5-beta
   - 8.5
   - 8
 duplicated_versions:
   - 8
+vault_versions:
+  - 8.5-beta
+  - 8.4
+  - 8.4-beta
+  - 8.3
+vault_mirror: http://repo.almalinux.org/vault/
 arches:
   - x86_64
   - aarch64
