@@ -1,0 +1,14 @@
+---
+name: mirror.airnet.uz
+address:
+  http: http://mirror.airnet.uz/almalinux/
+  https: https://mirror.airnet.uz/almalinux/
+geolocation:
+  country: UZ
+  state_province: Tashkent
+  city: Tashkent
+update_frequency: 2h
+sponsor: AirNet
+sponsor_url: https://airnet.uz
+email: mirror@airnet.uz
+---
