@@ -18,7 +18,7 @@ python_packages:
   - beautifulsoup4==4.10.0
   - blinker==1.4
   - dataclasses==0.6
-  - dateparser==1.0.0
+  - dateparser==1.1.1
   - geopy==2.2.0
   - gunicorn[gthread]==20.1.0
   - Flask-BS4==5.0.0.1

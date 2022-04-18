@@ -23,7 +23,7 @@ from yaml_snippets.data_models import (
     RepoData,
     GeoLocationData,
     MirrorData,
-    LocationData,
+    LocationData, MainConfig,
 )
 from db.models import (
     Mirror,
@@ -126,29 +126,20 @@ async def set_repo_status(
 
 async def update_mirror_in_db(
         mirror_info: MirrorData,
-        versions: list[str],
-        repos: list[RepoData],
-        allowed_outdate: str,
         db_session: Session,
         http_session: ClientSession,
-        arches: list[str],
-        required_protocols: list[str],
-        sem: asyncio.Semaphore
+        sem: asyncio.Semaphore,
+        main_config: MainConfig,
 ) -> None:
     """
     Update record about a mirror in DB in background thread.
     The function remove old record about a mirror and add new record if
         a mirror is actual
     :param mirror_info: extracted info about a mirror from yaml files
-    :param versions: the list of versions which should be provided by mirrors
-    :param repos: the list of repos which should be provided by mirrors
-    :param allowed_outdate: allowed mirror lag
-    :param arches: list of default arches which are supported by a mirror
-    :param required_protocols: list of network protocols any of them
-                               should be supported by a mirror
     :param db_session: session to DB
     :param http_session: async HTTP session
     :param sem: asyncio Semaphore object
+    :param main_config: main config of the mirrors service
     """
 
     mirror_info = await set_geo_data(mirror_info, sem)
@@ -159,20 +150,17 @@ async def update_mirror_in_db(
     else:
         mirror_name, is_available = await mirror_available(
             mirror_info=mirror_info,
-            versions=versions,
-            repos=repos,
             http_session=http_session,
-            arches=arches,
-            required_protocols=required_protocols,
             logger=logger,
+            main_config=main_config,
         )
     if not is_available:
         await set_mirror_flapped(mirror_name=mirror_name)
         return
     await set_repo_status(
         mirror_info=mirror_info,
-        allowed_outdate=allowed_outdate,
-        required_protocols=required_protocols,
+        allowed_outdate=main_config.allowed_outdate,
+        required_protocols=main_config.required_protocols,
         http_session=http_session,
     )
     urls_to_create = [
