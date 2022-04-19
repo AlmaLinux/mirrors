@@ -137,6 +137,10 @@ repos:
       path: CRB/debug/$basearch/
       versions:
           - "9.0-beta"
+    - name: crb-debug
+      path: CRB/debug/$basearch/
+      versions:
+          - "9.0-beta"
     - name: nfv-debuginfo
       path: NFV/debug/$basearch/
       versions:
