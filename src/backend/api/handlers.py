@@ -469,11 +469,14 @@ async def get_isos_list_by_countries(
     return mirrors_by_countries, nearest_mirrors
 
 
-def get_main_isos_table(config) -> dict[str, list[str]]:
+def get_main_isos_table(config: MainConfig) -> dict[str, list[str]]:
     result = defaultdict(list)
     for arch in config.arches:
-        result[arch] = [version for version in config.versions
-                        if version not in config.duplicated_versions]
+        result[arch] = [
+            version for version in config.versions
+            if version not in config.duplicated_versions and
+            arch in config.versions_arches.get(version, config.arches)
+        ]
 
     return result
 
