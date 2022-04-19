@@ -149,13 +149,13 @@ repos:
       path: CRB/debug/$basearch/
       versions:
           - "9.0-beta"
-    - name: nfv-debuginfo
+    - name: nfv-debug
       path: NFV/debug/$basearch/
       versions:
           - "9.0-beta"
       arches:
           - x86_64
-    - name: rt-debuginfo
+    - name: rt-debug
       path: RT/debug/$basearch/
       versions:
           - "9.0-beta"
