@@ -60,6 +60,12 @@ repos:
       path: extras/$basearch/os/
     - name: ha
       path: HighAvailability/$basearch/os/
+      versions:
+          - "8.5"
+    - name: highavailability
+      path: HighAvailability/$basearch/os/
+      versions:
+          - "9.0-beta"
     - name: devel
       path: devel/$basearch/os/
       versions:
@@ -102,6 +108,12 @@ repos:
       path: extras/Source/
     - name: ha-source
       path: HighAvailability/Source/
+      versions:
+          - "8.5"
+    - name: highavailability-source
+      path: HighAvailability/Source/
+      versions:
+          - "9.0-beta"
     - name: devel-source
       path: devel/Source/
       versions:
@@ -133,10 +145,6 @@ repos:
       path: PowerTools/debug/$basearch/
       versions:
           - "8.5"
-    - name: crb-debuginfo
-      path: CRB/debug/$basearch/
-      versions:
-          - "9.0-beta"
     - name: crb-debug
       path: CRB/debug/$basearch/
       versions:
@@ -165,7 +173,7 @@ repos:
       path: HighAvailability/debug/$basearch/
       versions:
           - "8.5"
-    - name: ha-debug
+    - name: highavailability-debug
       path: HighAvailability/debug/$basearch/
       versions:
           - "9.0-beta"
