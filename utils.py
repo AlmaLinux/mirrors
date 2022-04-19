@@ -301,24 +301,30 @@ def get_mirrors_info(
 def _get_arches_for_version(
         repo_arches: list[str],
         global_arches: list[str],
-        version: str,
-        versions_arches: dict[str, list[str]],
 ) -> list[str]:
     """
     Get the available arches for specific version
     :param repo_arches: arches of a specific repo
     :param global_arches: global list of arches
-    :param version: number of specific version
-    :param versions_arches: dictionary contains accordance of versions
-                            to arches
     """
 
     if repo_arches:
         return repo_arches
-    elif versions_arches and version in versions_arches:
-        return versions_arches[version]
     else:
         return global_arches
+
+
+def _is_permitted_arch_for_this_version_and_repo(
+        version: str,
+        arch: str,
+        versions_arches: dict[str, list[str]]
+) -> bool:
+    if version not in versions_arches:
+        return True
+    elif version in versions_arches and arch in versions_arches[version]:
+        return True
+    else:
+        return False
 
 
 async def mirror_available(
@@ -367,13 +373,17 @@ async def mirror_available(
             arches = _get_arches_for_version(
                 repo_arches=repo_data.arches,
                 global_arches=main_config.arches,
-                version=version,
-                versions_arches=main_config.versions_arches,
             )
             repo_versions = repo_data.versions
             if repo_versions and version not in repo_versions:
                 continue
             for arch in arches:
+                if not _is_permitted_arch_for_this_version_and_repo(
+                    version=version,
+                    arch=arch,
+                    versions_arches=main_config.versions_arches,
+                ):
+                    continue
                 repo_path = repo_data.path.replace('$basearch', arch)
                 check_url = os.path.join(
                     mirror_url,

@@ -27,7 +27,7 @@
                 "duplicated_versions": {
                     "$ref": "#/definitions/Versions"
                 },
-                "arches_versions": {
+                "versions_arches": {
                     "type": "object",
                     "patternProperties": {
                         "^.*$": {
@@ -76,10 +76,7 @@
         "Version": {
             "oneOf": [
                 {
-                    "pattern": "^[0-9].[0-9](-beta)?$"
-                },
-                {
-                    "pattern": "^[0-9]$"
+                    "pattern": "^[0-9](.[0-9](-beta)?)?$"
                 }
             ]
         },
