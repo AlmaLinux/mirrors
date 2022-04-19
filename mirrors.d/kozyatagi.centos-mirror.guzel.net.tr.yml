@@ -1,5 +1,5 @@
 ---
-name: kozyatagi.centos-mirror.guzel.net.tr
+name: kozyatagi.mirror.guzel.net.tr
 address:
   http: http://kozyatagi.mirror.guzel.net.tr/almalinux/
   https: https://kozyatagi.mirror.guzel.net.tr/almalinux/
