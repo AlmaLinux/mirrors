@@ -198,15 +198,11 @@ async def _get_nearest_mirrors(
 async def _process_mirror(
         subnets: dict[str, list[str]],
         mirror_info: MirrorData,
-        versions: list[str],
-        repos: list[RepoData],
-        allowed_outdate: str,
         db_session: Session,
         http_session: ClientSession,
-        arches: list[str],
-        required_protocols: list[str],
         nominatim_sem: asyncio.Semaphore,
-        mirror_check_sem: asyncio.Semaphore
+        mirror_check_sem: asyncio.Semaphore,
+        main_config: MainConfig,
 ):
     set_subnets_for_hyper_cloud_mirror(
         subnets=subnets,
@@ -216,14 +212,10 @@ async def _process_mirror(
     async with mirror_check_sem:
         await update_mirror_in_db(
             mirror_info=mirror_info,
-            versions=versions,
-            repos=repos,
-            allowed_outdate=allowed_outdate,
             db_session=db_session,
             http_session=http_session,
-            arches=arches,
-            required_protocols=required_protocols,
-            sem=nominatim_sem
+            sem=nominatim_sem,
+            main_config=main_config,
         )
 
 
@@ -264,15 +256,11 @@ async def update_mirrors_handler() -> str:
                     _process_mirror(
                         subnets=subnets,
                         mirror_info=mirror_info,
-                        versions=config.versions,
-                        repos=config.repos,
-                        allowed_outdate=config.allowed_outdate,
                         db_session=db_session,
                         http_session=http_session,
-                        arches=config.arches,
-                        required_protocols=config.required_protocols,
                         nominatim_sem=nominatim_sem,
                         mirror_check_sem=mirror_check_sem,
+                        main_config=config,
                     )
                 ) for mirror_info in all_mirrors
             ))
@@ -481,11 +469,14 @@ async def get_isos_list_by_countries(
     return mirrors_by_countries, nearest_mirrors
 
 
-def get_main_isos_table(config) -> dict[str, list[str]]:
+def get_main_isos_table(config: MainConfig) -> dict[str, list[str]]:
     result = defaultdict(list)
     for arch in config.arches:
-        result[arch] = [version for version in config.versions
-                        if version not in config.duplicated_versions]
+        result[arch] = [
+            version for version in config.versions
+            if version not in config.duplicated_versions and
+            arch in config.versions_arches.get(version, config.arches)
+        ]
 
     return result
 

@@ -48,9 +48,12 @@
 
     - name: Set SELinux security context of Gunicorn binary
       file:
-        path: "{{ source_path }}/bin/python3.9"
+        path: "{{ item }}"
         setype: bin_t
         seuser: system_u
+      with_items:
+        - "{{ source_path }}/bin/python3.9"
+        - "{{ source_path }}/bin/gunicorn"
 
 - name: Prepare gunicorn.py
   template:
