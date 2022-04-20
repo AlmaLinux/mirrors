@@ -1,4 +1,5 @@
 # coding=utf-8
+from collections import defaultdict
 from json import JSONEncoder
 from typing import Optional
 from dataclasses import (
@@ -117,8 +118,11 @@ class MainConfig:
     mirrors_dir: str
     vault_mirror: str
     versions: list[str] = field(default_factory=list)
+    arches: list[str] = field(default_factory=list)
     duplicated_versions: list[str] = field(default_factory=list)
     vault_versions: list[str] = field(default_factory=list)
-    arches: list[str] = field(default_factory=list)
+    versions_arches: dict[str, list[str]] = field(
+        default_factory=lambda: defaultdict(list)
+    )
     required_protocols: list[str] = field(default_factory=list)
     repos: list[RepoData] = field(default_factory=list)

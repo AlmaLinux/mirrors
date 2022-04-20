@@ -1,5 +1,5 @@
 {
-    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$schema": "http://json-schema.org/draft-07/schema#",
     "$ref": "#/definitions/Welcome4",
     "definitions": {
         "Welcome4": {
@@ -22,43 +22,25 @@
                     "type": "string"
                 },
                 "versions": {
-                    "type": "array",
-                    "items": {
-                        "oneOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "number"
-                            }
-                        ]
-                    }
+                    "$ref": "#/definitions/Versions"
                 },
                 "duplicated_versions": {
-                    "type": "array",
-                    "items": {
-                        "oneOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "number"
-                            }
-                        ]
-                    }
+                    "$ref": "#/definitions/Versions"
+                },
+                "versions_arches": {
+                    "type": "object",
+                    "patternProperties": {
+                        "^.*$": {
+                            "$ref": "#/definitions/Arches"
+                        }
+                    },
+                    "propertyNames": {
+                        "$ref": "#/definitions/Version"
+                    },
+                    "additionalProperties": false
                 },
                 "vault_versions": {
-                    "type": "array",
-                    "items": {
-                        "oneOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "number"
-                            }
-                        ]
-                    }
+                    "$ref": "#/definitions/Versions"
                 },
                 "required_protocols": {
                     "type": "array",
@@ -67,10 +49,7 @@
                     }
                 },
                 "arches": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                    "$ref": "#/definitions/Arches"
                 },
                 "repos": {
                     "type": "array",
@@ -94,6 +73,13 @@
             ],
             "title": "Welcome4"
         },
+        "Version": {
+            "oneOf": [
+                {
+                    "pattern": "^[0-9](.[0-9](-beta)?)?$"
+                }
+            ]
+        },
         "Repo": {
             "type": "object",
             "additionalProperties": false,
@@ -105,23 +91,10 @@
                     "type": "string"
                 },
                 "arches": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                    "$ref": "#/definitions/Arches"
                 },
                 "versions": {
-                    "type": "array",
-                    "items": {
-                        "oneOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "number"
-                            }
-                        ]
-                    }
+                    "$ref": "#/definitions/Versions"
                 }
             },
             "required": [
@@ -129,6 +102,25 @@
                 "path"
             ],
             "title": "Repo"
+        },
+        "Arches": {
+            "type": "array",
+            "contains": {
+                "type": "string",
+                "enum": [
+                    "x86_64",
+                    "aarch64",
+                    "ppc64le",
+                    "s390x"
+                ]
+            }
+        },
+        "Versions": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "$ref": "#/definitions/Version"
+            }
         }
     }
 }

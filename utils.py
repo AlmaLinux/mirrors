@@ -113,6 +113,10 @@ def process_main_config(
                 str(version) for version in yaml_data.get('vault_versions', [])
             ],
             arches=yaml_data['arches'],
+            versions_arches={
+                arch: versions for arch, versions in
+                yaml_data.get('versions_arches', {}).items()
+            },
             required_protocols=yaml_data['required_protocols'],
             repos=[
                 RepoData(
@@ -294,26 +298,48 @@ def get_mirrors_info(
     return result
 
 
+def _get_arches_for_version(
+        repo_arches: list[str],
+        global_arches: list[str],
+) -> list[str]:
+    """
+    Get the available arches for specific version
+    :param repo_arches: arches of a specific repo
+    :param global_arches: global list of arches
+    """
+
+    if repo_arches:
+        return repo_arches
+    else:
+        return global_arches
+
+
+def _is_permitted_arch_for_this_version_and_repo(
+        version: str,
+        arch: str,
+        versions_arches: dict[str, list[str]]
+) -> bool:
+    if version not in versions_arches:
+        return True
+    elif version in versions_arches and arch in versions_arches[version]:
+        return True
+    else:
+        return False
+
+
 async def mirror_available(
         mirror_info: MirrorData,
-        versions: list[str],
-        repos: list[RepoData],
         http_session: ClientSession,
-        arches: list[str],
-        required_protocols: list[str],
+        main_config: MainConfig,
         logger: Logger,
 ) -> tuple[str, bool]:
     """
     Check mirror availability
     :param mirror_info: the dictionary which contains info about a mirror
                         (name, address, update frequency, sponsor info, email)
-    :param versions: the list of versions which should be provided by a mirror
-    :param repos: the list of repos which should be provided by a mirror
-    :param arches: list of default arches which are supported by a mirror
-    :param http_session: async HTTP session
-    :param required_protocols: list of network protocols any of them
-                               should be supported by a mirror
     :param logger: instance of Logger class
+    :param main_config: main config of the mirrors service
+    :param http_session: async HTTP session
     """
     mirror_name = mirror_info.name
     logger.info('Checking mirror "%s"...', mirror_name)
@@ -327,67 +353,77 @@ async def mirror_available(
         urls = mirror_info.urls  # type: dict[str, str]
         mirror_url = next(
             address for protocol_type, address in urls.items()
-            if protocol_type in required_protocols
+            if protocol_type in main_config.required_protocols
         )
     except StopIteration:
         logger.error(
             'Mirror "%s" has no one address with protocols "%s"',
             mirror_name,
-            required_protocols,
+            main_config.required_protocols,
         )
         return mirror_name, False
-    for version in versions:
+    for version in main_config.versions:
         # cloud mirrors (Azure/AWS) don't store beta versions
         if mirror_info.cloud_type and 'beta' in version:
             continue
-        for repo_data in repos:
-            arches = repo_data.arches or arches
+        # don't check duplicated versions
+        if version in main_config.duplicated_versions:
+            continue
+        for repo_data in main_config.repos:
+            arches = _get_arches_for_version(
+                repo_arches=repo_data.arches,
+                global_arches=main_config.arches,
+            )
             repo_versions = repo_data.versions
             if repo_versions and version not in repo_versions:
                 continue
-            repo_path = repo_data.path.replace('$basearch', arches[0])
-            check_url = os.path.join(
-                mirror_url,
-                str(version),
-                repo_path,
-                'repodata/repomd.xml',
-            )
-            try:
-                async with http_session.get(
-                        check_url,
-                        headers=HEADERS,
-                        timeout=AIOHTTP_TIMEOUT,
-                ) as resp:
-                    try:
-                        await resp.text()
-                    except Exception as err:
-                        logger.error(
-                            'Something went wrong with mirror "%s". '
-                            'Exception "%s"',
-                            mirror_name,
-                            err,
-                        )
-                    if resp.status != 200:
-                        # if mirror has no valid version/arch combos it is dead
-                        logger.error(
-                            'Mirror "%s" has one or more invalid '
-                            'repositories by path "%s"',
-                            mirror_name,
-                            repo_path,
-                        )
-                        return mirror_name, False
-            except (ClientError, TimeoutError) as err:
-                # We want to unified error message, so I used logging
-                # level `error` instead logging level `exception`
-                logger.error(
-                    'Mirror "%s" is not available for version '
-                    '"%s" and repo path "%s" because "%s"',
-                    mirror_name,
-                    version,
+            for arch in arches:
+                if not _is_permitted_arch_for_this_version_and_repo(
+                    version=version,
+                    arch=arch,
+                    versions_arches=main_config.versions_arches,
+                ):
+                    continue
+                repo_path = repo_data.path.replace('$basearch', arch)
+                check_url = os.path.join(
+                    mirror_url,
+                    str(version),
                     repo_path,
-                    str(err) or type(err),
+                    'repodata/repomd.xml',
                 )
-                return mirror_name, False
+                try:
+                    async with http_session.get(
+                            check_url,
+                            headers=HEADERS,
+                            timeout=AIOHTTP_TIMEOUT,
+                    ) as resp:
+                        await resp.text()
+                        if resp.status != 200:
+                            # if mirror has no valid version/arch combos,
+                            # so it is dead
+                            logger.error(
+                                'Mirror "%s" has one or more invalid '
+                                'repositories by path "%s"',
+                                mirror_name,
+                                check_url,
+                            )
+                            return mirror_name, False
+                except (
+                        ClientError,
+                        TimeoutError,
+                        UnicodeError,
+                ) as err:
+                    # We want to unified error message, so I used logging
+                    # level `error` instead logging level `exception`
+                    logger.error(
+                        'Mirror "%s" is not available for version '
+                        '"%s" and repo path "%s" because "%s"',
+                        mirror_name,
+                        version,
+                        repo_path,
+                        str(err) or type(err),
+                    )
+                    return mirror_name, False
     logger.info(
         'Mirror "%s" is available',
         mirror_name,
