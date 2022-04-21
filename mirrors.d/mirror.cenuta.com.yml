@@ -3,7 +3,11 @@ name: mirror-denizli.cenuta.com
 address:
   http: http://mirror-denizli.cenuta.com/almalinux/
   https: https://mirror-denizli.cenuta.com/almalinux/
-update_frequency: 3h
+ geolocation:
+  country: TR
+  state_province: Denizli
+  city: Denizli
+update_frequency: 1h
 sponsor: Cenuta Hosting
 sponsor_url: https://www.cenuta.com
 email: info@cenuta.com
