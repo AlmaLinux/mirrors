@@ -1,8 +1,9 @@
 ---
 name: almalinux.mirror.myduniahost.com
 address:
-  http: http://almalinux.mirror.myduniahost.com/
-  rsync: rsync://rsync.almalinux.mirror.myduniahost.com/
+  http: http://mirror.myduniahost.com/almalinux/
+  https: https://mirror.myduniahost.com/almalinux/
+  rsync: rsync://mirror.myduniahost.com/almalinux/
 geolocation:
   country: MY
   state_province: Kuala Lumpur
