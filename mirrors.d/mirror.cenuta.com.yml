@@ -3,7 +3,7 @@ name: mirror-denizli.cenuta.com
 address:
   http: http://mirror-denizli.cenuta.com/almalinux/
   https: https://mirror-denizli.cenuta.com/almalinux/
- geolocation:
+geolocation:
   country: TR
   state_province: Denizli
   city: Denizli
