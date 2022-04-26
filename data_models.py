@@ -108,6 +108,7 @@ class MirrorData:
 class RepoData:
     name: str
     path: str
+    vault: bool
     arches: list[str] = field(default_factory=list)
     versions: list[str] = field(default_factory=list)
 
