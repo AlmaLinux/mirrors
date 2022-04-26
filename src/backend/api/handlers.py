@@ -354,6 +354,29 @@ async def get_all_mirrors_db(
     return mirrors_list
 
 
+def _is_vault_repo(
+        version: str,
+        vault_versions: list[str],
+        repo: RepoData,
+) -> bool:
+    """
+    Check that the repo is vault or not.
+      The function returns True if repo is vault and
+      returns False if the one isn't vault
+    :param version: version of requested a mirrors list
+    :param vault_versions: the list of global vault versions
+    :param repo: repo of requested a mirrors list
+    """
+
+    if version in vault_versions:
+        return True
+    if repo.vault and not repo.versions:
+        return True
+    if repo.vault and repo.versions and version in repo.versions:
+        return True
+    return False
+
+
 async def get_mirrors_list(
         ip_address: str,
         version: str,
@@ -386,15 +409,21 @@ async def get_mirrors_list(
                 version,
                 ', '.join(versions),
             )
-    repo_path = repos[repository].path
+    repo = repos[repository]
+    repo_path = repo.path
 
-    # if a client requests vault version
-    if version in vault_versions:
+    # if a client requests global vault version or vault repo
+    if _is_vault_repo(
+        version=version,
+        vault_versions=vault_versions,
+        repo=repo
+    ):
         return os.path.join(
             vault_mirror,
             version,
             repo_path,
         )
+
     nearest_mirrors = await _get_nearest_mirrors(
         ip_address=ip_address,
         without_private_mirrors=False,
