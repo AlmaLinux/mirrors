@@ -1,6 +1,7 @@
 ---
 name: mirrors.kernel.org
 address:
+  http: http://mirrors.kernel.org/almalinux
   rsync: rsync://mirrors.kernel.org/almalinux
 geolocation:
   country: US
