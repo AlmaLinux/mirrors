@@ -370,9 +370,7 @@ def _is_vault_repo(
 
     if version in vault_versions:
         return True
-    if repo.vault and not repo.versions:
-        return True
-    if repo.vault and repo.versions and version in repo.versions:
+    if repo.vault:
         return True
     return False
 
