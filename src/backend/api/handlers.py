@@ -377,7 +377,7 @@ async def get_mirrors_list(
             repository,
             ', '.join(repos.keys()),
         )
-    if version not in versions + vault_versions:
+    if version not in versions and version not in vault_versions:
         try:
             version = next(ver for ver in versions if version.startswith(ver))
         except StopIteration:
