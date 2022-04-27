@@ -1,0 +1,14 @@
+---
+name: mirrors.bangmod.cloud
+address:
+  http: http://mirrors.bangmod.cloud/almalinux/
+  https: https://mirrors.bangmod.cloud/almalinux/
+geolocation:
+  country: TH
+  state_province: Bangkok
+  city: Bangkok
+update_frequency: 2h
+sponsor: Bangmod Cloud
+sponsor_url: https://bangmod.cloud
+email: pureewat.k@bangmod.co.th
+...

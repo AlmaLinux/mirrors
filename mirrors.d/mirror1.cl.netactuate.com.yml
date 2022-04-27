@@ -4,6 +4,10 @@ address:
   http: http://mirror1.cl.netactuate.com/almalinux/
   https: https://mirror1.cl.netactuate.com/almalinux/
   rsync: rsync://mirror1.cl.netactuate.com/almalinux
+geolocation:
+  country: CL
+  state_province: Provincia de Santiago
+  city: Santiago
 update_frequency: 4h
 sponsor: NetActuate
 sponsor_url: https://www.netactuate.com

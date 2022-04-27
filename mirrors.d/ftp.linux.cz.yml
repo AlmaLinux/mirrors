@@ -1,0 +1,16 @@
+---
+name: ftp.linux.cz
+address:
+  ftp: ftp://ftp.linux.cz/pub/linux/almalinux/
+  http: http://ftp.linux.cz/pub/linux/almalinux/
+  https: https://ftp.linux.cz/pub/linux/almalinux/
+  rsync: rsync://ftp.linux.cz/pub/linux/almalinux/
+geolocation:
+  country: CZ
+  state_province:
+  city: Brno
+update_frequency: 2h
+sponsor: Faculty of Informatics, Masaryk University
+sponsor_url: https://www.fi.muni.cz/
+email: ftp-admin@fi.muni.cz
+...

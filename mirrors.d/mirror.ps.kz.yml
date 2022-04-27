@@ -1,0 +1,15 @@
+---
+name: mirror.ps.kz
+address:
+  http: http://mirror.ps.kz/almalinux/
+  https: https://mirror.ps.kz/almalinux/
+  rsync: rsync://mirror.ps.kz/almalinux/
+geolocation:
+  country: KZ
+  state_province: Almaty
+  city: Almaty
+update_frequency: 2h
+sponsor: PS Internet Company
+sponsor_url: https://www.ps.kz
+email: mirror-admin@ps.kz
+...

@@ -1,0 +1,13 @@
+name: capital.hoster.kz
+address:
+ http: http://capital.hoster.kz/almalinux/
+ https: https://capital.hoster.kz/almalinux/
+ rsync: rsync://capital.hoster.kz/almalinux/
+geolocation:
+ country: KZ
+ state_province:
+ city: Nur-Sultan
+update_frequency: 3h
+sponsor: Hoster.KZ
+sponsor_url: https://hoster.kz/
+email: support@hoster.kz

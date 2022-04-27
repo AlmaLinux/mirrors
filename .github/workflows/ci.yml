@@ -1,0 +1,54 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  config_checker:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install Python packages into venv
+        run: python3.9 -m pip install -r gh_ci/req.txt
+
+      - id: files
+        uses: jitterbit/get-changed-files@v1
+
+      - name: Check YAML configs
+        run: |
+          mirror_regexp="mirrors.d/.*.yml"
+          if ! echo "${{ steps.files.outputs.all }}" | grep -E "${mirror_regexp}" &> /dev/null; then
+            # we check only the main config if PR doesn't contain any mirror config
+            python3.9 gh_ci/config_checker.py -sc config.yml -ss gh_ci/yaml_snippets/json_schemas/service_config.json
+          else
+            changed_files=""
+            for changed_file in ${{ steps.files.outputs.all }}; do
+              if echo "${changed_file}" | grep -E "${mirror_regexp}" &> /dev/null; then
+                changed_files="${changed_file} ${changed_files}"
+              fi
+            done
+            python3.9 gh_ci/config_checker.py -sc config.yml -ss gh_ci/yaml_snippets/json_schemas/service_config.json -ms gh_ci/yaml_snippets/json_schemas/mirror_config.json -mc ${changed_files}
+          fi

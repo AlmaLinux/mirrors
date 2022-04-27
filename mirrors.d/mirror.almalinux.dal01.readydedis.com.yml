@@ -3,6 +3,10 @@ name: mirror.almalinux.dal01.readydedis.com
 address:
   http: http://mirror.almalinux.dal01.readydedis.com/almalinux/
   https: https://mirror.almalinux.dal01.readydedis.com/almalinux/
+geolocation:
+  country: US
+  state_province: Texas
+  city: Dallas
 update_frequency: 1h
 sponsor: ReadyDedis
 sponsor_url: https://readydedis.com

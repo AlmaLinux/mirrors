@@ -1,0 +1,14 @@
+---
+name: mr.heru.id
+address:
+  http: http://mr.heru.id/almalinux/
+  https: https://mr.heru.id/almalinux/
+geolocation:
+  country: ID
+  state_province: DKI Jakarta
+  city: Jakarta
+update_frequency: 4h
+sponsor: heru.id
+sponsor_url: https://heru.id/
+email: me@heru.id
+...

@@ -1,0 +1,10 @@
+---
+name: mirror.vpsnet.com
+address:
+  http: http://mirror.vpsnet.com/almalinux/
+  https: https://mirror.vpsnet.com/almalinux/
+update_frequency: 3h
+sponsor: VPSnet.com
+sponsor_url: https://www.VPSnet.com
+email: info@vpsnet.com
+...

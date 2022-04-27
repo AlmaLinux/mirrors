@@ -1,0 +1,15 @@
+---
+name: mirror.chpc.utah.edu
+address:
+  http: http://mirror.chpc.utah.edu/pub/almalinux/
+  https: https://mirror.chpc.utah.edu/pub/almalinux/
+  rsync: rsync://mirror.chpc.utah.edu/pub/almalinux
+geolocation:
+  country: US
+  state_province: Utah
+  city: Salt Lake City
+update_frequency: 6h
+sponsor: University of Utah CHPC
+sponsor_url: https://www.chpc.utah.edu/
+email: david.richardson@utah.edu
+...

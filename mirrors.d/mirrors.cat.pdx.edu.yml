@@ -1,0 +1,15 @@
+---
+name: mirrors.cat.pdx.edu
+address:
+  http: http://mirrors.cat.pdx.edu/alma
+  https: https://mirrors.cat.pdx.edu/alma
+  rsync: rsync://mirrors.cat.pdx.edu/alma
+geolocation:
+  country: US
+  state_province: Oregon
+  city: Portland
+update_frequency: 1h
+sponsor: Computer Action Team at Portland State University
+sponsor_url: https://cat.pdx.edu
+email: support@cat.pdx.edu
+...

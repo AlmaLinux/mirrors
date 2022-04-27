@@ -3,6 +3,10 @@ name: mirror.misakamikoto.network
 address:
   http: http://mirror.misakamikoto.network/almalinux/
   https: https://mirror.misakamikoto.network/almalinux/
+geolocation:
+  country: KR
+  state_province: Gyeongsangbuk-do
+  city: Yeongcheon-si
 update_frequency: 6h
 sponsor: Kwabang
 sponsor_url: https://kwabang.net

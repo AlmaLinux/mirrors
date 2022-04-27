@@ -3,6 +3,10 @@ name: danweb2.dsteiner.ch
 address:
   http: http://danweb2.dsteiner.ch/almalinux/
   https: https://danweb2.dsteiner.ch/almalinux/
+geolocation:
+  country: CH
+  state_province: Zurich
+  city: Zurich
 update_frequency: 6h
 sponsor: DS
 sponsor_url: https://www.dsteiner.ch/
