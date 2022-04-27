@@ -398,14 +398,14 @@ async def get_mirrors_list(
             repository,
             ', '.join(repos.keys()),
         )
-    if version not in versions:
+    if version not in versions + vault_versions:
         try:
             version = next(ver for ver in versions if version.startswith(ver))
         except StopIteration:
             raise UnknownRepositoryOrVersion(
                 'Unknown version "%s". Allowed list of versions "%s"',
                 version,
-                ', '.join(versions),
+                ', '.join(versions + vault_versions),
             )
     repo = repos[repository]
     repo_path = repo.path
