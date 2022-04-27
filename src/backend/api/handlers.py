@@ -368,9 +368,7 @@ def _is_vault_repo(
     :param repo: repo of requested a mirrors list
     """
 
-    if version in vault_versions:
-        return True
-    if repo.vault:
+    if version in vault_versions or repo.vault:
         return True
     return False
 
