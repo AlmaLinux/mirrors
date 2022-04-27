@@ -134,6 +134,7 @@ def process_main_config(
                         ],
                         attributes=[str(ver) for ver in yaml_data['versions']]
                     ),
+                    vault=repo.get('vault', False),
                 ) for repo in yaml_data['repos']
             ]
         ), None
