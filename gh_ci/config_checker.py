@@ -114,12 +114,9 @@ async def are_mirrors_available(
         for mirror in mirrors:
             mirror_name, is_available = await mirror_available(
                 mirror_info=mirror,
-                versions=main_config.versions,
-                repos=main_config.repos,
                 http_session=http_session,
-                arches=main_config.arches,
-                required_protocols=main_config.required_protocols,
                 logger=logger,
+                main_config=main_config,
             )
             if not is_available:
                 ret_code = 1

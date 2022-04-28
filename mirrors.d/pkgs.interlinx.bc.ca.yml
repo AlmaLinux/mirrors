@@ -6,6 +6,7 @@ sponsor: N/A
 sponsor_url: http://not-applicable.example.com/
 update_frequency: 1h
 email: info@interlinx.bc.ca
+monopoly: true
 private: true
 subnets:
   - 69.165.217.196/32

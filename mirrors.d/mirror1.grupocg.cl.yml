@@ -1,8 +1,8 @@
 ---
-name: mirror-almalinux.grupocg.cl
+name: mirror1.grupocg.cl
 address:
-  http: http://mirror-almalinux.grupocg.cl/almalinux/
-  https: https://mirror-almalinux.grupocg.cl/almalinux/
+  http: http://mirror1.grupocg.cl/almalinux/
+  https: https://mirror1.grupocg.cl/almalinux/
 geolocation:
   country: CL
   state_province: Region Metropolitana

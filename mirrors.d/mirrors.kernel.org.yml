@@ -1,0 +1,14 @@
+---
+name: mirrors.kernel.org
+address:
+  http: http://mirrors.kernel.org/almalinux
+  rsync: rsync://mirrors.kernel.org/almalinux
+geolocation:
+  country: US
+  state_province: California
+  city: San Jose
+update_frequency: 3h
+sponsor: Linux Kernel Archives
+sponsor_url: https://kernel.org
+email: ftpadmin@kernel.org
+...
