@@ -2,7 +2,6 @@ name: mirror.natro.com
 address:
   http: http://mirror.natro.com/almalinux/
   https: https://mirror.natro.com/almalinux/
-  rsync: rsync://mirror.natro.com/almalinux/
 geolocation:
   country: TR
   state_province: Istanbul
