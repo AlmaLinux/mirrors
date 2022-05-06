@@ -371,6 +371,8 @@ async def mirror_available(
         if version in main_config.duplicated_versions:
             continue
         for repo_data in main_config.repos:
+            if repo_data.vault:
+                continue
             arches = _get_arches_for_version(
                 repo_arches=repo_data.arches,
                 global_arches=main_config.arches,
