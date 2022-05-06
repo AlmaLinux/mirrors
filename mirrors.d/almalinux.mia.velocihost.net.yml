@@ -7,5 +7,9 @@ update_frequency: 3h
 sponsor: VelociHOST
 sponsor_url: https://www.velocihost.net
 email: support@velocihost.net
+geolocation:
+  continent: North America
+  country: US
+  state_province: Florida
+  city: Miami
 ...
-
