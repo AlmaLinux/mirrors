@@ -183,19 +183,27 @@ repos:
       vault: true
       versions:
           - "9.0-beta"
-    - name: nfv-debug
+    - name: nfv-debuginfo
       path: NFV/debug/$basearch/
       vault: true
       versions:
           - "8.6-beta"
+    - name: nfv-debug
+      path: NFV/debug/$basearch/
+      vault: true
+      versions:
           - "9.0-beta"
       arches:
           - x86_64
-    - name: rt-debug
+    - name: rt-debuginfo
       path: RT/debug/$basearch/
       vault: true
       versions:
           - "8.6-beta"
+    - name: rt-debug
+      path: RT/debug/$basearch/
+      vault: true
+      versions:
           - "9.0-beta"
       arches:
           - x86_64
