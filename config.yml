@@ -8,24 +8,25 @@ versions_arches:
         - x86_64
         - aarch64
         - ppc64le
-    "8.6-beta":
+    "8.6":
         - x86_64
         - aarch64
         - ppc64le
 versions:
-    - "8.5"
-    - "8.6-beta"
     - "8"
+    - "8.5"
+    - "8.6"
     - "9"
     - "9.0-beta"
 duplicated_versions:
     - "8"
     - "9"
 vault_versions:
-    - "8.5-beta"
-    - "8.4"
-    - "8.4-beta"
     - "8.3"
+    - "8.4-beta"
+    - "8.4"
+    - "8.5-beta"
+    - "8.6-beta"
 vault_mirror: http://repo.almalinux.org/vault/
 arches:
     - x86_64
@@ -45,7 +46,7 @@ repos:
       path: PowerTools/$basearch/os/
       versions:
           - "8.5"
-          - "8.6-beta"
+          - "8.6"
     - name: crb
       path: CRB/$basearch/os/
       versions:
@@ -53,14 +54,14 @@ repos:
     - name: nfv
       path: NFV/$basearch/os/
       versions:
-          - "8.6-beta"
+          - "8.6"
           - "9.0-beta"
       arches:
           - x86_64
     - name: rt
       path: RT/$basearch/os/
       versions:
-          - "8.6-beta"
+          - "8.6"
           - "9.0-beta"
       arches:
           - x86_64
@@ -70,7 +71,7 @@ repos:
       path: HighAvailability/$basearch/os/
       versions:
           - "8.5"
-          - "8.6-beta"
+          - "8.6"
     - name: highavailability
       path: HighAvailability/$basearch/os/
       versions:
@@ -104,7 +105,7 @@ repos:
       vault: true
       versions:
           - "8.5"
-          - "8.6-beta"
+          - "8.6"
     - name: crb-source
       path: CRB/Source/
       vault: true
@@ -114,13 +115,13 @@ repos:
       path: NFV/Source/
       vault: true
       versions:
-          - "8.6-beta"
+          - "8.6"
           - "9.0-beta"
     - name: rt-source
       path: RT/Source/
       vault: true
       versions:
-          - "8.6-beta"
+          - "8.6"
           - "9.0-beta"
     - name: extras-source
       path: extras/Source/
@@ -130,7 +131,7 @@ repos:
       vault: true
       versions:
           - "8.5"
-          - "8.6-beta"
+          - "8.6"
     - name: highavailability-source
       path: HighAvailability/Source/
       vault: true
@@ -155,7 +156,7 @@ repos:
       vault: true
       versions:
           - "8.5"
-          - "8.6-beta"
+          - "8.6"
     - name: baseos-debug
       path: BaseOS/debug/$basearch/
       vault: true
@@ -166,7 +167,7 @@ repos:
       vault: true
       versions:
           - "8.5"
-          - "8.6-beta"
+          - "8.6"
     - name: appstream-debug
       path: AppStream/debug/$basearch/
       vault: true
@@ -177,7 +178,7 @@ repos:
       vault: true
       versions:
           - "8.5"
-          - "8.6-beta"
+          - "8.6"
     - name: crb-debug
       path: CRB/debug/$basearch/
       vault: true
@@ -187,7 +188,7 @@ repos:
       path: NFV/debug/$basearch/
       vault: true
       versions:
-          - "8.6-beta"
+          - "8.6"
     - name: nfv-debug
       path: NFV/debug/$basearch/
       vault: true
@@ -199,7 +200,7 @@ repos:
       path: RT/debug/$basearch/
       vault: true
       versions:
-          - "8.6-beta"
+          - "8.6"
     - name: rt-debug
       path: RT/debug/$basearch/
       vault: true
@@ -212,7 +213,7 @@ repos:
       vault: true
       versions:
           - "8.5"
-          - "8.6-beta"
+          - "8.6"
     - name: extras-debug
       path: extras/debug/$basearch/
       vault: true
@@ -223,7 +224,7 @@ repos:
       vault: true
       versions:
           - "8.5"
-          - "8.6-beta"
+          - "8.6"
     - name: highavailability-debug
       path: HighAvailability/debug/$basearch/
       vault: true
@@ -242,7 +243,7 @@ repos:
       vault: true
       versions:
           - "8.5"
-          - "8.6-beta"
+          - "8.6"
     - name: resilientstorage-debug
       path: ResilientStorage/debug/$basearch/
       vault: true
