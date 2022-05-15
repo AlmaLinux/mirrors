@@ -1,0 +1,18 @@
+---
+name: mirror.xenyth.net
+address:
+  http: http://mirror.xenyth.net/almalinux/
+  https: http://mirror.xenyth.net/almalinux/
+  rsync: http://mirror.xenyth.net/almalinux/
+update_frequency: 2h
+sponsor: GoCodeIT Inc
+sponsor_url: https://xenyth.net/
+email: support@xenyth.net
+geolocation:
+  continent: North America
+  country: CA
+  state_province: Ontario
+  city: Toronto
+private: false
+monopoly: false
+...
