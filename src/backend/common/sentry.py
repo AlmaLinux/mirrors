@@ -39,7 +39,7 @@ def init_sentry_client(dsn: Optional[str] = None) -> None:
         dsn = os.getenv('SENTRY_DSN')
     # sentry performance monitoring
     if os.getenv('DEPLOY_ENVIRONMENT') == 'Production':
-        traces_sample_rate = 0.1
+        traces_sample_rate = 0.01
     else:
         traces_sample_rate = 1.0
     sentry_sdk.init(
