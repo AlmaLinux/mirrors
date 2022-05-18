@@ -8,24 +8,57 @@
   become: yes
   become_user: "{{ service_user }}"
 
-- name: Enable working uWSGI binary in home directory of an user
+- name: Prepare Gunicorn SELinux module
   block:
-    - name: Set SELinux file context mapping definitions of uWSGI binary
-      sefcontext:
-        target: "{{ source_path }}/bin/uwsgi"
-        setype: bin_t
-        state: present
+    - name: Check already installed module
+      command:
+        argv:
+          - "semodule"
+          - "--list-modules"
+      register: se_modules
 
-    - name: Set SELinux security context of uWSGI binary
+    - name: Compile SELinux module
+      block:
+        - name: Create gunicorn.mod
+          command:
+            argv:
+              - "checkmodule"
+              - "-M"
+              - "-m"
+              - "-o"
+              - "{{ source_path }}/src/gunicorn.mod"
+              - "{{ source_path }}/src/gunicorn.tt"
+
+        - name: Create gunicorn.pp
+          command:
+            argv:
+              - "semodule_package"
+              - "-m"
+              - "{{ source_path }}/src/gunicorn.mod"
+              - "-o"
+              - "{{ source_path }}/src/gunicorn.pp"
+
+        - name: Install Gunicorn SELinux module
+          command:
+            argv:
+              - "semodule"
+              - "-i"
+              - "{{ source_path }}/src/gunicorn.pp"
+      when: "{{ 'gunicorn' not in se_modules.stdout }}"
+
+    - name: Set SELinux security context of Gunicorn binary
       file:
-        path: "{{ source_path }}/bin/uwsgi"
+        path: "{{ item }}"
         setype: bin_t
         seuser: system_u
+      with_items:
+        - "{{ source_path }}/bin/python3.9"
+        - "{{ source_path }}/bin/gunicorn"
 
-- name: Prepare uwsgi.ini
+- name: Prepare gunicorn.py
   template:
-    dest: "{{ source_path }}/src/backend/uwsgi.ini"
-    src: uwsgi.ini.j2
+    dest: "{{ source_path }}/src/backend/gunicorn.py"
+    src: gunicorn.py.j2
     owner: "{{ service_user }}"
     group: "{{ service_user }}"
     mode: 0600
@@ -40,7 +73,7 @@
     mode: 0755
     force: yes
 
-- name: Install systemd service of uWSGI backend
+- name: Install systemd service of Gunicorn backend
   template:
     dest: "/etc/systemd/system/mirror_service_backend.service"
     src: mirror_service_backend.service.j2
@@ -49,7 +82,7 @@
     mode: 0640
     force: 'yes'
 
-- name: Enable systemd service of uWSGI backend
+- name: Enable systemd service of Gunicorn backend
   systemd:
     name: mirror_service_backend.service
     state: restarted

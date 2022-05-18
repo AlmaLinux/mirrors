@@ -1,9 +1,4 @@
 # coding=utf-8
-from dataclasses import (
-    is_dataclass,
-    asdict,
-)
-from json import JSONEncoder
 from ipaddress import ip_network
 
 from geoip2.errors import AddressNotFoundError
@@ -25,9 +20,10 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.ext.hybrid import hybrid_method
 
 from common.sentry import get_logger
-from db.data_models import (
+from yaml_snippets.data_models import (
     MirrorData,
-    LocationData, GeoLocationData,
+    LocationData,
+    GeoLocationData,
 )
 from db.db_engine import AsnEngine
 
@@ -114,6 +110,7 @@ class Mirror(Base):
     cloud_type = Column(String, nullable=True)
     cloud_region = Column(String, nullable=True)
     private = Column(Boolean, nullable=True, default=False)
+    monopoly = Column(Boolean, nullable=True, default=False)
     ipv6 = Column(Boolean, nullable=False, default=False)
     urls = relationship(
         'Url',
@@ -169,6 +166,7 @@ class Mirror(Base):
             cloud_type=self.cloud_type,
             cloud_region=self.cloud_region,
             private=False if self.private is None else self.private,
+            monopoly=False if self.monopoly is None else self.monopoly,
             ipv6=self.ipv6
         )
 

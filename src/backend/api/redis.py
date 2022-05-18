@@ -7,11 +7,11 @@ from typing import (
     Union
 )
 
-from db.data_models import DataClassesJSONEncoder
-from db.db_engine import RedisEngine
-from db.models import (
+from yaml_snippets.data_models import (
+    DataClassesJSONEncoder,
     MirrorData,
 )
+from db.db_engine import RedisEngine
 from common.sentry import (
     get_logger,
 )

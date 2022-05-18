@@ -8,10 +8,10 @@ from aiohttp import ClientSession, TCPConnector
 from sqlalchemy.orm import Session, joinedload
 
 from api.exceptions import UnknownRepositoryOrVersion
-from api.mirrors_update import (
+from api.mirrors_update import update_mirror_in_db
+from yaml_snippets.utils import (
     get_config,
     get_mirrors_info,
-    update_mirror_in_db,
 )
 from api.redis import (
     set_mirrors_to_cache,
@@ -29,14 +29,14 @@ from api.utils import (
     sort_mirrors_by_distance_and_country,
     randomize_mirrors_within_distance,
 )
-from db.data_models import (
+from yaml_snippets.data_models import (
     RepoData,
     MainConfig,
+    MirrorData,
 )
 from db.models import (
     Url,
     Mirror,
-    MirrorData,
     get_asn_by_ip,
     is_ip_in_any_subnet,
     Subnet,
@@ -56,6 +56,18 @@ logger = get_logger(__name__)
 
 LENGTH_GEO_MIRRORS_LIST = 10
 LENGTH_CLOUD_MIRRORS_LIST = 5
+SERVICE_CONFIG_PATH = os.path.join(
+    os.environ['CONFIG_ROOT'],
+    'mirrors/updates/config.yml'
+)
+SERVICE_CONFIG_JSON_SCHEMA_PATH = os.path.join(
+    os.environ['SOURCE_PATH'],
+    'src/backend/yaml_snippets/json_schemas/service_config.json'
+)
+MIRROR_CONFIG_JSON_SCHEMA_PATH = os.path.join(
+    os.environ['SOURCE_PATH'],
+    'src/backend/yaml_snippets/json_schemas/mirror_config.json'
+)
 
 
 async def _get_nearest_mirrors_by_network_data(
@@ -86,7 +98,10 @@ async def _get_nearest_mirrors_by_network_data(
             ip_address=ip_address,
             subnets=mirror.subnets,
         ):
-            suitable_mirrors.append(mirror)
+            if mirror.monopoly:
+                return [mirror]
+            else:
+                suitable_mirrors.append(mirror)
     if 1 <= len(suitable_mirrors) < LENGTH_CLOUD_MIRRORS_LIST\
             and match is not None:
         continent, country, _, _, latitude, longitude = match
@@ -183,15 +198,11 @@ async def _get_nearest_mirrors(
 async def _process_mirror(
         subnets: dict[str, list[str]],
         mirror_info: MirrorData,
-        versions: list[str],
-        repos: list[RepoData],
-        allowed_outdate: str,
         db_session: Session,
         http_session: ClientSession,
-        arches: list[str],
-        required_protocols: list[str],
         nominatim_sem: asyncio.Semaphore,
-        mirror_check_sem: asyncio.Semaphore
+        mirror_check_sem: asyncio.Semaphore,
+        main_config: MainConfig,
 ):
     set_subnets_for_hyper_cloud_mirror(
         subnets=subnets,
@@ -201,19 +212,19 @@ async def _process_mirror(
     async with mirror_check_sem:
         await update_mirror_in_db(
             mirror_info=mirror_info,
-            versions=versions,
-            repos=repos,
-            allowed_outdate=allowed_outdate,
             db_session=db_session,
             http_session=http_session,
-            arches=arches,
-            required_protocols=required_protocols,
-            sem=nominatim_sem
+            sem=nominatim_sem,
+            main_config=main_config,
         )
 
 
 async def update_mirrors_handler() -> str:
-    config = get_config()
+    config = get_config(
+        logger=logger,
+        path_to_config=SERVICE_CONFIG_PATH,
+        path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_PATH,
+    )
     mirrors_dir = os.path.join(
         os.getenv('CONFIG_ROOT'),
         'mirrors/updates',
@@ -221,6 +232,8 @@ async def update_mirrors_handler() -> str:
     )
     all_mirrors = get_mirrors_info(
         mirrors_dir=mirrors_dir,
+        logger=logger,
+        path_to_json_schema=MIRROR_CONFIG_JSON_SCHEMA_PATH,
     )
 
     # semaphore for nominatim
@@ -243,20 +256,32 @@ async def update_mirrors_handler() -> str:
                     _process_mirror(
                         subnets=subnets,
                         mirror_info=mirror_info,
-                        versions=config.versions,
-                        repos=config.repos,
-                        allowed_outdate=config.allowed_outdate,
                         db_session=db_session,
                         http_session=http_session,
-                        arches=config.arches,
-                        required_protocols=config.required_protocols,
                         nominatim_sem=nominatim_sem,
                         mirror_check_sem=mirror_check_sem,
+                        main_config=config,
                     )
                 ) for mirror_info in all_mirrors
             ))
         db_session.flush()
-    await refresh_mirrors_cache()
+    # update all mirrors list in the redis cache
+    await refresh_mirrors_cache(
+        are_ok_and_not_from_clouds=True,
+        without_private_mirrors=True,
+    )
+    await refresh_mirrors_cache(
+        are_ok_and_not_from_clouds=False,
+        without_private_mirrors=False,
+    )
+    await refresh_mirrors_cache(
+        are_ok_and_not_from_clouds=False,
+        without_private_mirrors=True,
+    )
+    await refresh_mirrors_cache(
+        are_ok_and_not_from_clouds=True,
+        without_private_mirrors=False,
+    )
     return 'Done'
 
 
@@ -329,23 +354,39 @@ async def get_all_mirrors_db(
     return mirrors_list
 
 
+def _is_vault_repo(
+        version: str,
+        vault_versions: list[str],
+        repo: RepoData,
+) -> bool:
+    """
+    Check that the repo is vault or not.
+      The function returns True if repo is vault and
+      returns False if the one isn't vault
+    :param version: version of requested a mirrors list
+    :param vault_versions: the list of global vault versions
+    :param repo: repo of requested a mirrors list
+    """
+
+    if version in vault_versions or repo.vault:
+        return True
+    return False
+
+
 async def get_mirrors_list(
         ip_address: str,
         version: str,
         repository: str,
 ) -> str:
     mirrors_list = []
-    config = get_config()
+    config = get_config(
+        logger=logger,
+        path_to_config=SERVICE_CONFIG_PATH,
+        path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_PATH,
+    )
     versions = [str(version) for version in config.versions]
-    if version not in versions:
-        try:
-            version = next(ver for ver in versions if version.startswith(ver))
-        except StopIteration:
-            raise UnknownRepositoryOrVersion(
-                'Unknown version "%s". Allowed list of versions "%s"',
-                version,
-                ', '.join(versions),
-            )
+    vault_versions = [str(version) for version in config.vault_versions]
+    vault_mirror = config.vault_mirror
     repos = {
         repo.name: repo for repo in config.repos
     }  # type: dict[str, RepoData]
@@ -355,7 +396,30 @@ async def get_mirrors_list(
             repository,
             ', '.join(repos.keys()),
         )
-    repo_path = repos[repository].path
+    if version not in versions and version not in vault_versions:
+        try:
+            version = next(ver for ver in versions if version.startswith(ver))
+        except StopIteration:
+            raise UnknownRepositoryOrVersion(
+                'Unknown version "%s". Allowed list of versions "%s"',
+                version,
+                ', '.join(versions + vault_versions),
+            )
+    repo = repos[repository]
+    repo_path = repo.path
+
+    # if a client requests global vault version or vault repo
+    if _is_vault_repo(
+        version=version,
+        vault_versions=vault_versions,
+        repo=repo
+    ):
+        return os.path.join(
+            vault_mirror,
+            version,
+            repo_path,
+        )
+
     nearest_mirrors = await _get_nearest_mirrors(
         ip_address=ip_address,
         without_private_mirrors=False,
@@ -401,7 +465,7 @@ async def get_isos_list_by_countries(
 ) -> tuple[dict[str, list[MirrorData]], list[MirrorData]]:
     mirrors_by_countries = defaultdict(list)
     for mirror_info in await get_all_mirrors():
-        # Hyper clouds (like AWS/Azure) don't have isos, because they traffic
+        # Hyper clouds (like AWS/Azure) don't have ISOs, because they traffic
         # is too expensive
         if mirror_info.cloud_type in ('aws', 'azure'):
             continue
@@ -412,10 +476,12 @@ async def get_isos_list_by_countries(
             arch=arch,
             config=config,
         )
-        mirrors_by_countries[mirror_info.geolocation.country].append(mirror_info)
+        mirrors_by_countries[
+            mirror_info.geolocation.country
+        ].append(mirror_info)
     nearest_mirrors = await _get_nearest_mirrors(ip_address=ip_address)
     for nearest_mirror in nearest_mirrors:
-        # Hyper clouds (like AWS/Azure) don't have isos, because they traffic
+        # Hyper clouds (like AWS/Azure) don't have ISOs, because they traffic
         # is too expensive
         if nearest_mirror.cloud_type in ('aws', 'azure'):
             continue
@@ -428,11 +494,14 @@ async def get_isos_list_by_countries(
     return mirrors_by_countries, nearest_mirrors
 
 
-def get_main_isos_table(config) -> dict[str, list[str]]:
+def get_main_isos_table(config: MainConfig) -> dict[str, list[str]]:
     result = defaultdict(list)
     for arch in config.arches:
-        result[arch] = [version for version in config.versions
-                        if version not in config.duplicated_versions]
+        result[arch] = [
+            version for version in config.versions
+            if version not in config.duplicated_versions and
+            arch in config.versions_arches.get(version, config.arches)
+        ]
 
     return result
 

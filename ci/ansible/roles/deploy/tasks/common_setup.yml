@@ -10,7 +10,7 @@
     name: "{{ dnf_packages }}"
     state: present
 
-- name: Set SELinux option for right working of nginx + uWSGI
+- name: Set SELinux option for right working of nginx + Gunicorn
   seboolean:
     state: yes
     name: httpd_can_network_connect
