@@ -1,0 +1,15 @@
+---
+name: mirror.usi.edu
+address:
+  http: http://mirror.usi.edu/pub/almalinux/
+  https: https://mirror.usi.edu/pub/almalinux/
+  rsync: rsync://mirror.usi.edu/almalinux
+geolocation:
+  country: US
+  state_province: Indiana
+  city: Evansville
+update_frequency: 3h
+sponsor: University of Southern Indiana
+sponsor_url: https://usi.edu
+email: nb@usi.edu
+...
