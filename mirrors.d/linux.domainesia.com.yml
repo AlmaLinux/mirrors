@@ -5,8 +5,8 @@ address:
   https: https://linux.domainesia.com/almalinux
   rsync: rsync://linux.domainesia.com/almalinux
 update_frequency: 3h
-sponsor: DomaiNesia - PT Delta Neva Angkasa
-sponsor_url: https://domainesia.com
+sponsor: DomaiNesia
+sponsor_url: https://www.domainesia.com
 email: support@domainesia.com
 geolocation:
   country: ID
