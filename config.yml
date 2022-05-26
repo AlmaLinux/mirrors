@@ -92,6 +92,9 @@ repos:
     versions:
       - "8.5"
       - "8.6"
+    arches:
+      - x86_64
+      - aarch64
   - name: plus
     path: plus/$basearch/os/
     versions:
@@ -279,6 +282,9 @@ repos:
     versions:
       - "8.5"
       - "8.6"
+    arches:
+      - x86_64
+      - aarch64
   - name: plus-debuginfo
     path: plus/debug/$basearch/
     vault: true
