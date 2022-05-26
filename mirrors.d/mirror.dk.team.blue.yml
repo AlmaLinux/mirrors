@@ -3,9 +3,11 @@ name: mirror.dk.team.blue
 address:
   http: http://mirror.dk.team.blue/almalinux/
   https: https://mirror.dk.team.blue/almalinux/
+  rsync: rsync://mirror.dk.team.blue::almalinux
+  ftp: ftp://mirror.dk.team.blue/almalinux
 geolocation:
   country: DK
-  state_province: Central Denmark Region
+  state: Skanderborg Municipality
   city: Skanderborg
 update_frequency: 1h
 sponsor: team.blue Denmark
