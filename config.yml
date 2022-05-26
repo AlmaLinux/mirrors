@@ -100,7 +100,6 @@ repos:
     versions:
       - "8.5"
       - "8.6"
-      - "9.0"
   - name: plus
     path: plus/$basearch/os/
     versions:
@@ -174,7 +173,6 @@ repos:
     versions:
       - "8.5"
       - "8.6"
-      - "9.0"
   - name: plus-source
     path: plus/Source/
     vault: true
@@ -307,11 +305,6 @@ repos:
     versions:
       - "8.5"
       - "8.6"
-  - name: devel-debug
-    path: devel/debug/$basearch/
-    vault: true
-    versions:
-      - "9.0"
   - name: plus-debug
     path: plus/debug/$basearch/
     vault: true
