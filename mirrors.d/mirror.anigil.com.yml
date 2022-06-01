@@ -1,0 +1,12 @@
+---
+name: mirror.anigil.com
+address:
+  http: http://mirror.anigil.com/almalinux
+  https: https://mirror.anigil.com/almalinux
+update_frequency: Every hour.
+email: dlatldn426@gmail.com
+geolocation:
+  continent: North East Asia
+  country: KR
+  city: Gwangju
+...
