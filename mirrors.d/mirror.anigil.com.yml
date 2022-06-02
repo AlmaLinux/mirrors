@@ -5,7 +5,7 @@ address:
   https: http://mirror.anigil.com/almalinux/
 geolocation:
   country: KR
-  state_province: Jeollanam-do
+  state_province: 
   city: Gwangju
 update_frequency: 1h
 sponsor: Ani-Gil
