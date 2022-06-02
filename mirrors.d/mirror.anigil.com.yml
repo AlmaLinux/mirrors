@@ -2,7 +2,7 @@
 name: mirror.anigil.com
 address:
   http: http://mirror.anigil.com/almalinux/
-  https: http://mirror.anigil.com/almalinux/
+  https: https://mirror.anigil.com/almalinux/
 geolocation:
   country: KR
   state_province: 
