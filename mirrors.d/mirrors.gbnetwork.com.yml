@@ -1,0 +1,15 @@
+---
+name: mirrors.gbnetwork.com
+address:
+  http: http://mirrors.gbnetwork.com/almalinux/
+  https: https://mirrors.gbnetwork.com/almalinux/
+  rsync: rsync://mirrors.gbnetwork.com/almalinux
+geolocation:
+  country: MY
+  state_province: Selangor
+  city: Cyberjaya
+update_frequency: 1h
+sponsor: GB Network Solutions Sdn Bhd
+sponsor_url: https://www.gbnetwork.com/
+email: support@gbnetwork.com
+...
