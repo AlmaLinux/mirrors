@@ -1,7 +1,7 @@
 ---
 name: mirror.datamossa.io
 address:
-  http: https//mirror.datamossa.io/almalinux/
+  http: https://mirror.datamossa.io/almalinux/
   https: https://mirror.datamossa.io/almalinux/
   rsync: rsync://mirror.datamossa.io/almalinux
 geolocation:
