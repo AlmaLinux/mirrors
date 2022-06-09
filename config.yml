@@ -92,6 +92,7 @@ repos:
     versions:
       - "8.5"
       - "8.6"
+      - "9.0"
     arches:
       - x86_64
       - aarch64
@@ -163,6 +164,7 @@ repos:
     versions:
       - "8.5"
       - "8.6"
+      - "9.0"
   - name: plus-source
     path: plus/Source/
     vault: true
@@ -280,6 +282,7 @@ repos:
     versions:
       - "8.5"
       - "8.6"
+      - "9.0"
     arches:
       - x86_64
       - aarch64
