@@ -3,6 +3,7 @@ name: repo.mobinhost.com
 address:
   http: http://repo.mobinhost.com/AlmaLinux/
   https: https://repo.mobinhost.com/AlmaLinux/
+  ftp: ftp://repo.mobinhost.com/repo/AlmaLinux/
 geolocation:
   country: IR
   state_province: Tehran
