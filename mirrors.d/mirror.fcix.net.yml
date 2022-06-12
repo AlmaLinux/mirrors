@@ -2,7 +2,7 @@
 name: mirror.fcix.net
 address:
   http: http://mirror.fcix.net/almalinux/
-update_frequency: 3h
+update_frequency: 2h
 sponsor: Fremont Cabal Internet Exchange
 sponsor_url: https://fcix.net/
 email: mirror@fcix.net
@@ -13,4 +13,21 @@ geolocation:
   city: Fremont
 private: false
 monopoly: false
+asn: 7034
+subnets:
+  - 23.130.184.0/24
+  - 44.10.10.0/24
+  - 44.62.10.0/24
+  - 44.190.5.0/24
+  - 198.137.202.0/24
+  - 204.87.183.0/24
+  - 2602:fbee::/40
+  - 2607:7c80:54::/48
+  - 23.128.96.0/24
+  - 2620:137:e000::/44
+  - 23.131.160.0/24
+  - 44.4.64.0/22
+  - 2620:138:5000::/44
+  - 23.173.80.0/24
+  - 2602:809:b000::/48
 ...
