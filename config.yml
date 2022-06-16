@@ -101,6 +101,7 @@ repos:
     versions:
       - "8.5"
       - "8.6"
+      - "9.0"
   # sources repos
   - name: baseos-source
     path: BaseOS/Source/
@@ -171,6 +172,7 @@ repos:
     versions:
       - "8.5"
       - "8.6"
+      - "9.0"
   # debug repos
   - name: baseos-debuginfo
     path: BaseOS/debug/$basearch/
@@ -296,6 +298,11 @@ repos:
     versions:
       - "8.5"
       - "8.6"
+  - name: plus-debug
+    path: plus/debug/$basearch/
+    vault: true
+    versions:
+      - "9.0"
   ## raspberry pi repos
   - name: raspberrypi
     path: raspberrypi/$basearch/os/
