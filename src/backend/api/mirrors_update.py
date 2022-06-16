@@ -193,8 +193,8 @@ async def update_mirror_in_db(
         urls=urls_to_create,
         private=mirror_info.private,
         monopoly=mirror_info.monopoly,
+        asn=','.join(mirror_info.asn),
     )
-    mirror_to_create.asn = mirror_info.asn
     if mirror_info.subnets:
         subnets_to_create = [
             Subnet(

@@ -94,7 +94,7 @@ async def _get_nearest_mirrors_by_network_data(
     for mirror in mirrors:
         if mirror.status != "ok":
             continue
-        if (asn and asn == mirror.asn) or is_ip_in_any_subnet(
+        if (asn is not None and asn in mirror.asn) or is_ip_in_any_subnet(
             ip_address=ip_address,
             subnets=mirror.subnets,
         ):

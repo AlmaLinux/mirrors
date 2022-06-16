@@ -20,7 +20,7 @@ else:
         ),
         'geoip_db.mmdb',
     )
-if ASN_PATH:
+if ASN_PATH is not None:
     ASN_DATABASE = ASN_PATH
 else:
     ASN_DATABASE = os.path.join(
@@ -30,7 +30,7 @@ else:
         'asn_db.mmdb',
     )
 
-if SQLITE_PATH:
+if SQLITE_PATH is not None:
     SQLITE_CONNECTION_STRING = f'sqlite:///{SQLITE_PATH}'
 else:
     SQLITE_CONNECTION_STRING = 'sqlite:////data/mirrors.db'
