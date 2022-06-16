@@ -72,10 +72,13 @@
         "asn": {
             "oneOf": [
                 {
-                    "type": "string"
+                    "type": "integer"
                 },
                 {
-                    "type": "integer"
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             ]
         },
