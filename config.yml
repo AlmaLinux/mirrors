@@ -282,10 +282,14 @@ repos:
     versions:
       - "8.5"
       - "8.6"
-      - "9.0"
     arches:
       - x86_64
       - aarch64
+  - name: devel-debug
+    path: devel/debug/$basearch/
+    vault: true
+    versions:
+      - "9.0"
   - name: plus-debuginfo
     path: plus/debug/$basearch/
     vault: true
