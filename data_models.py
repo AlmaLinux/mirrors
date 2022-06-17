@@ -68,7 +68,7 @@ class MirrorData:
     ip: Optional[str] = None
     ipv6: Optional[bool] = None
     isos_link: Optional[str] = None
-    asn: Optional[str] = None
+    asn: list[str] = None
     monopoly: bool = False
     urls: dict[str, str] = field(default_factory=dict)
     subnets: list[str] = field(default_factory=list)

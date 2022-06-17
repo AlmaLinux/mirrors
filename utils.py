@@ -189,10 +189,18 @@ def process_mirror_config(
     :param logger: instance of Logger class
     """
 
+    def _extract_asn(asn_field: Union[list, int]) -> list:
+        if asn_field is None:
+            return []
+        if isinstance(asn_field, int):
+            return [str(asn_field)]
+        else:
+            return [str(i) for i in asn_field]
+
     def _get_mirror_subnets(
             subnets_field: Union[list, str],
             mirror_name: str,
-    ):
+    ) -> list:
         if isinstance(subnets_field, str):
             try:
                 req = requests.get(subnets_field)
@@ -221,7 +229,7 @@ def process_mirror_config(
             subnets_field=yaml_data.get('subnets', []),
             mirror_name=yaml_data['name'],
         ),
-        asn=yaml_data.get('asn'),
+        asn=_extract_asn(yaml_data.get('asn')),
         cloud_type=yaml_data.get('cloud_type', ''),
         cloud_region=','.join(yaml_data.get('cloud_regions', [])),
         geolocation=GeoLocationData.load_from_json(
