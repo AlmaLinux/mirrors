@@ -158,7 +158,7 @@ class Mirror(Base):
             sponsor_name=self.sponsor_name,
             sponsor_url=self.sponsor_url,
             email=self.email,
-            asn=self.asn,
+            asn=(self.asn or '').split(','),
             urls={
                 url.type: url.url for url in self.urls
             },
