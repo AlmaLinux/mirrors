@@ -7,7 +7,7 @@ geolocation:
   country: IT
   state_province: Turin
   city: Turin
-update_frequency: 1sh
+update_frequency: 1h
 sponsor: VHosting Solution
 sponsor_url: https://www.vhosting-it.com/
 email: lorenzo@almalinux.org
