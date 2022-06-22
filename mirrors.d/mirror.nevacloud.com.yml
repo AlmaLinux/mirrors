@@ -5,7 +5,7 @@ address:
   https: https://mirror.nevacloud.com/almalinux
   rsync: rsync://mirror.nevacloud.com/almalinux
 update_frequency: 3h
-sponsor: NevaCloud - PT Delta Awan Angkasa
+sponsor: Nevacloud
 sponsor_url: https://nevacloud.com
 email: noc@nevacloud.com
 geolocation:
