@@ -4,12 +4,17 @@ mirrorlist_dir: docs/.vuepress/public/mirrorlist
 mirrors_dir: mirrors.d
 mirrors_table: docs/internal/mirrors.md
 versions_arches:
+  "8.5":
+    - x86_64
+    - aarch64
+    - ppc64le
   "8.6":
     - x86_64
     - aarch64
     - ppc64le
 versions:
   - "8"
+  - "8.5"
   - "8.6"
   - "9"
   - "9.0"
@@ -19,7 +24,6 @@ duplicated_versions:
 vault_versions:
   - "8.3"
   - "8.4"
-  - "8.5"
 vault_mirror: http://repo.almalinux.org/vault/
 arches:
   - x86_64
@@ -38,6 +42,7 @@ repos:
   - name: powertools
     path: PowerTools/$basearch/os/
     versions:
+      - "8.5"
       - "8.6"
   - name: crb
     path: CRB/$basearch/os/
@@ -62,6 +67,7 @@ repos:
   - name: ha
     path: HighAvailability/$basearch/os/
     versions:
+      - "8.5"
       - "8.6"
   - name: highavailability
     path: HighAvailability/$basearch/os/
@@ -84,6 +90,7 @@ repos:
   - name: devel
     path: devel/$basearch/os/
     versions:
+      - "8.5"
       - "8.6"
       - "9.0"
     arches:
@@ -92,6 +99,7 @@ repos:
   - name: plus
     path: plus/$basearch/os/
     versions:
+      - "8.5"
       - "8.6"
       - "9.0"
   # sources repos
@@ -105,6 +113,7 @@ repos:
     path: PowerTools/Source/
     vault: true
     versions:
+      - "8.5"
       - "8.6"
   - name: crb-source
     path: CRB/Source/
@@ -130,6 +139,7 @@ repos:
     path: HighAvailability/Source/
     vault: true
     versions:
+      - "8.5"
       - "8.6"
   - name: highavailability-source
     path: HighAvailability/Source/
@@ -153,12 +163,14 @@ repos:
     path: devel/Source/
     vault: true
     versions:
+      - "8.5"
       - "8.6"
       - "9.0"
   - name: plus-source
     path: plus/Source/
     vault: true
     versions:
+      - "8.5"
       - "8.6"
       - "9.0"
   # debug repos
@@ -166,6 +178,7 @@ repos:
     path: BaseOS/debug/$basearch/
     vault: true
     versions:
+      - "8.5"
       - "8.6"
   - name: baseos-debug
     path: BaseOS/debug/$basearch/
@@ -176,6 +189,7 @@ repos:
     path: AppStream/debug/$basearch/
     vault: true
     versions:
+      - "8.5"
       - "8.6"
   - name: appstream-debug
     path: AppStream/debug/$basearch/
@@ -186,6 +200,7 @@ repos:
     path: PowerTools/debug/$basearch/
     vault: true
     versions:
+      - "8.5"
       - "8.6"
   - name: crb-debug
     path: CRB/debug/$basearch/
@@ -220,6 +235,7 @@ repos:
     path: extras/debug/$basearch/
     vault: true
     versions:
+      - "8.5"
       - "8.6"
   - name: extras-debug
     path: extras/debug/$basearch/
@@ -230,6 +246,7 @@ repos:
     path: HighAvailability/debug/$basearch/
     vault: true
     versions:
+      - "8.5"
       - "8.6"
   - name: highavailability-debug
     path: HighAvailability/debug/$basearch/
@@ -250,6 +267,7 @@ repos:
     path: ResilientStorage/debug/$basearch/
     vault: true
     versions:
+      - "8.5"
       - "8.6"
   - name: resilientstorage-debug
     path: ResilientStorage/debug/$basearch/
@@ -264,6 +282,7 @@ repos:
     path: devel/debug/$basearch/
     vault: true
     versions:
+      - "8.5"
       - "8.6"
     arches:
       - x86_64
@@ -277,6 +296,7 @@ repos:
     path: plus/debug/$basearch/
     vault: true
     versions:
+      - "8.5"
       - "8.6"
   - name: plus-debug
     path: plus/debug/$basearch/
