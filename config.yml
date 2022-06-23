@@ -289,17 +289,17 @@ repos:
     arches:
       - aarch64
     versions:
-      - "8.5"
+      - "8.6"
   - name: raspberrypi-source
     path: raspberrypi/Source
     vault: true
     versions:
-      - "8.5"
+      - "8.6"
   - name: raspberrypi-debuginfo
     path: raspberrypi/debug/$basearch/
     vault: true
     arches:
       - aarch64
     versions:
-      - "8.5"
+      - "8.6"
 ...
