@@ -1,9 +1,15 @@
+---
 name: mirrors.bkns.vn
 address:
   http: http://mirrors.bkns.vn/almalinux/
   https: https://mirrors.bkns.vn/almalinux/
   rsync: rsync://mirrors.bkns.vn/almalinux
+geolocation:
+  country: VN
+  state_province: Caugiay
+  city: Hanoi
 update_frequency: 1h
 sponsor: BKNS.VN
 sponsor_url: https://www.bkns.vn/
 email: info@bkns.vn
+...
