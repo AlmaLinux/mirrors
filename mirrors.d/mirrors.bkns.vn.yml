@@ -3,7 +3,11 @@ address:
   http: http://mirrors.bkns.vn/almalinux/
   https: https://mirrors.bkns.vn/almalinux/
   rsync: rsync://mirrors.bkns.vn/almalinux
-update_frequency: 1h
+geolocation:
+  country: VN
+  state_province: Cau Giay
+  city: Hanoi
+update_frequency: 3h
 sponsor: BKNS.VN
 sponsor_url: https://www.bkns.vn/
 email: info@bkns.vn
