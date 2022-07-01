@@ -152,7 +152,8 @@ def get_geo_data_by_ip(
     db = GeoIPEngine.get_instance()
     try:
         city = db.city(ip)
-    except AddressNotFoundError:
+    # ValueError will be raised in case of incorrect IP
+    except (AddressNotFoundError, ValueError):
         return
     try:
         city_name = city.city.name
