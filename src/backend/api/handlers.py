@@ -135,9 +135,7 @@ async def _get_nearest_mirrors_by_network_data(
             mirrors=sorted_additional_mirrors,
             country=country,
         )[:LENGTH_CLOUD_MIRRORS_LIST - len(suitable_mirrors)]
-        suitable_mirrors.extend(
-            mirror['mirror'] for mirror in randomized_additional_mirrors
-        )
+        suitable_mirrors.extend(randomized_additional_mirrors)
     return suitable_mirrors
 
 
