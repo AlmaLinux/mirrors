@@ -39,6 +39,8 @@ HEADERS = {
 WHITELIST_MIRRORS = (
     'repo.almalinux.org',
 )
+# FIXME: Temporary solution
+# https://github.com/AlmaLinux/mirrors/issues/572
 WHITELIST_MIRRORS_PER_ARCH_REPO = {
     'eastus.azure.repo.almalinux.org': {
         'arches': [
