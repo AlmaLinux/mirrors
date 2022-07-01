@@ -39,6 +39,24 @@ HEADERS = {
 WHITELIST_MIRRORS = (
     'repo.almalinux.org',
 )
+WHITELIST_MIRRORS_PER_ARCH = {
+    'eastus.azure.repo.almalinux.org': [
+        'x86_64',
+        'aarch64',
+    ],
+    'germanywestcentral.azure.repo.almalinux.org': [
+        'x86_64',
+        'aarch64',
+    ],
+    'southeastasia.azure.repo.almalinux.org': [
+        'x86_64',
+        'aarch64',
+    ],
+    'westus2.azure.repo.almalinux.org': [
+        'x86_64',
+        'aarch64',
+    ],
+}
 NUMBER_OF_PROCESSES_FOR_MIRRORS_CHECK = 15
 AIOHTTP_TIMEOUT = 30
 
@@ -389,6 +407,9 @@ async def mirror_available(
             if repo_versions and version not in repo_versions:
                 continue
             for arch in arches:
+                if mirror_info.name in WHITELIST_MIRRORS_PER_ARCH and \
+                        arch not in WHITELIST_MIRRORS_PER_ARCH[mirror_info.name]:
+                    continue
                 if not _is_permitted_arch_for_this_version_and_repo(
                     version=version,
                     arch=arch,
