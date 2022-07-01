@@ -39,23 +39,79 @@ HEADERS = {
 WHITELIST_MIRRORS = (
     'repo.almalinux.org',
 )
-WHITELIST_MIRRORS_PER_ARCH = {
-    'eastus.azure.repo.almalinux.org': [
-        'x86_64',
-        'aarch64',
-    ],
-    'germanywestcentral.azure.repo.almalinux.org': [
-        'x86_64',
-        'aarch64',
-    ],
-    'southeastasia.azure.repo.almalinux.org': [
-        'x86_64',
-        'aarch64',
-    ],
-    'westus2.azure.repo.almalinux.org': [
-        'x86_64',
-        'aarch64',
-    ],
+WHITELIST_MIRRORS_PER_ARCH_REPO = {
+    'eastus.azure.repo.almalinux.org': {
+        'arches': [
+            'x86_64',
+            'aarch64',
+        ],
+        'repos': [
+            'AppStream',
+            'BaseOS',
+            'HighAvailability',
+            'NFV',
+            'PowerTools',
+            'RT',
+            'ResilientStorage',
+            'devel',
+            'extras',
+            'plus',
+        ]
+    },
+    'germanywestcentral.azure.repo.almalinux.org': {
+        'arches': [
+            'x86_64',
+            'aarch64',
+        ],
+        'repos': [
+            'AppStream',
+            'BaseOS',
+            'HighAvailability',
+            'NFV',
+            'PowerTools',
+            'RT',
+            'ResilientStorage',
+            'devel',
+            'extras',
+            'plus',
+        ]
+    },
+    'southeastasia.azure.repo.almalinux.org': {
+        'arches': [
+            'x86_64',
+            'aarch64',
+        ],
+        'repos': [
+            'AppStream',
+            'BaseOS',
+            'HighAvailability',
+            'NFV',
+            'PowerTools',
+            'RT',
+            'ResilientStorage',
+            'devel',
+            'extras',
+            'plus',
+        ]
+    },
+    'westus2.azure.repo.almalinux.org': {
+        'arches': [
+            'x86_64',
+            'aarch64',
+        ],
+        'repos': [
+            'AppStream',
+            'BaseOS',
+            'HighAvailability',
+            'NFV',
+            'PowerTools',
+            'RT',
+            'ResilientStorage',
+            'devel',
+            'extras',
+            'plus',
+        ]
+    },
 }
 NUMBER_OF_PROCESSES_FOR_MIRRORS_CHECK = 15
 AIOHTTP_TIMEOUT = 30
@@ -397,6 +453,9 @@ async def mirror_available(
         if version in main_config.duplicated_versions:
             continue
         for repo_data in main_config.repos:
+            if mirror_info.name in WHITELIST_MIRRORS_PER_ARCH_REPO and \
+                    repo_data.name not in WHITELIST_MIRRORS_PER_ARCH_REPO[mirror_info.name]['repos']:
+                continue
             if repo_data.vault:
                 continue
             arches = _get_arches_for_version(
@@ -407,8 +466,8 @@ async def mirror_available(
             if repo_versions and version not in repo_versions:
                 continue
             for arch in arches:
-                if mirror_info.name in WHITELIST_MIRRORS_PER_ARCH and \
-                        arch not in WHITELIST_MIRRORS_PER_ARCH[mirror_info.name]:
+                if mirror_info.name in WHITELIST_MIRRORS_PER_ARCH_REPO and \
+                        arch not in WHITELIST_MIRRORS_PER_ARCH_REPO[mirror_info.name]['arches']:
                     continue
                 if not _is_permitted_arch_for_this_version_and_repo(
                     version=version,
