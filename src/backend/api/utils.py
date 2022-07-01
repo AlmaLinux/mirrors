@@ -43,7 +43,9 @@ from common.sentry import (
 from haversine import haversine
 from api.redis import (
     get_geolocation_from_cache,
-    set_geolocation_to_cache
+    set_geolocation_to_cache,
+    get_subnets_from_cache,
+    set_subnets_to_cache,
 )
 
 logger = get_logger(__name__)
@@ -210,7 +212,7 @@ async def get_azure_subnets_json(http_session: ClientSession) -> Optional[dict]:
             response_json = await resp.json(
                 content_type='application/octet-stream',
             )
-    except (ClientConnectorError, TimeoutError) as err:
+    except (ClientConnectorError, asyncio.exceptions.TimeoutError) as err:
         logger.error(
             'Cannot get json with Azure subnets by url "%s" because "%s"',
             link_to_json_url,
@@ -240,6 +242,9 @@ async def get_aws_subnets_json(http_session: ClientSession) -> Optional[dict]:
 
 
 async def get_azure_subnets(http_session: ClientSession):
+    subnets = await get_subnets_from_cache('azure_subnets')
+    if subnets is not None:
+        return subnets
     data_json = await get_azure_subnets_json(http_session=http_session)
     subnets = dict()
     if data_json is None:
@@ -250,10 +255,14 @@ async def get_azure_subnets(http_session: ClientSession):
             properties = value['properties']
             subnets[properties['region'].lower()] = \
                 properties['addressPrefixes']
+    await set_subnets_to_cache('aws_subnets', subnets)
     return subnets
 
 
 async def get_aws_subnets(http_session: ClientSession):
+    subnets = await get_subnets_from_cache('aws_subnets')
+    if subnets is not None:
+        return subnets
     data_json = await get_aws_subnets_json(http_session=http_session)
     subnets = defaultdict(list)
     if data_json is None:
@@ -262,6 +271,7 @@ async def get_aws_subnets(http_session: ClientSession):
         subnets[v4_prefix['region'].lower()].append(v4_prefix['ip_prefix'])
     for v6_prefix in data_json['ipv6_prefixes']:
         subnets[v6_prefix['region'].lower()].append(v6_prefix['ipv6_prefix'])
+    await set_subnets_to_cache('aws_subnets', subnets)
     return subnets
 
 

@@ -93,7 +93,7 @@ async def set_repo_status(
         ) as resp:
             timestamp_response = await resp.text()
     except (asyncio.exceptions.TimeoutError, HTTPError):
-        logger.error(
+        logger.warning(
             'Mirror "%s" has no timestamp file by url "%s"',
             mirror_info.name,
             timestamp_url,
@@ -107,7 +107,7 @@ async def set_repo_status(
         try:
             mirror_last_updated = float(timestamp_response)
         except ValueError:
-            logger.info(
+            logger.warning(
                 'Mirror "%s" has broken timestamp file by url "%s"',
                 mirror_info.name,
                 timestamp_url,
