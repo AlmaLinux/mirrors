@@ -4,8 +4,17 @@ address:
   http: http://mirror.serverion.com/almalinux/
   https: https://mirror.serverion.com/almalinux/
   rsync: rsync://mirror.serverion.com/almalinux
+  ftp: ftp://mirror.serverion.com
 update_frequency: 1h
-sponsor: SERVERION
+sponsor: serverion.com
 sponsor_url: https://www.serverion.com
 email: desmond@serverion.com
+geolocation:
+  continent: EU
+  country: NL
+  state_province: ZH
+  city: Zoetermeer
+private: false
+monopoly: false
+asn: 213035
 ...
