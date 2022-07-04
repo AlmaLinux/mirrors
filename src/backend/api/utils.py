@@ -255,7 +255,7 @@ async def get_azure_subnets(http_session: ClientSession):
             properties = value['properties']
             subnets[properties['region'].lower()] = \
                 properties['addressPrefixes']
-    await set_subnets_to_cache('aws_subnets', subnets)
+    await set_subnets_to_cache('azure_subnets', subnets)
     return subnets
 
 
