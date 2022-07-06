@@ -1,0 +1,15 @@
+[mirrors_service]
+10.0.0.10
+
+[all:vars]
+ansible_connection=ssh
+ansible_user=vagrant
+ansible_ssh_pass=vagrant
+container_env_prefix=prod
+deploy_environment=Production
+backend_workers=4
+auth_key=<your auth key for access to the endpoint of updating mirrors list>
+test_ip_address=<ip_address_of_request_for_debugging>
+gunicorn_port=<port of uwsgi service>
+license_key=<License key from MaxMind site>
+rsyslog_server=10.0.0.10
