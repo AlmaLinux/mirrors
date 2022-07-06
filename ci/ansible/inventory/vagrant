@@ -6,6 +6,7 @@ ansible_connection=ssh
 ansible_user=vagrant
 ansible_ssh_pass=vagrant
 container_env_prefix=prod
+sentry_dsn=<place here a DSN key of your Sentry>
 deploy_environment=Production
 backend_workers=4
 auth_key=<your auth key for access to the endpoint of updating mirrors list>
