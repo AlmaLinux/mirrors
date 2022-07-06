@@ -31,8 +31,7 @@
     7. Set value of option `test_ip_address` to test IP. This options is work only for non-production layout.
     8. Set value of option `gunicorn_port`. That is used for starting backend service.
 6. Go to project directory `ci/ansible`
-6. Run command `ansible-playbook -vv -i inventory/dev -u 
-   <username> --become main.yml`, there is `<username>` is name of a user from a remote server which has sudo rights
+6. Run command `ansible-playbook -vv -i inventory/vagrant -u vagrant --become main.yml`, `vagrant` with `-u` is name of a user from a remote server which has sudo rights
 
 ## How it works
 The service uses IP of a incoming request for detecting country and region. Therefore, a location can be different by expected if a server or you are using proxy, vpn, Cloudflare (or something like this).
