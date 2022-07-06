@@ -10,6 +10,7 @@ dnf_packages:
   - nginx
   - gcc
   # for testing purposes
+  - checkpolicy
   - sqlite
 python_packages:
   - aiodns==3.0.0
