@@ -66,6 +66,37 @@ async def set_mirrors_to_cache(
         )
 
 
+async def get_subnets_from_cache(
+        key: str,
+) -> dict:
+    """
+    Get a cached subnets of Azure/AWS cloud
+    """
+    async with redis_context() as redis_engine:
+        subnets_string = await redis_engine.get(str(key))
+    if subnets_string is not None:
+        subnets_json = json.loads(
+            subnets_string,
+        )
+        return subnets_json
+
+
+async def set_subnets_to_cache(
+        key: str,
+        subnets: dict,
+) -> None:
+    """
+    Save a mirror list for specified IP to cache
+    """
+    async with redis_context() as redis_engine:
+        subnets = json.dumps(subnets)
+        await redis_engine.set(
+            str(key),
+            subnets,
+            24 * 60 * 60,
+        )
+
+
 async def get_geolocation_from_cache(
         key: str
 ) -> Union[tuple[float, float], tuple[None, None]]:

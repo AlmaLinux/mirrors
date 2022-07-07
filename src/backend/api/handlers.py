@@ -78,6 +78,21 @@ async def _get_nearest_mirrors_by_network_data(
     The function returns mirrors which are in the same subnet or have the same
     ASN as a request's IP
     """
+
+    def _is_additional_mirrors_suitable(
+            mirror_data: MirrorData,
+            main_list_of_mirrors: list[MirrorData]
+    ) -> bool:
+        """
+        An additional mirror is a mirror
+        which is fresh (not outdated), not flapping and public, because
+        all suitable private mirrors we already found,
+        using ASN or subnets data
+        """
+        return mirror_data.status == 'ok' and \
+        not mirror_data.private and \
+        mirror_data not in main_list_of_mirrors
+
     match = get_geo_data_by_ip(ip_address)
     asn = get_asn_by_ip(ip_address)
     suitable_mirrors = []
@@ -105,15 +120,22 @@ async def _get_nearest_mirrors_by_network_data(
     if 1 <= len(suitable_mirrors) < LENGTH_CLOUD_MIRRORS_LIST\
             and match is not None:
         continent, country, _, _, latitude, longitude = match
-        suitable_mirrors.extend(
-            mirror['mirror'] for mirror in
-            sort_mirrors_by_distance_and_country(
-                request_geo_data=(latitude, longitude),
-                mirrors=[mirror for mirror in mirrors
-                         if mirror not in suitable_mirrors],
-                country=country,
-            )[:LENGTH_CLOUD_MIRRORS_LIST - len(suitable_mirrors)]
+        not_sorted_additional_mirrors = [
+            mirror for mirror in mirrors if _is_additional_mirrors_suitable(
+                mirror_data=mirror,
+                main_list_of_mirrors=suitable_mirrors,
+            )
+        ]
+        sorted_additional_mirrors = sort_mirrors_by_distance_and_country(
+            request_geo_data=(latitude, longitude),
+            mirrors=not_sorted_additional_mirrors,
+            country=country,
         )
+        randomized_additional_mirrors = randomize_mirrors_within_distance(
+            mirrors=sorted_additional_mirrors,
+            country=country,
+        )[:LENGTH_CLOUD_MIRRORS_LIST - len(suitable_mirrors)]
+        suitable_mirrors.extend(randomized_additional_mirrors)
     return suitable_mirrors
 
 
@@ -186,7 +208,7 @@ async def _get_nearest_mirrors(
     if not suitable_mirrors:
         suitable_mirrors = await _get_nearest_mirrors_by_geo_data(
             ip_address=ip_address,
-            without_private_mirrors=without_private_mirrors,
+            without_private_mirrors=True,
         )
     await set_mirrors_to_cache(
         ip_address,
