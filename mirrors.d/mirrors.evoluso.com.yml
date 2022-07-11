@@ -6,7 +6,6 @@ address:
   rsync: None
 geolocation:
   country: NL
-  state_province: 
   city: Amsterdam
 update_frequency: 24h
 sponsor: Evoluso.com
