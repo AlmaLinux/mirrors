@@ -2,8 +2,8 @@
 name: mirrors.evoluso.com
 address:
   http: http://mirrors.evoluso.com/almalinux/
-  https: None
-  rsync: None
+  https: 
+  rsync: 
 geolocation:
   country: NL
   state_province: Wormer
