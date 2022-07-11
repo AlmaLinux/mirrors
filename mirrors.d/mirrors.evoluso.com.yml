@@ -6,7 +6,7 @@ address:
   rsync: 
 geolocation:
   country: NL
-  state_province: Wormer
+  state_province: North Holland
   city: Amsterdam
 update_frequency: 24h
 sponsor: Evoluso.com
