@@ -9,9 +9,6 @@ Vagrant.configure("2") do |config|
     libvirt.cpus = 1
     libvirt.memory = 2048
     libvirt.random_hostname = true
-    libvirt.graphics_type = "spice"
-    libvirt.channel :type => 'spicevmc', :target_name => 'com.redhat.spice.0', :target_type => 'virtio'
-    libvirt.redirdev :type => "spicevmc"
     libvirt.uri = 'qemu:///system'
   end
 
@@ -20,8 +17,8 @@ Vagrant.configure("2") do |config|
     i.vm.network "private_network", ip: "10.0.0.10"
   end
 
-  config.vm.define "mirror1" do |i|
-    i.vm.hostname = "alma-8-mirror-1"
+  config.vm.define "fake-mirror" do |i|
+    i.vm.hostname = "alma-8-fake-mirror"
     i.vm.network "private_network", ip: "10.0.0.11"
   end
 
