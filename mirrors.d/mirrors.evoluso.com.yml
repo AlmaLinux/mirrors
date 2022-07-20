@@ -5,6 +5,7 @@ address:
   https: https://mirrors.evoluso.com/almalinux/
   rsync: 
   geolocation:
+geolocation:
   country: NL
   state_province: North Holland
   city: Amsterdam
