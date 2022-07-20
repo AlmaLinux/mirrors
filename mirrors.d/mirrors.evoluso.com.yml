@@ -2,7 +2,7 @@
 name: mirrors.evoluso.com
 address:
   http: http://mirrors.evoluso.com/almalinux/
-  https: 
+  https: https://mirrors.evoluso.com/almalinux/
   rsync: 
 geolocation:
   country: NL
