@@ -1,0 +1,15 @@
+---
+name: mirror.datacenter.by
+address:
+  http: http://mirror.datacenter.by/pub/almalinux
+  https: https://mirror.datacenter.by/pub/almalinux
+  rsync: rsync://mirror.datacenter.by/almalinux
+update_frequency: 3h
+geolocation:
+  city: Minsk
+  state_province: Belarus
+  country: BY
+sponsor: Beltelecom
+sponsor_url: https://beltelecom.by
+email: admin@mirror.datacenter.by
+...
