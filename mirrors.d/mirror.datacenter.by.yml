@@ -3,6 +3,7 @@ name: mirror.datacenter.by
 address:
   http: http://mirror.datacenter.by/pub/almalinux
   https: https://mirror.datacenter.by/pub/almalinux
+  ftp: ftp://mirror.datacenter.by/pub/almalinux
   rsync: rsync://mirror.datacenter.by/almalinux
 update_frequency: 3h
 geolocation:
