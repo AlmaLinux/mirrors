@@ -6,8 +6,9 @@ address:
   rsync: rsync://mirror.datacenter.by/almalinux
 update_frequency: 3h
 geolocation:
+  continent: Europe
   city: Minsk
-  state_province: Belarus
+  state_province: Minsk
   country: BY
 sponsor: Beltelecom
 sponsor_url: https://beltelecom.by
