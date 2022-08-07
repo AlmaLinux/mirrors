@@ -1,0 +1,14 @@
+---
+name: mirror.mangohost.net
+address:
+  http: http://mirror.mangohost.net/almalinux/
+  https: https://mirror.mangohost.net/almalinux/
+  rsync: rsync://mirror.mangohost.net/almalinux
+geolocation:
+  country: MD
+  state_province: Chisinau
+  city: Chisinau
+update_frequency: 3h
+sponsor: MangoHost.NET
+sponsor_url: https://mangohost.net
+email: almalinux@mangohost.net

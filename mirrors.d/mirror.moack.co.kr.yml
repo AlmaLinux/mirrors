@@ -1,0 +1,12 @@
+name: mirror.moack.co.kr
+address:
+  http: http://mirror.moack.co.kr/almalinux/
+  https: https://mirror.moack.co.kr/almalinux
+geolocation:
+  country: KR
+  state_province: Gyeonggi Province
+  city: Yongin
+update_frequency: 1d
+sponsor: MOACK
+sponsor_url: https://www.moack.co.kr
+email: noc@moack.net
