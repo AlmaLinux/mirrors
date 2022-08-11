@@ -3,6 +3,7 @@ name: mirror.misakamikoto.network
 address:
   http: http://mirror.misakamikoto.network/almalinux/
   https: https://mirror.misakamikoto.network/almalinux/
+  rsync: rsync://rsync.misakamikoto.network
 geolocation:
   country: KR
   state_province: Gyeongsangbuk-do
