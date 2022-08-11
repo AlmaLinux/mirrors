@@ -4,221 +4,302 @@ mirrorlist_dir: docs/.vuepress/public/mirrorlist
 mirrors_dir: mirrors.d
 mirrors_table: docs/internal/mirrors.md
 versions_arches:
-    "8.5":
-        - x86_64
-        - aarch64
-        - ppc64le
-versions:
-    - "8.5"
-    - "8"
-    - "9"
-    - "9.0-beta"
-duplicated_versions:
-    - "8"
-    - "9"
-vault_versions:
-    - "8.5-beta"
-    - "8.4"
-    - "8.4-beta"
-    - "8.3"
-vault_mirror: http://repo.almalinux.org/vault/
-arches:
+  "8.6":
     - x86_64
     - aarch64
     - ppc64le
-    - s390x
+versions:
+  - "8"
+  - "8.6"
+  - "9"
+  - "9.0"
+duplicated_versions:
+  - "8"
+  - "9"
+vault_versions:
+  - "8.3"
+  - "8.4"
+  - "8.5"
+vault_mirror: http://repo.almalinux.org/vault/
+arches:
+  - x86_64
+  - aarch64
+  - ppc64le
+  - s390x
 # one of them should be in a mirror's config
 required_protocols:
-    - http
-    - https
+  - http
+  - https
 repos:
-    - name: baseos
-      path: BaseOS/$basearch/os/
-    - name: appstream
-      path: AppStream/$basearch/os/
-    - name: powertools
-      path: PowerTools/$basearch/os/
-      versions:
-          - "8.5"
-    - name: crb
-      path: CRB/$basearch/os/
-      versions:
-          - "9.0-beta"
-    - name: nfv
-      path: NFV/$basearch/os/
-      versions:
-          - "9.0-beta"
-      arches:
-          - x86_64
-    - name: rt
-      path: RT/$basearch/os/
-      versions:
-          - "9.0-beta"
-      arches:
-          - x86_64
-    - name: extras
-      path: extras/$basearch/os/
-    - name: ha
-      path: HighAvailability/$basearch/os/
-      versions:
-          - "8.5"
-    - name: highavailability
-      path: HighAvailability/$basearch/os/
-      versions:
-          - "9.0-beta"
-    - name: devel
-      path: devel/$basearch/os/
-      versions:
-          - "8.5"
-      arches:
-          - x86_64
-          - aarch64
-    - name: resilientstorage
-      path: ResilientStorage/$basearch/os/
-      arches:
-          - x86_64
-          - ppc64le
-          - s390x
-    - name: plus
-      path: plus/$basearch/os/
-      versions:
-          - "8.5"
-    # sources repos
-    - name: baseos-source
-      path: BaseOS/Source/
-    - name: appstream-source
-      path: AppStream/Source/
-    - name: powertools-source
-      path: PowerTools/Source/
-      versions:
-          - "8.5"
-    - name: crb-source
-      path: CRB/Source/
-      versions:
-          - "9.0-beta"
-    - name: nfv-source
-      path: NFV/Source/
-      versions:
-          - "9.0-beta"
-    - name: rt-source
-      path: RT/Source/
-      versions:
-          - "9.0-beta"
-    - name: extras-source
-      path: extras/Source/
-    - name: ha-source
-      path: HighAvailability/Source/
-      versions:
-          - "8.5"
-    - name: highavailability-source
-      path: HighAvailability/Source/
-      versions:
-          - "9.0-beta"
-    - name: devel-source
-      path: devel/Source/
-      versions:
-          - "8.5"
-    - name: resilientstorage-source
-      path: ResilientStorage/Source/
-    - name: plus-source
-      path: plus/Source/
-      versions:
-          - "8.5"
-    # debug repos
-    - name: baseos-debuginfo
-      path: BaseOS/debug/$basearch/
-      versions:
-          - "8.5"
-    - name: baseos-debug
-      path: BaseOS/debug/$basearch/
-      versions:
-          - "9.0-beta"
-    - name: appstream-debuginfo
-      path: AppStream/debug/$basearch/
-      versions:
-          - "8.5"
-    - name: appstream-debug
-      path: AppStream/debug/$basearch/
-      versions:
-          - "9.0-beta"
-    - name: powertools-debuginfo
-      path: PowerTools/debug/$basearch/
-      versions:
-          - "8.5"
-    - name: crb-debug
-      path: CRB/debug/$basearch/
-      versions:
-          - "9.0-beta"
-    - name: nfv-debug
-      path: NFV/debug/$basearch/
-      versions:
-          - "9.0-beta"
-      arches:
-          - x86_64
-    - name: rt-debug
-      path: RT/debug/$basearch/
-      versions:
-          - "9.0-beta"
-      arches:
-          - x86_64
-    - name: extras-debuginfo
-      path: extras/debug/$basearch/
-      versions:
-          - "8.5"
-    - name: extras-debug
-      path: extras/debug/$basearch/
-      versions:
-          - "9.0-beta"
-    - name: ha-debuginfo
-      path: HighAvailability/debug/$basearch/
-      versions:
-          - "8.5"
-    - name: highavailability-debug
-      path: HighAvailability/debug/$basearch/
-      versions:
-          - "9.0-beta"
-    - name: devel-debuginfo
-      path: devel/debug/$basearch/
-      versions:
-          - "8.5"
-      arches:
-          - x86_64
-          - aarch64
-    - name: resilientstorage-debuginfo
-      path: ResilientStorage/debug/$basearch/
-      arches:
-          - x86_64
-          - ppc64le
-          - s390x
-      versions:
-          - "8.5"
-    - name: resilientstorage-debug
-      path: ResilientStorage/debug/$basearch/
-      arches:
-          - x86_64
-          - ppc64le
-          - s390x
-      versions:
-          - "9.0-beta"
-    - name: plus-debuginfo
-      path: plus/debug/$basearch/
-      versions:
-          - "8.5"
-    ## raspberry pi repos
-    - name: raspberrypi
-      path: raspberrypi/$basearch/os/
-      arches:
-          - aarch64
-      versions:
-          - "8.5"
-    - name: raspberrypi-source
-      path: raspberrypi/Source
-      versions:
-          - "8.5"
-    - name: raspberrypi-debuginfo
-      path: raspberrypi/debug/$basearch/
-      arches:
-          - aarch64
-      versions:
-          - "8.5"
+  - name: baseos
+    path: BaseOS/$basearch/os/
+  - name: appstream
+    path: AppStream/$basearch/os/
+  - name: powertools
+    path: PowerTools/$basearch/os/
+    versions:
+      - "8.6"
+  - name: crb
+    path: CRB/$basearch/os/
+    versions:
+      - "9.0"
+  - name: nfv
+    path: NFV/$basearch/os/
+    versions:
+      - "8.6"
+      - "9.0"
+    arches:
+      - x86_64
+  - name: rt
+    path: RT/$basearch/os/
+    versions:
+      - "8.6"
+      - "9.0"
+    arches:
+      - x86_64
+  - name: extras
+    path: extras/$basearch/os/
+  - name: ha
+    path: HighAvailability/$basearch/os/
+    versions:
+      - "8.6"
+  - name: highavailability
+    path: HighAvailability/$basearch/os/
+    versions:
+      - "9.0"
+  - name: sap
+    path: SAP/$basearch/os/
+    versions:
+      - "9.0"
+  - name: saphana
+    path: SAPHANA/$basearch/os/
+    versions:
+      - "9.0"
+  - name: resilientstorage
+    path: ResilientStorage/$basearch/os/
+    arches:
+      - x86_64
+      - ppc64le
+      - s390x
+  - name: devel
+    path: devel/$basearch/os/
+    versions:
+      - "8.6"
+      - "9.0"
+    arches:
+      - x86_64
+      - aarch64
+  - name: plus
+    path: plus/$basearch/os/
+    versions:
+      - "8.6"
+      - "9.0"
+  # sources repos
+  - name: baseos-source
+    path: BaseOS/Source/
+    vault: true
+  - name: appstream-source
+    path: AppStream/Source/
+    vault: true
+  - name: powertools-source
+    path: PowerTools/Source/
+    vault: true
+    versions:
+      - "8.6"
+  - name: crb-source
+    path: CRB/Source/
+    vault: true
+    versions:
+      - "9.0"
+  - name: nfv-source
+    path: NFV/Source/
+    vault: true
+    versions:
+      - "8.6"
+      - "9.0"
+  - name: rt-source
+    path: RT/Source/
+    vault: true
+    versions:
+      - "8.6"
+      - "9.0"
+  - name: extras-source
+    path: extras/Source/
+    vault: true
+  - name: ha-source
+    path: HighAvailability/Source/
+    vault: true
+    versions:
+      - "8.6"
+  - name: highavailability-source
+    path: HighAvailability/Source/
+    vault: true
+    versions:
+      - "9.0"
+  - name: sap-source
+    path: SAP/Source/
+    vault: true
+    versions:
+      - "9.0"
+  - name: saphana-source
+    path: SAPHANA/Source/
+    vault: true
+    versions:
+      - "9.0"
+  - name: resilientstorage-source
+    path: ResilientStorage/Source/
+    vault: true
+  - name: devel-source
+    path: devel/Source/
+    vault: true
+    versions:
+      - "8.6"
+      - "9.0"
+  - name: plus-source
+    path: plus/Source/
+    vault: true
+    versions:
+      - "8.6"
+      - "9.0"
+  # debug repos
+  - name: baseos-debuginfo
+    path: BaseOS/debug/$basearch/
+    vault: true
+    versions:
+      - "8.6"
+  - name: baseos-debug
+    path: BaseOS/debug/$basearch/
+    vault: true
+    versions:
+      - "9.0"
+  - name: appstream-debuginfo
+    path: AppStream/debug/$basearch/
+    vault: true
+    versions:
+      - "8.6"
+  - name: appstream-debug
+    path: AppStream/debug/$basearch/
+    vault: true
+    versions:
+      - "9.0"
+  - name: powertools-debuginfo
+    path: PowerTools/debug/$basearch/
+    vault: true
+    versions:
+      - "8.6"
+  - name: crb-debug
+    path: CRB/debug/$basearch/
+    vault: true
+    versions:
+      - "9.0"
+  - name: nfv-debuginfo
+    path: NFV/debug/$basearch/
+    vault: true
+    versions:
+      - "8.6"
+  - name: nfv-debug
+    path: NFV/debug/$basearch/
+    vault: true
+    versions:
+      - "9.0"
+    arches:
+      - x86_64
+  - name: rt-debuginfo
+    path: RT/debug/$basearch/
+    vault: true
+    versions:
+      - "8.6"
+  - name: rt-debug
+    path: RT/debug/$basearch/
+    vault: true
+    versions:
+      - "9.0"
+    arches:
+      - x86_64
+  - name: extras-debuginfo
+    path: extras/debug/$basearch/
+    vault: true
+    versions:
+      - "8.6"
+  - name: extras-debug
+    path: extras/debug/$basearch/
+    vault: true
+    versions:
+      - "9.0"
+  - name: ha-debuginfo
+    path: HighAvailability/debug/$basearch/
+    vault: true
+    versions:
+      - "8.6"
+  - name: highavailability-debug
+    path: HighAvailability/debug/$basearch/
+    vault: true
+    versions:
+      - "9.0"
+  - name: sap-debug
+    path: SAP/debug/$basearch/
+    vault: true
+    versions:
+      - "9.0"
+  - name: saphana-debug
+    path: SAPHANA/debug/$basearch/
+    vault: true
+    versions:
+      - "9.0"
+  - name: resilientstorage-debuginfo
+    path: ResilientStorage/debug/$basearch/
+    vault: true
+    versions:
+      - "8.6"
+  - name: resilientstorage-debug
+    path: ResilientStorage/debug/$basearch/
+    vault: true
+    arches:
+      - x86_64
+      - ppc64le
+      - s390x
+    versions:
+      - "9.0"
+  - name: devel-debuginfo
+    path: devel/debug/$basearch/
+    vault: true
+    versions:
+      - "8.6"
+    arches:
+      - x86_64
+      - aarch64
+  - name: devel-debug
+    path: devel/debug/$basearch/
+    vault: true
+    versions:
+      - "9.0"
+  - name: plus-debuginfo
+    path: plus/debug/$basearch/
+    vault: true
+    versions:
+      - "8.6"
+  - name: plus-debug
+    path: plus/debug/$basearch/
+    vault: true
+    versions:
+      - "9.0"
+  ## raspberry pi repos
+  - name: raspberrypi
+    path: raspberrypi/$basearch/os/
+    arches:
+      - aarch64
+    versions:
+      - "8.6"
+  - name: raspberrypi-source
+    path: raspberrypi/Source
+    vault: true
+    versions:
+      - "8.6"
+  - name: raspberrypi-debuginfo
+    path: raspberrypi/debug/$basearch/
+    vault: true
+    arches:
+      - aarch64
+    versions:
+      - "8.6"
 ...
