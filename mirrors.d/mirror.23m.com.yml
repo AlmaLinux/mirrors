@@ -4,6 +4,10 @@ address:
   http: http://mirror.23m.com/almalinux/
   https: https://mirror.23m.com/almalinux/
   rsync: rsync://mirror.23m.com/almalinux
+geolocation:
+  country: DE
+  state_province: Hesse
+  city: Frankfurt
 update_frequency: 1h
 sponsor: 23media GmbH
 sponsor_url: https://23m.com

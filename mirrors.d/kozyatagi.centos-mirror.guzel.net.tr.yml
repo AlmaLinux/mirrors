@@ -1,0 +1,14 @@
+---
+name: kozyatagi.mirror.guzel.net.tr
+address:
+  http: http://kozyatagi.mirror.guzel.net.tr/almalinux/
+  https: https://kozyatagi.mirror.guzel.net.tr/almalinux/
+geolocation:
+  country: TR
+  state_province: Kozyatagi
+  city: Istanbul
+update_frequency: 3h
+sponsor: Guzel Hosting
+sponsor_url: https://www.guzel.net.tr
+email: bilgi@guzel.net.tr
+...

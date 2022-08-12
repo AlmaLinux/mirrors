@@ -3,6 +3,10 @@ name: mirrors.chroot.ro
 address:
   http: http://mirrors.chroot.ro/almalinux/
   https: https://mirrors.chroot.ro/almalinux/
+geolocation:
+  country: RO
+  state_province:
+  city: Bucharest
 update_frequency: 2h
 sponsor: Chroot.ro
 sponsor_url: https://www.chroot.ro
