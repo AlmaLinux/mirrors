@@ -7,7 +7,7 @@
 
 ## Requirements
 
-* CentOS 8 (target server)
+* AlmaLinux 8 (target server)
 * Ansible version is 2.10 or newer
 * Ansible community.docker collection
     * Use command `ansible-galaxy collection install community.docker` for installing it
