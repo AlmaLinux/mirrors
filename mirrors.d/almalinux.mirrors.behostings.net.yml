@@ -1,0 +1,14 @@
+---
+name: almalinux.mirrors.behostings.net
+address:
+  http: http://almalinux.mirrors.behostings.net
+  https: https://almalinux.mirrors.behostings.net
+geolocation:
+  country: BE
+  state_province: Jodoigne
+  city: Brabant Wallon
+update_frequency: 3h
+sponsor: Behostings
+sponsor_url: https://www.behostings.com
+email: support@behostings.com
+...
