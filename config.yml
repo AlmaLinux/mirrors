@@ -3,11 +3,6 @@ allowed_outdate: 12h
 mirrorlist_dir: docs/.vuepress/public/mirrorlist
 mirrors_dir: mirrors.d
 mirrors_table: docs/internal/mirrors.md
-versions_arches:
-  "8.6":
-    - x86_64
-    - aarch64
-    - ppc64le
 versions:
   - "8"
   - "8.6"
