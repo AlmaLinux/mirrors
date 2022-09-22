@@ -7,8 +7,9 @@
 
 ## Requirements
 
-* CentOS 8 (target server)
-* Ansible version is 2.10 or newer - make sure you have the full version installed with: `sudo dnf install -y epel-release && sudo dnf install -y ansible`
+
+* AlmaLinux 8 (target server)
+* Ansible version is 2.10 or newer
 * Ansible community.docker collection
     * Use command `ansible-galaxy collection install community.docker` for installing it
 * Ansible ssh-reconnect role
