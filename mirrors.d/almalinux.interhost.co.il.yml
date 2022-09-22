@@ -3,7 +3,6 @@ name: almalinux.interhost.co.il
 address:
   http: http://almalinux.interhost.co.il/
   https: https://almalinux.interhost.co.il/
-  rsync: rsync://almalinux.interhost.co.il/
 geolocation:
   country: IL
   state_province:
