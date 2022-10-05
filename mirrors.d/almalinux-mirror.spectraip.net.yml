@@ -4,11 +4,15 @@ address:
   http: http://mirror.spectraip.net/almalinux/
   https: https://mirror.spectraip.net/almalinux/
 geolocation:
+  continent: Europe
   country: NL
   state_province: North Holland
   city: Amsterdam
+private: false
 update_frequency: 3h
 sponsor: SpectraIP B.V.
-sponsor_url: https://www.spectraip.net
+sponsor_url: https://www.spectraip.net/
 email: info@spectraip.net
+asn:
+  - 62068
 ...
