@@ -1,0 +1,14 @@
+---
+name: tx-mirror.tier.net
+address:
+  http: http://tx-mirror.tier.net/almalinux/
+  https: https://tx-mirror.tier.net/almalinux/
+geolocation:
+  country: US
+  state_province: Texas
+  city: Dallas
+update_frequency: 3h
+sponsor: Tier.Net
+sponsor_url: https://www.tier.net
+email: jacob@tier.net
+...
