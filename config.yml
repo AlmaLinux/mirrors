@@ -261,14 +261,22 @@ repos:
     path: SAP/debug/$basearch/
     vault: true
     versions:
-      - "8.7-beta"
       - "9.0"
   - name: saphana-debug
     path: SAPHANA/debug/$basearch/
     vault: true
     versions:
-      - "8.7-beta"
       - "9.0"
+  - name: sap-debuginfo
+    path: SAP/debug/$basearch/
+    vault: true
+    versions:
+      - "8.7-beta"
+  - name: saphana-debuginfo
+    path: SAPHANA/debug/$basearch/
+    vault: true
+    versions:
+      - "8.7-beta"
   - name: resilientstorage-debuginfo
     path: ResilientStorage/debug/$basearch/
     vault: true
