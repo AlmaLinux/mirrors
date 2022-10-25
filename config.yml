@@ -6,6 +6,7 @@ mirrors_table: docs/internal/mirrors.md
 versions:
   - "8"
   - "8.6"
+  - "8.7-beta"
   - "9"
   - "9.0"
 duplicated_versions:
@@ -34,6 +35,7 @@ repos:
     path: PowerTools/$basearch/os/
     versions:
       - "8.6"
+      - "8.7-beta"
   - name: crb
     path: CRB/$basearch/os/
     versions:
@@ -42,6 +44,7 @@ repos:
     path: NFV/$basearch/os/
     versions:
       - "8.6"
+      - "8.7-beta"
       - "9.0"
     arches:
       - x86_64
@@ -49,6 +52,7 @@ repos:
     path: RT/$basearch/os/
     versions:
       - "8.6"
+      - "8.7-beta"
       - "9.0"
     arches:
       - x86_64
@@ -58,6 +62,7 @@ repos:
     path: HighAvailability/$basearch/os/
     versions:
       - "8.6"
+      - "8.7-beta"
   - name: highavailability
     path: HighAvailability/$basearch/os/
     versions:
@@ -65,10 +70,12 @@ repos:
   - name: sap
     path: SAP/$basearch/os/
     versions:
+      - "8.7-beta"
       - "9.0"
   - name: saphana
     path: SAPHANA/$basearch/os/
     versions:
+      - "8.7-beta"
       - "9.0"
   - name: resilientstorage
     path: ResilientStorage/$basearch/os/
@@ -80,6 +87,7 @@ repos:
     path: devel/$basearch/os/
     versions:
       - "8.6"
+      - "8.7-beta"
       - "9.0"
     arches:
       - x86_64
@@ -88,7 +96,9 @@ repos:
     path: plus/$basearch/os/
     versions:
       - "8.6"
+      - "8.7-beta"
       - "9.0"
+
   # sources repos
   - name: baseos-source
     path: BaseOS/Source/
@@ -101,6 +111,7 @@ repos:
     vault: true
     versions:
       - "8.6"
+      - "8.7-beta"
   - name: crb-source
     path: CRB/Source/
     vault: true
@@ -111,12 +122,14 @@ repos:
     vault: true
     versions:
       - "8.6"
+      - "8.7-beta"
       - "9.0"
   - name: rt-source
     path: RT/Source/
     vault: true
     versions:
       - "8.6"
+      - "8.7-beta"
       - "9.0"
   - name: extras-source
     path: extras/Source/
@@ -126,6 +139,7 @@ repos:
     vault: true
     versions:
       - "8.6"
+      - "8.7-beta"
   - name: highavailability-source
     path: HighAvailability/Source/
     vault: true
@@ -135,11 +149,13 @@ repos:
     path: SAP/Source/
     vault: true
     versions:
+      - "8.7-beta"
       - "9.0"
   - name: saphana-source
     path: SAPHANA/Source/
     vault: true
     versions:
+      - "8.7-beta"
       - "9.0"
   - name: resilientstorage-source
     path: ResilientStorage/Source/
@@ -149,19 +165,23 @@ repos:
     vault: true
     versions:
       - "8.6"
+      - "8.7-beta"
       - "9.0"
   - name: plus-source
     path: plus/Source/
     vault: true
     versions:
       - "8.6"
+      - "8.7-beta"
       - "9.0"
+
   # debug repos
   - name: baseos-debuginfo
     path: BaseOS/debug/$basearch/
     vault: true
     versions:
       - "8.6"
+      - "8.7-beta"
   - name: baseos-debug
     path: BaseOS/debug/$basearch/
     vault: true
@@ -172,6 +192,7 @@ repos:
     vault: true
     versions:
       - "8.6"
+      - "8.7-beta"
   - name: appstream-debug
     path: AppStream/debug/$basearch/
     vault: true
@@ -182,6 +203,7 @@ repos:
     vault: true
     versions:
       - "8.6"
+      - "8.7-beta"
   - name: crb-debug
     path: CRB/debug/$basearch/
     vault: true
@@ -192,6 +214,7 @@ repos:
     vault: true
     versions:
       - "8.6"
+      - "8.7-beta"
   - name: nfv-debug
     path: NFV/debug/$basearch/
     vault: true
@@ -204,6 +227,7 @@ repos:
     vault: true
     versions:
       - "8.6"
+      - "8.7-beta"
   - name: rt-debug
     path: RT/debug/$basearch/
     vault: true
@@ -216,6 +240,7 @@ repos:
     vault: true
     versions:
       - "8.6"
+      - "8.7-beta"
   - name: extras-debug
     path: extras/debug/$basearch/
     vault: true
@@ -226,6 +251,7 @@ repos:
     vault: true
     versions:
       - "8.6"
+      - "8.7-beta"
   - name: highavailability-debug
     path: HighAvailability/debug/$basearch/
     vault: true
@@ -241,11 +267,22 @@ repos:
     vault: true
     versions:
       - "9.0"
+  - name: sap-debuginfo
+    path: SAP/debug/$basearch/
+    vault: true
+    versions:
+      - "8.7-beta"
+  - name: saphana-debuginfo
+    path: SAPHANA/debug/$basearch/
+    vault: true
+    versions:
+      - "8.7-beta"
   - name: resilientstorage-debuginfo
     path: ResilientStorage/debug/$basearch/
     vault: true
     versions:
       - "8.6"
+      - "8.7-beta"
   - name: resilientstorage-debug
     path: ResilientStorage/debug/$basearch/
     vault: true
@@ -260,6 +297,7 @@ repos:
     vault: true
     versions:
       - "8.6"
+      - "8.7-beta"
     arches:
       - x86_64
       - aarch64
@@ -273,11 +311,13 @@ repos:
     vault: true
     versions:
       - "8.6"
+      - "8.7-beta"
   - name: plus-debug
     path: plus/debug/$basearch/
     vault: true
     versions:
       - "9.0"
+
   ## raspberry pi repos
   - name: raspberrypi
     path: raspberrypi/$basearch/os/
@@ -285,11 +325,13 @@ repos:
       - aarch64
     versions:
       - "8.6"
+      - "8.7-beta"
   - name: raspberrypi-source
     path: raspberrypi/Source
     vault: true
     versions:
       - "8.6"
+      - "8.7-beta"
   - name: raspberrypi-debuginfo
     path: raspberrypi/debug/$basearch/
     vault: true
@@ -297,4 +339,5 @@ repos:
       - aarch64
     versions:
       - "8.6"
+      - "8.7-beta"
 ...
