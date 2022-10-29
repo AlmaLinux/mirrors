@@ -6,7 +6,7 @@ address:
   rsync: rsync://almalinux.mirrors.orange.ro
 geolocation:
   country: RO
-  state_province: Bucharest
+  state_province: Bucuresti
   city: Bucharest
 update_frequency: 3h
 sponsor: Orange Romania Communications
