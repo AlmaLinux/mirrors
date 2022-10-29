@@ -1,0 +1,15 @@
+---
+name: mirror.papua.go.id
+address:
+  http: http://mirror.papua.go.id/almalinux/
+  https: https://mirror.papua.go.id/almalinux/
+  rsync: rsync://rsync.mirror.papua.go.id/almalinux
+geolocation:
+  country: ID
+  state_province: Papua
+  city: Jayapura
+update_frequency: 4h
+sponsor: Pemerintah Provinsi Papua
+sponsor_url: https://www.papua.go.id
+email: service@papua.go.id
+...
