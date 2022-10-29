@@ -1,5 +1,6 @@
 # coding=utf-8
 import os
+from datetime import datetime
 
 from flask import (
     Flask,
@@ -22,7 +23,7 @@ from api.handlers import (
     get_isos_list_by_countries,
     get_main_isos_table,
 )
-from api.mirrors_update import get_config
+from yaml_snippets.utils import get_config
 from api.utils import (
     success_result,
     error_result,
@@ -33,6 +34,7 @@ from common.sentry import (
     init_sentry_client,
     get_logger,
 )
+from flask_api.status import HTTP_200_OK
 from flask_bs4 import Bootstrap
 
 
@@ -42,12 +44,37 @@ init_sentry_client()
 logger = get_logger(__name__)
 
 
+@app.context_processor
+def inject_now_date():
+    return {
+        'now': datetime.utcnow(),
+    }
+
+
 def _get_request_ip() -> str:
     test_ip_address = os.getenv('TEST_IP_ADDRESS', None)
     ip_address = request.headers.get('X-Forwarded-For') or request.remote_addr
     if ',' in ip_address:
         ip_address = [item.strip() for item in ip_address.split(',')][0]
     return test_ip_address or ip_address
+
+
+@app.route(
+    '/my_ip_and_headers',
+    methods=('GET',),
+)
+@error_result
+def my_ip_and_headers():
+    result = {
+        'my_ip': request.remote_addr,
+    }
+    result.update(request.headers)
+
+    return jsonify_response(
+        status='ok',
+        result=result,
+        status_code=HTTP_200_OK,
+    )
 
 
 @app.route(
@@ -103,7 +130,17 @@ async def isos(
     data = {
         'main_title': 'AlmaLinux ISOs links'
     }
-    config = get_config()
+    config = get_config(
+        logger=logger,
+        path_to_config=os.path.join(
+            os.getenv('CONFIG_ROOT'),
+            'mirrors/updates/config.yml'
+        ),
+        path_to_json_schema=os.path.join(
+            os.environ['SOURCE_PATH'],
+            'src/backend/yaml_snippets/json_schemas/service_config.json'
+        )
+    )
     if arch is None or version is None:
         data.update({
             'isos_list': get_main_isos_table(config=config),

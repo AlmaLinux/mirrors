@@ -7,12 +7,12 @@
 
 ## Requirements
 
-* CentOS 8 (target server)
+* AlmaLinux 8 (target server)
 * Ansible version is 2.10 or newer
 * Ansible community.docker collection
     * Use command `ansible-galaxy collection install community.docker` for installing it
-* Ansible ssh-reconnect collection
-    * Use command `ansible-galaxy collection install udondan.ssh-reconnect` for installing it
+* Ansible ssh-reconnect role
+    * Use command `ansible-galaxy install udondan.ssh-reconnect` for installing it
 
 ## Deploying
 
@@ -28,15 +28,10 @@
     4. Set value of option `deploy_environment` to `Production` if you deploy 
        production variant of the service. Otherwise, use `Dev` or something like this.
     5. Set value of option `auth_key` to random string. E.g. `124120bydf978g6sd9fg`
-    6. Set value of option `backend_port` to value of port which will be used 
-       for proxying requests from nginx to container. The container will 
-       accept only local connections if you set value of `deploy_environment` to `Production`. 
-       Otherwise, the container will accept remote connections. 
     7. Set value of option `test_ip_address` to test IP. This options is work only for non-production layout.
-    8. Set value of options `uwsgi_address` and `uwsgi_port`. Those are used for starting uwsgi service inside a container.
+    8. Set value of option `gunicorn_port`. That is used for starting backend service.
 6. Go to project directory `ci/ansible`
-6. Run command `ansible-playbook -vv -i inventory/dev -u 
-   <username> --become main.yml`, there is `<username>` is name of a user from a remote server which has sudo rights
+6. Run command `ansible-playbook -vv -i inventory/vagrant -u vagrant --become main.yml`, `vagrant` with `-u` is name of a user from a remote server which has sudo rights
 
 ## How it works
 The service uses IP of a incoming request for detecting country and region. Therefore, a location can be different by expected if a server or you are using proxy, vpn, Cloudflare (or something like this).

@@ -7,11 +7,11 @@ from typing import (
     Union
 )
 
-from db.data_models import DataClassesJSONEncoder
-from db.db_engine import RedisEngine
-from db.models import (
+from yaml_snippets.data_models import (
+    DataClassesJSONEncoder,
     MirrorData,
 )
+from db.db_engine import RedisEngine
 from common.sentry import (
     get_logger,
 )
@@ -63,6 +63,37 @@ async def set_mirrors_to_cache(
             str(key),
             mirrors,
             CACHE_EXPIRED_TIME,
+        )
+
+
+async def get_subnets_from_cache(
+        key: str,
+) -> dict:
+    """
+    Get a cached subnets of Azure/AWS cloud
+    """
+    async with redis_context() as redis_engine:
+        subnets_string = await redis_engine.get(str(key))
+    if subnets_string is not None:
+        subnets_json = json.loads(
+            subnets_string,
+        )
+        return subnets_json
+
+
+async def set_subnets_to_cache(
+        key: str,
+        subnets: dict,
+) -> None:
+    """
+    Save a mirror list for specified IP to cache
+    """
+    async with redis_context() as redis_engine:
+        subnets = json.dumps(subnets)
+        await redis_engine.set(
+            str(key),
+            subnets,
+            24 * 60 * 60,
         )
 
 

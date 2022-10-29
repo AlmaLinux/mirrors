@@ -5,6 +5,7 @@
     dest: "{{ config_root }}/mirrors/updates"
     clone: yes
     update: yes
+    force: yes
     accept_hostkey: yes
     track_submodules: no
 

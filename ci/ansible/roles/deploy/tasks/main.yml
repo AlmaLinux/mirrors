@@ -2,7 +2,7 @@
 
 - name: Ansible preparation
   block:
-    - include_tasks: ansible_preparation.yml
+    - import_tasks: ansible_preparation.yml
   tags:
     - ansible
 
@@ -10,20 +10,22 @@
   block:
     - name: Deploy tasks
       block:
-        - include_tasks: common_setup.yml
-        - include_tasks: deploy_files.yml
-        - include_tasks: get_mirrors_repo.yml
-        - include_tasks: create_dbs_systemd_timer.yml
-        - include_tasks: create_mirrors_systemd_timer.yml
-        - include_tasks: redis_configuration.yml
-        - include_tasks: backend_installation.yml
-        - include_tasks: nginx_configuration.yml
+        - import_tasks: common_setup.yml
+        - import_tasks: deploy_files.yml
+          tags:
+            - deploy_files
+        - import_tasks: get_mirrors_repo.yml
+        - import_tasks: create_dbs_systemd_timer.yml
+        - import_tasks: create_mirrors_systemd_timer.yml
+        - import_tasks: redis_configuration.yml
+        - import_tasks: backend_installation.yml
+        - import_tasks: nginx_configuration.yml
       tags:
         - deploy
 
     - name: Tests
       block:
-        - include_tasks: tests.yml
+        - import_tasks: tests.yml
       tags:
         - tests
   vars:

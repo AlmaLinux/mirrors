@@ -1,5 +1,5 @@
 [Unit]
-Description=AlmaLinux mirrors service (uWSGI backend)
+Description=AlmaLinux mirrors service (Gunicorn backend)
 After=syslog.target
 
 [Service]
@@ -11,7 +11,7 @@ RestartSec=5
 TimeoutStopSec=10
 WorkingDirectory={{ source_path }}/src/backend
 ExecStartPre=/usr/local/bin/mirror_service_backend.sh
-ExecStart={{ source_path }}/bin/uwsgi --ini {{ source_path }}/src/backend/uwsgi.ini
+ExecStart={{ source_path }}/bin/gunicorn -c {{ source_path }}/src/backend/gunicorn.py
 
 [Install]
 WantedBy=multi-user.target

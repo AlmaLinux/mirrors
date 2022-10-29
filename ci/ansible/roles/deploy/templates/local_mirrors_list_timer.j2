@@ -2,12 +2,12 @@
 Description={{ description }} Service
 Wants=network-online.target
 After=network.target network-online.target
+Requires={{ mirrors_timer_name }}.service
 
 [Timer]
-OnStartupSec=1m
+OnStartupSec=60
 OnUnitActiveSec=3600
 RandomizedDelaySec=300
-Persistent=true
 
 [Install]
 WantedBy=timers.target
