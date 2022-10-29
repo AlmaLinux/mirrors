@@ -1,0 +1,13 @@
+---
+name: mirror.dimensi.cloud
+address:
+  http: http://mirror.dimensi.cloud/almalinux/ 
+geolocation:
+  country: ID
+  state_province: Yogyakarta
+  city: Yogyakarta
+update_frequency: 1h
+sponsor: PT Media Sarana Data
+sponsor_url: https://gmedia.net.id
+email: fajar.wibowo@gmedia.co.id
+...

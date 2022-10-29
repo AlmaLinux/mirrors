@@ -3,12 +3,12 @@ name: repo.mobinhost.com
 address:
   http: http://repo.mobinhost.com/AlmaLinux/
   https: https://repo.mobinhost.com/AlmaLinux/
-  ftp: ftp://repo.mobinhost.com/repo/AlmaLinux/
+  ftp: ftp://repo.mobinhost.com/AlmaLinux/
 geolocation:
   country: IR
   state_province: Tehran
   city: Tehran
 update_frequency: 3h
-sponsor: Mizban Dade Pardazi Mobin Host
+sponsor: Mizban Dade Pardazi Mobin
 sponsor_url: https://www.mobinhost.com
 email: technical@mobinhost.com

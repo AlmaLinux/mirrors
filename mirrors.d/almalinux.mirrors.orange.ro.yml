@@ -1,0 +1,14 @@
+---
+name: almalinux.mirrors.orange.ro
+address:
+  http: http://almalinux.mirrors.orange.ro
+  https: https://almalinux.mirrors.orange.ro
+  rsync: rsync://almalinux.mirrors.orange.ro
+geolocation:
+  country: RO
+  city: Bucharest
+update_frequency: 3h
+sponsor: Orange Romania Communications
+sponsor_url: https://orange.ro
+email: iulian.dragut@orange.com
+...
