@@ -1,13 +1,13 @@
 ---
 name: almalinux.mirrors.behostings.net
 address:
-http: http://almalinux.mirrors.behostings.net
-https: https://almalinux.mirrors.behostings.net
+  http: http://almalinux.mirrors.behostings.net
+  https: https://almalinux.mirrors.behostings.net
 geolocation:
-country: BE
-state_province: Liege
-city: Aywaille
-update_frequency: 3h
+  country: BE
+  state_province: Liege
+  city: Aywaille
+  update_frequency: 3h
 sponsor: Behostings
 sponsor_url: https://www.behostings.com
 email: basil.m@thgnet.net
