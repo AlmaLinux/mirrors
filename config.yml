@@ -9,6 +9,7 @@ versions:
   - "8.7-beta"
   - "9"
   - "9.0"
+  - "9.1-beta"
 duplicated_versions:
   - "8"
   - "9"
@@ -40,12 +41,14 @@ repos:
     path: CRB/$basearch/os/
     versions:
       - "9.0"
+      - "9.1-beta"
   - name: nfv
     path: NFV/$basearch/os/
     versions:
       - "8.6"
       - "8.7-beta"
       - "9.0"
+      - "9.1-beta"
     arches:
       - x86_64
   - name: rt
@@ -54,6 +57,7 @@ repos:
       - "8.6"
       - "8.7-beta"
       - "9.0"
+      - "9.1-beta"
     arches:
       - x86_64
   - name: extras
@@ -67,16 +71,19 @@ repos:
     path: HighAvailability/$basearch/os/
     versions:
       - "9.0"
+      - "9.1-beta"
   - name: sap
     path: SAP/$basearch/os/
     versions:
       - "8.7-beta"
       - "9.0"
+      - "9.1-beta"
   - name: saphana
     path: SAPHANA/$basearch/os/
     versions:
       - "8.7-beta"
       - "9.0"
+      - "9.1-beta"
   - name: resilientstorage
     path: ResilientStorage/$basearch/os/
     arches:
@@ -89,6 +96,7 @@ repos:
       - "8.6"
       - "8.7-beta"
       - "9.0"
+      - "9.1-beta"
     arches:
       - x86_64
       - aarch64
@@ -98,6 +106,7 @@ repos:
       - "8.6"
       - "8.7-beta"
       - "9.0"
+      - "9.1-beta"
 
   # sources repos
   - name: baseos-source
@@ -117,6 +126,7 @@ repos:
     vault: true
     versions:
       - "9.0"
+      - "9.1-beta"
   - name: nfv-source
     path: NFV/Source/
     vault: true
@@ -124,6 +134,7 @@ repos:
       - "8.6"
       - "8.7-beta"
       - "9.0"
+      - "9.1-beta"
   - name: rt-source
     path: RT/Source/
     vault: true
@@ -131,6 +142,7 @@ repos:
       - "8.6"
       - "8.7-beta"
       - "9.0"
+      - "9.1-beta"
   - name: extras-source
     path: extras/Source/
     vault: true
@@ -145,12 +157,14 @@ repos:
     vault: true
     versions:
       - "9.0"
+      - "9.1-beta"
   - name: sap-source
     path: SAP/Source/
     vault: true
     versions:
       - "8.7-beta"
       - "9.0"
+      - "9.1-beta"
   - name: saphana-source
     path: SAPHANA/Source/
     vault: true
@@ -167,6 +181,7 @@ repos:
       - "8.6"
       - "8.7-beta"
       - "9.0"
+      - "9.1-beta"
   - name: plus-source
     path: plus/Source/
     vault: true
@@ -174,6 +189,7 @@ repos:
       - "8.6"
       - "8.7-beta"
       - "9.0"
+      - "9.1-beta"
 
   # debug repos
   - name: baseos-debuginfo
@@ -187,6 +203,7 @@ repos:
     vault: true
     versions:
       - "9.0"
+      - "9.1-beta"
   - name: appstream-debuginfo
     path: AppStream/debug/$basearch/
     vault: true
@@ -198,6 +215,7 @@ repos:
     vault: true
     versions:
       - "9.0"
+      - "9.1-beta"
   - name: powertools-debuginfo
     path: PowerTools/debug/$basearch/
     vault: true
@@ -209,6 +227,7 @@ repos:
     vault: true
     versions:
       - "9.0"
+      - "9.1-beta"
   - name: nfv-debuginfo
     path: NFV/debug/$basearch/
     vault: true
@@ -220,6 +239,7 @@ repos:
     vault: true
     versions:
       - "9.0"
+      - "9.1-beta"
     arches:
       - x86_64
   - name: rt-debuginfo
@@ -233,6 +253,7 @@ repos:
     vault: true
     versions:
       - "9.0"
+      - "9.1-beta"
     arches:
       - x86_64
   - name: extras-debuginfo
@@ -246,6 +267,7 @@ repos:
     vault: true
     versions:
       - "9.0"
+      - "9.1-beta"
   - name: ha-debuginfo
     path: HighAvailability/debug/$basearch/
     vault: true
@@ -257,16 +279,19 @@ repos:
     vault: true
     versions:
       - "9.0"
+      - "9.1-beta"
   - name: sap-debug
     path: SAP/debug/$basearch/
     vault: true
     versions:
       - "9.0"
+      - "9.1-beta"
   - name: saphana-debug
     path: SAPHANA/debug/$basearch/
     vault: true
     versions:
       - "9.0"
+      - "9.1-beta"
   - name: sap-debuginfo
     path: SAP/debug/$basearch/
     vault: true
@@ -292,6 +317,7 @@ repos:
       - s390x
     versions:
       - "9.0"
+      - "9.1-beta"
   - name: devel-debuginfo
     path: devel/debug/$basearch/
     vault: true
@@ -306,6 +332,7 @@ repos:
     vault: true
     versions:
       - "9.0"
+      - "9.1-beta"
   - name: plus-debuginfo
     path: plus/debug/$basearch/
     vault: true
@@ -317,6 +344,7 @@ repos:
     vault: true
     versions:
       - "9.0"
+      - "9.1-beta"
 
   ## raspberry pi repos
   - name: raspberrypi
