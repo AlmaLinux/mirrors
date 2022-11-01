@@ -60,13 +60,13 @@ SERVICE_CONFIG_PATH = os.path.join(
     os.environ['CONFIG_ROOT'],
     'mirrors/updates/config.yml'
 )
-SERVICE_CONFIG_JSON_SCHEMA_PATH = os.path.join(
+SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH = os.path.join(
     os.environ['SOURCE_PATH'],
-    'src/backend/yaml_snippets/json_schemas/service_config.json'
+    'src/backend/yaml_snippets/json_schemas/service_config'
 )
-MIRROR_CONFIG_JSON_SCHEMA_PATH = os.path.join(
+MIRROR_CONFIG_JSON_SCHEMA_DIR_PATH = os.path.join(
     os.environ['SOURCE_PATH'],
-    'src/backend/yaml_snippets/json_schemas/mirror_config.json'
+    'src/backend/yaml_snippets/json_schemas/mirror_config'
 )
 
 
@@ -245,7 +245,7 @@ async def update_mirrors_handler() -> str:
     config = get_config(
         logger=logger,
         path_to_config=SERVICE_CONFIG_PATH,
-        path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_PATH,
+        path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
     )
     mirrors_dir = os.path.join(
         os.getenv('CONFIG_ROOT'),
@@ -255,7 +255,7 @@ async def update_mirrors_handler() -> str:
     all_mirrors = get_mirrors_info(
         mirrors_dir=mirrors_dir,
         logger=logger,
-        path_to_json_schema=MIRROR_CONFIG_JSON_SCHEMA_PATH,
+        path_to_json_schema=MIRROR_CONFIG_JSON_SCHEMA_DIR_PATH,
     )
 
     # semaphore for nominatim
@@ -404,7 +404,7 @@ async def get_mirrors_list(
     config = get_config(
         logger=logger,
         path_to_config=SERVICE_CONFIG_PATH,
-        path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_PATH,
+        path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
     )
     versions = [str(version) for version in config.versions]
     vault_versions = [str(version) for version in config.vault_versions]
@@ -441,7 +441,6 @@ async def get_mirrors_list(
             version,
             repo_path,
         )
-
     nearest_mirrors = await _get_nearest_mirrors(
         ip_address=ip_address,
         without_private_mirrors=False,

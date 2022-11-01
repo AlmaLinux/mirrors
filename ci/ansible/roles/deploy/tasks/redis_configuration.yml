@@ -1,9 +1,9 @@
 ---
-- name: Enable persistent storage for Redis
+- name: Disable persistent storage for Redis
   lineinfile:
     path: /etc/redis.conf
-    regexp: '^appendonly no$'
-    line: 'appendonly yes'
+    regexp: '^appendonly yes$'
+    line: 'appendonly no'
     state: present
     insertbefore: BOF
 

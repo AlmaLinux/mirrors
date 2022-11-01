@@ -10,6 +10,16 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 
 
+def get_deploy_environment_name() -> str:
+    """
+    Get deploy environment name from the file
+    """
+
+    with open(os.getenv('DEPLOY_ENVIRONMENT'), 'r') as fd:
+        deploy_env_name = fd.read().strip()
+    return deploy_env_name
+
+
 def get_aws_instance_api() -> str:
     """
     Get IP of a current AWS instance
@@ -29,6 +39,7 @@ def init_sentry_client(dsn: Optional[str] = None) -> None:
     Initialize sentry client with default options
     :param dsn: project auth key
     """
+    deploy_env_name = get_deploy_environment_name()
     if dsn is None and os.getenv('SENTRY_DSN') is None:
         logging.warning('Sentry DSN is not defined')
     if os.getenv('SENTRY_DISABLED') == 'True':
@@ -38,13 +49,13 @@ def init_sentry_client(dsn: Optional[str] = None) -> None:
     if dsn is None:
         dsn = os.getenv('SENTRY_DSN')
     # sentry performance monitoring
-    if os.getenv('DEPLOY_ENVIRONMENT') == 'Production':
+    if deploy_env_name == 'Production':
         traces_sample_rate = 0.01
     else:
         traces_sample_rate = 1.0
     sentry_sdk.init(
         dsn=dsn,
-        environment=os.getenv('DEPLOY_ENVIRONMENT'),
+        environment=deploy_env_name,
         ignore_errors=[
             KeyboardInterrupt,
         ],
@@ -72,7 +83,7 @@ def get_logger(logger_name: str):
     logger = logging.Logger(logger_name)
     # Set handler if it doesn't exist
     if not len(logger.handlers):
-        deploy_environment = os.getenv('DEPLOY_ENVIRONMENT', '')
+        deploy_environment = get_deploy_environment_name()
         if deploy_environment.lower() in ('production', 'staging'):
             logging_level = logging.WARNING
         else:

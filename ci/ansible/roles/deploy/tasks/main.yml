@@ -18,6 +18,8 @@
         - import_tasks: create_dbs_systemd_timer.yml
         - import_tasks: create_mirrors_systemd_timer.yml
         - import_tasks: redis_configuration.yml
+          tags:
+            - redis_config
         - import_tasks: backend_installation.yml
         - import_tasks: nginx_configuration.yml
       tags:

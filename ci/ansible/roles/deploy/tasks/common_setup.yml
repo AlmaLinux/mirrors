@@ -66,3 +66,10 @@
     state: restarted
     name: systemd-journald
   when: persistent_journald.changed
+
+- name: Write name of deploy environment
+  copy:
+    dest: "{{ config_root }}/deploy_environment.var"
+    content: "{{ deploy_environment }}"
+    owner: "{{ service_user }}"
+    group: "{{ service_user }}"
