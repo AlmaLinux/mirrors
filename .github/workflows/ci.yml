@@ -39,10 +39,10 @@ jobs:
 
       - name: Check YAML configs
         run: |
-          mirror_regexp="mirrors.d/.*.yml"
+          mirror_regexp="mirrors.d/.*.(yml|yaml)$"
           if ! echo "${{ steps.files.outputs.all }}" | grep -E "${mirror_regexp}" &> /dev/null; then
             # we check only the main config if PR doesn't contain any mirror config
-            python3.9 gh_ci/config_checker.py -sc config.yml -ss gh_ci/yaml_snippets/json_schemas/service_config.json
+            python3.9 gh_ci/config_checker.py -sc config.yml
           else
             changed_files=""
             for changed_file in ${{ steps.files.outputs.all }}; do
@@ -50,5 +50,5 @@ jobs:
                 changed_files="${changed_file} ${changed_files}"
               fi
             done
-            python3.9 gh_ci/config_checker.py -sc config.yml -ss gh_ci/yaml_snippets/json_schemas/service_config.json -ms gh_ci/yaml_snippets/json_schemas/mirror_config.json -mc ${changed_files}
+            python3.9 gh_ci/config_checker.py -sc config.yml -mc ${changed_files}
           fi
