@@ -39,6 +39,7 @@ HEADERS = {
 WHITELIST_MIRRORS = (
     'repo.almalinux.org',
 )
+
 # FIXME: Temporary solution
 # https://github.com/AlmaLinux/mirrors/issues/572
 WHITELIST_MIRRORS_PER_ARCH_REPO = {
@@ -226,7 +227,7 @@ def get_config(
         ),
         path_to_json_schema: str = os.path.join(
             os.path.dirname(os.path.realpath(__file__)),
-            'json_schemas/service_config.json',
+            'json_schemas/service_config',
         ),
 ) -> Optional[MainConfig]:
     """
@@ -234,6 +235,11 @@ def get_config(
     """
 
     config_data = load_yaml(path=path_to_config)
+    service_config_version = config_data.get('config_version', 1)
+    path_to_json_schema = os.path.join(
+        path_to_json_schema,
+        f'v{service_config_version}.json',
+    )
     json_schema = load_json_schema(path=path_to_json_schema)
     is_valid, err_msg = config_validation(
         yaml_data=config_data,
@@ -321,13 +327,18 @@ def get_mirror_config(
         path_to_config: Path,
         path_to_json_schema: str = os.path.join(
             os.path.dirname(os.path.realpath(__file__)),
-            'json_schemas/service_config.json',
+            'json_schemas/mirror_config',
         ),
 ) -> Optional[MirrorData]:
     """
     Read, validate, parse and return config of a mirror
     """
     mirror_data = load_yaml(path=str(path_to_config))
+    mirror_config_version = mirror_data.get('config_version', 1)
+    path_to_json_schema = os.path.join(
+        path_to_json_schema,
+        f'v{mirror_config_version}.json',
+    )
     json_schema = load_json_schema(path=path_to_json_schema)
     is_valid, err_msg = config_validation(
         yaml_data=mirror_data,
@@ -359,7 +370,7 @@ def get_mirrors_info(
         logger: Logger,
         path_to_json_schema: str = os.path.join(
             os.path.dirname(os.path.realpath(__file__)),
-            'json_schemas/service_config.json',
+            'json_schemas/service_config',
         )
 ) -> list[MirrorData]:
     """
@@ -494,7 +505,7 @@ async def mirror_available(
                         if resp.status != 200:
                             # if mirror has no valid version/arch combos,
                             # so it is dead
-                            logger.error(
+                            logger.warning(
                                 'Mirror "%s" has one or more invalid '
                                 'repositories by path "%s"',
                                 mirror_name,
@@ -508,7 +519,7 @@ async def mirror_available(
                 ) as err:
                     # We want to unified error message, so I used logging
                     # level `error` instead logging level `exception`
-                    logger.error(
+                    logger.warning(
                         'Mirror "%s" is not available for version '
                         '"%s" and repo path "%s" because "%s"',
                         mirror_name,
