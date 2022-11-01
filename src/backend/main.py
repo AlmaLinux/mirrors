@@ -22,6 +22,8 @@ from api.handlers import (
     get_url_types,
     get_isos_list_by_countries,
     get_main_isos_table,
+    SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
+    SERVICE_CONFIG_PATH,
 )
 from yaml_snippets.utils import get_config
 from api.utils import (
@@ -132,14 +134,8 @@ async def isos(
     }
     config = get_config(
         logger=logger,
-        path_to_config=os.path.join(
-            os.getenv('CONFIG_ROOT'),
-            'mirrors/updates/config.yml'
-        ),
-        path_to_json_schema=os.path.join(
-            os.environ['SOURCE_PATH'],
-            'src/backend/yaml_snippets/json_schemas/service_config.json'
-        )
+        path_to_config=SERVICE_CONFIG_PATH,
+        path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
     )
     if arch is None or version is None:
         data.update({
