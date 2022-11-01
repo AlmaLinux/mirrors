@@ -12,13 +12,7 @@
                 "allowed_outdate": {
                     "type": "string"
                 },
-                "mirrorlist_dir": {
-                    "type": "string"
-                },
                 "mirrors_dir": {
-                    "type": "string"
-                },
-                "mirrors_table": {
                     "type": "string"
                 },
                 "vault_mirror": {
