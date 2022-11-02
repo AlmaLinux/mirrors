@@ -38,3 +38,19 @@
   with_items:
     - "8.3"
     - "8.4"
+
+- name: Check ISOs page
+  uri:
+    url: "http://localhost/isos.html"
+    method: GET
+    return_content: yes
+  register: result
+  failed_when: "'AlmaLinux ISOs links' not in result.content"
+
+- name: Check arch/version ISOs page
+  uri:
+    url: "http://localhost/isos/x86_64/9.html"
+    method: GET
+    return_content: yes
+  register: result
+  failed_when: "'AlmaLinux ISOs links' not in result.content"
