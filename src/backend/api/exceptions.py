@@ -24,5 +24,5 @@ class AuthException(BaseCustomException):
     response_code = HTTP_403_FORBIDDEN
 
 
-class UnknownRepositoryOrVersion(BaseCustomException):
+class UnknownRepoAttribute(BaseCustomException):
     response_code = HTTP_404_NOT_FOUND

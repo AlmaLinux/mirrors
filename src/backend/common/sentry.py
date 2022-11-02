@@ -42,12 +42,10 @@ def init_sentry_client(dsn: Optional[str] = None) -> None:
     deploy_env_name = get_deploy_environment_name()
     if dsn is None and os.getenv('SENTRY_DSN') is None:
         logging.warning('Sentry DSN is not defined')
-    if os.getenv('SENTRY_DISABLED') == 'True':
-        logging.warning('Sentry is disabled')
-        return
-
     if dsn is None:
         dsn = os.getenv('SENTRY_DSN')
+    if dsn is None or not dsn:
+        return
     # sentry performance monitoring
     if deploy_env_name == 'Production':
         traces_sample_rate = 0.01

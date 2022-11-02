@@ -11,6 +11,8 @@
     - name: Deploy tasks
       block:
         - import_tasks: common_setup.yml
+          tags:
+            - always
         - import_tasks: deploy_files.yml
           tags:
             - deploy_files
@@ -21,6 +23,8 @@
           tags:
             - redis_config
         - import_tasks: backend_installation.yml
+          tags:
+            - backend
         - import_tasks: nginx_configuration.yml
       tags:
         - deploy

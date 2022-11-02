@@ -13,7 +13,7 @@ from werkzeug.exceptions import InternalServerError
 from api.exceptions import (
     BaseCustomException,
     AuthException,
-    UnknownRepositoryOrVersion,
+    UnknownRepoAttribute,
 )
 from api.handlers import (
     update_mirrors_handler,
@@ -42,8 +42,8 @@ from flask_bs4 import Bootstrap
 
 app = Flask('app')
 Bootstrap(app)
-init_sentry_client()
 logger = get_logger(__name__)
+init_sentry_client()
 
 
 @app.context_processor
@@ -145,7 +145,10 @@ async def isos(
         return render_template('isos_main.html', **data)
     else:
         ip_address = _get_request_ip()
-        mirrors_by_countries, nearest_mirrors = await get_isos_list_by_countries(
+        (
+            mirrors_by_countries,
+            nearest_mirrors
+        ) = await get_isos_list_by_countries(
             arch=arch,
             version=version,
             ip_address=ip_address,
@@ -207,9 +210,9 @@ def handle_internal_server_error(error: InternalServerError) -> Response:
     )
 
 
-@app.errorhandler(UnknownRepositoryOrVersion)
+@app.errorhandler(UnknownRepoAttribute)
 def handle_unknown_repository_or_version(
-        error: UnknownRepositoryOrVersion,
+        error: UnknownRepoAttribute,
 ) -> Response:
     logger.info(error.message, *error.args)
     return jsonify_response(
