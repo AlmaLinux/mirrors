@@ -22,7 +22,16 @@
                     "$ref": "#/definitions/Versions"
                 },
                 "duplicated_versions": {
-                    "$ref": "#/definitions/Versions"
+                    "type": "object",
+                    "patternProperties": {
+                        "^.*$": {
+                            "$ref": "#/definitions/Version"
+                        }
+                    },
+                    "propertyNames": {
+                        "$ref": "#/definitions/Version"
+                    },
+                    "additionalProperties": false
                 },
                 "versions_arches": {
                     "type": "object",
