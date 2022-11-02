@@ -10,8 +10,8 @@ versions:
   - "9.0"
   - "9.1-beta"
 duplicated_versions:
-  - "8"
-  - "9"
+  "8": "8.6"
+  "9": "9.0"
 vault_versions:
   - "8.3"
   - "8.4"
