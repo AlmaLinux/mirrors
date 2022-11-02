@@ -178,17 +178,34 @@ def process_main_config(
         return repo_attributes
 
     try:
+        duplicated_versions = yaml_data['duplicated_versions']
+        # TODO: remove 2nd branch of the condition after update the production
+        vault_versions = [
+            str(version) for version in yaml_data.get('vault_versions', [])
+        ]
+        if isinstance(duplicated_versions, dict):
+            duplicated_versions = {
+                major: minor for major, minor in duplicated_versions.items()
+            }
+        else:
+            stable_active_versions = [
+                ver for version in yaml_data['versions']
+                if (ver := str(version)) not in vault_versions
+                and 'beta' not in ver
+            ]
+            duplicated_versions = {
+                major: next(
+                    ver for ver in stable_active_versions
+                    if ver.startswith(major) and ver not in duplicated_versions
+                ) for major in duplicated_versions
+            }
         return MainConfig(
             allowed_outdate=yaml_data['allowed_outdate'],
             mirrors_dir=yaml_data['mirrors_dir'],
             vault_mirror=yaml_data.get('vault_mirror'),
             versions=[str(version) for version in yaml_data['versions']],
-            duplicated_versions=[
-                str(version) for version in yaml_data['duplicated_versions']
-            ],
-            vault_versions=[
-                str(version) for version in yaml_data.get('vault_versions', [])
-            ],
+            duplicated_versions=duplicated_versions,
+            vault_versions=vault_versions,
             arches=yaml_data['arches'],
             versions_arches={
                 arch: versions for arch, versions in

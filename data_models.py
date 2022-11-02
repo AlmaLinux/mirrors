@@ -120,7 +120,7 @@ class MainConfig:
     vault_mirror: str
     versions: list[str] = field(default_factory=list)
     arches: list[str] = field(default_factory=list)
-    duplicated_versions: list[str] = field(default_factory=list)
+    duplicated_versions: dict[str, str] = field(default_factory=dict)
     vault_versions: list[str] = field(default_factory=list)
     versions_arches: dict[str, list[str]] = field(
         default_factory=lambda: defaultdict(list)
