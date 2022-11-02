@@ -408,17 +408,21 @@ def get_allowed_version(
         duplicated_versions: dict[str, str],
         version: str,
 ) -> str:
-    logger.info('Duplicated versions %s', duplicated_versions)
-    logger.info('Version %s', version)
-    if (dup_version := duplicated_versions.get(version)) is None and \
-            version not in versions and version not in vault_versions:
-        raise UnknownRepoAttribute(
-            'Unknown version "%s". Allowed list of versions "%s"',
-            version,
-            ', '.join(versions + vault_versions),
-        )
-    elif dup_version is not None:
-        return dup_version
+
+    if version not in versions and version not in vault_versions:
+        try:
+            major_version = next(
+                ver for ver in duplicated_versions if version.startswith(ver)
+            )
+            return duplicated_versions[major_version]
+        except StopIteration:
+            raise UnknownRepoAttribute(
+                'Unknown version "%s". Allowed list of versions "%s"',
+                version,
+                ', '.join(versions + vault_versions),
+            )
+    elif version in versions and version in duplicated_versions:
+        return duplicated_versions[version]
     else:
         return version
 
