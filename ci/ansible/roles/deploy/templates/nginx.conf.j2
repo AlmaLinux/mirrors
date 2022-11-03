@@ -52,6 +52,11 @@ http {
                     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
                 }
 
+                location /mirrorlist {                                          
+                    alias /etc/mirrors_service/prod/mirrors/updates/docs/.vuepress/public/mirrorlist/;
+                    autoindex on;                                               
+                }
+
         }
         # log real IPs in access logs, not aws load balancer IPs
         log_format main '$http_x_forwarded_for - $remote_user [$time_local] "$request" '

@@ -9,9 +9,12 @@ dnf_packages:
   - redis
   - nginx
   - gcc
+  - tar
   # for testing purposes
+  - bash-completion
   - checkpolicy
   - sqlite
+  - vim-X11
 python_packages:
   - aiodns==3.0.0
   - aioredis[hiredis]==2.0.0
