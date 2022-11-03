@@ -115,7 +115,7 @@ def success_result(f):
                 result=result,
                 status_code=HTTP_200_OK,
             )
-        elif request.method == 'GET':
+        elif request.method in ('GET', 'HEAD'):
             return textify_response(
                 content=result,
                 status_code=HTTP_200_OK
@@ -312,14 +312,21 @@ async def get_coords_by_city(
                 domain='nominatim.openstreetmap.org',
                 adapter_factory=AioHTTPAdapter,
             ) as geo:
-                result = await geo.geocode(
-                    query={
-                        'city': city,
-                        'state': state,
-                        'country': country
-                    },
-                    exactly_one=True
-                )
+                try:
+                    result = await geo.geocode(
+                        query={
+                            'city': city,
+                            'state': state,
+                            'country': country
+                        },
+                        exactly_one=True
+                    )
+                except asyncio.CancelledError as err:
+                    logger.warning(
+                        'Cannot get info from the geo service because "%s"',
+                        err,
+                    )
+                    return 0.0, 0.0
                 if result is None:
                     return 0.0, 0.0
                 await set_geolocation_to_cache(

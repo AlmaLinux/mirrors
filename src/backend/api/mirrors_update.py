@@ -3,6 +3,7 @@ import asyncio
 import aiodns
 import os
 
+import aiohttp
 import dateparser
 
 from aiohttp import ClientSession
@@ -19,11 +20,12 @@ from api.utils import (
 from common.sentry import get_logger
 from urllib3.exceptions import HTTPError
 
+from yaml_snippets.utils import WHITELIST_MIRRORS
 from yaml_snippets.data_models import (
-    RepoData,
     GeoLocationData,
     MirrorData,
-    LocationData, MainConfig,
+    LocationData,
+    MainConfig,
 )
 from db.models import (
     Mirror,
@@ -43,10 +45,6 @@ HEADERS = {
     "Accept-Language": "en-US,en;q=0.5",
     "Accept-Encoding": "gzip, deflate"
 }
-# the list of mirrors which should be always available
-WHITELIST_MIRRORS = (
-    'repo.almalinux.org',
-)
 NUMBER_OF_PROCESSES_FOR_MIRRORS_CHECK = 15
 AIOHTTP_TIMEOUT = 30
 
@@ -92,7 +90,11 @@ async def set_repo_status(
             raise_for_status=True
         ) as resp:
             timestamp_response = await resp.text()
-    except (asyncio.exceptions.TimeoutError, HTTPError):
+    except (
+            asyncio.exceptions.TimeoutError,
+            HTTPError,
+            aiohttp.ClientError,
+    ):
         logger.warning(
             'Mirror "%s" has no timestamp file by url "%s"',
             mirror_info.name,

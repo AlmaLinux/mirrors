@@ -91,3 +91,4 @@
     daemon_reload: yes
   tags:
     - backend_systemd_service
+    - deploy_files
