@@ -1,8 +1,7 @@
 ---
+config_version: 2
 allowed_outdate: 12h
-mirrorlist_dir: docs/.vuepress/public/mirrorlist
 mirrors_dir: mirrors.d
-mirrors_table: docs/internal/mirrors.md
 versions:
   - "8"
   - "8.6"
@@ -10,9 +9,11 @@ versions:
   - "9"
   - "9.0"
   - "9.1-beta"
+# it's also used for mapping <major version>:<full version>
+# if a client requests only major version
 duplicated_versions:
-  - "8"
-  - "9"
+  "8": "8.6"
+  "9": "9.0"
 vault_versions:
   - "8.3"
   - "8.4"
