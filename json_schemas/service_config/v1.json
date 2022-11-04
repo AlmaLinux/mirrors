@@ -6,6 +6,9 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
+                "config_version": {
+                    "type": "integer"
+                },
                 "allowed_outdate": {
                     "type": "string"
                 },

@@ -1,0 +1,133 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$ref": "#/definitions/Welcome4",
+    "definitions": {
+        "Welcome4": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "config_version": {
+                    "type": "integer"
+                },
+                "allowed_outdate": {
+                    "type": "string"
+                },
+                "mirrors_dir": {
+                    "type": "string"
+                },
+                "vault_mirror": {
+                    "type": "string"
+                },
+                "versions": {
+                    "$ref": "#/definitions/Versions"
+                },
+                "duplicated_versions": {
+                    "type": "object",
+                    "patternProperties": {
+                        "^.*$": {
+                            "$ref": "#/definitions/Version"
+                        }
+                    },
+                    "propertyNames": {
+                        "$ref": "#/definitions/Version"
+                    },
+                    "additionalProperties": false
+                },
+                "versions_arches": {
+                    "type": "object",
+                    "patternProperties": {
+                        "^.*$": {
+                            "$ref": "#/definitions/Arches"
+                        }
+                    },
+                    "propertyNames": {
+                        "$ref": "#/definitions/Version"
+                    },
+                    "additionalProperties": false
+                },
+                "vault_versions": {
+                    "$ref": "#/definitions/Versions"
+                },
+                "required_protocols": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "arches": {
+                    "$ref": "#/definitions/Arches"
+                },
+                "repos": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Repo"
+                    }
+                }
+            },
+            "required": [
+                "allowed_outdate",
+                "arches",
+                "duplicated_versions",
+                "required_protocols",
+                "mirrors_dir",
+                "repos",
+                "vault_mirror",
+                "vault_versions",
+                "versions"
+            ],
+            "title": "Welcome4"
+        },
+        "Version": {
+            "oneOf": [
+                {
+                    "pattern": "^[0-9](.[0-9](-beta)?)?$"
+                }
+            ]
+        },
+        "Repo": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "arches": {
+                    "$ref": "#/definitions/Arches"
+                },
+                "versions": {
+                    "$ref": "#/definitions/Versions"
+                },
+                "vault": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "name",
+                "path"
+            ],
+            "title": "Repo"
+        },
+        "Arches": {
+            "type": "array",
+            "contains": {
+                "type": "string",
+                "enum": [
+                    "x86_64",
+                    "aarch64",
+                    "ppc64le",
+                    "s390x"
+                ]
+            }
+        },
+        "Versions": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "$ref": "#/definitions/Version"
+            }
+        }
+    }
+}
