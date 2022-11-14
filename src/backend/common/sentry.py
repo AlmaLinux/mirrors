@@ -40,6 +40,8 @@ def init_sentry_client(dsn: Optional[str] = None) -> None:
     :param dsn: project auth key
     """
     deploy_env_name = get_deploy_environment_name()
+    logging.basicConfig(level=logging.INFO)
+    logging.info('Current deploy environment "%s"', deploy_env_name)
     if dsn is None and os.getenv('SENTRY_DSN') is None:
         logging.warning('Sentry DSN is not defined')
     if dsn is None:
