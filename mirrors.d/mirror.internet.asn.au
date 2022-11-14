@@ -1,0 +1,11 @@
+---
+name: mirror.internet.asn.au
+address:
+  http: http://mirror.internet.asn.au/pub/almalinux
+  https: https://mirror.internet.asn.au/pub/almalinux
+  rsync: rsync://mirror.internet.asn.au/almalinux
+update_frequency: 1h
+sponsor: Internet Association of Australia
+sponsor_url: https://internet.asn.au/
+email: noc@internet.asn.au
+...
