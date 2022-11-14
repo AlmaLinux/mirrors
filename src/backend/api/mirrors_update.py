@@ -232,17 +232,21 @@ async def set_geo_data(
         ip = '0.0.0.0'
         match = None
     else:
+        resolver = aiodns.DNSResolver(timeout=5, tries=2)
         try:
-            resolver = aiodns.DNSResolver(timeout=5, tries=2)
             dns = await resolver.query(mirror_name, 'A')
-            ip = dns[0].host
-            match = get_geo_data_by_ip(ip)
+            match = [
+                {
+                    'match': _match,
+                    'ip': record.host,
+                } for record in dns
+                if (_match := get_geo_data_by_ip(record.host)) is not None
+            ]
         except aiodns.error.DNSError:
             logger.warning('Can\'t get IP of mirror %s', mirror_name)
             match = None
             ip = '0.0.0.0'
         try:
-            resolver = aiodns.DNSResolver(timeout=5, tries=2)
             dns = await resolver.query(mirror_name, 'AAAA')
             if dns:
                 ipv6 = True
@@ -251,22 +255,24 @@ async def set_geo_data(
         except aiodns.error.DNSError:
             ipv6 = False
     logger.info('Set geo data for mirror "%s"', mirror_name)
-    if match is None:
+    if not match:
         state = 'Unknown'
         city = 'Unknown'
         country = 'Unknown'
         continent = 'Unknown'
-        ip = ip
+        ip = 'Unknown'
         location = LocationData(
             latitude=-91,  # outside range of latitude (-90 to 90)
             longitude=-181,  # outside range of longitude (-180 to 180)
         )
     else:
-        continent, country, state, city, latitude, longitude = match
+        continent, country, state, city, \
+        latitude, longitude = match[0]['match']
         location = LocationData(
             latitude=latitude,
             longitude=longitude,
         )
+        ip = match[0]['ip']
     # try to get geo data from yaml
     try:
         continent = mirror_info.geolocation.continent or continent
