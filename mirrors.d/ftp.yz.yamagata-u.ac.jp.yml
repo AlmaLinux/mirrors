@@ -8,4 +8,8 @@ update_frequency: 1h
 sponsor: Yamagata University
 sponsor_url: https://www.yamagata-u.ac.jp/
 email: www-admin@ftp.yz.yamagata-u.ac.jp
+geolocation:
+  country: JP
+  state_province: Yamagata
+  city: Yonezawa
 ...
