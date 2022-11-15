@@ -1,0 +1,16 @@
+---
+name: mirrors.dotsrc.org
+address:
+  http: http://mirrors.dotsrc.org/almalinux
+  https: https://mirrors.dotsrc.org/almalinux
+  rsync: rsync://mirrors.dotsrc.org/almalinux
+  ftp: ftp://mirrors.dotsrc.org/almalinux
+update_frequency: 2h
+sponsor: dotsrc
+sponsor_url: https://dotsrc.org/
+email: staff@dotsrc.org
+geolocation:
+  continent: Europe
+  country: DK
+  city: Aalborg
+...
