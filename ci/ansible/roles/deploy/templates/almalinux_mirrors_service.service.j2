@@ -10,7 +10,7 @@ Restart=on-failure
 RestartSec=5
 TimeoutStopSec=10
 WorkingDirectory={{ source_path }}/src/backend
-ExecStartPre=/usr/local/bin/mirror_service_backend.sh
+ExecStartPre={{ scripts_path }}/{{ mirrors_service }}.sh
 ExecStart={{ source_path }}/bin/gunicorn -c {{ source_path }}/src/backend/gunicorn.py
 
 [Install]

@@ -4,6 +4,7 @@ Wants=network-online.target
 After=network.target network-online.target
 
 [Service]
+User={{ service_user }}
+Group={{ service_user }}
 Type=oneshot
-ExecStart="{{ update_mirrors_list_script_path }}"
-PIDFile=/var/run/{{ mirrors_timer_name }}.pid
+ExecStart="{{ scripts_path }}/{{ dbs_update }}.sh"

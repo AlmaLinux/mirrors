@@ -31,8 +31,6 @@ logger = get_logger(__name__)
 
 Base = declarative_base()
 
-CACHE_EXPIRED_TIME = 24 * 3600  # 24 hours
-
 
 class Subnet(Base):
     __tablename__ = 'subnets'

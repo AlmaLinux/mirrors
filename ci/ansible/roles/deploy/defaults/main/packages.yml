@@ -12,6 +12,8 @@ dnf_packages:
   # for testing purposes
   - checkpolicy
   - sqlite
+  - bash-completion
+  - setools-console
 python_packages:
   - aiodns==3.0.0
   - aioredis[hiredis]==2.0.0

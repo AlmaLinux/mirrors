@@ -19,9 +19,9 @@ from datetime import datetime
 
 logger = get_logger(__name__)
 
-CACHE_EXPIRED_TIME = 3600  # 1 hour
+CACHE_EXPIRED_TIME = 3600 * 1  # 1 hour
 FLAPPED_EXPIRED_TIME = 3600 * 3  # 3 hours
-MIRRORS_LIST_EXPIRED_TIME = 5200  # 2 hours
+MIRRORS_LIST_EXPIRED_TIME = 3600 * 2  # 2 hours
 
 
 @asynccontextmanager
