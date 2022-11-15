@@ -4,6 +4,7 @@ address:
   http: http://mirrors.ohost.bg/almalinux/
   https: https://mirrors.ohost.bg/almalinux/
   rsync: rsync://mirrors.ohost.bg/almalinux
+  ftp: ftp://mirrors.ohost.bg/almalinux
 geolocation:
   country: BG
   state_province: Sofia
