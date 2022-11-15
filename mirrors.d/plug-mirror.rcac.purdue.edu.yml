@@ -24,4 +24,4 @@ monopoly: false
 #   - 91213
 # or
 # asn: [12345, 98765]
-# asn: [17]
+asn: [17]
