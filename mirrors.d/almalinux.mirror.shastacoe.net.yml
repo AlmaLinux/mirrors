@@ -15,5 +15,5 @@ geolocation:
   city: Redding
 private: false
 monopoly: false
-asn: 23483
+asn: [2152, 23483]
 ...
