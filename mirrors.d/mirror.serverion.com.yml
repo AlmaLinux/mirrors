@@ -1,10 +1,17 @@
 ---
 name: mirror.serverion.com
 address:
-  http: https://mirror.serverion.com/almalinux/
+  http: http://mirror.serverion.com/almalinux/
   https: https://mirror.serverion.com/almalinux/
-update_frequency: 3h
+  rsync: rsync://mirror.serverion.com/almalinux/
+  ftp: ftp://mirror.serverion.com/almalinux/
+update_frequency: 30m
 sponsor: Serverion
-sponsor_url: https://www.serverion.com/
-email: info@serverion.com
+sponsor_url: https://www.serverion.com
+email: mirror@serverion.com
+geolocation:
+  continent: Europe
+  country: NL
+  city: Zodetermeer
+asn: 213035
 ...
