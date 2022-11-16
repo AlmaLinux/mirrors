@@ -36,10 +36,13 @@ async def redis_context():
 
 async def get_mirrors_from_cache(
         key: str,
+        iso_mirrors: bool = False,
 ) -> Optional[list[MirrorData]]:
     """
     Get a cached list of mirrors for specified IP
     """
+    if iso_mirrors:
+        key = f'{key}_iso'
     async with redis_context() as redis_engine:
         mirrors_string = await redis_engine.get(str(key))
     if mirrors_string is not None:
@@ -53,10 +56,13 @@ async def get_mirrors_from_cache(
 async def set_mirrors_to_cache(
         key: str,
         mirrors: list[MirrorData],
+        iso_mirrors: bool = False,
 ) -> None:
     """
     Save a mirror list for specified IP to cache
     """
+    if iso_mirrors:
+        key = f'{key}_iso'
     async with redis_context() as redis_engine:
         mirrors = json.dumps(mirrors, cls=DataClassesJSONEncoder)
         await redis_engine.set(
@@ -172,6 +178,7 @@ async def set_mirror_list(
         mirrors: list[MirrorData],
         are_ok_and_not_from_clouds: bool = False,
         without_private_mirrors: bool = True,
+        iso_mirrors: bool = False,
 ) -> None:
     """
     Save a list of mirrors to cache
@@ -179,10 +186,12 @@ async def set_mirror_list(
            mirrors if the param is True, else - save all mirrors
     :param mirrors: list of cached mirrors
     :param without_private_mirrors: exclude private mirrors from a list
+    :param iso_mirrors: only mirrors which have ISO full set
     """
     redis_key = _get_redis_key_for_the_mirrors_list(
         are_ok_and_not_from_clouds=are_ok_and_not_from_clouds,
         without_private_mirrors=without_private_mirrors,
+        iso_mirrors=iso_mirrors,
     )
     async with redis_context() as redis_engine:
         mirrors = json.dumps(mirrors, cls=DataClassesJSONEncoder)
@@ -192,6 +201,7 @@ async def set_mirror_list(
 def _get_redis_key_for_the_mirrors_list(
         are_ok_and_not_from_clouds: bool = False,
         without_private_mirrors: bool = True,
+        iso_mirrors: bool = True,
 ) -> str:
     if are_ok_and_not_from_clouds and without_private_mirrors:
         redis_key = 'mirror_list_are_ok_and_not_from_clouds_without_private'
@@ -201,22 +211,27 @@ def _get_redis_key_for_the_mirrors_list(
         redis_key = 'mirror_list_without_private'
     else:
         redis_key = 'mirror_list_with_private'
+    if iso_mirrors:
+        redis_key = f'{redis_key}_iso_mirrors'
     return redis_key
 
 
 async def get_mirror_list(
         are_ok_and_not_from_clouds: bool = False,
         without_private_mirrors: bool = True,
+        iso_mirrors: bool = False,
 ) -> Optional[list[MirrorData]]:
     """
     Get a list of mirrors from cache
     :param are_ok_and_not_from_clouds: Get a list of not expired and not cloud
            mirrors if the param is True, else - get all mirrors
     :param without_private_mirrors: exclude private mirrors from a list
+    :param iso_mirrors: only mirrors which have ISO full set
     """
     redis_key = _get_redis_key_for_the_mirrors_list(
         are_ok_and_not_from_clouds=are_ok_and_not_from_clouds,
         without_private_mirrors=without_private_mirrors,
+        iso_mirrors=iso_mirrors,
     )
     async with redis_context() as redis_engine:
         mirror_list = await redis_engine.get(redis_key)

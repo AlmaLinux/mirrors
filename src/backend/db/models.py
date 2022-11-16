@@ -110,6 +110,7 @@ class Mirror(Base):
     private = Column(Boolean, nullable=True, default=False)
     monopoly = Column(Boolean, nullable=True, default=False)
     ipv6 = Column(Boolean, nullable=False, default=False)
+    has_full_iso_set = Column(Boolean, nullable=False, default=False)
     urls = relationship(
         'Url',
         secondary=mirrors_urls,

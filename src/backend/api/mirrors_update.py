@@ -45,25 +45,78 @@ HEADERS = {
     "Accept-Language": "en-US,en;q=0.5",
     "Accept-Encoding": "gzip, deflate"
 }
-NUMBER_OF_PROCESSES_FOR_MIRRORS_CHECK = 15
+ISO_FILES_TEMPLATES = (
+    'AlmaLinux-{version}-{arch}-boot.iso',
+    'AlmaLinux-{version}-{arch}-dvd.iso',
+    'AlmaLinux-{version}-{arch}-minimal.iso',
+    'AlmaLinux-{version}-{arch}-boot.iso.manifest',
+    'AlmaLinux-{version}-{arch}-dvd.iso.manifest',
+    'AlmaLinux-{version}-{arch}-minimal.iso.manifest',
+    'CHECKSUM',
+)
+
 AIOHTTP_TIMEOUT = 30
 
 
 logger = get_logger(__name__)
 
 
+def _get_mirror_iso_uris(
+        versions: list[str],
+        arches: list[str],
+) -> list[str]:
+    result = []
+    for version in versions:
+        for arch in arches:
+            for iso_file_template in ISO_FILES_TEMPLATES:
+                iso_file = iso_file_template.format(
+                    version=f'{version}{"-1" if "beta" in version else ""}',
+                    arch=arch,
+                )
+                result.append(
+                    f'{version}/isos/{arch}/{iso_file}'
+                )
+    return result
+
+
+async def _has_mirror_iso_uris(
+        mirror_iso_uri: str,
+        mirror_url: str,
+        http_session: ClientSession,
+        iso_check_sem: asyncio.Semaphore,
+):
+    async with iso_check_sem:
+        iso_url = os.path.join(mirror_url, mirror_iso_uri)
+        try:
+            await http_session.head(
+                iso_url,
+                headers=HEADERS,
+                timeout=AIOHTTP_TIMEOUT,
+                raise_for_status=True
+            )
+            logger.info('ISO artifact "%s" is available', iso_url)
+            return True
+        except (
+                asyncio.exceptions.TimeoutError,
+                HTTPError,
+                aiohttp.ClientError,
+        ):
+            logger.info('ISO artifact "%s" is unavailable', iso_url)
+            return False
+
+
 async def set_repo_status(
     mirror_info: MirrorData,
     allowed_outdate: str,
-    required_protocols: list[str],
+    mirror_url: str,
     http_session: ClientSession
 ) -> None:
     """
     Set status of a mirror
     :param mirror_info: info about a mirror
     :param allowed_outdate: allowed mirror lag
-    :param required_protocols: list of network protocols any of them
-                               should be supported by a mirror
+    :param mirror_url: workable mirror's URL which
+                       uses one of required protocols
     :param http_session: async http session
     """
 
@@ -73,11 +126,6 @@ async def set_repo_status(
     if await get_mirror_flapped(mirror_name=mirror_info.name):
         mirror_info.status = "flapping"
         return
-    urls = mirror_info.urls
-    mirror_url = next(
-        url for url_type, url in urls.items()
-        if url_type in required_protocols
-    )
     timestamp_url = os.path.join(
         mirror_url,
         'TIME',
@@ -132,6 +180,7 @@ async def update_mirror_in_db(
         http_session: ClientSession,
         sem: asyncio.Semaphore,
         main_config: MainConfig,
+        mirror_iso_uris: list[str]
 ) -> None:
     """
     Update record about a mirror in DB in background thread.
@@ -142,10 +191,16 @@ async def update_mirror_in_db(
     :param http_session: async HTTP session
     :param sem: asyncio Semaphore object
     :param main_config: main config of the mirrors service
+    :param mirror_iso_uris: full set ISO URIs for all version and arches
     """
 
     mirror_info = await set_geo_data(mirror_info, sem)
     mirror_name = mirror_info.name
+    urls = mirror_info.urls
+    mirror_url = next(
+        url for url_type, url in urls.items()
+        if url_type in main_config.required_protocols
+    )
     if mirror_name in WHITELIST_MIRRORS:
         mirror_info.status = "ok"
         is_available = True
@@ -159,10 +214,30 @@ async def update_mirror_in_db(
     if not is_available:
         await set_mirror_flapped(mirror_name=mirror_name)
         return
+
+    iso_check_sem = asyncio.Semaphore(25)
+    has_mirror_iso_full_set_results = await asyncio.gather(*(
+        asyncio.ensure_future(
+            _has_mirror_iso_uris(
+                mirror_iso_uri=mirror_iso_uri,
+                mirror_url=mirror_url,
+                http_session=http_session,
+                iso_check_sem=iso_check_sem,
+            )
+        ) for mirror_iso_uri in mirror_iso_uris
+    ))
+    logger.info(
+        'ISO results "%s" for mirror "%s"',
+        has_mirror_iso_full_set_results,
+        mirror_name,
+    )
+    mirror_info.has_full_iso_set = not any(
+        not has_flag for has_flag in has_mirror_iso_full_set_results
+    )
     await set_repo_status(
         mirror_info=mirror_info,
         allowed_outdate=main_config.allowed_outdate,
-        required_protocols=main_config.required_protocols,
+        mirror_url=mirror_url,
         http_session=http_session,
     )
     urls_to_create = [
