@@ -3,13 +3,15 @@ name: mirror.serverion.com
 address:
   http: http://mirror.serverion.com/almalinux/
   https: https://mirror.serverion.com/almalinux/
-  rsync: rsync://mirror.serverion.com/almalinux
-geolocation:
-  country: NL
-  state_province: North Holland
-  city: Amsterdam
-update_frequency: 1h
-sponsor: serverion.com
+  rsync: rsync://mirror.serverion.com/almalinux/
+  ftp: ftp://mirror.serverion.com/almalinux/
+update_frequency: 30m
+sponsor: Serverion
 sponsor_url: https://www.serverion.com
-email: desmond@serverion.com
+email: mirror@serverion.com
+geolocation:
+  continent: Europe
+  country: NL
+  city: Zodetermeer
+asn: 213035
 ...
