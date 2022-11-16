@@ -296,7 +296,6 @@ async def update_mirrors_handler() -> str:
                         )
                     ) for mirror_info in all_mirrors
                 ))
-            db_session.flush()
         # update all mirrors list in the redis cache
         await refresh_mirrors_cache(
             are_ok_and_not_from_clouds=True,
