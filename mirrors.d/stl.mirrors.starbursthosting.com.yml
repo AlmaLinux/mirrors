@@ -1,0 +1,19 @@
+---
+name: stl.mirrors.starbursthosting.com
+cloud_type: 
+address:
+  http: http://stl.mirrors.starbursthosting.com/almalinux
+  https: https://stl.mirrors.starbursthosting.com/almalinux
+  rsync: 
+  ftp:
+update_frequency: 6h
+sponsor: Starburst Services
+sponsor_url: https://starbursthosting.com
+email: sysops@starbursthosting.com
+geolocation:
+  continent: North America
+  country: US
+  state_province: Missouri
+  city: St. Louis
+private: false
+monopoly: false
