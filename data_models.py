@@ -72,6 +72,7 @@ class MirrorData:
     monopoly: bool = False
     urls: dict[str, str] = field(default_factory=dict)
     subnets: list[str] = field(default_factory=list)
+    has_full_iso_set: bool = False
 
     @staticmethod
     def load_from_json(dct: dict):
@@ -97,7 +98,8 @@ class MirrorData:
             asn=dct.get('asn'),
             urls=dct.get('urls'),
             subnets=dct.get('subnets'),
-            monopoly=dct.get('monopoly')
+            monopoly=dct.get('monopoly'),
+            has_full_iso_set=dct.get('has_full_iso_set'),
         )
 
     def to_json(self):

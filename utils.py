@@ -513,22 +513,11 @@ async def mirror_available(
                     'repodata/repomd.xml',
                 )
                 try:
-                    async with http_session.get(
-                            check_url,
-                            headers=HEADERS,
-                            timeout=AIOHTTP_TIMEOUT,
-                    ) as resp:
-                        await resp.text()
-                        if resp.status != 200:
-                            # if mirror has no valid version/arch combos,
-                            # so it is dead
-                            logger.warning(
-                                'Mirror "%s" has one or more invalid '
-                                'repositories by path "%s"',
-                                mirror_name,
-                                check_url,
-                            )
-                            return mirror_name, False
+                    await http_session.head(
+                        check_url,
+                        headers=HEADERS,
+                        timeout=AIOHTTP_TIMEOUT,
+                    )
                 except (
                         ClientError,
                         TimeoutError,
