@@ -1,6 +1,5 @@
 ---
 name: stl.mirrors.starbursthosting.com
-cloud_type: 
 address:
   http: http://stl.mirrors.starbursthosting.com/almalinux
   https: https://stl.mirrors.starbursthosting.com/almalinux
