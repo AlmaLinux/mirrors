@@ -1,32 +1,38 @@
 ---
 - name: Prepare script for updating MaxMind DBs
   template:
-    src: "{{ dbs_timer_name }}_script.j2"
-    dest: "{{ update_maxmind_dbs_script_path }}"
+    src: "{{ dbs_update }}.sh.j2"
+    dest: "{{ scripts_path }}/{{ dbs_update }}.sh"
     group: "{{ service_user }}"
     owner: "{{ service_user }}"
+    setype: bin_t
+    seuser: system_u
     mode: 0740
-    force: 'yes'
 
 - name: Prepare systemd units
   template:
     src: "{{ item.src }}"
-    dest: "/etc/systemd/system/{{ item.dst }}"
+    dest: "{{ systemd_services_path }}/{{ item.dst }}"
     group: "{{ service_user }}"
     owner: "{{ service_user }}"
     mode: 0640
-    force: 'yes'
+    setype: "{{ item.setype }}"
+    seuser: "{{ item.seuser }}"
   vars:
     description: Update the MaxMind DBs
   with_items:
-    - dst: "{{ dbs_timer_name }}.service"
-      src: "{{ dbs_timer_name }}_service.j2"
-    - dst: "{{ dbs_timer_name }}.timer"
-      src: "{{ dbs_timer_name }}_timer.j2"
+    - dst: "{{ dbs_update }}.service"
+      src: "{{ dbs_update }}.service.j2"
+      setype: systemd_unit_file_t
+      seuser: system_u
+    - dst: "{{ dbs_update }}.timer"
+      src: "{{ dbs_update }}.timer.j2"
+      setype: systemd_unit_file_t
+      seuser: system_u
 
 - name: Enable systemd timer
   systemd:
-    name: "{{ dbs_timer_name }}.timer"
+    name: "{{ dbs_update }}.timer"
     state: started
     enabled: true
     masked: false
@@ -34,5 +40,5 @@
 
 - name: Run update MaxMind DBs
   systemd:
-    name: "{{ dbs_timer_name }}.service"
+    name: "{{ dbs_update }}.service"
     state: restarted

@@ -1,0 +1,9 @@
+---
+systemd_services_path: "/etc/systemd/system"
+scripts_path: "/usr/local/bin"
+
+dbs_update: "almalinux_dbs_update"
+mirrors_list_update: "almalinux_mirrors_list_update"
+mirrors_list_update_pid: "/{{ source_path }}/{{ mirrors_list_update }}.pid"
+mirrors_service: "almalinux_mirrors_service"
+...

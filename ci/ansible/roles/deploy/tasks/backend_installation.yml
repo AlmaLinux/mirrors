@@ -62,29 +62,30 @@
     owner: "{{ service_user }}"
     group: "{{ service_user }}"
     mode: 0600
-    force: yes
 
 - name: Prepare started script of backend service
   template:
-    dest: "/usr/local/bin/mirror_service_backend.sh"
-    src: mirror_service_backend.sh.j2
+    dest: "{{ scripts_path }}/{{ mirrors_service }}.sh"
+    src: "{{ mirrors_service }}.sh.j2"
     owner: "{{ service_user }}"
     group: "{{ service_user }}"
-    mode: 0755
-    force: yes
+    setype: bin_t
+    seuser: system_u
+    mode: 0740
 
 - name: Install systemd service of Gunicorn backend
   template:
-    dest: "/etc/systemd/system/mirror_service_backend.service"
-    src: mirror_service_backend.service.j2
+    dest: "{{ systemd_services_path }}/{{ mirrors_service }}.service"
+    src: "{{ mirrors_service }}.service.j2"
     group: "{{ service_user }}"
     owner: "{{ service_user }}"
+    setype: systemd_unit_file_t
+    seuser: system_u
     mode: 0640
-    force: 'yes'
 
 - name: Enable systemd service of Gunicorn backend
   systemd:
-    name: mirror_service_backend.service
+    name: "{{ mirrors_service }}.service"
     state: restarted
     enabled: yes
     masked: no

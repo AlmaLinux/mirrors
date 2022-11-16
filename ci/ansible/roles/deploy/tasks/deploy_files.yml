@@ -3,6 +3,7 @@
   synchronize:
     src: "../../../src"
     dest: "{{ source_path }}"
+    set_remote_user: no
 
 - name: Update permissions of sources
   file:
