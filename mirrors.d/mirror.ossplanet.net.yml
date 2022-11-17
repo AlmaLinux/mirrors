@@ -1,0 +1,19 @@
+---
+name: mirror.ossplanet.net
+address:
+  http: http://mirror.ossplanet.net/mirror/almalinux
+  https: https://mirror.ossplanet.net/mirror/almalinux
+  rsync: rsync://mirror.ossplanet.net/almalinux
+  ftp: ftp://mirror.ossplanet.net/mirror/almalinux
+update_frequency: 2h
+sponsor: OSSPlanet OpenSource Hosting Service
+sponsor_url: https://ossplanet.net/
+email: apply@ossplanet.net
+geolocation:
+  continent: East Asia
+  country: TW
+  state_province: Taiwan
+  city: Nantou
+  private: false
+  monopoly: false
+...
