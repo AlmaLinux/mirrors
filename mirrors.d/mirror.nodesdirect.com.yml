@@ -1,0 +1,16 @@
+---
+name: mirror.nodesdirect.com
+address:
+  http: http://mirror.nodesdirect.com/almalinux
+  https: https://mirror.nodesdirect.com/almalinux
+  rsync: rsync://mirror.nodesdirect.com/almalinux
+  ftp: ftp://mirror.nodesdirect.com/almalinux
+update_frequency: 4h
+sponsor: Nodes Direct Holdings, LLC
+sponsor_url: https://nodesdirect.com
+email: noc@nodesdirect.com
+geolocation:
+  country: US
+  state_province: FL
+  city: Jacksonville
+...
