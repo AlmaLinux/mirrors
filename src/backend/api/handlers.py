@@ -278,56 +278,56 @@ async def update_mirrors_handler() -> str:
         return 'Update is already running'
     try:
         pid_file_path.write_text(str(os.getpid()))
-        with session_scope() as db_session:
-            db_session.query(Mirror).delete()
-            db_session.query(Url).delete()
-            db_session.query(Subnet).delete()
-            mirror_check_sem = asyncio.Semaphore(100)
-            conn = TCPConnector(
-                limit=10000,
-                force_close=True,
-                use_dns_cache=False,
-            )
-            async with ClientSession(
-                    connector=conn,
-                    headers={"Connection": "close"},
-                    raise_for_status=True,
-            ) as http_session:
-                subnets = await get_aws_subnets(http_session=http_session)
-                subnets.update(
-                    await get_azure_subnets(http_session=http_session),
-                )
-                await asyncio.gather(*(
-                    asyncio.ensure_future(
-                        _process_mirror(
-                            subnets=subnets,
-                            mirror_info=mirror_info,
-                            db_session=db_session,
-                            http_session=http_session,
-                            nominatim_sem=nominatim_sem,
-                            mirror_check_sem=mirror_check_sem,
-                            main_config=config,
-                            mirror_iso_uris=mirror_iso_uris,
-                        )
-                    ) for mirror_info in all_mirrors
-                ))
-        # update all mirrors list in the redis cache
-        await refresh_mirrors_cache(
-            are_ok_and_not_from_clouds=True,
-            without_private_mirrors=True,
-        )
-        await refresh_mirrors_cache(
-            are_ok_and_not_from_clouds=False,
-            without_private_mirrors=False,
-        )
-        await refresh_mirrors_cache(
-            are_ok_and_not_from_clouds=False,
-            without_private_mirrors=True,
-        )
-        await refresh_mirrors_cache(
-            are_ok_and_not_from_clouds=True,
-            without_private_mirrors=False,
-        )
+        # with session_scope() as db_session:
+        #     db_session.query(Mirror).delete()
+        #     db_session.query(Url).delete()
+        #     db_session.query(Subnet).delete()
+        #     mirror_check_sem = asyncio.Semaphore(100)
+        #     conn = TCPConnector(
+        #         limit=10000,
+        #         force_close=True,
+        #         use_dns_cache=False,
+        #     )
+        #     async with ClientSession(
+        #             connector=conn,
+        #             headers={"Connection": "close"},
+        #             raise_for_status=True,
+        #     ) as http_session:
+        #         subnets = await get_aws_subnets(http_session=http_session)
+        #         subnets.update(
+        #             await get_azure_subnets(http_session=http_session),
+        #         )
+        #         await asyncio.gather(*(
+        #             asyncio.ensure_future(
+        #                 _process_mirror(
+        #                     subnets=subnets,
+        #                     mirror_info=mirror_info,
+        #                     db_session=db_session,
+        #                     http_session=http_session,
+        #                     nominatim_sem=nominatim_sem,
+        #                     mirror_check_sem=mirror_check_sem,
+        #                     main_config=config,
+        #                     mirror_iso_uris=mirror_iso_uris,
+        #                 )
+        #             ) for mirror_info in all_mirrors
+        #         ))
+        # # update all mirrors list in the redis cache
+        # await refresh_mirrors_cache(
+        #     are_ok_and_not_from_clouds=True,
+        #     without_private_mirrors=True,
+        # )
+        # await refresh_mirrors_cache(
+        #     are_ok_and_not_from_clouds=False,
+        #     without_private_mirrors=False,
+        # )
+        # await refresh_mirrors_cache(
+        #     are_ok_and_not_from_clouds=False,
+        #     without_private_mirrors=True,
+        # )
+        # await refresh_mirrors_cache(
+        #     are_ok_and_not_from_clouds=True,
+        #     without_private_mirrors=False,
+        # )
     finally:
         os.remove(pid_file_path)
     return 'Done'

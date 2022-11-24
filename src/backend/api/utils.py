@@ -169,12 +169,9 @@ def get_geo_data_by_ip(
     continent = city.continent.name
     latitude = city.location.latitude
     longitude = city.location.longitude
-    if all(
-            name is None for name in
-            (continent, country, state, city_name, latitude, longitude)
-       ):
+    if (continent or country or state or
+            city_name or latitude or longitude) is None:
         return None
-
     return continent, country, state, city_name, latitude, longitude
 
 

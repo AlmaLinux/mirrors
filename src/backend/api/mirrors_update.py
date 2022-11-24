@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import asyncio
+
 import aiodns
 import os
 
@@ -7,6 +8,7 @@ import aiohttp
 import dateparser
 
 from aiohttp import ClientSession
+from aiohttp.web_exceptions import HTTPError
 from sqlalchemy.orm import Session
 from api.redis import (
     set_mirror_flapped,
@@ -18,9 +20,11 @@ from api.utils import (
 )
 
 from common.sentry import get_logger
-from urllib3.exceptions import HTTPError
 
-from yaml_snippets.utils import WHITELIST_MIRRORS
+from yaml_snippets.utils import (
+    WHITELIST_MIRRORS,
+    is_url_available,
+)
 from yaml_snippets.data_models import (
     GeoLocationData,
     MirrorData,
@@ -77,32 +81,6 @@ def _get_mirror_iso_uris(
                     f'{version}/isos/{arch}/{iso_file}'
                 )
     return result
-
-
-async def _has_mirror_iso_uris(
-        mirror_iso_uri: str,
-        mirror_url: str,
-        http_session: ClientSession,
-        iso_check_sem: asyncio.Semaphore,
-):
-    async with iso_check_sem:
-        iso_url = os.path.join(mirror_url, mirror_iso_uri)
-        try:
-            await http_session.head(
-                iso_url,
-                headers=HEADERS,
-                timeout=AIOHTTP_TIMEOUT,
-                raise_for_status=True
-            )
-            logger.info('ISO artifact "%s" is available', iso_url)
-            return True
-        except (
-                asyncio.exceptions.TimeoutError,
-                HTTPError,
-                aiohttp.ClientError,
-        ):
-            logger.info('ISO artifact "%s" is unavailable', iso_url)
-            return False
 
 
 async def set_repo_status(
@@ -174,6 +152,58 @@ async def set_repo_status(
         return
 
 
+async def does_mirror_have_full_iso_set(
+    http_session: ClientSession,
+    mirror_url: str,
+    mirror_iso_uris: list[str],
+) -> bool:
+
+    success_msg = 'ISO artifact by URL "%(url)s" is available'
+    error_msg = (
+        'ISO artifact by URL "%(url)s" '
+        'is unavailable because "%(err)s"'
+    )
+    tasks = [asyncio.ensure_future(
+        is_url_available(
+            url=(
+                url := os.path.join(
+                    mirror_url,
+                    iso_uri,
+                )
+            ),
+            http_session=http_session,
+            logger=logger,
+            is_get_request=False,
+            success_msg=success_msg,
+            success_msg_vars={
+                'url': url,
+            },
+            error_msg=error_msg,
+            error_msg_vars={
+                'url': url,
+            },
+        )
+    ) for iso_uri in mirror_iso_uris]
+
+    async def check_tasks(
+            created_tasks: list[asyncio.Task],
+    ) -> bool:
+        done_tasks, pending_tasks = await asyncio.wait(
+            created_tasks,
+            return_when=asyncio.FIRST_COMPLETED,
+        )
+        for future in done_tasks:
+            if not future.result():
+                return False
+        if not pending_tasks:
+            return True
+        return await check_tasks(
+            pending_tasks,
+        )
+
+    return await check_tasks(tasks)
+
+
 async def update_mirror_in_db(
         mirror_info: MirrorData,
         db_session: Session,
@@ -215,24 +245,10 @@ async def update_mirror_in_db(
         await set_mirror_flapped(mirror_name=mirror_name)
         return
 
-    iso_check_sem = asyncio.Semaphore(25)
-    has_mirror_iso_full_set_results = await asyncio.gather(*(
-        asyncio.ensure_future(
-            _has_mirror_iso_uris(
-                mirror_iso_uri=mirror_iso_uri,
-                mirror_url=mirror_url,
-                http_session=http_session,
-                iso_check_sem=iso_check_sem,
-            )
-        ) for mirror_iso_uri in mirror_iso_uris
-    ))
-    logger.info(
-        'ISO results "%s" for mirror "%s"',
-        has_mirror_iso_full_set_results,
-        mirror_name,
-    )
-    mirror_info.has_full_iso_set = not any(
-        not has_flag for has_flag in has_mirror_iso_full_set_results
+    mirror_info.has_full_iso_set = await does_mirror_have_full_iso_set(
+        http_session=http_session,
+        mirror_url=mirror_url,
+        mirror_iso_uris=mirror_iso_uris,
     )
     await set_repo_status(
         mirror_info=mirror_info,
@@ -271,6 +287,7 @@ async def update_mirror_in_db(
         private=mirror_info.private,
         monopoly=mirror_info.monopoly,
         asn=','.join(mirror_info.asn),
+        has_full_iso_set=mirror_info.has_full_iso_set,
     )
     if mirror_info.subnets:
         subnets_to_create = [
@@ -304,7 +321,6 @@ async def set_geo_data(
     mirror_name = mirror_info.name
     if mirror_info.private:
         ipv6 = False
-        ip = '0.0.0.0'
         match = None
     else:
         resolver = aiodns.DNSResolver(timeout=5, tries=2)
@@ -320,7 +336,6 @@ async def set_geo_data(
         except aiodns.error.DNSError:
             logger.warning('Can\'t get IP of mirror %s', mirror_name)
             match = None
-            ip = '0.0.0.0'
         try:
             dns = await resolver.query(mirror_name, 'AAAA')
             if dns:
@@ -342,7 +357,7 @@ async def set_geo_data(
         )
     else:
         continent, country, state, city, \
-        latitude, longitude = match[0]['match']
+            latitude, longitude = match[0]['match']
         location = LocationData(
             latitude=latitude,
             longitude=longitude,
