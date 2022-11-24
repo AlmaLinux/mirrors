@@ -1,4 +1,5 @@
 # coding=utf-8
+from __future__ import annotations
 from collections import defaultdict
 from json import JSONEncoder
 from typing import Optional
@@ -24,8 +25,11 @@ class DataClassesJSONEncoder(JSONEncoder):
 
 @dataclass
 class LocationData:
-    latitude: Optional[float] = None
-    longitude: Optional[float] = None
+    # outside ranges
+    # latitude (-90 to 90)
+    # longitude (-180 to 180)
+    latitude: float = -91
+    longitude: float = -181
 
     @staticmethod
     def load_from_json(dct: dict[str, float]):
@@ -37,10 +41,10 @@ class LocationData:
 
 @dataclass
 class GeoLocationData:
-    continent: Optional[str] = None
-    country: Optional[str] = None
-    state: Optional[str] = None
-    city: Optional[str] = None
+    continent: str = 'Unknown'
+    country: str = 'Unknown'
+    state: str = 'Unknown'
+    city: str = 'Unknown'
 
     @staticmethod
     def load_from_json(dct: dict[str, str]):
@@ -50,6 +54,12 @@ class GeoLocationData:
             state=dct.get('state_province'),
             city=dct.get('city'),
         )
+
+    def update_from_existing_object(self, geo_location_data: GeoLocationData):
+        self.continent = self.continent or geo_location_data.continent
+        self.country = self.country or geo_location_data.country
+        self.state = self.state or geo_location_data.state
+        self.city = self.city or geo_location_data.city
 
 
 @dataclass

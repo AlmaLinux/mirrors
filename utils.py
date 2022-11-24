@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import json
-from asyncio.exceptions import TimeoutError
+from asyncio.exceptions import TimeoutError, CancelledError
 import os
 from logging import Logger
 
@@ -10,7 +10,15 @@ import yaml
 from pathlib import Path
 from typing import Optional, Union
 
-from aiohttp import ClientSession, ClientError
+from aiodns import DNSResolver
+from aiodns.error import DNSError
+from aiohttp import (
+    ClientSession,
+    ClientError, ServerDisconnectedError, ClientTimeout, TCPConnector,
+    ClientResponse,
+)
+from aiohttp.web_exceptions import HTTPError
+from aiohttp_retry import ExponentialRetry, RetryClient
 from jsonschema import (
     ValidationError,
     validate,
@@ -20,7 +28,7 @@ from .data_models import (
     MainConfig,
     RepoData,
     GeoLocationData,
-    MirrorData,
+    MirrorData, LocationData,
 )
 
 
@@ -120,6 +128,46 @@ NUMBER_OF_PROCESSES_FOR_MIRRORS_CHECK = 15
 AIOHTTP_TIMEOUT = 30
 
 
+async def is_url_available(
+        url: Path,
+        http_session: ClientSession,
+        logger: Logger,
+        is_get_request: bool,
+        success_msg: Optional[str],
+        success_msg_vars: Optional[dict],
+        error_msg: Optional[str],
+        error_msg_vars: Optional[dict],
+):
+    try:
+        if is_get_request:
+            method = 'get'
+        else:
+            method = 'head'
+        response = await http_session.request(
+            method=method,
+            url=str(url),
+            headers=HEADERS,
+        )
+        if is_get_request:
+            await response.text()
+        if success_msg is not None and success_msg_vars is not None:
+            logger.info(success_msg, success_msg_vars)
+        return True
+    except (
+            TimeoutError,
+            HTTPError,
+            ClientError,
+            CancelledError,
+            # E.g. repomd.xml is broken.
+            # It can't be decoded in that case
+            UnicodeError,
+    ) as err:
+        error_msg_vars['err'] = str(err) or type(err)
+        if error_msg is not None and error_msg_vars is not None:
+            logger.warning(error_msg, error_msg_vars)
+        return False
+
+
 def load_json_schema(
         path: str,
 ) -> dict:
@@ -178,27 +226,14 @@ def process_main_config(
         return repo_attributes
 
     try:
-        duplicated_versions = yaml_data['duplicated_versions']
-        # TODO: remove 2nd branch of the condition after update the production
         vault_versions = [
             str(version) for version in yaml_data.get('vault_versions', [])
         ]
-        if isinstance(duplicated_versions, dict):
-            duplicated_versions = {
-                major: minor for major, minor in duplicated_versions.items()
-            }
-        else:
-            stable_active_versions = [
-                ver for version in yaml_data['versions']
-                if (ver := str(version)) not in vault_versions
-                and 'beta' not in ver
-            ]
-            duplicated_versions = {
-                major: next(
-                    ver for ver in stable_active_versions
-                    if ver.startswith(major) and ver not in duplicated_versions
-                ) for major in duplicated_versions
-            }
+        duplicated_versions = {
+            str(major): str(minor) for major, minor
+            in yaml_data['duplicated_versions'].items()
+        }
+
         return MainConfig(
             allowed_outdate=yaml_data['allowed_outdate'],
             mirrors_dir=yaml_data['mirrors_dir'],
@@ -512,27 +547,26 @@ async def mirror_available(
                     repo_path,
                     'repodata/repomd.xml',
                 )
-                try:
-                    await http_session.head(
-                        check_url,
-                        headers=HEADERS,
-                        timeout=AIOHTTP_TIMEOUT,
-                    )
-                except (
-                        ClientError,
-                        TimeoutError,
-                        UnicodeError,
-                ) as err:
-                    # We want to unified error message, so I used logging
-                    # level `error` instead logging level `exception`
-                    logger.warning(
-                        'Mirror "%s" is not available for version '
-                        '"%s" and repo path "%s" because "%s"',
-                        mirror_name,
-                        version,
-                        repo_path,
-                        str(err) or type(err),
-                    )
+                error_msg = (
+                    'Mirror "%(name)s" is not available for version '
+                    '"%(version)s" and repo path "%(repo)s" because "%(err)s"'
+                )
+                error_msg_vars = {
+                    'name': mirror_name,
+                    'version': version,
+                    'repo': repo_path,
+                }
+                result = await is_url_available(
+                    url=check_url,
+                    http_session=http_session,
+                    logger=logger,
+                    is_get_request=True,
+                    success_msg=None,
+                    success_msg_vars=None,
+                    error_msg=error_msg,
+                    error_msg_vars=error_msg_vars,
+                )
+                if not result:
                     return mirror_name, False
     logger.info(
         'Mirror "%s" is available',
