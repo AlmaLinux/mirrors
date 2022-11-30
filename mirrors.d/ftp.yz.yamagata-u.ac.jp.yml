@@ -3,7 +3,7 @@ name: ftp.yz.yamagata-u.ac.jp
 address:
   http: http://ftp.yz.yamagata-u.ac.jp/pub/linux/almalinux/
   https: https://ftp.yz.yamagata-u.ac.jp/pub/linux/almalinux/
-  rsync: rsync://rsync.ftp.yz.yamagata-u.ac.jp/pub/linux/almalinux/
+  rsync: rsync://ftp.yz.yamagata-u.ac.jp/pub/linux/almalinux/
 update_frequency: 1h
 sponsor: Yamagata University
 sponsor_url: https://www.yamagata-u.ac.jp/
