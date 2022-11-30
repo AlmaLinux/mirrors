@@ -325,7 +325,7 @@ async def update_mirrors_handler() -> str:
             for mirror_info in all_mirrors:
                 if mirror_info.ip in ('Unknown', None):
                     continue
-                if mirror_info.status == 'flapping':
+                if mirror_info.status not in ('ok', 'expired'):
                     continue
                 urls_to_create = [
                     Url(
