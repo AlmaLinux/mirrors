@@ -401,9 +401,7 @@ class MirrorProcessor:
         )
         tasks = [asyncio.ensure_future(
             is_url_available(
-                url=(
-                    url := urljoin(mirror_url  + '/', iso_uri)
-                ),
+                url=urljoin(mirror_url + '/', iso_uri),
                 http_session=self.client_session,
                 logger=self.logger,
                 is_get_request=False,

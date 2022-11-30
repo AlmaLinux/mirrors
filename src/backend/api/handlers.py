@@ -296,7 +296,7 @@ async def update_mirrors_handler() -> str:
                             mirror_info=mirror_info,
                         )
                     ) for mirror_info in all_mirrors[i:next_slice]
-                    if mirror_info.status == 'ok'
+                    if mirror_info.status in ('ok', 'expired')
                 ))
                 await asyncio.gather(*(
                     asyncio.ensure_future(
@@ -306,8 +306,9 @@ async def update_mirrors_handler() -> str:
                             mirror_iso_uris=mirror_iso_uris,
                         )
                     ) for mirror_info in all_mirrors[i:next_slice]
-                    if mirror_info.status == 'ok' and mirror_info.ip not
-                    in ('Unknown', None) and not mirror_info.private
+                    if mirror_info.status in ('ok', 'expired')
+                    and mirror_info.ip not in ('Unknown', None)
+                    and not mirror_info.private
                 ))
                 await asyncio.gather(*(
                     asyncio.ensure_future(
@@ -315,7 +316,7 @@ async def update_mirrors_handler() -> str:
                             mirror_info=mirror_info,
                         )
                     ) for mirror_info in all_mirrors[i:next_slice]
-                    if mirror_info.status == 'ok'
+                    if mirror_info.status in ('ok', 'expired')
                 ))
         with session_scope() as db_session:
             db_session.query(Mirror).delete()
@@ -332,8 +333,7 @@ async def update_mirrors_handler() -> str:
                         type=url_type,
                     ) for url_type, url in mirror_info.urls.items()
                 ]
-                for url_to_create in urls_to_create:
-                    db_session.add(url_to_create)
+                db_session.add_all(urls_to_create)
                 mirror_to_create = Mirror(
                     name=mirror_info.name,
                     continent=mirror_info.geolocation.continent,
@@ -365,8 +365,7 @@ async def update_mirrors_handler() -> str:
                             subnet=subnet,
                         ) for subnet in mirror_info.subnets
                     ]
-                    for subnet_to_create in subnets_to_create:
-                        db_session.add(subnet_to_create)
+                    db_session.add_all(subnets_to_create)
                     mirror_to_create.subnets = subnets_to_create
                 db_session.add(mirror_to_create)
         # update all mirrors list in the redis cache
@@ -456,7 +455,7 @@ async def get_all_mirrors_db(
         if without_private_mirrors:
             mirrors_query = mirrors_query.filter(
                 or_(
-                    Mirror.private.is_(True),
+                    Mirror.private.is_(False),
                     Mirror.private.is_(None)
                 ),
             )
