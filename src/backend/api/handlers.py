@@ -5,14 +5,11 @@ import random
 from collections import defaultdict
 from pathlib import Path
 
-from aiohttp import (
-    ClientSession,
-    TCPConnector,
-)
-from sqlalchemy.orm import Session, joinedload
+import dateparser
+from sqlalchemy.orm import joinedload
 
 from api.exceptions import UnknownRepoAttribute
-from api.mirrors_update import update_mirror_in_db, _get_mirror_iso_uris
+from api.mirror_processor import MirrorProcessor
 from yaml_snippets.utils import (
     get_config,
     get_mirrors_info,
@@ -29,7 +26,6 @@ from api.utils import (
     get_geo_data_by_ip,
     get_aws_subnets,
     get_azure_subnets,
-    set_subnets_for_hyper_cloud_mirror,
     sort_mirrors_by_distance_and_country,
     randomize_mirrors_within_distance,
 )
@@ -46,15 +42,8 @@ from db.models import (
     Subnet,
 )
 from db.utils import session_scope
-from sqlalchemy.sql.expression import (
-    null,
-    false,
-    or_,
-    true,
-)
-from common.sentry import (
-    get_logger,
-)
+from sqlalchemy.sql.expression import or_
+from common.sentry import get_logger
 
 logger = get_logger(__name__)
 
@@ -222,35 +211,9 @@ async def _get_nearest_mirrors(
     return suitable_mirrors
 
 
-async def _process_mirror(
-        subnets: dict[str, list[str]],
-        mirror_info: MirrorData,
-        db_session: Session,
-        http_session: ClientSession,
-        nominatim_sem: asyncio.Semaphore,
-        mirror_check_sem: asyncio.Semaphore,
-        main_config: MainConfig,
-        mirror_iso_uris: list[str],
-):
-    set_subnets_for_hyper_cloud_mirror(
-        subnets=subnets,
-        mirror_info=mirror_info,
-
-    )
-    async with mirror_check_sem:
-        await update_mirror_in_db(
-            mirror_info=mirror_info,
-            db_session=db_session,
-            http_session=http_session,
-            sem=nominatim_sem,
-            main_config=main_config,
-            mirror_iso_uris=mirror_iso_uris,
-        )
-
-
 async def update_mirrors_handler() -> str:
 
-    config = get_config(
+    main_config = get_config(
         logger=logger,
         path_to_config=SERVICE_CONFIG_PATH,
         path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
@@ -258,59 +221,154 @@ async def update_mirrors_handler() -> str:
     mirrors_dir = os.path.join(
         os.getenv('CONFIG_ROOT'),
         'mirrors/updates',
-        config.mirrors_dir,
+        main_config.mirrors_dir,
     )
     all_mirrors = get_mirrors_info(
         mirrors_dir=mirrors_dir,
         logger=logger,
         path_to_json_schema=MIRROR_CONFIG_JSON_SCHEMA_DIR_PATH,
     )
-    mirror_iso_uris = _get_mirror_iso_uris(
-        versions=list(set(config.versions) - set(config.duplicated_versions)),
-        arches=config.arches,
-    )
-
-    # semaphore for nominatim
-    nominatim_sem = asyncio.Semaphore(1)
 
     pid_file_path = Path(os.getenv('MIRRORS_UPDATE_PID'))
-    if Path(os.getenv('MIRRORS_UPDATE_PID')).exists():
+    if pid_file_path.exists():
         return 'Update is already running'
     try:
         pid_file_path.write_text(str(os.getpid()))
+        step = 20
+        mirror_check_sem = asyncio.Semaphore(step)
+        mirrors_len = len(all_mirrors)
+        async with mirror_check_sem, MirrorProcessor(
+            logger=logger,
+        ) as mirror_processor:  # type: MirrorProcessor
+            mirror_iso_uris = mirror_processor.get_mirror_iso_uris(
+                versions=set(main_config.versions) -
+                set(main_config.duplicated_versions),
+                arches=main_config.arches
+            )
+            subnets = await get_aws_subnets(
+                http_session=mirror_processor.client_session,
+            )
+            subnets.update(
+                await get_azure_subnets(
+                    http_session=mirror_processor.client_session,
+                ),
+            )
+            for i in range(0, mirrors_len, step):
+                next_slice = min(i + step, mirrors_len)
+                await asyncio.gather(*(
+                    asyncio.ensure_future(
+                        mirror_processor.set_subnets_for_cloud_mirror(
+                            subnets=subnets,
+                            mirror_info=mirror_info,
+                        )
+                    ) for mirror_info in all_mirrors[i:next_slice]
+                    if mirror_info.cloud_type
+                ))
+                await asyncio.gather(*(
+                    asyncio.ensure_future(
+                        mirror_processor.set_ip_for_mirror(
+                            mirror_info=mirror_info,
+                        )
+                    ) for mirror_info in all_mirrors[i:next_slice]
+                ))
+                await asyncio.gather(*(
+                    asyncio.ensure_future(
+                        mirror_processor.set_status_of_mirror(
+                            main_config=main_config,
+                            mirror_info=mirror_info,
+                        )
+                    ) for mirror_info in all_mirrors[i:next_slice]
+                    if mirror_info.ip not in ('Unknown', None)
+                    and not mirror_info.private
+                ))
+                await asyncio.gather(*(
+                    asyncio.ensure_future(
+                        mirror_processor.set_ipv6_support_of_mirror(
+                            mirror_info=mirror_info,
+                        )
+                    ) for mirror_info in all_mirrors[i:next_slice]
+                    if mirror_info.ip not in ('Unknown', None)
+                    and not mirror_info.private
+                ))
+                await asyncio.gather(*(
+                    asyncio.ensure_future(
+                        mirror_processor.set_geo_data_from_offline_database(
+                            mirror_info=mirror_info,
+                        )
+                    ) for mirror_info in all_mirrors[i:next_slice]
+                    if mirror_info.status == 'ok'
+                ))
+                await asyncio.gather(*(
+                    asyncio.ensure_future(
+                        mirror_processor.set_mirror_have_full_iso_set(
+                            mirror_info=mirror_info,
+                            main_config=main_config,
+                            mirror_iso_uris=mirror_iso_uris,
+                        )
+                    ) for mirror_info in all_mirrors[i:next_slice]
+                    if mirror_info.status == 'ok' and mirror_info.ip not
+                    in ('Unknown', None) and not mirror_info.private
+                ))
+                await asyncio.gather(*(
+                    asyncio.ensure_future(
+                        mirror_processor.set_geo_data_from_online_service(
+                            mirror_info=mirror_info,
+                        )
+                    ) for mirror_info in all_mirrors[i:next_slice]
+                    if mirror_info.status == 'ok'
+                ))
         with session_scope() as db_session:
             db_session.query(Mirror).delete()
             db_session.query(Url).delete()
             db_session.query(Subnet).delete()
-            mirror_check_sem = asyncio.Semaphore(100)
-            conn = TCPConnector(
-                limit=10000,
-                force_close=True,
-                use_dns_cache=False,
-            )
-            async with ClientSession(
-                    connector=conn,
-                    headers={"Connection": "close"},
-                    raise_for_status=True,
-            ) as http_session:
-                subnets = await get_aws_subnets(http_session=http_session)
-                subnets.update(
-                    await get_azure_subnets(http_session=http_session),
+            for mirror_info in all_mirrors:
+                if mirror_info.ip in ('Unknown', None):
+                    continue
+                if mirror_info.status == 'flapping':
+                    continue
+                urls_to_create = [
+                    Url(
+                        url=url,
+                        type=url_type,
+                    ) for url_type, url in mirror_info.urls.items()
+                ]
+                for url_to_create in urls_to_create:
+                    db_session.add(url_to_create)
+                mirror_to_create = Mirror(
+                    name=mirror_info.name,
+                    continent=mirror_info.geolocation.continent,
+                    country=mirror_info.geolocation.country,
+                    state=mirror_info.geolocation.state,
+                    city=mirror_info.geolocation.city,
+                    ip=mirror_info.ip,
+                    ipv6=mirror_info.ipv6,
+                    latitude=mirror_info.location.latitude,
+                    longitude=mirror_info.location.longitude,
+                    status=mirror_info.status,
+                    update_frequency=dateparser.parse(
+                        mirror_info.update_frequency
+                    ),
+                    sponsor_name=mirror_info.sponsor_name,
+                    sponsor_url=mirror_info.sponsor_url,
+                    email=mirror_info.email,
+                    cloud_type=mirror_info.cloud_type,
+                    cloud_region=mirror_info.cloud_region,
+                    urls=urls_to_create,
+                    private=mirror_info.private,
+                    monopoly=mirror_info.monopoly,
+                    asn=','.join(mirror_info.asn),
+                    has_full_iso_set=mirror_info.has_full_iso_set,
                 )
-                await asyncio.gather(*(
-                    asyncio.ensure_future(
-                        _process_mirror(
-                            subnets=subnets,
-                            mirror_info=mirror_info,
-                            db_session=db_session,
-                            http_session=http_session,
-                            nominatim_sem=nominatim_sem,
-                            mirror_check_sem=mirror_check_sem,
-                            main_config=config,
-                            mirror_iso_uris=mirror_iso_uris,
-                        )
-                    ) for mirror_info in all_mirrors
-                ))
+                if mirror_info.subnets:
+                    subnets_to_create = [
+                        Subnet(
+                            subnet=subnet,
+                        ) for subnet in mirror_info.subnets
+                    ]
+                    for subnet_to_create in subnets_to_create:
+                        db_session.add(subnet_to_create)
+                    mirror_to_create.subnets = subnets_to_create
+                db_session.add(mirror_to_create)
         # update all mirrors list in the redis cache
         await refresh_mirrors_cache(
             are_ok_and_not_from_clouds=True,
@@ -329,7 +387,8 @@ async def update_mirrors_handler() -> str:
             without_private_mirrors=False,
         )
     finally:
-        os.remove(pid_file_path)
+        if pid_file_path.exists():
+            os.remove(pid_file_path)
     return 'Done'
 
 
@@ -397,13 +456,13 @@ async def get_all_mirrors_db(
         if without_private_mirrors:
             mirrors_query = mirrors_query.filter(
                 or_(
-                    Mirror.private == false(),
-                    Mirror.private == null()
+                    Mirror.private.is_(True),
+                    Mirror.private.is_(None)
                 ),
             )
         if iso_mirrors:
             mirrors_query = mirrors_query.filter(
-                Mirror.has_full_iso_set == true(),
+                Mirror.has_full_iso_set.is_(True),
             )
         if are_ok_and_not_from_clouds:
             mirrors_query = mirrors_query.filter(

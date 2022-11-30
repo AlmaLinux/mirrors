@@ -13,5 +13,14 @@ WorkingDirectory={{ source_path }}/src/backend
 ExecStartPre={{ scripts_path }}/{{ mirrors_service }}.sh
 ExecStart={{ source_path }}/bin/gunicorn -c {{ source_path }}/src/backend/gunicorn.py
 
+LimitAS=infinity
+LimitRSS=infinity
+LimitCORE=infinity
+LimitNOFILE=65536
+LimitNPROC=infinity
+LimitSIGPENDING=infinity
+LimitSIGPENDING=infinity
+LimitMSGQUEUE=infinity
+
 [Install]
 WantedBy=multi-user.target
