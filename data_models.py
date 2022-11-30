@@ -78,7 +78,7 @@ class GeoLocationData:
 
 @dataclass
 class MirrorData:
-    status: str = "ok"
+    status: str = "Unknown"
     cloud_type: str = ''
     cloud_region: str = ''
     private: bool = False
