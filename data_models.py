@@ -34,32 +34,46 @@ class LocationData:
     @staticmethod
     def load_from_json(dct: dict[str, float]):
         return LocationData(
-            latitude=dct.get('latitude'),
-            longitude=dct.get('longitude'),
+            latitude=dct.get('latitude', -91),
+            longitude=dct.get('longitude', -181),
         )
 
 
 @dataclass
 class GeoLocationData:
+
     continent: str = 'Unknown'
     country: str = 'Unknown'
     state: str = 'Unknown'
     city: str = 'Unknown'
 
+    def are_mandatory_fields_empty(self) -> bool:
+        return any(
+            item == 'Unknown' or item is None for item in (
+                self.country,
+                self.city,
+                self.state,
+            )
+        )
+
     @staticmethod
     def load_from_json(dct: dict[str, str]):
         return GeoLocationData(
-            continent=dct.get('continent'),
-            country=dct.get('country'),
-            state=dct.get('state_province'),
-            city=dct.get('city'),
+            continent=dct.get('continent', 'Unknown'),
+            country=dct.get('country', 'Unknown'),
+            state=dct.get('state_province', 'Unknown'),
+            city=dct.get('city', 'Unknown'),
         )
 
+    def __setattr__(self, key, value):
+        if key not in self.__dict__ or self.__dict__[key] == 'Unknown':
+            self.__dict__[key] = value
+
     def update_from_existing_object(self, geo_location_data: GeoLocationData):
-        self.continent = self.continent or geo_location_data.continent
-        self.country = self.country or geo_location_data.country
-        self.state = self.state or geo_location_data.state
-        self.city = self.city or geo_location_data.city
+        self.continent = geo_location_data.continent
+        self.country = geo_location_data.country
+        self.state = geo_location_data.state
+        self.city = geo_location_data.city
 
 
 @dataclass

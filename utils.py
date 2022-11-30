@@ -1,24 +1,20 @@
 #!/usr/bin/env python3
+import asyncio
 import json
-from asyncio.exceptions import TimeoutError, CancelledError
 import os
+from asyncio.exceptions import TimeoutError, CancelledError
 from logging import Logger
+from pathlib import Path
+from typing import Optional, Union
+from urllib.parse import urljoin
 
 import requests
 import yaml
-
-from pathlib import Path
-from typing import Optional, Union
-
-from aiodns import DNSResolver
-from aiodns.error import DNSError
 from aiohttp import (
     ClientSession,
-    ClientError, ServerDisconnectedError, ClientTimeout, TCPConnector,
-    ClientResponse,
+    ClientError,
 )
 from aiohttp.web_exceptions import HTTPError
-from aiohttp_retry import ExponentialRetry, RetryClient
 from jsonschema import (
     ValidationError,
     validate,
@@ -30,7 +26,6 @@ from .data_models import (
     GeoLocationData,
     MirrorData, LocationData,
 )
-
 
 # set User-Agent for python-requests
 HEADERS = {
@@ -129,7 +124,7 @@ AIOHTTP_TIMEOUT = 30
 
 
 async def is_url_available(
-        url: Path,
+        url: str,
         http_session: ClientSession,
         logger: Logger,
         is_get_request: bool,
@@ -157,14 +152,15 @@ async def is_url_available(
             TimeoutError,
             HTTPError,
             ClientError,
-            CancelledError,
             # E.g. repomd.xml is broken.
             # It can't be decoded in that case
             UnicodeError,
     ) as err:
-        error_msg_vars['err'] = str(err) or type(err)
         if error_msg is not None and error_msg_vars is not None:
+            error_msg_vars['err'] = str(err) or type(err)
             logger.warning(error_msg, error_msg_vars)
+        return False
+    except CancelledError:
         return False
 
 
@@ -366,6 +362,7 @@ def process_mirror_config(
         asn=_extract_asn(yaml_data.get('asn')),
         cloud_type=yaml_data.get('cloud_type', ''),
         cloud_region=','.join(yaml_data.get('cloud_regions', [])),
+        location=LocationData(),
         geolocation=GeoLocationData.load_from_json(
             yaml_data.get('geolocation', {}),
         ),
@@ -510,6 +507,7 @@ async def mirror_available(
             main_config.required_protocols,
         )
         return mirror_name, False
+    urls_for_checking = {}
     for version in main_config.versions:
         # cloud mirrors (Azure/AWS) don't store beta versions
         if mirror_info.cloud_type and 'beta' in version:
@@ -541,33 +539,68 @@ async def mirror_available(
                 ):
                     continue
                 repo_path = repo_data.path.replace('$basearch', arch)
-                check_url = os.path.join(
-                    mirror_url,
-                    str(version),
-                    repo_path,
+                url_for_check = urljoin(
+                    urljoin(
+                        urljoin(
+                            mirror_url + '/',
+                            str(version),
+                        ) + '/',
+                        repo_path,
+                    ) + '/',
                     'repodata/repomd.xml',
                 )
-                error_msg = (
-                    'Mirror "%(name)s" is not available for version '
-                    '"%(version)s" and repo path "%(repo)s" because "%(err)s"'
-                )
-                error_msg_vars = {
-                    'name': mirror_name,
+                urls_for_checking[url_for_check] = {
                     'version': version,
-                    'repo': repo_path,
+                    'repo_path': repo_path,
                 }
-                result = await is_url_available(
-                    url=check_url,
-                    http_session=http_session,
-                    logger=logger,
-                    is_get_request=True,
-                    success_msg=None,
-                    success_msg_vars=None,
-                    error_msg=error_msg,
-                    error_msg_vars=error_msg_vars,
-                )
-                if not result:
-                    return mirror_name, False
+
+    success_msg = (
+        'Mirror "%(name)s" is available by url "%(url)s"'
+    )
+    error_msg = (
+        'Mirror "%(name)s" is not available for version '
+        '"%(version)s" and repo path "%(repo)s" because "%(err)s"'
+    )
+
+    tasks = [asyncio.ensure_future(
+        is_url_available(
+            url=check_url,
+            http_session=http_session,
+            logger=logger,
+            is_get_request=True,
+            success_msg=success_msg,
+            success_msg_vars=None,
+            error_msg=error_msg,
+            error_msg_vars={
+                'name': mirror_name,
+                'version': url_info['version'],
+                'repo': url_info['repo_path'],
+            },
+        )
+    ) for check_url, url_info in urls_for_checking.items()]
+
+    async def _check_tasks(
+            created_tasks: list[asyncio.Task],
+    ) -> bool:
+        done_tasks, pending_tasks = await asyncio.wait(
+            created_tasks,
+            return_when=asyncio.FIRST_COMPLETED,
+        )
+        for future in done_tasks:
+            if not future.result():
+                for pending_task in pending_tasks:
+                    pending_task.cancel()
+                return False
+        if not pending_tasks:
+            return True
+        return await _check_tasks(
+            pending_tasks,
+        )
+
+    result = await _check_tasks(tasks)
+
+    if not result:
+        return mirror_name, False
     logger.info(
         'Mirror "%s" is available',
         mirror_name,
