@@ -1,19 +1,19 @@
 ---
-name: repo.almalinux.org
+name: mirror.wwfx.net
 address:
-  http: http://repo.almalinux.org/almalinux/
-  https: https://repo.almalinux.org/almalinux/
-  rsync: rsync://rsync.repo.almalinux.org/almalinux
+  http: http://mirror.wwfx.net/alma/
+  https: https://mirror.wwfx.net/alma/
+  rsync: rsync://rsync.mirror.wwfx.net/alma
 geolocation:
-  country: US
-  state_province: GA
-  city: Atlanta
-update_frequency: 1h
-sponsor: AlmaLinux OS Foundation
-sponsor_url: https://www.almalinux.org
+  country: BG
+  state_province: SF
+  city: Sofia
+update_frequency: 3h
+sponsor: Worldwide Fx
+sponsor_url: https://wwfx.net
 # Please do not use an email piped to a helpdesk or similar.
 # Use an address or alias that goes directly to those responsible for
 # mirror management.
 # Remove these comments before submitting your pull request.
-email: hello@almalinux.org
+email: bg.tech@wwfx.net
 ...
