@@ -23,7 +23,7 @@ from api.handlers import (
     get_isos_list_by_countries,
     get_main_isos_table,
     SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
-    SERVICE_CONFIG_PATH,
+    SERVICE_CONFIG_PATH, get_allowed_version, get_allowed_arch,
 )
 from yaml_snippets.utils import get_config
 from api.utils import (
@@ -93,7 +93,28 @@ async def get_mirror_list(
     return await get_mirrors_list(
         ip_address=ip_address,
         version=version,
+        arch=None,
         repository=repository,
+    )
+
+
+@app.route(
+    '/isolist/<version>/<arch>',
+    methods=('GET',),
+)
+@success_result
+@error_result
+async def get_iso_list(
+        version: str,
+        arch: str,
+):
+    ip_address = _get_request_ip()
+    return await get_mirrors_list(
+        ip_address=ip_address,
+        version=version,
+        arch=arch,
+        repository=None,
+        iso_list=True,
     )
 
 
@@ -149,10 +170,18 @@ async def isos(
             mirrors_by_countries,
             nearest_mirrors
         ) = await get_isos_list_by_countries(
-            arch=arch,
-            version=version,
             ip_address=ip_address,
-            config=config,
+        )
+        version = get_allowed_version(
+            versions=config.versions,
+            # ISOs are stored only for active versions (non-vault)
+            vault_versions=[],
+            duplicated_versions=config.duplicated_versions,
+            version=version,
+        )
+        arch = get_allowed_arch(
+            arch=arch,
+            arches=config.arches,
         )
         data.update({
             'arch': arch,
@@ -180,7 +209,9 @@ async def mirrors_table():
             'IPv6'
         ],
         'url_types': url_types,
-        'mirror_list': await get_all_mirrors(),
+        'mirror_list': await get_all_mirrors(
+            get_without_private_mirrors=True,
+        ),
         'main_title': 'AlmaLinux Mirrors',
     }
     return render_template('mirrors.html', **data)

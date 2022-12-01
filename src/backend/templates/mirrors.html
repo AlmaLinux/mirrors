@@ -75,7 +75,12 @@
                     </td>
                     <td>{{ mirror.status }}</td>
                     <td>{{ mirror.geolocation.continent }}</td>
-                    <td>{{ mirror.geolocation.country }}</td>
+                    <td>
+                        {% if mirror.geolocation.country != 'Unknown' %}
+                            <span data-flag="{{ mirror.geolocation.country }}"></span>&nbsp;
+                        {% endif %}
+                        {{ mirror.geolocation.country }}
+                    </td>
                     {% for url_type in url_types %}
                         <td>
                             {% if mirror.urls.get(url_type) %}

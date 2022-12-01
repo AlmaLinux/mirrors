@@ -21,6 +21,7 @@ from aiohttp_retry import (
     ExponentialRetry,
     RetryClient,
 )
+from pycountry import countries
 
 from api.redis import (
     set_mirror_flapped,
@@ -38,6 +39,7 @@ from yaml_snippets.utils import (
     mirror_available,
     is_url_available,
     WHITELIST_MIRRORS,
+    check_tasks,
 )
 
 
@@ -174,7 +176,28 @@ class MirrorProcessor:
             )
         mirror_info.ip = ip
 
-    async def set_geo_data_from_offline_database(
+    async def set_mirror_url(
+            self,
+            mirror_info: MirrorData,
+            main_config: MainConfig,
+    ):
+        self.logger.info('Set mirror URL for "%s"', mirror_info.name)
+        mirror_info.mirror_url = self.get_mirror_url(
+            main_config=main_config,
+            mirror_info=mirror_info,
+        )
+
+    async def set_iso_url(
+            self,
+            mirror_info: MirrorData,
+    ):
+        self.logger.info('Set iso URL for "%s"', mirror_info.name)
+        mirror_info.iso_url = urljoin(
+            mirror_info.mirror_url + '/',
+            '%s/isos/%s',
+        )
+
+    async def set_geo_and_location_data_from_offline_database(
             self,
             mirror_info: MirrorData,
     ):
@@ -203,12 +226,23 @@ class MirrorProcessor:
                 mirror_info.name,
             )
         mirror_info.location = location
-        mirror_info.geolocation.continent = geo_location_data.continent
-        mirror_info.geolocation.country = geo_location_data.country
-        mirror_info.geolocation.state = geo_location_data.state
-        mirror_info.geolocation.city = geo_location_data.city
+        mirror_info.geolocation.update_from_existing_object(geo_location_data)
+        try:
+            if mirror_info.geolocation.country == 'Unknown':
+                return
+            if len(mirror_info.geolocation.country) == 2:
+                mirror_info.geolocation.__dict__['country'] = \
+                    mirror_info.geolocation.country.upper()
+            else:
+                country = countries.get(
+                    name=mirror_info.geolocation.country,
+                )
+                mirror_info.geolocation.__dict__['country'] = \
+                    country.alpha_2
+        except LookupError:
+            pass
 
-    async def set_geo_data_from_online_service(
+    async def set_location_data_from_online_service(
             self,
             mirror_info: MirrorData,
     ):
@@ -387,28 +421,27 @@ class MirrorProcessor:
     async def set_mirror_have_full_iso_set(
             self,
             mirror_info: MirrorData,
-            main_config: MainConfig,
             mirror_iso_uris: list[str],
     ):
-        success_msg = 'ISO artifact by URL "%(url)s" is available'
         error_msg = (
             'ISO artifact by URL "%(url)s" '
             'is unavailable because "%(err)s"'
         )
-        mirror_url = self.get_mirror_url(
-            main_config=main_config,
-            mirror_info=mirror_info,
-        )
         tasks = [asyncio.ensure_future(
             is_url_available(
-                url=urljoin(mirror_url + '/', iso_uri),
+                url=(url := urljoin(
+                    mirror_info.mirror_url + '/',
+                    iso_uri,
+                )),
                 http_session=self.client_session,
                 logger=self.logger,
                 is_get_request=False,
                 success_msg=None,
                 success_msg_vars=None,
-                error_msg=None,
-                error_msg_vars=None,
+                error_msg=error_msg,
+                error_msg_vars={
+                    'url': url,
+                },
             )
         ) for iso_uri in mirror_iso_uris]
 
@@ -416,22 +449,5 @@ class MirrorProcessor:
             'Set the mirrors have full ISO set is started for mirror "%s"',
             mirror_info.name,
         )
-        async def _check_tasks(
-                created_tasks: list[asyncio.Task],
-        ) -> bool:
-            done_tasks, pending_tasks = await asyncio.wait(
-                created_tasks,
-                return_when=asyncio.FIRST_COMPLETED,
-            )
-            for future in done_tasks:
-                if not future.result():
-                    for pending_task in pending_tasks:
-                        pending_task.cancel()
-                    return False
-            if not pending_tasks:
-                return True
-            return await _check_tasks(
-                pending_tasks,
-            )
 
-        mirror_info.has_full_iso_set = await _check_tasks(tasks)
+        mirror_info.has_full_iso_set = await check_tasks(tasks)

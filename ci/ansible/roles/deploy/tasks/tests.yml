@@ -6,7 +6,7 @@
     state: absent
 
 
-- name: Check some mirrors in a request
+- name: Check some mirrors in a request (MirrorList)
   uri:
     url: "http://localhost/mirrorlist/8/baseos"
     headers:
@@ -27,6 +27,7 @@
       centos.corp.cloudlinux.com: "77.79.198.14"
       # some public mirror
       almalinux.ip-connect.info: "77.121.201.30"
+      mirrors.nav.ro: "77.121.201.30"
 
 - name: Check vault versions
   uri:
@@ -54,3 +55,22 @@
     return_content: yes
   register: result
   failed_when: "'AlmaLinux ISOs links' not in result.content"
+
+
+
+
+- name: Check some mirrors in a request (ISOLJist)
+  uri:
+    url: "http://localhost/isolist/8/x86_64"
+    headers:
+      X-Forwarded-For: "{{ item.value }}"
+    method: GET
+    return_content: yes
+  register: result
+  failed_when: "item.key not in result.content"
+  loop: "{{ mirrors | dict2items }}"
+  vars:
+    mirrors:
+      # some public mirror
+      almalinux.ip-connect.info: "77.121.201.30"
+      mirrors.nav.ro: "77.121.201.30"

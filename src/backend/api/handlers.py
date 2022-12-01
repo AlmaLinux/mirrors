@@ -1,9 +1,12 @@
 # coding=utf-8
 import asyncio
+import itertools
 import os
 import random
 from collections import defaultdict
 from pathlib import Path
+from typing import Optional
+from urllib.parse import urljoin
 
 import dateparser
 from sqlalchemy.orm import joinedload
@@ -66,8 +69,10 @@ MIRROR_CONFIG_JSON_SCHEMA_DIR_PATH = os.path.join(
 
 async def _get_nearest_mirrors_by_network_data(
         ip_address: str,
-        without_private_mirrors: bool = True,
-        iso_mirrors: bool = False,
+        get_without_private_mirrors: bool,
+        get_without_cloud_mirrors: bool,
+        get_mirrors_with_full_set_of_isos: bool,
+        get_working_mirrors: bool,
 ) -> list[MirrorData]:
     """
     The function returns mirrors which are in the same subnet or have the same
@@ -93,9 +98,10 @@ async def _get_nearest_mirrors_by_network_data(
     suitable_mirrors = []
 
     mirrors = await get_all_mirrors(
-        are_ok_and_not_from_clouds=True,
-        without_private_mirrors=without_private_mirrors,
-        iso_mirrors=iso_mirrors,
+        get_working_mirrors=get_working_mirrors,
+        get_without_cloud_mirrors=get_without_cloud_mirrors,
+        get_without_private_mirrors=get_without_private_mirrors,
+        get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos,
     )
     for mirror in mirrors:
         if mirror.status != "ok":
@@ -132,8 +138,10 @@ async def _get_nearest_mirrors_by_network_data(
 
 async def _get_nearest_mirrors_by_geo_data(
         ip_address: str,
-        without_private_mirrors: bool = True,
-        iso_mirrors: bool = False,
+        get_without_private_mirrors: bool,
+        get_without_cloud_mirrors: bool,
+        get_mirrors_with_full_set_of_isos: bool,
+        get_working_mirrors: bool,
 ) -> list[MirrorData]:
     """
     The function returns nearest N mirrors to a client
@@ -141,9 +149,10 @@ async def _get_nearest_mirrors_by_geo_data(
     """
     match = get_geo_data_by_ip(ip_address)
     mirrors = await get_all_mirrors(
-        are_ok_and_not_from_clouds=True,
-        without_private_mirrors=without_private_mirrors,
-        iso_mirrors=iso_mirrors,
+        get_working_mirrors=get_working_mirrors,
+        get_without_cloud_mirrors=get_without_cloud_mirrors,
+        get_without_private_mirrors=get_without_private_mirrors,
+        get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos,
     )
     # We return all mirrors if we can't
     # determine geo data of a request's IP
@@ -177,8 +186,10 @@ async def _get_nearest_mirrors_by_geo_data(
 
 async def _get_nearest_mirrors(
         ip_address: str,
-        iso_mirrors: bool = False,
-        without_private_mirrors: bool = True,
+        get_without_private_mirrors: bool,
+        get_without_cloud_mirrors: bool,
+        get_mirrors_with_full_set_of_isos: bool,
+        get_working_mirrors: bool,
 ) -> list[MirrorData]:
     """
     Get the nearest mirrors by geo-data or by subnet/ASN
@@ -188,25 +199,29 @@ async def _get_nearest_mirrors(
     else:
         suitable_mirrors = await get_mirrors_from_cache(
             key=ip_address,
-            iso_mirrors=iso_mirrors,
+            get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos
         )
     if suitable_mirrors is not None:
         return suitable_mirrors
     suitable_mirrors = await _get_nearest_mirrors_by_network_data(
         ip_address=ip_address,
-        iso_mirrors=iso_mirrors,
-        without_private_mirrors=without_private_mirrors,
+        get_working_mirrors=get_working_mirrors,
+        get_without_cloud_mirrors=get_without_cloud_mirrors,
+        get_without_private_mirrors=get_without_private_mirrors,
+        get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos,
     )
     if not suitable_mirrors:
         suitable_mirrors = await _get_nearest_mirrors_by_geo_data(
             ip_address=ip_address,
-            iso_mirrors=iso_mirrors,
-            without_private_mirrors=True,
+            get_working_mirrors=get_working_mirrors,
+            get_without_cloud_mirrors=get_without_cloud_mirrors,
+            get_without_private_mirrors=get_without_private_mirrors,
+            get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos
         )
     await set_mirrors_to_cache(
         key=ip_address,
         mirrors=suitable_mirrors,
-        iso_mirrors=iso_mirrors,
+        get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos,
     )
     return suitable_mirrors
 
@@ -273,13 +288,27 @@ async def update_mirrors_handler() -> str:
                 ))
                 await asyncio.gather(*(
                     asyncio.ensure_future(
+                        mirror_processor.set_mirror_url(
+                            mirror_info=mirror_info,
+                            main_config=main_config,
+                        )
+                    ) for mirror_info in all_mirrors[i:next_slice]
+                ))
+                await asyncio.gather(*(
+                    asyncio.ensure_future(
+                        mirror_processor.set_iso_url(
+                            mirror_info=mirror_info,
+                        )
+                    ) for mirror_info in all_mirrors[i:next_slice]
+                ))
+                await asyncio.gather(*(
+                    asyncio.ensure_future(
                         mirror_processor.set_status_of_mirror(
                             main_config=main_config,
                             mirror_info=mirror_info,
                         )
                     ) for mirror_info in all_mirrors[i:next_slice]
                     if mirror_info.ip not in ('Unknown', None)
-                    and not mirror_info.private
                 ))
                 await asyncio.gather(*(
                     asyncio.ensure_future(
@@ -292,9 +321,8 @@ async def update_mirrors_handler() -> str:
                 ))
                 await asyncio.gather(*(
                     asyncio.ensure_future(
-                        mirror_processor.set_geo_data_from_offline_database(
-                            mirror_info=mirror_info,
-                        )
+                        mirror_processor.set_geo_and_location_data_from_offline_database(
+                            mirror_info=mirror_info)
                     ) for mirror_info in all_mirrors[i:next_slice]
                     if mirror_info.status in ('ok', 'expired')
                 ))
@@ -302,19 +330,18 @@ async def update_mirrors_handler() -> str:
                     asyncio.ensure_future(
                         mirror_processor.set_mirror_have_full_iso_set(
                             mirror_info=mirror_info,
-                            main_config=main_config,
                             mirror_iso_uris=mirror_iso_uris,
                         )
                     ) for mirror_info in all_mirrors[i:next_slice]
                     if mirror_info.status in ('ok', 'expired')
                     and mirror_info.ip not in ('Unknown', None)
                     and not mirror_info.private
+                    and mirror_info.cloud_type in ('', None)
                 ))
                 await asyncio.gather(*(
                     asyncio.ensure_future(
-                        mirror_processor.set_geo_data_from_online_service(
-                            mirror_info=mirror_info,
-                        )
+                        mirror_processor.set_location_data_from_online_service(
+                            mirror_info=mirror_info)
                     ) for mirror_info in all_mirrors[i:next_slice]
                     if mirror_info.status in ('ok', 'expired')
                 ))
@@ -349,6 +376,8 @@ async def update_mirrors_handler() -> str:
                         mirror_info.update_frequency
                     ),
                     sponsor_name=mirror_info.sponsor_name,
+                    mirror_url=mirror_info.mirror_url,
+                    iso_url=mirror_info.iso_url,
                     sponsor_url=mirror_info.sponsor_url,
                     email=mirror_info.email,
                     cloud_type=mirror_info.cloud_type,
@@ -368,23 +397,9 @@ async def update_mirrors_handler() -> str:
                     db_session.add_all(subnets_to_create)
                     mirror_to_create.subnets = subnets_to_create
                 db_session.add(mirror_to_create)
-        # update all mirrors list in the redis cache
-        await refresh_mirrors_cache(
-            are_ok_and_not_from_clouds=True,
-            without_private_mirrors=True,
-        )
-        await refresh_mirrors_cache(
-            are_ok_and_not_from_clouds=False,
-            without_private_mirrors=False,
-        )
-        await refresh_mirrors_cache(
-            are_ok_and_not_from_clouds=False,
-            without_private_mirrors=True,
-        )
-        await refresh_mirrors_cache(
-            are_ok_and_not_from_clouds=True,
-            without_private_mirrors=False,
-        )
+        # update all mirrors list in the Redis cache
+        for args in itertools.product((True, False), repeat=4):
+            await refresh_mirrors_cache(*args)
     finally:
         if pid_file_path.exists():
             os.remove(pid_file_path)
@@ -392,55 +407,95 @@ async def update_mirrors_handler() -> str:
 
 
 async def refresh_mirrors_cache(
-        are_ok_and_not_from_clouds: bool = False,
-        without_private_mirrors: bool = True,
-        iso_mirrors: bool = False,
+        get_working_mirrors: bool = False,
+        get_without_cloud_mirrors: bool = False,
+        get_without_private_mirrors: bool = False,
+        get_mirrors_with_full_set_of_isos: bool = False
 ):
+    """
+    Refresh cache of a mirrors list in Redis
+    :param get_working_mirrors: select mirrors which are not expired
+    :param get_without_cloud_mirrors: select mirrors without those who are
+           hosted in clouds (Azure/AWS)
+    :param get_without_private_mirrors: select mirrors without those who are
+           hosted behind NAT
+    :param get_mirrors_with_full_set_of_isos: select mirrors which have full
+           set of ISOs and them artifacts (CHECKSUM, manifests)
+           per each version and architecture
+    """
     mirrors = await get_all_mirrors_db(
-        are_ok_and_not_from_clouds=are_ok_and_not_from_clouds,
-        without_private_mirrors=without_private_mirrors,
-        iso_mirrors=iso_mirrors,
+        get_working_mirrors=get_working_mirrors,
+        get_without_cloud_mirrors=get_without_cloud_mirrors,
+        get_without_private_mirrors=get_without_private_mirrors,
+        get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos,
     )
     mirror_list = [mirror.to_json() for mirror in mirrors]
     await set_mirror_list(
         mirrors=mirror_list,
-        are_ok_and_not_from_clouds=are_ok_and_not_from_clouds,
-        without_private_mirrors=without_private_mirrors,
-        iso_mirrors=iso_mirrors,
+        get_working_mirrors=get_working_mirrors,
+        get_without_cloud_mirrors=get_without_cloud_mirrors,
+        get_without_private_mirrors=get_without_private_mirrors,
+        get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos,
     )
 
 
 async def get_all_mirrors(
-        are_ok_and_not_from_clouds: bool = False,
-        without_private_mirrors: bool = True,
-        iso_mirrors: bool = False,
-
+        get_working_mirrors: bool = False,
+        get_without_cloud_mirrors: bool = False,
+        get_without_private_mirrors: bool = False,
+        get_mirrors_with_full_set_of_isos: bool = False
 ) -> list[MirrorData]:
+    """
+    Get the list of all mirrors from cache or regenerate one if it's empty
+    :param get_working_mirrors: select mirrors which are not expired
+    :param get_without_cloud_mirrors: select mirrors without those who are
+           hosted in clouds (Azure/AWS)
+    :param get_without_private_mirrors: select mirrors without those who are
+           hosted behind NAT
+    :param get_mirrors_with_full_set_of_isos: select mirrors which have full
+           set of ISOs and them artifacts (CHECKSUM, manifests)
+           per each version and architecture
+    """
     mirrors = await get_mirror_list(
-        are_ok_and_not_from_clouds=are_ok_and_not_from_clouds,
-        without_private_mirrors=without_private_mirrors,
-        iso_mirrors=iso_mirrors,
+        get_working_mirrors=get_working_mirrors,
+        get_without_cloud_mirrors=get_without_cloud_mirrors,
+        get_without_private_mirrors=get_without_private_mirrors,
+        get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos,
     )
     if not mirrors:
         await refresh_mirrors_cache(
-            are_ok_and_not_from_clouds=are_ok_and_not_from_clouds,
-            without_private_mirrors=without_private_mirrors,
-            iso_mirrors=iso_mirrors,
+            get_working_mirrors=get_working_mirrors,
+            get_without_cloud_mirrors=get_without_cloud_mirrors,
+            get_without_private_mirrors=get_without_private_mirrors,
+            get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos
         )
         mirrors = await get_mirror_list(
-            are_ok_and_not_from_clouds=are_ok_and_not_from_clouds,
-            without_private_mirrors=without_private_mirrors,
-            iso_mirrors=iso_mirrors,
+            get_working_mirrors=get_working_mirrors,
+            get_without_cloud_mirrors=get_without_cloud_mirrors,
+            get_without_private_mirrors=get_without_private_mirrors,
+            get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos
         )
 
     return [mirror for mirror in mirrors]
 
 
 async def get_all_mirrors_db(
-        are_ok_and_not_from_clouds: bool = False,
-        without_private_mirrors: bool = True,
-        iso_mirrors: bool = False,
+        get_working_mirrors: bool = False,
+        get_without_cloud_mirrors: bool = False,
+        get_without_private_mirrors: bool = False,
+        get_mirrors_with_full_set_of_isos: bool = False
 ) -> list[MirrorData]:
+    """
+    Get a mirrors list from DB
+    :param get_working_mirrors: select mirrors which are not expired
+    :param get_without_cloud_mirrors: select mirrors without those who are
+           hosted in clouds (Azure/AWS)
+    :param get_without_private_mirrors: select mirrors without those who are
+           hosted behind NAT
+    :param get_mirrors_with_full_set_of_isos: select mirrors which have full
+           set of ISOs and them artifacts (CHECKSUM, manifests)
+           per each version and architecture
+    """
     mirrors_list = []
     with session_scope() as session:
         mirrors_query = session.query(
@@ -452,20 +507,23 @@ async def get_all_mirrors_db(
             Mirror.continent,
             Mirror.country,
         )
-        if without_private_mirrors:
+        if get_without_private_mirrors:
             mirrors_query = mirrors_query.filter(
                 or_(
                     Mirror.private.is_(False),
                     Mirror.private.is_(None)
                 ),
             )
-        if iso_mirrors:
+        if get_mirrors_with_full_set_of_isos:
             mirrors_query = mirrors_query.filter(
                 Mirror.has_full_iso_set.is_(True),
             )
-        if are_ok_and_not_from_clouds:
+        if get_working_mirrors:
             mirrors_query = mirrors_query.filter(
                 Mirror.status == 'ok',
+            )
+        if get_without_cloud_mirrors:
+            mirrors_query = mirrors_query.filter(
                 Mirror.cloud_type == '',
             )
         mirrors = mirrors_query.all()
@@ -478,7 +536,7 @@ async def get_all_mirrors_db(
 def _is_vault_repo(
         version: str,
         vault_versions: list[str],
-        repo: RepoData,
+        repo: Optional[RepoData],
 ) -> bool:
     """
     Check that the repo is vault or not.
@@ -489,7 +547,7 @@ def _is_vault_repo(
     :param repo: repo of requested a mirrors list
     """
 
-    if version in vault_versions or repo.vault:
+    if version in vault_versions or (repo is not None and repo.vault):
         return True
     return False
 
@@ -535,7 +593,9 @@ def get_allowed_version(
 async def get_mirrors_list(
         ip_address: str,
         version: str,
-        repository: str,
+        arch: Optional[str],
+        repository: Optional[str],
+        iso_list: bool = False,
 ) -> str:
     mirrors_list = []
     config = get_config(
@@ -550,7 +610,7 @@ async def get_mirrors_list(
     repos = {
         repo.name: repo for repo in config.repos
     }  # type: dict[str, RepoData]
-    if repository not in repos:
+    if not iso_list and repository not in repos:
         raise UnknownRepoAttribute(
             'Unknown repository "%s". Allowed list of repositories "%s"',
             repository,
@@ -562,8 +622,12 @@ async def get_mirrors_list(
         duplicated_versions=duplicated_versions,
         version=version,
     )
-    repo = repos[repository]
-    repo_path = repo.path
+    if iso_list:
+        repo_path = f'isos/{arch}'
+        repo = None
+    else:
+        repo = repos[repository]
+        repo_path = repo.path
 
     # if a client requests global vault version or vault repo
     if _is_vault_repo(
@@ -576,87 +640,52 @@ async def get_mirrors_list(
             version,
             repo_path,
         )
-    nearest_mirrors = await _get_nearest_mirrors(ip_address=ip_address,
-                                                 without_private_mirrors=False)
+    if iso_list:
+        nearest_mirrors = await _get_nearest_mirrors(
+            ip_address=ip_address,
+            get_mirrors_with_full_set_of_isos=True,
+            get_without_private_mirrors=True,
+            get_working_mirrors=True,
+            get_without_cloud_mirrors=True,
+        )
+    else:
+        nearest_mirrors = await _get_nearest_mirrors(
+            ip_address=ip_address,
+            get_mirrors_with_full_set_of_isos=False,
+            get_without_private_mirrors=False,
+            get_working_mirrors=True,
+            get_without_cloud_mirrors=False,
+        )
     for mirror in nearest_mirrors:
-        mirror_url = mirror.urls.get(config.required_protocols[0]) or \
-                     mirror.urls.get(config.required_protocols[1])
-        full_mirror_path = os.path.join(
-            mirror_url,
-            version,
-            repo_path
+        full_mirror_path = urljoin(
+            mirror.mirror_url + '/',
+            f'{version}/{repo_path}',
         )
         mirrors_list.append(full_mirror_path)
 
     return '\n'.join(mirrors_list)
 
 
-def _set_isos_link_for_mirror(
-        mirror_info: MirrorData,
-        version: str,
-        arch: str,
-        config: MainConfig,
-):
-    urls = mirror_info.urls
-    mirror_url = next(
-        address for protocol_type, address in
-        urls.items()
-        if protocol_type in config.required_protocols
-    )
-    mirror_info.isos_link = os.path.join(
-        mirror_url,
-        str(version),
-        'isos',
-        arch,
-    )
-
-
 async def get_isos_list_by_countries(
-        arch: str,
-        version: str,
         ip_address: str,
-        config: MainConfig,
 ) -> tuple[dict[str, list[MirrorData]], list[MirrorData]]:
     mirrors_by_countries = defaultdict(list)
-    version = get_allowed_version(
-        versions=config.versions,
-        # ISOs are stored only for active versions (non-vault)
-        vault_versions=[],
-        duplicated_versions=config.duplicated_versions,
-        version=version,
-    )
-    arch = get_allowed_arch(
-        arch=arch,
-        arches=config.arches,
-    )
-    for mirror_info in await get_all_mirrors():
-        # Hyper clouds (like AWS/Azure) don't have ISOs, because they traffic
-        # is too expensive
-        if mirror_info.cloud_type in ('aws', 'azure'):
-            continue
-
-        _set_isos_link_for_mirror(
-            mirror_info=mirror_info,
-            version=version,
-            arch=arch,
-            config=config,
-        )
+    for mirror_info in await get_all_mirrors(
+        get_without_private_mirrors=True,
+        get_mirrors_with_full_set_of_isos=True,
+        get_without_cloud_mirrors=True,
+        get_working_mirrors=True,
+    ):
         mirrors_by_countries[
             mirror_info.geolocation.country
         ].append(mirror_info)
-    nearest_mirrors = await _get_nearest_mirrors(ip_address=ip_address,
-                                                 iso_mirrors=True)
-    for nearest_mirror in nearest_mirrors:
-        # Hyper clouds (like AWS/Azure) don't have ISOs, because they traffic
-        # is too expensive
-        if nearest_mirror.cloud_type in ('aws', 'azure'):
-            continue
-        _set_isos_link_for_mirror(
-            mirror_info=nearest_mirror,
-            version=version,
-            arch=arch,
-            config=config,
-        )
+    nearest_mirrors = await _get_nearest_mirrors(
+        ip_address=ip_address,
+        get_without_private_mirrors=True,
+        get_mirrors_with_full_set_of_isos=True,
+        get_without_cloud_mirrors=True,
+        get_working_mirrors=True,
+    )
     return mirrors_by_countries, nearest_mirrors
 
 

@@ -13,7 +13,10 @@
             <ul>
                 {% for mirror_info in nearest_mirrors %}
                     <li>
-                        <a href="{{ mirror_info.isos_link }}"
+                        {% if mirror_info.geolocation.country != 'Unknown' %}
+                            <span data-flag="{{ mirror_info.geolocation.country }}"></span>&nbsp;
+                        {% endif %}
+                        <a href="{{ mirror_info.iso_url % (version, arch) }}"
                            target="_blank"
                            class="link-success text-decoration-none">
                             {{ mirror_info.name }} {% include "snipets/link_icon.html" %}
@@ -40,10 +43,15 @@
         <tbody>
             {% for country, mirrors_info in mirror_list.items() %}
                 <tr>
-                    <td>{{ country }}</td>
+                    <td>
+                        {% if mirrors_info[0].geolocation.country != 'Unknown' %}
+                            <span data-flag="{{ mirrors_info[0].geolocation.country }}"></span>&nbsp;
+                        {% endif %}
+                        {{ country }}
+                    </td>
                     <td>
                         {% for mirror_info in mirrors_info %}
-                            <a href="{{ mirror_info.isos_link }}"
+                            <a href="{{ mirror_info.iso_url % (version, arch) }}"
                                class="link-success text-decoration-none"
                                target="_blank">
                                 {{ mirror_info.name }} {% include "snipets/link_icon.html" %}
