@@ -26,7 +26,7 @@
       # CL private mirror
       centos.corp.cloudlinux.com: "77.79.198.14"
       # some public mirror
-      almalinux.ip-connect.info: "77.121.201.30"
+      mirrors.hostico.ro: "77.121.201.30"
       mirrors.nav.ro: "77.121.201.30"
 
 - name: Check vault versions
@@ -72,5 +72,5 @@
   vars:
     mirrors:
       # some public mirror
-      almalinux.ip-connect.info: "77.121.201.30"
+      mirrors.hostico.ro: "77.121.201.30"
       mirrors.nav.ro: "77.121.201.30"

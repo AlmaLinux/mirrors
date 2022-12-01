@@ -76,7 +76,7 @@
                     <td>{{ mirror.status }}</td>
                     <td>{{ mirror.geolocation.continent }}</td>
                     <td>
-                        {% if mirror.geolocation.country != 'Unknown' %}
+                        {% if mirror.geolocation.country not in ('Unknown', 'TW') %}
                             <span data-flag="{{ mirror.geolocation.country }}"></span>&nbsp;
                         {% endif %}
                         {{ mirror.geolocation.country }}

@@ -13,7 +13,7 @@
             <ul>
                 {% for mirror_info in nearest_mirrors %}
                     <li>
-                        {% if mirror_info.geolocation.country != 'Unknown' %}
+                        {% if mirror_info.geolocation.country not in ('Unknown', 'TW') %}
                             <span data-flag="{{ mirror_info.geolocation.country }}"></span>&nbsp;
                         {% endif %}
                         <a href="{{ mirror_info.iso_url % (version, arch) }}"
@@ -44,7 +44,7 @@
             {% for country, mirrors_info in mirror_list.items() %}
                 <tr>
                     <td>
-                        {% if mirrors_info[0].geolocation.country != 'Unknown' %}
+                        {% if mirrors_info[0].geolocation.country not in ('Unknown', 'TW') %}
                             <span data-flag="{{ mirrors_info[0].geolocation.country }}"></span>&nbsp;
                         {% endif %}
                         {{ country }}
