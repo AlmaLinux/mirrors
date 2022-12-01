@@ -117,6 +117,25 @@ NUMBER_OF_PROCESSES_FOR_MIRRORS_CHECK = 15
 AIOHTTP_TIMEOUT = 30
 
 
+async def check_tasks(
+        created_tasks: list[asyncio.Task],
+) -> bool:
+    done_tasks, pending_tasks = await asyncio.wait(
+        created_tasks,
+        return_when=asyncio.FIRST_COMPLETED,
+    )
+    for future in done_tasks:
+        if not future.result():
+            for pending_task in pending_tasks:
+                pending_task.cancel()
+            return False
+    if not pending_tasks:
+        return True
+    return await check_tasks(
+        pending_tasks,
+    )
+
+
 async def is_url_available(
         url: str,
         http_session: ClientSession,
@@ -573,25 +592,7 @@ async def mirror_available(
         )
     ) for check_url, url_info in urls_for_checking.items()]
 
-    async def _check_tasks(
-            created_tasks: list[asyncio.Task],
-    ) -> bool:
-        done_tasks, pending_tasks = await asyncio.wait(
-            created_tasks,
-            return_when=asyncio.FIRST_COMPLETED,
-        )
-        for future in done_tasks:
-            if not future.result():
-                for pending_task in pending_tasks:
-                    pending_task.cancel()
-                return False
-        if not pending_tasks:
-            return True
-        return await _check_tasks(
-            pending_tasks,
-        )
-
-    result = await _check_tasks(tasks)
+    result = await check_tasks(tasks)
 
     if not result:
         return mirror_name, False

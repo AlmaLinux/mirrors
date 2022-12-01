@@ -49,7 +49,7 @@ class GeoLocationData:
 
     def are_mandatory_fields_empty(self) -> bool:
         return any(
-            item == 'Unknown' or item is None for item in (
+            item in ('Unknown', None) for item in (
                 self.country,
                 self.city,
                 self.state,
@@ -66,7 +66,7 @@ class GeoLocationData:
         )
 
     def __setattr__(self, key, value):
-        if key not in self.__dict__ or self.__dict__[key] == 'Unknown':
+        if key not in self.__dict__ or self.__dict__[key] in ('Unknown', None):
             self.__dict__[key] = value
 
     def update_from_existing_object(self, geo_location_data: GeoLocationData):
@@ -82,6 +82,8 @@ class MirrorData:
     cloud_type: str = ''
     cloud_region: str = ''
     private: bool = False
+    mirror_url: Optional[str] = None
+    iso_url: Optional[str] = None
     location: Optional[LocationData] = None
     geolocation: Optional[GeoLocationData] = None
     name: Optional[str] = None
@@ -105,6 +107,8 @@ class MirrorData:
             cloud_type=dct.get('cloud_type'),
             cloud_region=dct.get('cloud_region'),
             private=dct.get('private'),
+            mirror_url=dct.get('mirror_url'),
+            iso_url=dct.get('iso_url'),
             location=LocationData.load_from_json(
                 dct=dct.get('location') or {},
             ),
