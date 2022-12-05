@@ -17,6 +17,7 @@ dnf_packages:
 python_packages:
   - aiodns==3.0.0
   - aioredis[hiredis]==2.0.0
+  - aiohttp-retry==2.8.3
   - alembic==1.7.4
   - beautifulsoup4==4.10.0
   - blinker==1.4

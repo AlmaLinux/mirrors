@@ -102,6 +102,8 @@ class Mirror(Base):
     status = Column(String, nullable=False)
     update_frequency = Column(DateTime, nullable=False)
     sponsor_name = Column(String, nullable=False)
+    mirror_url = Column(String, nullable=False)
+    iso_url = Column(String, nullable=False)
     sponsor_url = Column(String, nullable=False)
     email = Column(String, nullable=False)
     asn = Column(String, nullable=True)
@@ -110,6 +112,7 @@ class Mirror(Base):
     private = Column(Boolean, nullable=True, default=False)
     monopoly = Column(Boolean, nullable=True, default=False)
     ipv6 = Column(Boolean, nullable=False, default=False)
+    has_full_iso_set = Column(Boolean, nullable=False, default=False)
     urls = relationship(
         'Url',
         secondary=mirrors_urls,
@@ -165,7 +168,9 @@ class Mirror(Base):
             cloud_region=self.cloud_region,
             private=False if self.private is None else self.private,
             monopoly=False if self.monopoly is None else self.monopoly,
-            ipv6=self.ipv6
+            ipv6=self.ipv6,
+            mirror_url=self.mirror_url,
+            iso_url=self.iso_url,
         )
 
     def get_subnets(self) -> list[str]:

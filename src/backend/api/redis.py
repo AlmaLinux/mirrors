@@ -36,10 +36,13 @@ async def redis_context():
 
 async def get_mirrors_from_cache(
         key: str,
+        get_mirrors_with_full_set_of_isos: bool = False,
 ) -> Optional[list[MirrorData]]:
     """
     Get a cached list of mirrors for specified IP
     """
+    if get_mirrors_with_full_set_of_isos:
+        key = f'{key}_iso'
     async with redis_context() as redis_engine:
         mirrors_string = await redis_engine.get(str(key))
     if mirrors_string is not None:
@@ -53,10 +56,13 @@ async def get_mirrors_from_cache(
 async def set_mirrors_to_cache(
         key: str,
         mirrors: list[MirrorData],
+        get_mirrors_with_full_set_of_isos: bool = False,
 ) -> None:
     """
     Save a mirror list for specified IP to cache
     """
+    if get_mirrors_with_full_set_of_isos:
+        key = f'{key}_iso'
     async with redis_context() as redis_engine:
         mirrors = json.dumps(mirrors, cls=DataClassesJSONEncoder)
         await redis_engine.set(
@@ -170,53 +176,90 @@ async def get_mirror_flapped(mirror_name: str) -> bool:
 
 async def set_mirror_list(
         mirrors: list[MirrorData],
-        are_ok_and_not_from_clouds: bool = False,
-        without_private_mirrors: bool = True,
+        get_working_mirrors: bool = False,
+        get_without_cloud_mirrors: bool = False,
+        get_without_private_mirrors: bool = False,
+        get_mirrors_with_full_set_of_isos: bool = False
 ) -> None:
     """
-    Save a list of mirrors to cache
-    :param are_ok_and_not_from_clouds: Save a list of not expired and not cloud
-           mirrors if the param is True, else - save all mirrors
+    Save a mirrors list to Redis cache
     :param mirrors: list of cached mirrors
-    :param without_private_mirrors: exclude private mirrors from a list
+    :param get_working_mirrors: select mirrors which are not expired
+    :param get_without_cloud_mirrors: select mirrors without those who are
+           hosted in clouds (Azure/AWS)
+    :param get_without_private_mirrors: select mirrors without those who are
+           hosted behind NAT
+    :param get_mirrors_with_full_set_of_isos: select mirrors which have full
+           set of ISOs and them artifacts (CHECKSUM, manifests)
+           per each version and architecture
     """
-    redis_key = _get_redis_key_for_the_mirrors_list(
-        are_ok_and_not_from_clouds=are_ok_and_not_from_clouds,
-        without_private_mirrors=without_private_mirrors,
-    )
+    redis_key = _generate_redis_key_for_the_mirrors_list(
+        get_working_mirrors=get_working_mirrors,
+        get_without_cloud_mirrors=get_without_cloud_mirrors,
+        get_without_private_mirrors=get_without_private_mirrors,
+        get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos)
     async with redis_context() as redis_engine:
         mirrors = json.dumps(mirrors, cls=DataClassesJSONEncoder)
         await redis_engine.set(redis_key, mirrors, MIRRORS_LIST_EXPIRED_TIME)
 
 
-def _get_redis_key_for_the_mirrors_list(
-        are_ok_and_not_from_clouds: bool = False,
-        without_private_mirrors: bool = True,
+def _generate_redis_key_for_the_mirrors_list(
+        get_working_mirrors: bool = False,
+        get_without_cloud_mirrors: bool = False,
+        get_without_private_mirrors: bool = False,
+        get_mirrors_with_full_set_of_isos: bool = False,
 ) -> str:
-    if are_ok_and_not_from_clouds and without_private_mirrors:
-        redis_key = 'mirror_list_are_ok_and_not_from_clouds_without_private'
-    elif are_ok_and_not_from_clouds and not without_private_mirrors:
-        redis_key = 'mirror_list_are_ok_and_not_from_clouds_with_private'
-    elif not are_ok_and_not_from_clouds and without_private_mirrors:
-        redis_key = 'mirror_list_without_private'
+    """
+    Generate key of a redis value by passed options
+    :param get_working_mirrors: select mirrors which are not expired
+    :param get_without_cloud_mirrors: select mirrors without those who are
+           hosted in clouds (Azure/AWS)
+    :param get_without_private_mirrors: select mirrors without those who are
+           hosted behind NAT
+    :param get_mirrors_with_full_set_of_isos: select mirrors which have full
+           set of ISOs and them artifacts (CHECKSUM, manifests)
+           per each version and architecture
+    """
+    redis_key = 'mirrors_list_'
+    redis_key_suffixes = []
+    if get_working_mirrors:
+        redis_key_suffixes += 'actual'
+    if get_without_cloud_mirrors:
+        redis_key_suffixes += 'no_cloud'
+    if get_without_private_mirrors:
+        redis_key_suffixes += 'no_private'
+    if get_mirrors_with_full_set_of_isos:
+        redis_key_suffixes += 'iso'
+    if redis_key_suffixes:
+        redis_key_suffix = ','.join(sorted(redis_key_suffixes))
     else:
-        redis_key = 'mirror_list_with_private'
-    return redis_key
+        redis_key_suffix = 'full'
+
+    return redis_key + redis_key_suffix
 
 
 async def get_mirror_list(
-        are_ok_and_not_from_clouds: bool = False,
-        without_private_mirrors: bool = True,
+        get_working_mirrors: bool = False,
+        get_without_cloud_mirrors: bool = False,
+        get_without_private_mirrors: bool = False,
+        get_mirrors_with_full_set_of_isos: bool = False
 ) -> Optional[list[MirrorData]]:
     """
     Get a list of mirrors from cache
-    :param are_ok_and_not_from_clouds: Get a list of not expired and not cloud
-           mirrors if the param is True, else - get all mirrors
-    :param without_private_mirrors: exclude private mirrors from a list
+    :param get_working_mirrors: select mirrors which are not expired
+    :param get_without_cloud_mirrors: select mirrors without those who are
+           hosted in clouds (Azure/AWS)
+    :param get_without_private_mirrors: select mirrors without those who are
+           hosted behind NAT
+    :param get_mirrors_with_full_set_of_isos: select mirrors which have full
+           set of ISOs and them artifacts (CHECKSUM, manifests)
+           per each version and architecture
     """
-    redis_key = _get_redis_key_for_the_mirrors_list(
-        are_ok_and_not_from_clouds=are_ok_and_not_from_clouds,
-        without_private_mirrors=without_private_mirrors,
+    redis_key = _generate_redis_key_for_the_mirrors_list(
+        get_working_mirrors=get_working_mirrors,
+        get_without_cloud_mirrors=get_without_cloud_mirrors,
+        get_without_private_mirrors=get_without_private_mirrors,
+        get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos,
     )
     async with redis_context() as redis_engine:
         mirror_list = await redis_engine.get(redis_key)
