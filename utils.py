@@ -2,7 +2,10 @@
 import asyncio
 import json
 import os
-from asyncio.exceptions import TimeoutError, CancelledError
+from asyncio.exceptions import (
+    TimeoutError,
+    CancelledError,
+)
 from logging import Logger
 from pathlib import Path
 from typing import Optional, Union
@@ -24,7 +27,8 @@ from .data_models import (
     MainConfig,
     RepoData,
     GeoLocationData,
-    MirrorData, LocationData,
+    MirrorData,
+    LocationData,
 )
 
 # set User-Agent for python-requests
@@ -380,7 +384,6 @@ def process_mirror_config(
             yaml_data.get('geolocation', {}),
         ),
         private=yaml_data.get('private', False),
-        monopoly=yaml_data.get('monopoly', False),
     )
 
 
@@ -430,16 +433,18 @@ def get_mirror_config(
 def get_mirrors_info(
         mirrors_dir: str,
         logger: Logger,
+        main_config: MainConfig,
         path_to_json_schema: str = os.path.join(
             os.path.dirname(os.path.realpath(__file__)),
             'json_schemas/service_config',
-        )
+        ),
 ) -> list[MirrorData]:
     """
     Extract info about all mirrors from yaml files
     :param mirrors_dir: path to the directory which contains
            config files of mirrors
     :param logger: instance of Logger class
+    :param main_config: main config of the mirrors service
     :param path_to_json_schema: path to JSON schema of a mirror's config
     """
     # global ALL_MIRROR_PROTOCOLS
@@ -451,6 +456,10 @@ def get_mirrors_info(
             path_to_json_schema=path_to_json_schema,
         )
         if mirror_info is not None:
+            mirror_info.mirror_url = get_mirror_url(
+                main_config=main_config,
+                mirror_info=mirror_info,
+            )
             result.append(mirror_info)
 
     return result
@@ -485,6 +494,16 @@ def _is_permitted_arch_for_this_version_and_repo(
         return False
 
 
+def get_mirror_url(
+        main_config: MainConfig,
+        mirror_info: MirrorData,
+):
+    return next(
+        url for url_type, url in mirror_info.urls.items()
+        if url_type in main_config.required_protocols
+    )
+
+
 async def mirror_available(
         mirror_info: MirrorData,
         http_session: ClientSession,
@@ -507,19 +526,6 @@ async def mirror_available(
             mirror_name,
         )
         return mirror_name, True
-    try:
-        urls = mirror_info.urls  # type: dict[str, str]
-        mirror_url = next(
-            address for protocol_type, address in urls.items()
-            if protocol_type in main_config.required_protocols
-        )
-    except StopIteration:
-        logger.error(
-            'Mirror "%s" has no one address with protocols "%s"',
-            mirror_name,
-            main_config.required_protocols,
-        )
-        return mirror_name, False
     urls_for_checking = {}
     for version in main_config.versions:
         # cloud mirrors (Azure/AWS) don't store beta versions
@@ -555,7 +561,7 @@ async def mirror_available(
                 url_for_check = urljoin(
                     urljoin(
                         urljoin(
-                            mirror_url + '/',
+                            mirror_info.mirror_url + '/',
                             str(version),
                         ) + '/',
                         repo_path,
