@@ -1,4 +1,5 @@
 # coding=utf-8
+from __future__ import annotations
 from collections import defaultdict
 from json import JSONEncoder
 from typing import Optional
@@ -24,40 +25,65 @@ class DataClassesJSONEncoder(JSONEncoder):
 
 @dataclass
 class LocationData:
-    latitude: Optional[float] = None
-    longitude: Optional[float] = None
+    # outside ranges
+    # latitude (-90 to 90)
+    # longitude (-180 to 180)
+    latitude: float = -91
+    longitude: float = -181
 
     @staticmethod
     def load_from_json(dct: dict[str, float]):
         return LocationData(
-            latitude=dct.get('latitude'),
-            longitude=dct.get('longitude'),
+            latitude=dct.get('latitude', -91),
+            longitude=dct.get('longitude', -181),
         )
 
 
 @dataclass
 class GeoLocationData:
-    continent: Optional[str] = None
-    country: Optional[str] = None
-    state: Optional[str] = None
-    city: Optional[str] = None
+
+    continent: str = 'Unknown'
+    country: str = 'Unknown'
+    state: str = 'Unknown'
+    city: str = 'Unknown'
+
+    def are_mandatory_fields_empty(self) -> bool:
+        return any(
+            item in ('Unknown', None) for item in (
+                self.country,
+                self.city,
+                self.state,
+            )
+        )
 
     @staticmethod
     def load_from_json(dct: dict[str, str]):
         return GeoLocationData(
-            continent=dct.get('continent'),
-            country=dct.get('country'),
-            state=dct.get('state_province'),
-            city=dct.get('city'),
+            continent=dct.get('continent', 'Unknown'),
+            country=dct.get('country', 'Unknown'),
+            state=dct.get('state_province', 'Unknown'),
+            city=dct.get('city', 'Unknown'),
         )
+
+    def __setattr__(self, key, value):
+        if key not in self.__dict__ or self.__dict__[key] in ('Unknown', None):
+            self.__dict__[key] = value
+
+    def update_from_existing_object(self, geo_location_data: GeoLocationData):
+        self.continent = geo_location_data.continent
+        self.country = geo_location_data.country
+        self.state = geo_location_data.state
+        self.city = geo_location_data.city
 
 
 @dataclass
 class MirrorData:
-    status: str = "ok"
+    status: str = "Unknown"
     cloud_type: str = ''
     cloud_region: str = ''
     private: bool = False
+    mirror_url: Optional[str] = None
+    iso_url: Optional[str] = None
     location: Optional[LocationData] = None
     geolocation: Optional[GeoLocationData] = None
     name: Optional[str] = None
@@ -72,6 +98,7 @@ class MirrorData:
     monopoly: bool = False
     urls: dict[str, str] = field(default_factory=dict)
     subnets: list[str] = field(default_factory=list)
+    has_full_iso_set: bool = False
 
     @staticmethod
     def load_from_json(dct: dict):
@@ -80,6 +107,8 @@ class MirrorData:
             cloud_type=dct.get('cloud_type'),
             cloud_region=dct.get('cloud_region'),
             private=dct.get('private'),
+            mirror_url=dct.get('mirror_url'),
+            iso_url=dct.get('iso_url'),
             location=LocationData.load_from_json(
                 dct=dct.get('location') or {},
             ),
@@ -97,7 +126,8 @@ class MirrorData:
             asn=dct.get('asn'),
             urls=dct.get('urls'),
             subnets=dct.get('subnets'),
-            monopoly=dct.get('monopoly')
+            monopoly=dct.get('monopoly'),
+            has_full_iso_set=dct.get('has_full_iso_set'),
         )
 
     def to_json(self):

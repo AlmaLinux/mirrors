@@ -1,16 +1,23 @@
 #!/usr/bin/env python3
+import asyncio
 import json
-from asyncio.exceptions import TimeoutError
 import os
+from asyncio.exceptions import (
+    TimeoutError,
+    CancelledError,
+)
 from logging import Logger
+from pathlib import Path
+from typing import Optional, Union
+from urllib.parse import urljoin
 
 import requests
 import yaml
-
-from pathlib import Path
-from typing import Optional, Union
-
-from aiohttp import ClientSession, ClientError
+from aiohttp import (
+    ClientSession,
+    ClientError,
+)
+from aiohttp.web_exceptions import HTTPError
 from jsonschema import (
     ValidationError,
     validate,
@@ -21,19 +28,13 @@ from .data_models import (
     RepoData,
     GeoLocationData,
     MirrorData,
+    LocationData,
 )
-
 
 # set User-Agent for python-requests
 HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 '
-                  '(KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36',
-    "Upgrade-Insecure-Requests": "1",
-    "DNT": "1",
-    "Accept": "text/html,application/xhtml+xml,"
-              "application/xml;q=0.9,*/*;q=0.8",
-    "Accept-Language": "en-US,en;q=0.5",
-    "Accept-Encoding": "gzip, deflate"
+    'User-Agent': 'curl/7.61.1',
+    'Accept': '*/*',
 }
 # the list of mirrors which should be always available
 WHITELIST_MIRRORS = (
@@ -120,6 +121,66 @@ NUMBER_OF_PROCESSES_FOR_MIRRORS_CHECK = 15
 AIOHTTP_TIMEOUT = 30
 
 
+async def check_tasks(
+        created_tasks: list[asyncio.Task],
+) -> bool:
+    done_tasks, pending_tasks = await asyncio.wait(
+        created_tasks,
+        return_when=asyncio.FIRST_COMPLETED,
+    )
+    for future in done_tasks:
+        if not future.result():
+            for pending_task in pending_tasks:
+                pending_task.cancel()
+            return False
+    if not pending_tasks:
+        return True
+    return await check_tasks(
+        pending_tasks,
+    )
+
+
+async def is_url_available(
+        url: str,
+        http_session: ClientSession,
+        logger: Logger,
+        is_get_request: bool,
+        success_msg: Optional[str],
+        success_msg_vars: Optional[dict],
+        error_msg: Optional[str],
+        error_msg_vars: Optional[dict],
+):
+    try:
+        if is_get_request:
+            method = 'get'
+        else:
+            method = 'head'
+        response = await http_session.request(
+            method=method,
+            url=str(url),
+            headers=HEADERS,
+        )
+        if is_get_request:
+            await response.text()
+        if success_msg is not None and success_msg_vars is not None:
+            logger.info(success_msg, success_msg_vars)
+        return True
+    except (
+            TimeoutError,
+            HTTPError,
+            ClientError,
+            # E.g. repomd.xml is broken.
+            # It can't be decoded in that case
+            UnicodeError,
+    ) as err:
+        if error_msg is not None and error_msg_vars is not None:
+            error_msg_vars['err'] = str(err) or type(err)
+            logger.warning(error_msg, error_msg_vars)
+        return False
+    except CancelledError:
+        return False
+
+
 def load_json_schema(
         path: str,
 ) -> dict:
@@ -178,27 +239,14 @@ def process_main_config(
         return repo_attributes
 
     try:
-        duplicated_versions = yaml_data['duplicated_versions']
-        # TODO: remove 2nd branch of the condition after update the production
         vault_versions = [
             str(version) for version in yaml_data.get('vault_versions', [])
         ]
-        if isinstance(duplicated_versions, dict):
-            duplicated_versions = {
-                major: minor for major, minor in duplicated_versions.items()
-            }
-        else:
-            stable_active_versions = [
-                ver for version in yaml_data['versions']
-                if (ver := str(version)) not in vault_versions
-                and 'beta' not in ver
-            ]
-            duplicated_versions = {
-                major: next(
-                    ver for ver in stable_active_versions
-                    if ver.startswith(major) and ver not in duplicated_versions
-                ) for major in duplicated_versions
-            }
+        duplicated_versions = {
+            str(major): str(minor) for major, minor
+            in yaml_data['duplicated_versions'].items()
+        }
+
         return MainConfig(
             allowed_outdate=yaml_data['allowed_outdate'],
             mirrors_dir=yaml_data['mirrors_dir'],
@@ -331,11 +379,11 @@ def process_mirror_config(
         asn=_extract_asn(yaml_data.get('asn')),
         cloud_type=yaml_data.get('cloud_type', ''),
         cloud_region=','.join(yaml_data.get('cloud_regions', [])),
+        location=LocationData(),
         geolocation=GeoLocationData.load_from_json(
             yaml_data.get('geolocation', {}),
         ),
         private=yaml_data.get('private', False),
-        monopoly=yaml_data.get('monopoly', False),
     )
 
 
@@ -385,16 +433,18 @@ def get_mirror_config(
 def get_mirrors_info(
         mirrors_dir: str,
         logger: Logger,
+        main_config: MainConfig,
         path_to_json_schema: str = os.path.join(
             os.path.dirname(os.path.realpath(__file__)),
             'json_schemas/service_config',
-        )
+        ),
 ) -> list[MirrorData]:
     """
     Extract info about all mirrors from yaml files
     :param mirrors_dir: path to the directory which contains
            config files of mirrors
     :param logger: instance of Logger class
+    :param main_config: main config of the mirrors service
     :param path_to_json_schema: path to JSON schema of a mirror's config
     """
     # global ALL_MIRROR_PROTOCOLS
@@ -406,6 +456,10 @@ def get_mirrors_info(
             path_to_json_schema=path_to_json_schema,
         )
         if mirror_info is not None:
+            mirror_info.mirror_url = get_mirror_url(
+                main_config=main_config,
+                mirror_info=mirror_info,
+            )
             result.append(mirror_info)
 
     return result
@@ -440,6 +494,16 @@ def _is_permitted_arch_for_this_version_and_repo(
         return False
 
 
+def get_mirror_url(
+        main_config: MainConfig,
+        mirror_info: MirrorData,
+):
+    return next(
+        url for url_type, url in mirror_info.urls.items()
+        if url_type in main_config.required_protocols
+    )
+
+
 async def mirror_available(
         mirror_info: MirrorData,
         http_session: ClientSession,
@@ -462,19 +526,7 @@ async def mirror_available(
             mirror_name,
         )
         return mirror_name, True
-    try:
-        urls = mirror_info.urls  # type: dict[str, str]
-        mirror_url = next(
-            address for protocol_type, address in urls.items()
-            if protocol_type in main_config.required_protocols
-        )
-    except StopIteration:
-        logger.error(
-            'Mirror "%s" has no one address with protocols "%s"',
-            mirror_name,
-            main_config.required_protocols,
-        )
-        return mirror_name, False
+    urls_for_checking = {}
     for version in main_config.versions:
         # cloud mirrors (Azure/AWS) don't store beta versions
         if mirror_info.cloud_type and 'beta' in version:
@@ -506,45 +558,50 @@ async def mirror_available(
                 ):
                     continue
                 repo_path = repo_data.path.replace('$basearch', arch)
-                check_url = os.path.join(
-                    mirror_url,
-                    str(version),
-                    repo_path,
+                url_for_check = urljoin(
+                    urljoin(
+                        urljoin(
+                            mirror_info.mirror_url + '/',
+                            str(version),
+                        ) + '/',
+                        repo_path,
+                    ) + '/',
                     'repodata/repomd.xml',
                 )
-                try:
-                    async with http_session.get(
-                            check_url,
-                            headers=HEADERS,
-                            timeout=AIOHTTP_TIMEOUT,
-                    ) as resp:
-                        await resp.text()
-                        if resp.status != 200:
-                            # if mirror has no valid version/arch combos,
-                            # so it is dead
-                            logger.warning(
-                                'Mirror "%s" has one or more invalid '
-                                'repositories by path "%s"',
-                                mirror_name,
-                                check_url,
-                            )
-                            return mirror_name, False
-                except (
-                        ClientError,
-                        TimeoutError,
-                        UnicodeError,
-                ) as err:
-                    # We want to unified error message, so I used logging
-                    # level `error` instead logging level `exception`
-                    logger.warning(
-                        'Mirror "%s" is not available for version '
-                        '"%s" and repo path "%s" because "%s"',
-                        mirror_name,
-                        version,
-                        repo_path,
-                        str(err) or type(err),
-                    )
-                    return mirror_name, False
+                urls_for_checking[url_for_check] = {
+                    'version': version,
+                    'repo_path': repo_path,
+                }
+
+    success_msg = (
+        'Mirror "%(name)s" is available by url "%(url)s"'
+    )
+    error_msg = (
+        'Mirror "%(name)s" is not available for version '
+        '"%(version)s" and repo path "%(repo)s" because "%(err)s"'
+    )
+
+    tasks = [asyncio.ensure_future(
+        is_url_available(
+            url=check_url,
+            http_session=http_session,
+            logger=logger,
+            is_get_request=True,
+            success_msg=success_msg,
+            success_msg_vars=None,
+            error_msg=error_msg,
+            error_msg_vars={
+                'name': mirror_name,
+                'version': url_info['version'],
+                'repo': url_info['repo_path'],
+            },
+        )
+    ) for check_url, url_info in urls_for_checking.items()]
+
+    result = await check_tasks(tasks)
+
+    if not result:
+        return mirror_name, False
     logger.info(
         'Mirror "%s" is available',
         mirror_name,
