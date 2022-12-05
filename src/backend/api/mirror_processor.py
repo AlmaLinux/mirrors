@@ -40,6 +40,7 @@ from yaml_snippets.utils import (
     is_url_available,
     WHITELIST_MIRRORS,
     check_tasks,
+    get_mirror_url,
 )
 
 
@@ -150,16 +151,6 @@ class MirrorProcessor:
             for subnet in subnets[cloud_region]
         ]
 
-    @staticmethod
-    def get_mirror_url(
-            main_config: MainConfig,
-            mirror_info: MirrorData,
-    ):
-        return next(
-            url for url_type, url in mirror_info.urls.items()
-            if url_type in main_config.required_protocols
-        )
-
     async def set_ip_for_mirror(
             self,
             mirror_info: MirrorData,
@@ -175,17 +166,9 @@ class MirrorProcessor:
                 mirror_info.name,
             )
         mirror_info.ip = ip
-
-    async def set_mirror_url(
-            self,
-            mirror_info: MirrorData,
-            main_config: MainConfig,
-    ):
-        self.logger.info('Set mirror URL for "%s"', mirror_info.name)
-        mirror_info.mirror_url = self.get_mirror_url(
-            main_config=main_config,
-            mirror_info=mirror_info,
-        )
+        # TODO: Set separate status for mirrors with unknown IP in future
+        # if mirror_info.ip in ('Unknown', None):
+        #     mirror_info.status = 'without IP'
 
     async def set_iso_url(
             self,
@@ -197,7 +180,7 @@ class MirrorProcessor:
             '%s/isos/%s',
         )
 
-    async def set_geo_and_location_data_from_offline_database(
+    async def set_geo_and_location_data_from_db(
             self,
             mirror_info: MirrorData,
     ):
@@ -307,18 +290,50 @@ class MirrorProcessor:
             mirror_info: MirrorData,
             main_config: MainConfig,
     ):
-        if await get_mirror_flapped(mirror_name=mirror_info.name):
-            return False
         self.logger.info(
             'Set status for mirror "%s"',
             mirror_info.name,
         )
+        if await get_mirror_flapped(mirror_name=mirror_info.name):
+            mirror_info.status = 'flapping'
+            return False
         if mirror_info.private or mirror_info.name in WHITELIST_MIRRORS:
             self.logger.info(
                 'Mirror "%s" is private or in exclusion list',
                 mirror_info.name,
             )
             mirror_info.status = "ok"
+            return
+        if not await is_url_available(
+                url=mirror_info.mirror_url,
+                http_session=self.client_session,
+                logger=self.logger,
+                is_get_request=True,
+                success_msg=None,
+                success_msg_vars=None,
+                error_msg='Mirror "%(mirror_name)s" '
+                          'is not available by url "%(url)s"',
+                error_msg_vars={
+                    'mirror_name': mirror_info.name,
+                    'url': mirror_info.mirror_url,
+                },
+        ):
+            self.logger.info(
+                'Mirror "%s" is not available',
+                mirror_info.name,
+            )
+            await set_mirror_flapped(mirror_name=mirror_info.name)
+            mirror_info.status = 'flapping'
+            return
+        if await self.is_mirror_expired(
+            mirror_info=mirror_info,
+            main_config=main_config,
+        ):
+            self.logger.info(
+                'Mirror "%s" is expired',
+                mirror_info.name,
+            )
+            mirror_info.status = 'expired'
             return
         mirror_name, is_available = await mirror_available(
             mirror_info=mirror_info,
@@ -334,22 +349,11 @@ class MirrorProcessor:
             await set_mirror_flapped(mirror_name=mirror_info.name)
             mirror_info.status = 'flapping'
             return
-        is_mirror_expired = await self.is_mirror_expired(
-            mirror_info=mirror_info,
-            main_config=main_config,
+        self.logger.info(
+            'Mirror "%s" is actual',
+            mirror_info.name,
         )
-        if is_mirror_expired:
-            self.logger.info(
-                'Mirror "%s" is expired',
-                mirror_info.name,
-            )
-            mirror_info.status = 'expired'
-        else:
-            self.logger.info(
-                'Mirror "%s" is actual',
-                mirror_info.name,
-            )
-            mirror_info.status = 'ok'
+        mirror_info.status = 'ok'
 
     async def is_mirror_expired(
             self,
@@ -360,7 +364,7 @@ class MirrorProcessor:
             f'now-{main_config.allowed_outdate} UTC'
         ).timestamp()
         timestamp_url = urljoin(
-            self.get_mirror_url(
+            get_mirror_url(
                 main_config=main_config,
                 mirror_info=mirror_info,
             ) + '/',

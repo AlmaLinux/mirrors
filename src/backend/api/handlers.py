@@ -241,6 +241,7 @@ async def update_mirrors_handler() -> str:
     all_mirrors = get_mirrors_info(
         mirrors_dir=mirrors_dir,
         logger=logger,
+        main_config=main_config,
         path_to_json_schema=MIRROR_CONFIG_JSON_SCHEMA_DIR_PATH,
     )
 
@@ -288,14 +289,6 @@ async def update_mirrors_handler() -> str:
                 ))
                 await asyncio.gather(*(
                     asyncio.ensure_future(
-                        mirror_processor.set_mirror_url(
-                            mirror_info=mirror_info,
-                            main_config=main_config,
-                        )
-                    ) for mirror_info in all_mirrors[i:next_slice]
-                ))
-                await asyncio.gather(*(
-                    asyncio.ensure_future(
                         mirror_processor.set_iso_url(
                             mirror_info=mirror_info,
                         )
@@ -321,7 +314,7 @@ async def update_mirrors_handler() -> str:
                 ))
                 await asyncio.gather(*(
                     asyncio.ensure_future(
-                        mirror_processor.set_geo_and_location_data_from_offline_database(
+                        mirror_processor.set_geo_and_location_data_from_db(
                             mirror_info=mirror_info)
                     ) for mirror_info in all_mirrors[i:next_slice]
                     if mirror_info.status in ('ok', 'expired')
