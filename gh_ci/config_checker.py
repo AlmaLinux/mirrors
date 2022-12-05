@@ -169,6 +169,13 @@ def main(args):
             err,
         )
         exit(1)
+    main_config, err_msg = process_main_config(yaml_data=service_config_data)
+    if err_msg:
+        logger.error(
+            'Main config of the mirror service is invalid because "%s"',
+            err_msg,
+        )
+        exit(1)
     exit_code = 0
     for mirror_config in args.mirror_configs:
         mirror_config_data = mirror_config['config_data']
@@ -200,6 +207,7 @@ def main(args):
         process_mirror_config(
             yaml_data=mirror_config['config_data'],
             logger=logger,
+            main_config=main_config,
         )
         for mirror_config in args.mirror_configs
     ]
