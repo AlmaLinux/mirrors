@@ -1,0 +1,14 @@
+---
+name: mirror.wwfx.net
+address:
+  http: http://mirror.wwfx.net/alma/
+  https: https://mirror.wwfx.net/alma/
+geolocation:
+  country: BG
+  state_province: Sofia
+  city: Sofia
+update_frequency: 3h
+sponsor: Worldwide Fx
+sponsor_url: https://wwfx.net
+email: bg.tech@wwfx.net
+...
