@@ -5,6 +5,7 @@ address:
   https: https://mirror.herza.id/almalinux/
   rsync: rsync://mirror.herza.id/almalinux
 geolocation:
+  continent: Asia
   country: ID
   state_province: DKI Jakarta
   city: Jakarta Selatan
@@ -12,10 +13,5 @@ update_frequency: 3h
 sponsor: Herza Cloud
 sponsor_url: https://herza.id
 email: noc@herza.id
-geolocation:
-  continent: South East Asia
-  country: ID
-  state_province: DKI Jakarta
-  city: Jakarta Selatan
 asn: 140443
 ...
