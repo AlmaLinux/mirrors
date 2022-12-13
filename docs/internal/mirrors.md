@@ -137,4 +137,4 @@ alma.serversaustralia.com.au|[Servers Australia Pty Ltd](https://serversaustrali
 mirrors.cloudfly.vn|[Cloudfly](https://cloudfly.vn/)|ok|Vietnam|[Mirror](https://mirrors.cloudfly.vn/almalinux)|[Mirror](http://mirrors.cloudfly.vn/almalinux)||
 mirrors.bkns.vn|[BKNS.VN](https://www.bkns.vn/)|ok|Vietnam|[Mirror](https://mirrors.bkns.vn/almalinux)|[Mirror](http://mirrors.bkns.vn/almalinux)|[Link](rsync://mirrors.bkns.vn/almalinux)|
 mirrors.inet.vn|[iNET Software](https://inet.vn/)|ok|Vietnam|[Mirror](https://mirrors.inet.vn/almalinux)|[Mirror](http://mirrors.inet.vn/almalinux)||
-mirrors.tino.vn|[iNET Software](https://tino.vn/)|ok|Vietnam|[Mirror](https://mirrors.tino.vn/almalinux)|[Mirror](http://mirrors.tino.vn/almalinux)||
+mirrors.tino.vn|[Tino Group](https://tino.vn/)|ok|Vietnam|[Mirror](https://mirrors.tino.vn/almalinux)|[Mirror](http://mirrors.tino.vn/almalinux)||
