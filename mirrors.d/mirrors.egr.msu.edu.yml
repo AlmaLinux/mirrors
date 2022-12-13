@@ -1,0 +1,15 @@
+name: mirrors.egr.msu.edu
+address:
+  http: http://mirrors.egr.msu.edu/almalinux
+  https: https://mirrors.egr.msu.edu/almalinux
+update_frequency: 3h
+sponsor: Spartan Linux Users Group
+sponsor_url: https://mirrors.egr.msu.edu/about.html
+email: mirror-admin@egr.msu.edu
+geolocation:
+  continent: North America
+  country: US
+  state_province: Michigan
+  city: East Lansing
+private: false
+monopoly: false
