@@ -1,0 +1,9 @@
+name: mirrors.tino.vn
+address:
+  http: http://mirrors.tino.vn/almalinux/
+  https: https://mirrors.tino.vn/almalinux/
+  rsync: rsync://mirrors.tino.vn/almalinux
+update_frequency: 12h
+sponsor: TINO GROUP
+sponsor_url: https://tino.org/
+email: support@tino.org
