@@ -1,0 +1,19 @@
+---
+name: mirrors.ucr.ac.cr
+address:
+  http: http://mirrors.ucr.ac.cr/almalinux/
+  https: https://mirrors.ucr.ac.cr/almalinux/
+  rsync: rsync://mirrors.ucr.ac.cr/almalinux/
+  ftp: ftp://mirrors.ucr.ac.cr/almalinux/
+update_frequency: 3h
+sponsor: Universidad de Costa Rica
+sponsor_url: https://www.ucr.ac.cr/
+email: software.libre@ucr.ac.cr
+geolocation:
+  continent: Central America
+  country: CR
+  state_province: San José
+  city: Montes de Oca
+private: false
+monopoly: false
+asn: 263683
