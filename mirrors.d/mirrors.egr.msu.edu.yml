@@ -13,3 +13,5 @@ geolocation:
   city: East Lansing
 private: false
 monopoly: false
+asn:
+  - 231
