@@ -2,7 +2,7 @@ name: mirror.onlinehosting.com.tr
 address:
   http: http://mirror.onlinehosting.com.tr/almalinux/
   https: https://mirror.onlinehosting.com.tr/almalinux/
-  rsync://mirror.onlinehosting.com.tr/almalinux/
+  rsync: rsync://mirror.onlinehosting.com.tr/almalinux/
 geolocation:
   country: TR
   state_province: Ankara
