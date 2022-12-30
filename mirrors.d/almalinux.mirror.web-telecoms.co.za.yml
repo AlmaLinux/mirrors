@@ -1,0 +1,14 @@
+---
+name: almalinux.mirror.web-telecoms.co.za
+address:
+  http: http://almalinux.mirror.web-telecoms.co.za/
+  https: https://almalinux.mirror.web-telecoms.co.za/
+geolocation:
+  country: ZA
+  state_province: Western Cape
+  city: Cape Town
+update_frequency: 3h
+sponsor: Web Telecom Services
+sponsor_url: https://www.web-telecoms.co.za/
+email: mirrors@web-telecoms.co.za
+...
