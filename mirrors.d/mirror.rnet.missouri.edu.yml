@@ -2,6 +2,7 @@ name: mirror.rnet.missouri.edu
 address:
   http: http://mirror.rnet.missouri.edu/almalinux
   https: https://mirror.rnet.missouri.edu/almalinux
+  rsync: rsync://mirror.rnet.missouri.edu/almalinux
 update_frequency: 3h
 sponsor: University of Missouri IT Research Support Solutions
 sponsor_url: https://doit.missouri.edu/services/research/
