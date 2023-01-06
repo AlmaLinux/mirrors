@@ -7,8 +7,8 @@ address:
 ftp: none
 update_frequency: 1 h
 sponsor: Netdirekt A.S.
-sponsor_url: https: //www.netdirekt.com.tr
-                email: nobetci @netdirekt.com.tr
+sponsor_url: https://www.netdirekt.com.tr
+                email: nobetci@netdirekt.com.tr
 geolocation:
                 continent: asia
 country: Turkey
