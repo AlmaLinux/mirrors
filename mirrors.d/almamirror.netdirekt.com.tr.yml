@@ -1,8 +1,8 @@
 name: almamirror.netdirekt.com.tr
 cloud_type: None
 address:
-                http: http: //almamirror.netdirekt.com.tr/almalinux/
-                https: https: //almamirror.netdirekt.com.tr/almalinux/
+                http: http://almamirror.netdirekt.com.tr/almalinux/
+                https: https://almamirror.netdirekt.com.tr/almalinux/
                 rsync: none
 ftp: none
 update_frequency: 1 h
