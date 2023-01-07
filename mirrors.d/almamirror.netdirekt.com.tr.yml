@@ -1,19 +1,8 @@
 name: almamirror.netdirekt.com.tr
-cloud_type: None
 address:
-                http: http://almamirror.netdirekt.com.tr/almalinux/
-                https: https://almamirror.netdirekt.com.tr/almalinux/
-                rsync: none
-ftp: none
-update_frequency: 1 h
+  http: http://almamirror.netdirekt.com.tr/almalinux/
+  https: https://almamirror.netdirekt.com.tr/almalinux/
+update_frequency: 1h
 sponsor: Netdirekt A.S.
 sponsor_url: https://www.netdirekt.com.tr
-                email: nobetci@netdirekt.com.tr
-geolocation:
-                continent: asia
-country: Turkey
-state_province: Bornova
-city: Izmir
-private: false
-monopoly: false
-asn: 43391
+email: nobetci@netdirekt.com.tr
