@@ -13,11 +13,9 @@ from urllib.parse import urljoin
 
 import requests
 import yaml
-from aiohttp import (
-    ClientSession,
-    ClientError,
-)
+from aiohttp import ClientError
 from aiohttp.web_exceptions import HTTPError
+from aiohttp_retry.types import ClientType
 from jsonschema import (
     ValidationError,
     validate,
@@ -142,7 +140,7 @@ async def check_tasks(
 
 async def is_url_available(
         url: str,
-        http_session: ClientSession,
+        http_session: ClientType,
         logger: Logger,
         is_get_request: bool,
         success_msg: Optional[str],
@@ -512,7 +510,7 @@ def get_mirror_url(
 
 async def mirror_available(
         mirror_info: MirrorData,
-        http_session: ClientSession,
+        http_session: ClientType,
         main_config: MainConfig,
         logger: Logger,
 ) -> tuple[str, bool]:
