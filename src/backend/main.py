@@ -41,6 +41,7 @@ from flask_bs4 import Bootstrap
 
 
 app = Flask('app')
+app.url_map.strict_slashes = False
 Bootstrap(app)
 logger = get_logger(__name__)
 init_sentry_client()

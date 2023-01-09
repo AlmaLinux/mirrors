@@ -21,6 +21,7 @@ from aiohttp_retry import (
     ExponentialRetry,
     RetryClient,
 )
+from aiohttp_retry.types import ClientType
 from pycountry import countries
 
 from api.redis import (
@@ -47,6 +48,7 @@ from yaml_snippets.utils import (
 class MirrorProcessor:
 
     client_session = None  # type: ClientSession
+    client = None  # type: ClientType
     dns_resolver = None  # type: DNSResolver
     tcp_connector = None  # type: TCPConnector
 
@@ -64,6 +66,7 @@ class MirrorProcessor:
         'client_session',
         'dns_resolver',
         'tcp_connector',
+        'client',
     )
 
     nominatim_url = 'https://nominatim.openstreetmap.org'
@@ -106,7 +109,7 @@ class MirrorProcessor:
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
-        await self.client_session.close()
+        await self.client.close()
 
     async def request(
             self,
@@ -259,6 +262,7 @@ class MirrorProcessor:
             TimeoutError,
             HTTPError,
             ValueError,
+            ClientError,
         ) as err:
             self.logger.warning(
                 'Cannot get geodata for mirror'
@@ -306,13 +310,14 @@ class MirrorProcessor:
             return
         if not await is_url_available(
                 url=mirror_info.mirror_url,
-                http_session=self.client_session,
+                http_session=self.client,
                 logger=self.logger,
                 is_get_request=True,
                 success_msg=None,
                 success_msg_vars=None,
                 error_msg='Mirror "%(mirror_name)s" '
-                          'is not available by url "%(url)s"',
+                          'is not available by url "%(url)s" '
+                          'because "%(err)s"',
                 error_msg_vars={
                     'mirror_name': mirror_info.name,
                     'url': mirror_info.mirror_url,
@@ -337,7 +342,7 @@ class MirrorProcessor:
             return
         mirror_name, is_available = await mirror_available(
             mirror_info=mirror_info,
-            http_session=self.client_session,
+            http_session=self.client,
             main_config=main_config,
             logger=self.logger,
         )
@@ -437,7 +442,7 @@ class MirrorProcessor:
                     mirror_info.mirror_url + '/',
                     iso_uri,
                 )),
-                http_session=self.client_session,
+                http_session=self.client,
                 logger=self.logger,
                 is_get_request=False,
                 success_msg=None,

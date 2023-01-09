@@ -56,9 +56,6 @@
   register: result
   failed_when: "'AlmaLinux ISOs links' not in result.content"
 
-
-
-
 - name: Check some mirrors in a request (ISOLJist)
   uri:
     url: "http://localhost/isolist/8/x86_64"
