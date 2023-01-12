@@ -7,6 +7,20 @@
     state: present
     insertbefore: BOF
 
+- name: Disable RDB snapshots for Redis
+  lineinfile:
+    path: /etc/redis.conf
+    regexp: '^save .*'
+    state: absent
+    insertbefore: BOF
+
+- name: Disable RDB snapshots for Redis
+  lineinfile:
+    path: /etc/redis.conf
+    line: 'save ""'
+    state: present
+    insertbefore: BOF
+
 - name: Enable redis socket
   lineinfile:
     path: /etc/redis.conf

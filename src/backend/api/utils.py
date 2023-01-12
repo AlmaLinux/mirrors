@@ -18,6 +18,7 @@ from aiohttp import (
     ClientConnectorError,
 )
 import geopy
+from aiohttp_retry.types import ClientType
 from bs4 import BeautifulSoup
 from geoip2.errors import AddressNotFoundError
 from geopy.adapters import AioHTTPAdapter
@@ -243,7 +244,7 @@ async def get_aws_subnets_json(http_session: ClientSession) -> Optional[dict]:
     return response_json
 
 
-async def get_azure_subnets(http_session: ClientSession):
+async def get_azure_subnets(http_session: ClientType):
     subnets = await get_subnets_from_cache('azure_subnets')
     if subnets is not None:
         return subnets
@@ -261,7 +262,7 @@ async def get_azure_subnets(http_session: ClientSession):
     return subnets
 
 
-async def get_aws_subnets(http_session: ClientSession):
+async def get_aws_subnets(http_session: ClientType):
     subnets = await get_subnets_from_cache('aws_subnets')
     if subnets is not None:
         return subnets
