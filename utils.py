@@ -13,11 +13,9 @@ from urllib.parse import urljoin
 
 import requests
 import yaml
-from aiohttp import (
-    ClientSession,
-    ClientError,
-)
+from aiohttp import ClientError
 from aiohttp.web_exceptions import HTTPError
+from aiohttp_retry.types import ClientType
 from jsonschema import (
     ValidationError,
     validate,
@@ -142,7 +140,7 @@ async def check_tasks(
 
 async def is_url_available(
         url: str,
-        http_session: ClientSession,
+        http_session: ClientType,
         logger: Logger,
         is_get_request: bool,
         success_msg: Optional[str],
@@ -329,11 +327,13 @@ def get_config(
 def process_mirror_config(
         yaml_data: dict,
         logger: Logger,
+        main_config: MainConfig,
 ) -> MirrorData:
     """
     Process data of a mirror config
     :param yaml_data: YAML data from a file of a mirror config
     :param logger: instance of Logger class
+    :param main_config: config of the mirrors service
     """
 
     def _extract_asn(asn_field: Union[list, int]) -> list:
@@ -363,7 +363,7 @@ def process_mirror_config(
                 )
                 return []
         return subnets_field
-    return MirrorData(
+    mirror_info = MirrorData(
         name=yaml_data['name'],
         update_frequency=yaml_data['update_frequency'],
         sponsor_name=yaml_data['sponsor'],
@@ -385,11 +385,17 @@ def process_mirror_config(
         ),
         private=yaml_data.get('private', False),
     )
+    mirror_info.mirror_url = get_mirror_url(
+        main_config=main_config,
+        mirror_info=mirror_info,
+    )
+    return mirror_info
 
 
 def get_mirror_config(
         logger: Logger,
         path_to_config: Path,
+        main_config: MainConfig,
         path_to_json_schema: str = os.path.join(
             os.path.dirname(os.path.realpath(__file__)),
             'json_schemas/mirror_config',
@@ -419,6 +425,7 @@ def get_mirror_config(
     config = process_mirror_config(
         yaml_data=mirror_data,
         logger=logger,
+        main_config=main_config,
     )
     if err_msg:
         logger.error(
@@ -454,12 +461,9 @@ def get_mirrors_info(
             path_to_config=config_path,
             logger=logger,
             path_to_json_schema=path_to_json_schema,
+            main_config=main_config,
         )
         if mirror_info is not None:
-            mirror_info.mirror_url = get_mirror_url(
-                main_config=main_config,
-                mirror_info=mirror_info,
-            )
             result.append(mirror_info)
 
     return result
@@ -506,7 +510,7 @@ def get_mirror_url(
 
 async def mirror_available(
         mirror_info: MirrorData,
-        http_session: ClientSession,
+        http_session: ClientType,
         main_config: MainConfig,
         logger: Logger,
 ) -> tuple[str, bool]:
