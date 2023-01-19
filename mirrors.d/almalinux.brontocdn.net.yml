@@ -8,7 +8,7 @@ geolocation:
   state_province: Hessen
   city: Limburg an der Lahn
 update_frequency: 6h
-sponsor: BrontoCDNm
+sponsor: BrontoCDN
 sponsor_url: https://www.brontocdn.net
 email: levent@brontocdn.com
 ...
