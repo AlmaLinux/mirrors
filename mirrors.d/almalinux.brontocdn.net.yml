@@ -1,0 +1,14 @@
+---
+name: almalinux.brontocdn.net
+address:
+  http: http://almalinux.brontocdn.net/
+  https: https://almalinux.brontocdn.net/
+geolocation:
+  country: DE
+  state_province: Hessen
+  city: Limburg an der Lahn
+update_frequency: 6h
+sponsor: BrontoCDNm
+sponsor_url: https://www.brontocdn.net
+email: levent@brontocdn.com
+...
