@@ -1,0 +1,16 @@
+---
+name: ftp.belnet.be
+address:
+  ftp: ftp://ftp.belnet.be/mirror/almalinux/
+  http: http://ftp.belnet.be/mirror/almalinux/
+  https: https://ftp.belnet.be/mirror/almalinux/
+  rsync: rsync://ftp.belnet.be/almalinux
+geolocation:
+  country: BE
+  state_province: Brussels
+  city: Brussels
+update_frequency: 3h
+sponsor: Belnet, the Belgian Research and Education Network
+sponsor_url: https://www.belnet.be
+email: ftpmaint@belnet.be
+
