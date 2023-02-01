@@ -185,7 +185,7 @@ async def _get_nearest_mirrors_by_geo_data(
 
 
 async def _get_nearest_mirrors(
-        ip_address: str,
+        ip_address: Optional[str],
         get_without_private_mirrors: bool,
         get_without_cloud_mirrors: bool,
         get_mirrors_with_full_set_of_isos: bool,
@@ -194,6 +194,13 @@ async def _get_nearest_mirrors(
     """
     Get the nearest mirrors by geo-data or by subnet/ASN
     """
+    if ip_address is None:
+        return await get_all_mirrors(
+            get_working_mirrors=get_working_mirrors,
+            get_without_cloud_mirrors=get_without_cloud_mirrors,
+            get_without_private_mirrors=get_without_private_mirrors,
+            get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos,
+        )
     if os.getenv('DISABLE_CACHING_NEAREST_MIRRORS'):
         suitable_mirrors = None
     else:
@@ -584,7 +591,7 @@ def get_allowed_version(
 
 
 async def get_mirrors_list(
-        ip_address: str,
+        ip_address: Optional[str],
         version: str,
         arch: Optional[str],
         repository: Optional[str],
@@ -660,7 +667,7 @@ async def get_mirrors_list(
 
 
 async def get_isos_list_by_countries(
-        ip_address: str,
+        ip_address: Optional[str],
 ) -> tuple[dict[str, list[MirrorData]], list[MirrorData]]:
     mirrors_by_countries = defaultdict(list)
     for mirror_info in await get_all_mirrors(

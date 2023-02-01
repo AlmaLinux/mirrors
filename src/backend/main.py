@@ -1,6 +1,8 @@
 # coding=utf-8
+import ipaddress
 import os
 from datetime import datetime
+from typing import Optional
 
 from flask import (
     Flask,
@@ -54,11 +56,22 @@ def inject_now_date():
     }
 
 
-def _get_request_ip() -> str:
+def _get_request_ip() -> Optional[str]:
     test_ip_address = os.getenv('TEST_IP_ADDRESS', None)
     ip_address = request.headers.get('X-Forwarded-For') or request.remote_addr
     if ',' in ip_address:
         ip_address = [item.strip() for item in ip_address.split(',')][0]
+    try:
+        ipaddress.ip_address(ip_address)
+    except ValueError:
+        logger.error(
+            '%s does not appear to be an IPv4 or IPv6 address. '
+            'IP of a request: %s. Headers of a request: %s',
+            ip_address,
+            request.remote_addr,
+            request.headers,
+        )
+        return
     return test_ip_address or ip_address
 
 
