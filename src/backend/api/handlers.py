@@ -475,8 +475,8 @@ async def get_all_mirrors(
             get_without_private_mirrors=get_without_private_mirrors,
             get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos
         )
-
-    return [mirror for mirror in mirrors]
+    random.shuffle(mirrors)
+    return mirrors
 
 
 async def get_all_mirrors_db(
