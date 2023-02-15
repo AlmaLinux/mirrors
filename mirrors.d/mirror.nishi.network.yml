@@ -1,0 +1,14 @@
+---
+name: mirror.nishi.network
+address:
+  http: http://mirror.nishi.network/almalinux
+  https: https://mirror.nishi.network/almalinux
+geolocation:
+  country: JP
+  state_province: Tokyo
+  city: Tokyo
+update_frequency: 3h
+sponsor: Nishi Network
+sponsor_url: https://mirror.nishi.network/
+email: mirror-admin@nishi.network
+...
