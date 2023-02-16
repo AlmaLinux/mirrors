@@ -1,0 +1,18 @@
+---
+name: nyc.almalinux.osuosl.org
+address:
+  http: http://nyc.almalinux.osuosl.org
+  https: https://nyc.almalinux.osuosl.org
+  rsync: rsync://nyc.almalinux.osuosl.org/almalinux
+  ftp: ftp://nyc.almalinux.osuosl.org/pub/almalinux/
+update_frequency: 3h
+sponsor: Oregon State University Open Source Lab
+sponsor_url: https://osuosl.org
+email: support@osuosl.org
+geolocation:
+  continent: North America
+  country: US
+  state_province: New York
+  city: New York
+asn: 4181
+...
