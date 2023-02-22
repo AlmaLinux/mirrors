@@ -1,0 +1,15 @@
+---
+name: almalinux.virtono.com
+address:
+  http: http://almalinux.virtono.com/
+  https: 
+  rsync:
+geolocation:
+  country: GB
+  state_province: England
+  city: London 
+update_frequency: 3h
+sponsor: Virtono Networks
+sponsor_url: https://www.virtono.com/
+email: mirror@virtono.com
+...
