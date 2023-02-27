@@ -5,7 +5,7 @@ address:
   https: https://mirrors.ukfast.co.uk/sites/almalinux.org/
   rsync: rsync://mirrors.ukfast.co.uk/sites/almalinux.org/
 geolocation:
-  country: uk
+  country: GB
   state_province: Greater Manchester
   city: Manchester
 update_frequency: 3h

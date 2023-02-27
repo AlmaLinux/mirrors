@@ -1,0 +1,14 @@
+---
+name: mirrors.ft.uam.es
+address:
+  http: http://mirrors.ft.uam.es/almalinux/
+  https: https://mirrors.ft.uam.es/almalinux/
+geolocation:
+  country: ES
+  state_province: Comunidad de Madrid
+  city: Madrid
+update_frequency: 3h
+sponsor: Universidad Autónoma de Madrid
+sponsor_url: https://www.uam.es/uam/inicio
+email: pablo.collado@uam.es
+...

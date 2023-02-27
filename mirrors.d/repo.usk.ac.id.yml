@@ -1,0 +1,13 @@
+---
+name: repo.usk.ac.id
+address:
+  http: http://repo.usk.ac.id/almalinux/
+  https: https://repo.usk.ac.id/almalinux/
+geolocation:
+  country: ID
+  state_province: Aceh
+  city: Banda Aceh
+update_frequency: 3h
+sponsor: Universitas Syiah Kuala
+sponsor_url: https://usk.ac.id
+email: m.reza@usk.ac.id

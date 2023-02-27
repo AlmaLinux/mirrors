@@ -1,0 +1,17 @@
+---
+name: mirrors.upr.edu
+address:
+  http: http://mirrors.upr.edu/almalinux/
+  https: https://mirrors.upr.edu/almalinux/
+  rsync: rsync://mirrors.upr.edu/almalinux/
+update_frequency: 3h
+sponsor: University of Puerto Rico
+sponsor_url: https://www.upr.edu/
+email: noc-upr@upr.edu
+geolocation:
+  country: US
+  state_province: Puerto Rico
+  city: San Juan
+private: false
+monopoly: false
+...

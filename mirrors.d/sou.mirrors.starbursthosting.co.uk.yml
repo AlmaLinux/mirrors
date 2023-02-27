@@ -1,0 +1,13 @@
+---
+name: sou.mirrors.starbursthosting.co.uk
+address:
+  http: http://sou.mirrors.starbursthosting.co.uk/almalinux
+  https: https://sou.mirrors.starbursthosting.co.uk/almalinux
+update_frequency: 3h
+sponsor: Starburst Services
+sponsor_url: https://starbursthosting.co.uk
+email: sysops@starbursthosting.com
+geolocation:
+  continent: Europe
+  country: GB
+  city: Portsmouth

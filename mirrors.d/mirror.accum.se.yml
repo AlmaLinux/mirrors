@@ -1,0 +1,14 @@
+---
+name: mirror.accum.se
+address:
+  http: http://mirror.accum.se/mirror/almalinux.org/
+  https: https://mirror.accum.se/mirror/almalinux.org/
+  rsync: rsync://mirror.accum.se/mirror/almalinux.org/
+geolocation:
+  country: SE
+  state_province: Västerbotten
+  city: Umeå
+update_frequency: 3h
+sponsor: Academic Computer Club
+sponsor_url: https://www.accum.se
+email: ftp-adm@accum.se
