@@ -25,11 +25,8 @@ class DataClassesJSONEncoder(JSONEncoder):
 
 @dataclass
 class LocationData:
-    # outside ranges
-    # latitude (-90 to 90)
-    # longitude (-180 to 180)
-    latitude: float = -91
-    longitude: float = -181
+    latitude: float = -90
+    longitude: float = -180
 
     @staticmethod
     def load_from_json(dct: dict[str, float]):
@@ -44,7 +41,7 @@ class GeoLocationData:
 
     continent: str = 'Unknown'
     country: str = 'Unknown'
-    state: str = 'Unknown'
+    state_province: str = 'Unknown'
     city: str = 'Unknown'
 
     def are_mandatory_fields_empty(self) -> bool:
@@ -52,7 +49,7 @@ class GeoLocationData:
             item in ('Unknown', None) for item in (
                 self.country,
                 self.city,
-                self.state,
+                self.state_province,
             )
         )
 
@@ -61,7 +58,7 @@ class GeoLocationData:
         return GeoLocationData(
             continent=dct.get('continent', 'Unknown'),
             country=dct.get('country', 'Unknown'),
-            state=dct.get('state_province', 'Unknown'),
+            state_province=dct.get('state_province', 'Unknown'),
             city=dct.get('city', 'Unknown'),
         )
 
@@ -72,7 +69,7 @@ class GeoLocationData:
     def update_from_existing_object(self, geo_location_data: GeoLocationData):
         self.continent = geo_location_data.continent
         self.country = geo_location_data.country
-        self.state = geo_location_data.state
+        self.state_province = geo_location_data.state_province
         self.city = geo_location_data.city
 
 
