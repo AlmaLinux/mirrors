@@ -8,7 +8,8 @@
 - name: Install DNF packages
   dnf:
     name: "{{ dnf_packages }}"
-    state: present
+    state: latest
+    update_cache: yes
 
 - name: Set SELinux option for right working of nginx + Gunicorn
   seboolean:

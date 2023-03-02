@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 from typing import Optional
 
+from dataclasses import asdict
 from flask import (
     Flask,
     request,
@@ -157,6 +158,23 @@ async def get_debug_mirror_list():
     return jsonify_response(
         status='ok',
         result=result,
+        status_code=HTTP_200_OK,
+    )
+
+
+@app.route(
+    '/debug/mirrors',
+    methods=('GET',),
+)
+@error_result
+async def get_debug_all_mirrors():
+    data = {}
+    mirrors = await get_all_mirrors()
+    for mirror in mirrors:
+        data[mirror.name] = asdict(mirror)
+    return jsonify_response(
+        status='ok',
+        result=data,
         status_code=HTTP_200_OK,
     )
 

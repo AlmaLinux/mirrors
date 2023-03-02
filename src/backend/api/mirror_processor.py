@@ -201,7 +201,7 @@ class MirrorProcessor:
             (
                 geo_location_data.continent,
                 geo_location_data.country,
-                geo_location_data.state,
+                geo_location_data.state_province,
                 geo_location_data.city,
                 location.latitude,
                 location.longitude,
@@ -235,6 +235,14 @@ class MirrorProcessor:
         if mirror_info.status != 'ok':
             return
         if mirror_info.geolocation.are_mandatory_fields_empty():
+            self.logger.info(
+                'Mirror "%s" has empty mandatory geo field. City: "%s",'
+                'Country: "%s", State: "%s"',
+                mirror_info.name,
+                mirror_info.geolocation.city,
+                mirror_info.geolocation.country,
+                mirror_info.geolocation.state,
+            )
             return
         self.logger.info(
             'Set geodata for mirror "%s" from online DB',
@@ -247,7 +255,6 @@ class MirrorProcessor:
             'format': 'json',
             'limit': 1,
         }
-        location = LocationData()
         try:
             result = await (await self.request(
                 method='get',
@@ -256,13 +263,16 @@ class MirrorProcessor:
                 headers=HEADERS,
             )).json()
             if result:
-                location.latitude = result[0]['lat']
-                location.longitude = result[0]['lon']
+                mirror_info.location = LocationData(
+                    latitude=result[0]['lat'],
+                    longitude=result[0]['lon'],
+                )
         except (
             TimeoutError,
             HTTPError,
             ValueError,
             ClientError,
+            CancelledError,
         ) as err:
             self.logger.warning(
                 'Cannot get geodata for mirror'
@@ -270,9 +280,6 @@ class MirrorProcessor:
                 mirror_info.name,
                 str(err) or type(err),
             )
-        except CancelledError:
-            pass
-        mirror_info.location = location
 
     async def set_ipv6_support_of_mirror(
             self,

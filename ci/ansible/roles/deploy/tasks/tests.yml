@@ -26,8 +26,8 @@
       # CL private mirror
       centos.corp.cloudlinux.com: "77.79.198.14"
       # some public mirror
-      mirrors.hostico.ro: "77.121.201.30"
-      mirrors.nav.ro: "77.121.201.30"
+      mirror.vsys.host: "77.121.201.30"
+      almalinux.netforce.hosting: "77.121.201.30"
 
 - name: Check vault versions
   uri:
@@ -70,4 +70,3 @@
     mirrors:
       # some public mirror
       mirrors.hostico.ro: "77.121.201.30"
-      mirrors.nav.ro: "77.121.201.30"
