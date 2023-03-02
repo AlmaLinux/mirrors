@@ -5,10 +5,11 @@ import os
 import random
 from collections import defaultdict
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union
 from urllib.parse import urljoin
 
 import dateparser
+from dataclasses import asdict
 from sqlalchemy.orm import joinedload
 
 from api.exceptions import UnknownRepoAttribute
@@ -222,7 +223,8 @@ async def _get_nearest_mirrors(
             ip_address=ip_address,
             get_working_mirrors=get_working_mirrors,
             get_without_cloud_mirrors=get_without_cloud_mirrors,
-            get_without_private_mirrors=get_without_private_mirrors,
+            # we already get private mirrors by network data
+            get_without_private_mirrors=True,
             get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos
         )
     await set_mirrors_to_cache(
@@ -596,7 +598,8 @@ async def get_mirrors_list(
         arch: Optional[str],
         repository: Optional[str],
         iso_list: bool = False,
-) -> str:
+        debug_info: bool = False,
+) -> Union[str, dict]:
     mirrors_list = []
     config = get_config(
         logger=logger,
@@ -656,6 +659,28 @@ async def get_mirrors_list(
             get_working_mirrors=True,
             get_without_cloud_mirrors=False,
         )
+    if debug_info:
+        data = defaultdict(dict)
+        match = get_geo_data_by_ip(ip_address)
+        (
+            continent,
+            country,
+            state,
+            city_name,
+            latitude,
+            longitude,
+        ) = (None, None, None, None, None, None) if not match else match
+        data['geodata'][ip_address] = {
+            'continent': continent,
+            'country': country,
+            'state': state,
+            'city': city_name,
+            'latitude': latitude,
+            'longitude': longitude,
+        }
+        for mirror in nearest_mirrors:
+            data['mirrors'][mirror.name] = asdict(mirror)
+        return data
     for mirror in nearest_mirrors:
         full_mirror_path = urljoin(
             mirror.mirror_url + '/',

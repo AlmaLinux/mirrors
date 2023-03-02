@@ -131,9 +131,13 @@ def error_result(f):
     """
 
     @wraps(f)
-    def decorated_function(*args, **kwargs):
+    async def decorated_function(*args, **kwargs):
         try:
-            return f(*args, **kwargs)
+            result = f(*args, **kwargs)
+            if inspect.isawaitable(result):
+                return await result
+            else:
+                return result
         except BaseCustomException:
             raise
         except Exception as err:

@@ -257,7 +257,7 @@ class MirrorProcessor:
             )).json()
             if result:
                 location.latitude = result[0]['lat']
-                location.latitude = result[0]['lon']
+                location.longitude = result[0]['lon']
         except (
             TimeoutError,
             HTTPError,

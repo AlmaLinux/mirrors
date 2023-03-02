@@ -33,6 +33,7 @@ from api.utils import (
     error_result,
     auth_key_required,
     jsonify_response,
+    get_geo_data_by_ip,
 )
 from common.sentry import (
     init_sentry_client,
@@ -58,9 +59,12 @@ def inject_now_date():
 
 def _get_request_ip() -> Optional[str]:
     test_ip_address = os.getenv('TEST_IP_ADDRESS', None)
-    ip_address = request.headers.get('X-Forwarded-For') or request.remote_addr
+    ip_address = request.headers.get('X-Forwarded-For')
     if ',' in ip_address:
-        ip_address = [item.strip() for item in ip_address.split(',')][0]
+        ip_address = next(
+            ip for item in ip_address.split(',')
+            if not ipaddress.ip_address(ip := item.strip()).is_private
+        )
     try:
         ipaddress.ip_address(ip_address)
     except ValueError:
@@ -76,15 +80,38 @@ def _get_request_ip() -> Optional[str]:
 
 
 @app.route(
-    '/my_ip_and_headers',
+    '/debug/ip_info',
     methods=('GET',),
 )
 @error_result
 def my_ip_and_headers():
-    result = {
-        'my_ip': request.remote_addr,
-    }
+    result = {}
     result.update(request.headers)
+    ips = []
+    for ip in [
+                  request.headers.get('X-Real-Ip')
+              ] + request.headers.get('X-Forwarded-For', '').split(','):
+        if ip:
+            ips.append(ip.strip())
+    result['geodata'] = {}
+    for ip in ips:
+        match = get_geo_data_by_ip(ip)
+        (
+            continent,
+            country,
+            state,
+            city_name,
+            latitude,
+            longitude,
+        ) = (None, None, None, None, None, None) if not match else match
+        result['geodata'][ip] = {
+            'continent': continent,
+            'country': country,
+            'state': state,
+            'city': city_name,
+            'latitude': latitude,
+            'longitude': longitude,
+        }
 
     return jsonify_response(
         status='ok',
@@ -109,6 +136,28 @@ async def get_mirror_list(
         version=version,
         arch=None,
         repository=repository,
+    )
+
+
+@app.route(
+    '/debug/mirrorlist',
+    methods=('GET',),
+)
+@error_result
+async def get_debug_mirror_list():
+    ip_address = _get_request_ip()
+    result = await get_mirrors_list(
+        ip_address=ip_address,
+        version='8',
+        arch='x86_64',
+        repository=None,
+        iso_list=True,
+        debug_info=True,
+    )
+    return jsonify_response(
+        status='ok',
+        result=result,
+        status_code=HTTP_200_OK,
     )
 
 
@@ -225,6 +274,7 @@ async def mirrors_table():
         'url_types': url_types,
         'mirror_list': await get_all_mirrors(
             get_without_private_mirrors=True,
+            get_without_cloud_mirrors=True,
         ),
         'main_title': 'AlmaLinux Mirrors',
     }
