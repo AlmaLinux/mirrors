@@ -54,7 +54,7 @@ logger = get_logger(__name__)
 
 AUTH_KEY = os.environ.get('AUTH_KEY')
 
-RANDOMIZE_WITHIN_KM = 750
+RANDOMIZE_WITHIN_KM = 500
 
 AIOHTTP_TIMEOUT = 30
 
