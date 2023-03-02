@@ -7,6 +7,9 @@
     virtualenv_command: "python3.9 -m venv"
   become: yes
   become_user: "{{ service_user }}"
+  tags:
+    - update_packages
+    - virtualenv
 
 - name: Prepare Gunicorn SELinux module
   block:

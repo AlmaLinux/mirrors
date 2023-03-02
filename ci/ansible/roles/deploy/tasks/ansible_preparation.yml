@@ -4,3 +4,5 @@
     name: "{{ ansible_dnf_packages }}"
     state: latest
     update_cache: yes
+  tags:
+    - update_packages

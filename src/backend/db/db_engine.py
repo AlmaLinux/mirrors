@@ -2,7 +2,7 @@
 import os
 
 from geoip2.database import Reader
-import aioredis
+from redis import asyncio as aioredis
 from sqlalchemy import create_engine
 
 GEOIP_PATH = os.environ.get('GEOIP_PATH')

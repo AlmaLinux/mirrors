@@ -53,7 +53,7 @@ logger = get_logger(__name__)
 
 
 LENGTH_GEO_MIRRORS_LIST = 10
-LENGTH_CLOUD_MIRRORS_LIST = 5
+LENGTH_CLOUD_MIRRORS_LIST = 10
 SERVICE_CONFIG_PATH = os.path.join(
     os.environ['CONFIG_ROOT'],
     'mirrors/updates/config.yml'

@@ -10,6 +10,8 @@
     name: "{{ dnf_packages }}"
     state: latest
     update_cache: yes
+  tags:
+    - update_packages
 
 - name: Set SELinux option for right working of nginx + Gunicorn
   seboolean:
