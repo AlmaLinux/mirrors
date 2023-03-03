@@ -250,7 +250,7 @@ class MirrorProcessor:
         )
         params = {
             'city': mirror_info.geolocation.city,
-            'state': mirror_info.geolocation.state,
+            'state': mirror_info.geolocation.state_province,
             'country': mirror_info.geolocation.country,
             'format': 'json',
             'limit': 1,

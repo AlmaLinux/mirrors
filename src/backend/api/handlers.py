@@ -367,7 +367,7 @@ async def update_mirrors_handler() -> str:
                     name=mirror_info.name,
                     continent=mirror_info.geolocation.continent,
                     country=mirror_info.geolocation.country,
-                    state=mirror_info.geolocation.state,
+                    state=mirror_info.geolocation.state_province,
                     city=mirror_info.geolocation.city,
                     ip=mirror_info.ip,
                     ipv6=mirror_info.ipv6,
