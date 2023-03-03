@@ -69,7 +69,7 @@ def _get_request_ip() -> Optional[str]:
     try:
         ipaddress.ip_address(ip_address)
     except ValueError:
-        logger.error(
+        logger.warning(
             '%s does not appear to be an IPv4 or IPv6 address. '
             'IP of a request: %s. Headers of a request: %s',
             ip_address,
