@@ -241,7 +241,7 @@ class MirrorProcessor:
                 mirror_info.name,
                 mirror_info.geolocation.city,
                 mirror_info.geolocation.country,
-                mirror_info.geolocation.state,
+                mirror_info.geolocation.state_province,
             )
             return
         self.logger.info(
