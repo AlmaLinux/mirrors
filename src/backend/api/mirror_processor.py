@@ -212,7 +212,8 @@ class MirrorProcessor:
                 'Mirror "%s" does not have geo data for any its IP',
                 mirror_info.name,
             )
-            mirror_info.status = 'Unknown geo data for any IP of the mirror'
+            if not mirror_info.private:
+                mirror_info.status = 'Unknown geodata for any IP of the mirror'
         mirror_info.location = location
         mirror_info.geolocation.update_from_existing_object(geo_location_data)
         try:

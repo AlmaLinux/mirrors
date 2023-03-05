@@ -65,23 +65,22 @@ def inject_now_date():
 def _get_request_ip(*args, **kwargs) -> Optional[str]:
     test_ip_address = os.getenv('TEST_IP_ADDRESS', None)
     ip_address = request.headers.get('X-Forwarded-For')
+    result = None
     if ',' in ip_address:
-        ip_address = next(
-            ip for item in ip_address.split(',')
-            if not ipaddress.ip_address(ip := item.strip()).is_private
-        )
-    try:
-        ipaddress.ip_address(ip_address)
-    except ValueError:
-        logger.warning(
-            '%s does not appear to be an IPv4 or IPv6 address. '
-            'IP of a request: %s. Headers of a request: %s',
-            ip_address,
-            request.remote_addr,
-            request.headers,
-        )
-        return
-    return test_ip_address or ip_address
+        for ip in ip_address.split(','):
+            try:
+                if not ipaddress.ip_address(ip.strip()).is_private:
+                    result = ip.strip()
+                    break
+            except ValueError:
+                logger.warning(
+                    '%s does not appear to be an IPv4 or IPv6 address. '
+                    'IP of a request: %s. Headers of a request: %s',
+                    ip_address,
+                    request.remote_addr,
+                    request.headers,
+                )
+    return test_ip_address or result
 
 
 @app.route(
