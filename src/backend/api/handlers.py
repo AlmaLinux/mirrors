@@ -484,9 +484,9 @@ def get_all_mirrors_db(
             )
         or_filter = []
         if get_expired_mirrors:
-            or_filter.append(Mirror.status.is_('ok'))
-        if get_working_mirrors:
             or_filter.append(Mirror.status.is_('expired'))
+        if get_working_mirrors:
+            or_filter.append(Mirror.status.is_('ok'))
         if or_filter:
             mirrors_query = mirrors_query.filter(
                 or_(*or_filter)
