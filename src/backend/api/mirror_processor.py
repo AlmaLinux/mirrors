@@ -25,10 +25,12 @@ from aiohttp_retry.types import ClientType
 from pycountry import countries
 
 from api.redis import (
-    set_mirror_flapped,
-    get_mirror_flapped,
+    get_geolocation_from_cache,
+    set_geolocation_to_cache,
+    FLAPPED_EXPIRED_TIME,
 )
 from api.utils import get_geo_data_by_ip
+from db.db_engine import FlaskCacheEngine
 from yaml_snippets.data_models import (
     GeoLocationData,
     MirrorData,
@@ -104,6 +106,7 @@ class MirrorProcessor:
             retry_options=self.retry_options,
             raise_for_status=True,
         )
+        self.cache = FlaskCacheEngine.get_instance()
 
     async def __aenter__(self):
         return self
@@ -163,15 +166,13 @@ class MirrorProcessor:
         try:
             dns = await self.dns_resolver.query(mirror_info.name, 'A')
             ip = ','.join(str(record.host) for record in dns)
-        except DNSError:
+        except DNSError as err:
             self.logger.warning(
                 'Can not get IP of mirror "%s"',
                 mirror_info.name,
             )
+            mirror_info.status = f'Unknown IP (reason: {err})'
         mirror_info.ip = ip
-        # TODO: Set separate status for mirrors with unknown IP in future
-        # if mirror_info.ip in ('Unknown', None):
-        #     mirror_info.status = 'without IP'
 
     async def set_iso_url(
             self,
@@ -211,6 +212,7 @@ class MirrorProcessor:
                 'Mirror "%s" does not have geo data for any its IP',
                 mirror_info.name,
             )
+            mirror_info.status = 'Unknown geo data for any IP of the mirror'
         mirror_info.location = location
         mirror_info.geolocation.update_from_existing_object(geo_location_data)
         try:
@@ -248,6 +250,21 @@ class MirrorProcessor:
             'Set geodata for mirror "%s" from online DB',
             mirror_info.name,
         )
+        redis_key = (
+            f'nominatim_{mirror_info.geolocation.country}_'
+            f'{mirror_info.geolocation.state_province}_'
+            f'{mirror_info.geolocation.city}'
+        )
+        cached_latitude, cached_longitude = get_geolocation_from_cache(
+            key=redis_key,
+            cache=self.cache,
+        )
+        if cached_latitude is not None and cached_longitude is not None:
+            mirror_info.location = LocationData(
+                latitude=cached_latitude,
+                longitude=cached_longitude,
+            )
+            return
         params = {
             'city': mirror_info.geolocation.city,
             'state': mirror_info.geolocation.state_province,
@@ -263,6 +280,14 @@ class MirrorProcessor:
                 headers=HEADERS,
             )).json()
             if result:
+                latitude = result[0]['lat']
+                longitude = result[0]['lat']
+                set_geolocation_to_cache(
+                    key=redis_key,
+                    cache=self.cache,
+                    latitude=latitude,
+                    longitude=longitude,
+                )
                 mirror_info.location = LocationData(
                     latitude=result[0]['lat'],
                     longitude=result[0]['lon'],
@@ -279,6 +304,10 @@ class MirrorProcessor:
                 ' "%s" from online DB because "%s"',
                 mirror_info.name,
                 str(err) or type(err),
+            )
+            mirror_info.status = (
+                'Cannot get geodata for the mirror from '
+                f'online DB by reason "{str(err) or type(err)}"'
             )
 
     async def set_ipv6_support_of_mirror(
@@ -305,8 +334,9 @@ class MirrorProcessor:
             'Set status for mirror "%s"',
             mirror_info.name,
         )
-        if await get_mirror_flapped(mirror_name=mirror_info.name):
-            mirror_info.status = 'flapping'
+        redis_key = f'mirror_offline_{mirror_info.name}'
+        if (redis_value := self.cache.get(key=redis_key)) is not None:
+            mirror_info.status = redis_value
             return False
         if mirror_info.private or mirror_info.name in WHITELIST_MIRRORS:
             self.logger.info(
@@ -315,7 +345,7 @@ class MirrorProcessor:
             )
             mirror_info.status = "ok"
             return
-        if not await is_url_available(
+        result, reason = await is_url_available(
                 url=mirror_info.mirror_url,
                 http_session=self.client,
                 logger=self.logger,
@@ -329,13 +359,18 @@ class MirrorProcessor:
                     'mirror_name': mirror_info.name,
                     'url': mirror_info.mirror_url,
                 },
-        ):
+        )
+        if not result:
             self.logger.info(
                 'Mirror "%s" is not available',
                 mirror_info.name,
             )
-            await set_mirror_flapped(mirror_name=mirror_info.name)
-            mirror_info.status = 'flapping'
+            self.cache.set(
+                key=redis_key,
+                value=reason,
+                timeout=FLAPPED_EXPIRED_TIME,
+            )
+            mirror_info.status = reason
             return
         if await self.is_mirror_expired(
             mirror_info=mirror_info,
@@ -347,19 +382,23 @@ class MirrorProcessor:
             )
             mirror_info.status = 'expired'
             return
-        mirror_name, is_available = await mirror_available(
+        result, reason = await mirror_available(
             mirror_info=mirror_info,
             http_session=self.client,
             main_config=main_config,
             logger=self.logger,
         )
-        if not is_available:
+        if not result:
             self.logger.info(
                 'Mirror "%s" is not available',
                 mirror_info.name,
             )
-            await set_mirror_flapped(mirror_name=mirror_info.name)
-            mirror_info.status = 'flapping'
+            self.cache.set(
+                key=redis_key,
+                value=reason,
+                timeout=FLAPPED_EXPIRED_TIME,
+            )
+            mirror_info.status = reason
             return
         self.logger.info(
             'Mirror "%s" is actual',
@@ -443,27 +482,29 @@ class MirrorProcessor:
             'ISO artifact by URL "%(url)s" '
             'is unavailable because "%(err)s"'
         )
-        tasks = [asyncio.ensure_future(
-            is_url_available(
-                url=(url := urljoin(
-                    mirror_info.mirror_url + '/',
-                    iso_uri,
-                )),
-                http_session=self.client,
-                logger=self.logger,
-                is_get_request=False,
-                success_msg=None,
-                success_msg_vars=None,
-                error_msg=error_msg,
-                error_msg_vars={
-                    'url': url,
-                },
+        iso_semaphore = asyncio.Semaphore(5)
+        async with iso_semaphore:
+            tasks = [asyncio.ensure_future(
+                is_url_available(
+                    url=(url := urljoin(
+                        mirror_info.mirror_url + '/',
+                        iso_uri,
+                    )),
+                    http_session=self.client,
+                    logger=self.logger,
+                    is_get_request=False,
+                    success_msg=None,
+                    success_msg_vars=None,
+                    error_msg=error_msg,
+                    error_msg_vars={
+                        'url': url,
+                    },
+                )
+            ) for iso_uri in mirror_iso_uris]
+
+            self.logger.info(
+                'Set the mirrors have full ISO set is started for mirror "%s"',
+                mirror_info.name,
             )
-        ) for iso_uri in mirror_iso_uris]
-
-        self.logger.info(
-            'Set the mirrors have full ISO set is started for mirror "%s"',
-            mirror_info.name,
-        )
-
-        mirror_info.has_full_iso_set = await check_tasks(tasks)
+            result, _ = await check_tasks(tasks)
+            mirror_info.has_full_iso_set = result

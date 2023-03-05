@@ -1,9 +1,10 @@
 # coding=utf-8
 import os
 
+from flask import Flask
 from geoip2.database import Reader
-from redis import asyncio as aioredis
 from sqlalchemy import create_engine
+from flask_caching import Cache
 
 GEOIP_PATH = os.environ.get('GEOIP_PATH')
 ASN_PATH = os.environ.get('ASN_PATH')
@@ -66,9 +67,20 @@ class AsnEngine:
         return cls.__instance
 
 
-class RedisEngine:
+class FlaskCacheEngine:
     __instance = None
 
+    cache_config = {
+        'CACHE_TYPE': 'RedisCache',
+        'CACHE_REDIS_URL': f'unix://{REDIS_SOCKET}',
+        'CACHE_REDIS_DB': REDIS_DB,
+    }
+
     @classmethod
-    def get_instance(cls):
-        return aioredis.from_url(f"unix://{REDIS_SOCKET}", db=REDIS_DB)
+    def get_instance(cls, app: Flask = None):
+        if cls.__instance is None:
+            cls.__instance = Cache(config=cls.cache_config)
+        if app is not None:
+            cls.__instance.init_app(app)
+        return cls.__instance
+

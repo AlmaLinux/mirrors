@@ -17,14 +17,11 @@ from aiohttp import (
     ClientSession,
     ClientConnectorError,
 )
-import geopy
 from aiohttp_retry.types import ClientType
 from bs4 import BeautifulSoup
 from geoip2.errors import AddressNotFoundError
-from geopy.adapters import AioHTTPAdapter
-from geopy.exc import GeocoderServiceError
 
-from db.db_engine import GeoIPEngine
+from db.db_engine import GeoIPEngine, FlaskCacheEngine
 from yaml_snippets.data_models import MirrorData
 from api.exceptions import (
     BaseCustomException,
@@ -43,13 +40,12 @@ from common.sentry import (
 )
 from haversine import haversine
 from api.redis import (
-    get_geolocation_from_cache,
-    set_geolocation_to_cache,
     get_subnets_from_cache,
     set_subnets_to_cache,
 )
 
 logger = get_logger(__name__)
+cache = FlaskCacheEngine.get_instance()
 
 
 AUTH_KEY = os.environ.get('AUTH_KEY')
@@ -180,7 +176,9 @@ def get_geo_data_by_ip(
     return continent, country, state, city_name, latitude, longitude
 
 
-async def get_azure_subnets_json(http_session: ClientSession) -> Optional[dict]:
+async def get_azure_subnets_json(
+        http_session: ClientSession,
+) -> Optional[dict]:
     url = 'https://www.microsoft.com/en-us/download/confirmation.aspx?id=56519'
     link_attributes = {
         'data-bi-id': 'downloadretry',
@@ -249,7 +247,10 @@ async def get_aws_subnets_json(http_session: ClientSession) -> Optional[dict]:
 
 
 async def get_azure_subnets(http_session: ClientType):
-    subnets = await get_subnets_from_cache('azure_subnets')
+    subnets = await get_subnets_from_cache(
+        key='azure_subnets',
+        cache=cache,
+    )
     if subnets is not None:
         return subnets
     data_json = await get_azure_subnets_json(http_session=http_session)
@@ -262,12 +263,19 @@ async def get_azure_subnets(http_session: ClientType):
             properties = value['properties']
             subnets[properties['region'].lower()] = \
                 properties['addressPrefixes']
-    await set_subnets_to_cache('azure_subnets', subnets)
+    await set_subnets_to_cache(
+        key='azure_subnets',
+        cache=cache,
+        subnets=subnets,
+    )
     return subnets
 
 
 async def get_aws_subnets(http_session: ClientType):
-    subnets = await get_subnets_from_cache('aws_subnets')
+    subnets = await get_subnets_from_cache(
+        key='aws_subnets',
+        cache=cache,
+    )
     if subnets is not None:
         return subnets
     data_json = await get_aws_subnets_json(http_session=http_session)
@@ -278,7 +286,11 @@ async def get_aws_subnets(http_session: ClientType):
         subnets[v4_prefix['region'].lower()].append(v4_prefix['ip_prefix'])
     for v6_prefix in data_json['ipv6_prefixes']:
         subnets[v6_prefix['region'].lower()].append(v6_prefix['ipv6_prefix'])
-    await set_subnets_to_cache('aws_subnets', subnets)
+    await set_subnets_to_cache(
+        key='aws_subnets',
+        cache=cache,
+        subnets=subnets,
+    )
     return subnets
 
 
@@ -298,68 +310,6 @@ def set_subnets_for_hyper_cloud_mirror(
             for cloud_region in cloud_regions:
                 total_subnets.extend(subnets.get(cloud_region, []))
             mirror_info.subnets = total_subnets
-
-
-async def get_coords_by_city(
-        city: str,
-        state: Optional[str],
-        country: str,
-        sem: asyncio.Semaphore
-) -> tuple[float, float]:
-    cached_latitude, cached_longitude = await get_geolocation_from_cache(
-        f'nominatim_{country}_{state}_{city}'
-    )
-    if cached_latitude is not None and cached_longitude is not None:
-        return cached_latitude, cached_longitude
-
-    try:
-        async with sem:
-            async with geopy.geocoders.Nominatim(
-                user_agent="mirrors.almalinux.org",
-                domain='nominatim.openstreetmap.org',
-                adapter_factory=AioHTTPAdapter,
-            ) as geo:
-                try:
-                    result = await geo.geocode(
-                        query={
-                            'city': city,
-                            'state': state,
-                            'country': country
-                        },
-                        exactly_one=True
-                    )
-                except asyncio.CancelledError as err:
-                    logger.warning(
-                        'Cannot get info from the geo service because "%s"',
-                        err,
-                    )
-                    return 0.0, 0.0
-                if result is None:
-                    return 0.0, 0.0
-                await set_geolocation_to_cache(
-                    f'nominatim_{country}_{state}_{city}',
-                    {
-                        'latitude': result.latitude,
-                        'longitude': result.longitude,
-                    }
-               )
-            # nominatim api AUP is 1req/s
-            await asyncio.sleep(2)
-    except GeocoderServiceError as err:
-        logger.warning(
-            'Error retrieving Nominatim data for "%s".  Exception: "%s"',
-            f'{city}, {state}, {country}',
-            err
-        )
-        return 0.0, 0.0
-    except:
-        logger.exception('Unknown except occurred in geopy/nominatim lookup')
-        return 0.0, 0.0
-
-    try:
-        return result.latitude, result.longitude
-    except AttributeError:
-        return 0.0, 0.0
 
 
 def get_distance_in_km(

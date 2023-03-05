@@ -24,6 +24,7 @@ python_packages:
   - Flask-BS4==5.2.2.0
   - flask[async]==2.2.3
   - Flask-API==3.0.post1
+  - flask-caching==2.0.2
   - geopy==2.3.0
   - geoip2==4.6.0
   - gunicorn[gthread]==20.1.0

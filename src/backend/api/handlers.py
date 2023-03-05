@@ -3,7 +3,9 @@ import asyncio
 import itertools
 import os
 import random
+import time
 from collections import defaultdict
+from inspect import signature
 from pathlib import Path
 from typing import Optional, Union
 from urllib.parse import urljoin
@@ -14,17 +16,14 @@ from sqlalchemy.orm import joinedload
 
 from api.exceptions import UnknownRepoAttribute
 from api.mirror_processor import MirrorProcessor
+from db.db_engine import FlaskCacheEngine
 from yaml_snippets.utils import (
     get_config,
     get_mirrors_info,
 )
 from api.redis import (
-    set_mirrors_to_cache,
-    get_url_types_from_cache,
-    set_url_types_to_cache,
-    set_mirror_list,
-    get_mirror_list,
-    get_mirrors_from_cache,
+    _generate_redis_key_for_the_mirrors_list,
+    MIRRORS_LIST_EXPIRED_TIME,
 )
 from api.utils import (
     get_geo_data_by_ip,
@@ -50,6 +49,7 @@ from sqlalchemy.sql.expression import or_
 from common.sentry import get_logger
 
 logger = get_logger(__name__)
+cache = FlaskCacheEngine.get_instance()
 
 
 LENGTH_GEO_MIRRORS_LIST = 10
@@ -68,12 +68,13 @@ MIRROR_CONFIG_JSON_SCHEMA_DIR_PATH = os.path.join(
 )
 
 
-async def _get_nearest_mirrors_by_network_data(
+def _get_nearest_mirrors_by_network_data(
         ip_address: str,
         get_without_private_mirrors: bool,
         get_without_cloud_mirrors: bool,
         get_mirrors_with_full_set_of_isos: bool,
         get_working_mirrors: bool,
+        get_expired_mirrors: bool,
 ) -> list[MirrorData]:
     """
     The function returns mirrors which are in the same subnet or have the same
@@ -98,8 +99,9 @@ async def _get_nearest_mirrors_by_network_data(
     asn = get_asn_by_ip(ip_address)
     suitable_mirrors = []
 
-    mirrors = await get_all_mirrors(
+    mirrors = get_all_mirrors(
         get_working_mirrors=get_working_mirrors,
+        get_expired_mirrors=get_expired_mirrors,
         get_without_cloud_mirrors=get_without_cloud_mirrors,
         get_without_private_mirrors=get_without_private_mirrors,
         get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos,
@@ -137,20 +139,22 @@ async def _get_nearest_mirrors_by_network_data(
     return suitable_mirrors
 
 
-async def _get_nearest_mirrors_by_geo_data(
+def _get_nearest_mirrors_by_geo_data(
         ip_address: str,
         get_without_private_mirrors: bool,
         get_without_cloud_mirrors: bool,
         get_mirrors_with_full_set_of_isos: bool,
         get_working_mirrors: bool,
+        get_expired_mirrors: bool,
 ) -> list[MirrorData]:
     """
     The function returns nearest N mirrors to a client
     Read comments below to get more information
     """
     match = get_geo_data_by_ip(ip_address)
-    mirrors = await get_all_mirrors(
+    mirrors = get_all_mirrors(
         get_working_mirrors=get_working_mirrors,
+        get_expired_mirrors=get_expired_mirrors,
         get_without_cloud_mirrors=get_without_cloud_mirrors,
         get_without_private_mirrors=get_without_private_mirrors,
         get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos,
@@ -185,53 +189,43 @@ async def _get_nearest_mirrors_by_geo_data(
     return mirrors[:LENGTH_GEO_MIRRORS_LIST]
 
 
-async def _get_nearest_mirrors(
+def _get_nearest_mirrors(
         ip_address: Optional[str],
         get_without_private_mirrors: bool,
         get_without_cloud_mirrors: bool,
         get_mirrors_with_full_set_of_isos: bool,
         get_working_mirrors: bool,
+        get_expired_mirrors: bool,
 ) -> list[MirrorData]:
     """
     Get the nearest mirrors by geo-data or by subnet/ASN
     """
     if ip_address is None:
-        return await get_all_mirrors(
+        return get_all_mirrors(
             get_working_mirrors=get_working_mirrors,
+            get_expired_mirrors=get_expired_mirrors,
             get_without_cloud_mirrors=get_without_cloud_mirrors,
             get_without_private_mirrors=get_without_private_mirrors,
             get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos,
         )
-    if os.getenv('DISABLE_CACHING_NEAREST_MIRRORS'):
-        suitable_mirrors = None
-    else:
-        suitable_mirrors = await get_mirrors_from_cache(
-            key=ip_address,
-            get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos
-        )
-    if suitable_mirrors is not None:
-        return suitable_mirrors
-    suitable_mirrors = await _get_nearest_mirrors_by_network_data(
+    suitable_mirrors = _get_nearest_mirrors_by_network_data(
         ip_address=ip_address,
         get_working_mirrors=get_working_mirrors,
+        get_expired_mirrors=get_expired_mirrors,
         get_without_cloud_mirrors=get_without_cloud_mirrors,
         get_without_private_mirrors=get_without_private_mirrors,
         get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos,
     )
     if not suitable_mirrors:
-        suitable_mirrors = await _get_nearest_mirrors_by_geo_data(
+        suitable_mirrors = _get_nearest_mirrors_by_geo_data(
             ip_address=ip_address,
             get_working_mirrors=get_working_mirrors,
+            get_expired_mirrors=get_expired_mirrors,
             get_without_cloud_mirrors=get_without_cloud_mirrors,
             # we already get private mirrors by network data
             get_without_private_mirrors=True,
             get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos
-        )
-    await set_mirrors_to_cache(
-        key=ip_address,
-        mirrors=suitable_mirrors,
-        get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos,
-    )
+            )
     return suitable_mirrors
 
 
@@ -257,9 +251,11 @@ async def update_mirrors_handler() -> str:
     pid_file_path = Path(os.getenv('MIRRORS_UPDATE_PID'))
     if pid_file_path.exists():
         return 'Update is already running'
+    time1 = time.time()
     try:
+        logger.info('Update of the mirrors list is started')
         pid_file_path.write_text(str(os.getpid()))
-        step = 20
+        step = 100
         mirror_check_sem = asyncio.Semaphore(step)
         mirrors_len = len(all_mirrors)
         async with mirror_check_sem, MirrorProcessor(
@@ -352,10 +348,6 @@ async def update_mirrors_handler() -> str:
             db_session.query(Url).delete()
             db_session.query(Subnet).delete()
             for mirror_info in all_mirrors:
-                if mirror_info.ip in ('Unknown', None):
-                    continue
-                if mirror_info.status not in ('ok', 'expired'):
-                    continue
                 urls_to_create = [
                     Url(
                         url=url,
@@ -399,57 +391,33 @@ async def update_mirrors_handler() -> str:
                     db_session.add_all(subnets_to_create)
                     mirror_to_create.subnets = subnets_to_create
                 db_session.add(mirror_to_create)
-        # update all mirrors list in the Redis cache
-        for args in itertools.product((True, False), repeat=4):
-            await refresh_mirrors_cache(*args)
+        # update all mirrors lists in the Redis cache
+        for args in itertools.product(
+                (True, False),
+                repeat=len(signature(get_all_mirrors_db).parameters),
+        ):
+            get_all_mirrors_db(*args)
     finally:
+        logger.info(
+            'Update of the mirrors list is finished at "%s"',
+            time.time() - time1,
+        )
         if pid_file_path.exists():
             os.remove(pid_file_path)
     return 'Done'
 
 
-async def refresh_mirrors_cache(
+def get_all_mirrors(
         get_working_mirrors: bool = False,
-        get_without_cloud_mirrors: bool = False,
-        get_without_private_mirrors: bool = False,
-        get_mirrors_with_full_set_of_isos: bool = False
-):
-    """
-    Refresh cache of a mirrors list in Redis
-    :param get_working_mirrors: select mirrors which are not expired
-    :param get_without_cloud_mirrors: select mirrors without those who are
-           hosted in clouds (Azure/AWS)
-    :param get_without_private_mirrors: select mirrors without those who are
-           hosted behind NAT
-    :param get_mirrors_with_full_set_of_isos: select mirrors which have full
-           set of ISOs and them artifacts (CHECKSUM, manifests)
-           per each version and architecture
-    """
-    mirrors = await get_all_mirrors_db(
-        get_working_mirrors=get_working_mirrors,
-        get_without_cloud_mirrors=get_without_cloud_mirrors,
-        get_without_private_mirrors=get_without_private_mirrors,
-        get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos,
-    )
-    mirror_list = [mirror.to_json() for mirror in mirrors]
-    await set_mirror_list(
-        mirrors=mirror_list,
-        get_working_mirrors=get_working_mirrors,
-        get_without_cloud_mirrors=get_without_cloud_mirrors,
-        get_without_private_mirrors=get_without_private_mirrors,
-        get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos,
-    )
-
-
-async def get_all_mirrors(
-        get_working_mirrors: bool = False,
+        get_expired_mirrors: bool = False,
         get_without_cloud_mirrors: bool = False,
         get_without_private_mirrors: bool = False,
         get_mirrors_with_full_set_of_isos: bool = False
 ) -> list[MirrorData]:
     """
     Get the list of all mirrors from cache or regenerate one if it's empty
-    :param get_working_mirrors: select mirrors which are not expired
+    :param get_working_mirrors: select mirrors which have status 'ok'
+    :param get_expired_mirrors: select mirrors which have status 'expired'
     :param get_without_cloud_mirrors: select mirrors without those who are
            hosted in clouds (Azure/AWS)
     :param get_without_private_mirrors: select mirrors without those who are
@@ -458,38 +426,32 @@ async def get_all_mirrors(
            set of ISOs and them artifacts (CHECKSUM, manifests)
            per each version and architecture
     """
-    mirrors = await get_mirror_list(
+    mirrors = get_all_mirrors_db(
         get_working_mirrors=get_working_mirrors,
+        get_expired_mirrors=get_expired_mirrors,
         get_without_cloud_mirrors=get_without_cloud_mirrors,
         get_without_private_mirrors=get_without_private_mirrors,
         get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos,
     )
-    if not mirrors:
-        await refresh_mirrors_cache(
-            get_working_mirrors=get_working_mirrors,
-            get_without_cloud_mirrors=get_without_cloud_mirrors,
-            get_without_private_mirrors=get_without_private_mirrors,
-            get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos
-        )
-        mirrors = await get_mirror_list(
-            get_working_mirrors=get_working_mirrors,
-            get_without_cloud_mirrors=get_without_cloud_mirrors,
-            get_without_private_mirrors=get_without_private_mirrors,
-            get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos
-        )
     random.shuffle(mirrors)
     return mirrors
 
 
-async def get_all_mirrors_db(
+@cache.cached(
+    timeout=MIRRORS_LIST_EXPIRED_TIME,
+    make_cache_key=_generate_redis_key_for_the_mirrors_list,
+)
+def get_all_mirrors_db(
         get_working_mirrors: bool = False,
+        get_expired_mirrors: bool = False,
         get_without_cloud_mirrors: bool = False,
         get_without_private_mirrors: bool = False,
         get_mirrors_with_full_set_of_isos: bool = False
 ) -> list[MirrorData]:
     """
     Get a mirrors list from DB
-    :param get_working_mirrors: select mirrors which are not expired
+    :param get_working_mirrors: select mirrors which have status 'ok'
+    :param get_expired_mirrors: select mirrors which have status 'expired'
     :param get_without_cloud_mirrors: select mirrors without those who are
            hosted in clouds (Azure/AWS)
     :param get_without_private_mirrors: select mirrors without those who are
@@ -520,13 +482,18 @@ async def get_all_mirrors_db(
             mirrors_query = mirrors_query.filter(
                 Mirror.has_full_iso_set.is_(True),
             )
+        or_filter = []
+        if get_expired_mirrors:
+            or_filter.append(Mirror.status.is_('ok'))
         if get_working_mirrors:
+            or_filter.append(Mirror.status.is_('expired'))
+        if or_filter:
             mirrors_query = mirrors_query.filter(
-                Mirror.status == 'ok',
+                or_(*or_filter)
             )
         if get_without_cloud_mirrors:
             mirrors_query = mirrors_query.filter(
-                Mirror.cloud_type == '',
+                Mirror.cloud_type.is_(''),
             )
         mirrors = mirrors_query.all()
         for mirror in mirrors:
@@ -592,7 +559,7 @@ def get_allowed_version(
         return version
 
 
-async def get_mirrors_list(
+def get_mirrors_list(
         ip_address: Optional[str],
         version: str,
         arch: Optional[str],
@@ -644,20 +611,22 @@ async def get_mirrors_list(
             repo_path,
         )
     if iso_list:
-        nearest_mirrors = await _get_nearest_mirrors(
+        nearest_mirrors = _get_nearest_mirrors(
             ip_address=ip_address,
             get_mirrors_with_full_set_of_isos=True,
             get_without_private_mirrors=True,
             get_working_mirrors=True,
             get_without_cloud_mirrors=True,
+            get_expired_mirrors=False,
         )
     else:
-        nearest_mirrors = await _get_nearest_mirrors(
+        nearest_mirrors = _get_nearest_mirrors(
             ip_address=ip_address,
             get_mirrors_with_full_set_of_isos=False,
             get_without_private_mirrors=False,
             get_working_mirrors=True,
             get_without_cloud_mirrors=False,
+            get_expired_mirrors=False,
         )
     if debug_info:
         data = defaultdict(dict)
@@ -691,11 +660,11 @@ async def get_mirrors_list(
     return '\n'.join(mirrors_list)
 
 
-async def get_isos_list_by_countries(
+def get_isos_list_by_countries(
         ip_address: Optional[str],
 ) -> tuple[dict[str, list[MirrorData]], list[MirrorData]]:
     mirrors_by_countries = defaultdict(list)
-    for mirror_info in await get_all_mirrors(
+    for mirror_info in get_all_mirrors(
         get_without_private_mirrors=True,
         get_mirrors_with_full_set_of_isos=True,
         get_without_cloud_mirrors=True,
@@ -704,12 +673,13 @@ async def get_isos_list_by_countries(
         mirrors_by_countries[
             mirror_info.geolocation.country
         ].append(mirror_info)
-    nearest_mirrors = await _get_nearest_mirrors(
+    nearest_mirrors = _get_nearest_mirrors(
         ip_address=ip_address,
         get_without_private_mirrors=True,
         get_mirrors_with_full_set_of_isos=True,
         get_without_cloud_mirrors=True,
         get_working_mirrors=True,
+        get_expired_mirrors=False,
     )
     return mirrors_by_countries, nearest_mirrors
 
@@ -724,15 +694,3 @@ def get_main_isos_table(config: MainConfig) -> dict[str, list[str]]:
         ]
 
     return result
-
-
-async def get_url_types() -> list[str]:
-    url_types = await get_url_types_from_cache()
-    if url_types is not None:
-        return url_types
-    with session_scope() as session:
-        url_types = sorted(value[0] for value in session.query(
-            Url.type
-        ).distinct())
-        await set_url_types_to_cache(url_types)
-        return url_types
