@@ -192,8 +192,9 @@ class TheMirrorsService(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        cls._load_service_config()
         logging.basicConfig(level=logging.INFO)
+        cls._load_service_config()
+        logging.info('Check the service by url "%s"', cls.service_url)
 
 
 if __name__ == '__main__':
