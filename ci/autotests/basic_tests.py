@@ -3,12 +3,16 @@ import yaml
 import requests
 import logging
 import ddt
+import os
 
 
 @ddt.ddt
 class TheMirrorsService(unittest.TestCase):
 
-    service_url = 'http://mirrors-dev.almalinux.org'
+    service_url = os.environ.get(
+        'al_mirrors_service_url',
+        'http://mirrors-dev.almalinux.org',
+    )
     config = None
     config_url = (
         'https://raw.githubusercontent.com'
