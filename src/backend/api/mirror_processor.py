@@ -306,10 +306,6 @@ class MirrorProcessor:
                 mirror_info.name,
                 str(err) or type(err),
             )
-            mirror_info.status = (
-                'Cannot get geodata for the mirror from '
-                f'online DB by reason "{str(err) or type(err)}"'
-            )
 
     async def set_ipv6_support_of_mirror(
             self,

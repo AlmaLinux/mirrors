@@ -80,7 +80,18 @@ def _get_request_ip(*args, **kwargs) -> Optional[str]:
                     request.remote_addr,
                     request.headers,
                 )
+    else:
+        result = ip_address
     return test_ip_address or result
+
+
+def make_redis_key(version: str, repository: str, *args, **kwargs) -> str:
+    ip = _get_request_ip()
+    return f'{ip}_{version}_{repository}'
+
+
+def unless_make_cache(*args, **kwargs) -> bool:
+    return _get_request_ip() is None
 
 
 @app.route(
@@ -91,7 +102,7 @@ def _get_request_ip(*args, **kwargs) -> Optional[str]:
 def my_ip_and_headers():
     result = {}
     result.update(request.headers)
-    ips = []
+    ips = [request.remote_addr]
     for ip in [
                   request.headers.get('X-Real-Ip')
               ] + request.headers.get('X-Forwarded-For', '').split(','):
@@ -130,7 +141,8 @@ def my_ip_and_headers():
 )
 @cache.cached(
     timeout=CACHE_EXPIRED_TIME,
-    make_cache_key=_get_request_ip,
+    make_cache_key=make_redis_key,
+    unless=unless_make_cache,
 )
 @success_result
 @error_result
