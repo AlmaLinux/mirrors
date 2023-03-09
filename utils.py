@@ -121,18 +121,19 @@ AIOHTTP_TIMEOUT = 30
 
 async def check_tasks(
         created_tasks: list[asyncio.Task],
-) -> bool:
+) -> tuple[bool, Optional[str]]:
     done_tasks, pending_tasks = await asyncio.wait(
         created_tasks,
         return_when=asyncio.FIRST_COMPLETED,
     )
     for future in done_tasks:
-        if not future.result():
+        result, reason = future.result()
+        if not result:
             for pending_task in pending_tasks:
                 pending_task.cancel()
-            return False
+            return False, reason
     if not pending_tasks:
-        return True
+        return True, None
     return await check_tasks(
         pending_tasks,
     )
@@ -162,7 +163,7 @@ async def is_url_available(
             await response.text()
         if success_msg is not None and success_msg_vars is not None:
             logger.info(success_msg, success_msg_vars)
-        return True
+        return True, None
     except (
             TimeoutError,
             HTTPError,
@@ -174,9 +175,9 @@ async def is_url_available(
         if error_msg is not None and error_msg_vars is not None:
             error_msg_vars['err'] = str(err) or type(err)
             logger.warning(error_msg, error_msg_vars)
-        return False
-    except CancelledError:
-        return False
+        return False, str(err) or type(err)
+    except CancelledError as err:
+        return False, str(err) or type(err)
 
 
 def load_json_schema(
@@ -513,7 +514,7 @@ async def mirror_available(
         http_session: ClientType,
         main_config: MainConfig,
         logger: Logger,
-) -> tuple[str, bool]:
+) -> tuple[bool, Optional[str]]:
     """
     Check mirror availability
     :param mirror_info: the dictionary which contains info about a mirror
@@ -529,7 +530,7 @@ async def mirror_available(
             'Mirror "%s" is private and won\'t be checked',
             mirror_name,
         )
-        return mirror_name, True
+        return  True
     urls_for_checking = {}
     for version in main_config.versions:
         # cloud mirrors (Azure/AWS) don't store beta versions
@@ -584,30 +585,29 @@ async def mirror_available(
         'Mirror "%(name)s" is not available for version '
         '"%(version)s" and repo path "%(repo)s" because "%(err)s"'
     )
+    mirror_availability_semaphore = asyncio.Semaphore(10)
+    async with mirror_availability_semaphore:
+        tasks = [asyncio.ensure_future(
+            is_url_available(
+                url=check_url,
+                http_session=http_session,
+                logger=logger,
+                is_get_request=True,
+                success_msg=success_msg,
+                success_msg_vars=None,
+                error_msg=error_msg,
+                error_msg_vars={
+                    'name': mirror_name,
+                    'version': url_info['version'],
+                    'repo': url_info['repo_path'],
+                },
+            )
+        ) for check_url, url_info in urls_for_checking.items()]
+        result, reason = await check_tasks(tasks)
 
-    tasks = [asyncio.ensure_future(
-        is_url_available(
-            url=check_url,
-            http_session=http_session,
-            logger=logger,
-            is_get_request=True,
-            success_msg=success_msg,
-            success_msg_vars=None,
-            error_msg=error_msg,
-            error_msg_vars={
-                'name': mirror_name,
-                'version': url_info['version'],
-                'repo': url_info['repo_path'],
-            },
+    if result:
+        logger.info(
+            'Mirror "%s" is available',
+            mirror_name,
         )
-    ) for check_url, url_info in urls_for_checking.items()]
-
-    result = await check_tasks(tasks)
-
-    if not result:
-        return mirror_name, False
-    logger.info(
-        'Mirror "%s" is available',
-        mirror_name,
-    )
-    return mirror_name, True
+    return result, reason
