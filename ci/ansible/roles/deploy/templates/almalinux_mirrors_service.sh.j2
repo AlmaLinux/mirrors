@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+[[ -f "{{ mirrors_list_update_pid }}" ]] && rm -f "{{ mirrors_list_update_pid }}"
 export SQLITE_PATH={{ config_root }}/data/mirrors.db
 export PYTHONPATH={{ source_path }}/src/backend
 export DEPLOY_ENVIRONMENT={{ config_root }}/deploy_environment.var

@@ -3,8 +3,8 @@ ansible_dnf_packages:
   - python3-libselinux
   - python3-libsemanage
 dnf_packages:
-  - python39
-  - python39-devel
+  - python3
+  - python3-devel
   - git
   - redis
   - nginx
@@ -16,25 +16,26 @@ dnf_packages:
   - setools-console
 python_packages:
   - aiodns==3.0.0
-  - aioredis[hiredis]==2.0.0
   - aiohttp-retry==2.8.3
-  - alembic==1.7.4
-  - beautifulsoup4==4.10.0
-  - blinker==1.4
-  - dataclasses==0.6
-  - dateparser==1.1.1
-  - geopy==2.2.0
-  - gunicorn[gthread]==20.1.0
-  - Flask-BS4==5.0.0.1
-  - flask[async]==2.0.2
+  - alembic==1.9.4
+  - beautifulsoup4==4.11.2
+  - blinker==1.5
+  - dateparser==1.1.7
+  - Flask-BS4==5.2.2.0
+  - flask[async]==2.2.3
   - Flask-API==3.0.post1
-  - geoip2==4.4.0
-  - haversine==2.5.1
-  - jsonschema==3.2.0
-  - Jinja2==3.0.2
-  - lxml==4.6.3
+  - flask-caching==2.0.2
+  - geopy==2.3.0
+  - geoip2==4.6.0
+  - gunicorn[gthread]==20.1.0
+  - haversine==2.8.0
+  - jsonschema==4.17.3
+  - Jinja2==3.1.2
+  - lxml==4.9.2
+  - pycountry==22.3.5
   - pyyaml==6.0
-  - requests==2.26.0
-  - sentry-sdk[flask]==1.4.3
-  - sqlalchemy==1.4.27
-  - Werkzeug==2.0.2
+  - redis==4.5.1
+  - requests==2.28.2
+  - sentry-sdk[flask]==1.16.0
+  - sqlalchemy==2.0.4
+  - Werkzeug==2.2.2

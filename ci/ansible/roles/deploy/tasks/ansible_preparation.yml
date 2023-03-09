@@ -2,4 +2,7 @@
 - name: Install DNF packages for right works of Ansible
   dnf:
     name: "{{ ansible_dnf_packages }}"
-    state: present
+    state: latest
+    update_cache: yes
+  tags:
+    - update_packages

@@ -1,7 +1,7 @@
 ---
 - name: Disable persistent storage for Redis
   lineinfile:
-    path: /etc/redis.conf
+    path: "{{ redis_conf }}"
     regexp: '^appendonly yes$'
     line: 'appendonly no'
     state: present
@@ -9,21 +9,21 @@
 
 - name: Disable RDB snapshots for Redis
   lineinfile:
-    path: /etc/redis.conf
+    path: "{{ redis_conf }}"
     regexp: '^save .*'
     state: absent
     insertbefore: BOF
 
 - name: Disable RDB snapshots for Redis
   lineinfile:
-    path: /etc/redis.conf
+    path: "{{ redis_conf }}"
     line: 'save ""'
     state: present
     insertbefore: BOF
 
 - name: Enable redis socket
   lineinfile:
-    path: /etc/redis.conf
+    path: "{{ redis_conf }}"
     regexp: '^unixsocket'
     line: unixsocket {{ redis_socket_path }}
     state: present
@@ -31,7 +31,7 @@
 
 - name: Set redis socket perms
   lineinfile:
-    path: /etc/redis.conf
+    path: "{{ redis_conf }}"
     regex: '^unixsocketperm'
     line: unixsocketperm 777
     state: present

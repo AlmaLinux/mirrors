@@ -151,7 +151,7 @@ class Mirror(Base):
             geolocation=GeoLocationData(
                 continent=self.continent,
                 country=self.country,
-                state=self.state,
+                state_province=self.state,
                 city=self.city,
             ),
             status=self.status,
@@ -171,6 +171,7 @@ class Mirror(Base):
             ipv6=self.ipv6,
             mirror_url=self.mirror_url,
             iso_url=self.iso_url,
+            has_full_iso_set=self.has_full_iso_set,
         )
 
     def get_subnets(self) -> list[str]:

@@ -8,7 +8,10 @@
 - name: Install DNF packages
   dnf:
     name: "{{ dnf_packages }}"
-    state: present
+    state: latest
+    update_cache: yes
+  tags:
+    - update_packages
 
 - name: Set SELinux option for right working of nginx + Gunicorn
   seboolean:
@@ -19,6 +22,8 @@
 - name: Set config_root
   set_fact:
     config_root: "/etc/mirrors_service/{{ container_env_prefix }}"
+  tags:
+    - always
 
 - name: Create configs directory
   file:

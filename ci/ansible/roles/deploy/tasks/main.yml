@@ -11,8 +11,6 @@
     - name: Deploy tasks
       block:
         - import_tasks: common_setup.yml
-          tags:
-            - always
         - import_tasks: deploy_files.yml
           tags:
             - deploy_files
@@ -26,6 +24,8 @@
           tags:
             - backend
         - import_tasks: nginx_configuration.yml
+          tags:
+            - nginx
       tags:
         - deploy
 
@@ -35,4 +35,4 @@
       tags:
         - tests
   vars:
-    ansible_python_interpreter: "/usr/bin/python3.6"
+    ansible_python_interpreter: "/usr/bin/python3"
