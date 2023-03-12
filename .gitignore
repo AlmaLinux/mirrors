@@ -1,7 +1,7 @@
 .idea
 .venv
 mirrors
-ci/ansible/inventory/aws
 mirrors.db
 src/backend/db/geoip_db.mmdb
 src/backend/db/asn_db.mmdb
+vault-pass
