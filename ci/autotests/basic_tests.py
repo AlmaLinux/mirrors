@@ -190,6 +190,33 @@ class TheMirrorsService(unittest.TestCase):
                     )
                     self.assertTrue(mirror.endswith(mirror_suffix), msg=msg)
 
+    @ddt.unpack
+    @ddt.data(
+        (
+                '63.251.5.1',
+                'http://westus2.azure.repo.almalinux.org/almalinux/',
+        ),
+    )
+    def test_06_no_azure_by_geodata(self, ip, mirror):
+        logging.info('Check IP: "%s" for mirror "%s"', ip, mirror)
+        headers = {
+            'X-Forwarded-For': ip,
+        }
+        version = self.versions[len(self.versions) - 1]
+        repo_dict = self.repos[0]
+        repo_name = repo_dict['name']
+        repo_path = repo_dict['path']
+        mirror_suffix = self._make_mirror_suffix(version, repo_path)
+        mirror = f'{mirror}{mirror_suffix}'
+        url = f'{self.service_url}/mirrorlist/{version}/{repo_name}'
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        mirrors_list = self._parse_mirror_list(response.text)
+        self.assertTrue(
+            mirror not in mirrors_list,
+            msg=f'{mirror} is present in {mirrors_list}',
+        )
+
     @classmethod
     def setUpClass(cls) -> None:
         logging.basicConfig(level=logging.INFO)

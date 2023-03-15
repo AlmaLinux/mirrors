@@ -221,8 +221,8 @@ def _get_nearest_mirrors(
             ip_address=ip_address,
             get_working_mirrors=get_working_mirrors,
             get_expired_mirrors=get_expired_mirrors,
-            get_without_cloud_mirrors=get_without_cloud_mirrors,
-            # we already get private mirrors by network data
+            # we already get private and cloud mirrors by network data
+            get_without_cloud_mirrors=True,
             get_without_private_mirrors=True,
             get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos
             )
@@ -252,6 +252,7 @@ async def update_mirrors_handler() -> str:
     if pid_file_path.exists():
         return 'Update is already running'
     time1 = time.time()
+    message = 'Update of the mirrors list is finished at "%s"'
     try:
         logger.info('Update of the mirrors list is started')
         pid_file_path.write_text(str(os.getpid()))
@@ -404,7 +405,7 @@ async def update_mirrors_handler() -> str:
         )
         if pid_file_path.exists():
             os.remove(pid_file_path)
-    return 'Done'
+    return message % (time.time() - time1)
 
 
 def get_all_mirrors(
