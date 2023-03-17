@@ -173,11 +173,11 @@ async def is_url_available(
             UnicodeError,
     ) as err:
         if error_msg is not None and error_msg_vars is not None:
-            error_msg_vars['err'] = str(err) or type(err)
+            error_msg_vars['err'] = str(err) or str(type(err))
             logger.warning(error_msg, error_msg_vars)
-        return False, str(err) or type(err)
+        return False, str(err) or str(type(err))
     except CancelledError as err:
-        return False, str(err) or type(err)
+        return False, str(err) or str(type(err))
 
 
 def load_json_schema(
@@ -530,7 +530,7 @@ async def mirror_available(
             'Mirror "%s" is private and won\'t be checked',
             mirror_name,
         )
-        return  True
+        return True
     urls_for_checking = {}
     for version in main_config.versions:
         # cloud mirrors (Azure/AWS) don't store beta versions
