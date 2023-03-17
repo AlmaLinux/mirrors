@@ -304,7 +304,7 @@ class MirrorProcessor:
                 'Cannot get geodata for mirror'
                 ' "%s" from online DB because "%s"',
                 mirror_info.name,
-                str(err) or type(err),
+                str(err) or str(type(err)),
             )
 
     async def set_ipv6_support_of_mirror(
@@ -437,7 +437,7 @@ class MirrorProcessor:
                 'Mirror "%s" has no timestamp file by url "%s" because "%s"',
                 mirror_info.name,
                 timestamp_url,
-                str(err) or type(err),
+                str(err) or str(type(err)),
             )
             return True
         try:

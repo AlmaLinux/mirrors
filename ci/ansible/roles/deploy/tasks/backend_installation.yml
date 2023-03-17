@@ -58,13 +58,16 @@
         - "{{ source_path }}/bin/python3.9"
         - "{{ source_path }}/bin/gunicorn"
 
-- name: Prepare gunicorn.py
+- name: Prepare started Py script
   template:
-    dest: "{{ source_path }}/src/backend/gunicorn.py"
-    src: gunicorn.py.j2
+    dest: "{{ source_path }}/src/backend/{{ item }}"
+    src: "{{ item }}.j2"
     owner: "{{ service_user }}"
     group: "{{ service_user }}"
     mode: 0600
+  with_items:
+    - "gunicorn.py"
+    - "service.py"
 
 - name: Prepare started script of backend service
   template:
@@ -78,17 +81,20 @@
 
 - name: Install systemd service of Gunicorn backend
   template:
-    dest: "{{ systemd_services_path }}/{{ mirrors_service }}.service"
-    src: "{{ mirrors_service }}.service.j2"
+    dest: "{{ systemd_services_path }}/{{ item }}.service"
+    src: "{{ item }}.service.j2"
     group: "{{ service_user }}"
     owner: "{{ service_user }}"
     setype: systemd_unit_file_t
     seuser: system_u
     mode: 0640
+  with_items:
+    - "{{ mirrors_service }}"
+    - "{{ utilities_service }}"
 
 - name: Enable systemd service of Gunicorn backend
   systemd:
-    name: "{{ mirrors_service }}.service"
+    name: "{{ item }}.service"
     state: restarted
     enabled: yes
     masked: no
@@ -96,3 +102,6 @@
   tags:
     - backend_systemd_service
     - deploy_files
+  with_items:
+    - "{{ mirrors_service }}"
+    - "{{ utilities_service }}"

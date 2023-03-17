@@ -12,5 +12,6 @@ backend_workers=4
 auth_key=vagrant
 test_ip_address=<ip_address_of_request_for_debugging>
 gunicorn_port=5600
+utilities_port=5601
 license_key=<License key from MaxMind site>
 rsyslog_server=10.0.0.10

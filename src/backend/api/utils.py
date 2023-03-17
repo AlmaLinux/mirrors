@@ -87,10 +87,13 @@ def auth_key_required(f):
     Decorator: Check auth key
     """
     @wraps(f)
-    def decorated_function(*args, **kwargs):
+    async def decorated_function(*args, **kwargs):
         if request.method == 'GET' or \
                 AUTH_KEY == request.cookies.get('AUTH_KEY'):
-            return f(*args, **kwargs)
+            if inspect.iscoroutinefunction(f):
+                return await f(*args, **kwargs)
+            else:
+                return f(*args, **kwargs)
         else:
             raise AuthException('Invalid auth key is passed')
     return decorated_function
@@ -103,9 +106,11 @@ def success_result(f):
 
     @wraps(f)
     async def decorated_function(*args, **kwargs):
-        result = f(*args, **kwargs)
-        if inspect.isawaitable(result):
-            result = await result
+        logger.info('success f: %s', inspect.iscoroutinefunction(f))
+        if inspect.iscoroutinefunction(f):
+            result = await f(*args, **kwargs)
+        else:
+            result = f(*args, **kwargs)
         if request.method == 'POST':
             return jsonify_response(
                 status='success',
@@ -129,11 +134,10 @@ def error_result(f):
     @wraps(f)
     async def decorated_function(*args, **kwargs):
         try:
-            result = f(*args, **kwargs)
-            if inspect.isawaitable(result):
-                return await result
+            if inspect.iscoroutinefunction(f):
+                return await f(*args, **kwargs)
             else:
-                return result
+                return f(*args, **kwargs)
         except BaseCustomException:
             raise
         except Exception as err:

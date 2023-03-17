@@ -12,4 +12,4 @@ for i in $(seq 1 40); do
         curl -I http://[::1]:80 && break
         sleep 15
 done
-curl --cookie 'AUTH_KEY={{ auth_key }}' -X POST http://[::1]:{{ gunicorn_port }}/update_mirrors
+curl --cookie 'AUTH_KEY={{ auth_key }}' -X POST http://[::1]:{{ utilities_port }}/update_mirrors

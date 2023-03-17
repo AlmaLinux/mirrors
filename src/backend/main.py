@@ -13,7 +13,6 @@ from flask import (
 )
 
 from api.handlers import (
-    update_mirrors_handler,
     get_mirrors_list,
     get_all_mirrors,
     get_isos_list_by_countries,
@@ -36,7 +35,6 @@ from yaml_snippets.utils import get_config
 from api.utils import (
     success_result,
     error_result,
-    auth_key_required,
     jsonify_response,
     get_geo_data_by_ip,
 )
@@ -216,18 +214,6 @@ def get_iso_list(
         repository=None,
         iso_list=True,
     )
-
-
-@app.route(
-    '/update_mirrors',
-    methods=('POST',),
-)
-@success_result
-@error_result
-@auth_key_required
-async def update_mirrors():
-    result = await update_mirrors_handler()
-    return result
 
 
 @app.route(

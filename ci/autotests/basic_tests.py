@@ -186,7 +186,7 @@ class TheMirrorsService(unittest.TestCase):
                     )
                     msg = (
                         f'Wrong ISOs mirror "{mirror}" '
-                        f'for mirror_suffix "{mirror_suffix}'
+                        f'for mirror_suffix "{mirror_suffix}"'
                     )
                     self.assertTrue(mirror.endswith(mirror_suffix), msg=msg)
 
