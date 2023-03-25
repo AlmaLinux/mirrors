@@ -1,8 +1,8 @@
 ---
-name: sou.mirrors.starbursthosting.co.uk
+name: almalinux.starbursthosting.co.uk
 address:
-  http: http://sou.mirrors.starbursthosting.co.uk/almalinux
-  https: https://sou.mirrors.starbursthosting.co.uk/almalinux
+  http: http://almalinux.starbursthosting.co.uk
+  https: https://almalinux.starbursthosting.co.uk
 update_frequency: 3h
 sponsor: Starburst Services
 sponsor_url: https://starbursthosting.co.uk
