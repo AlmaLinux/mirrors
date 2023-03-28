@@ -1,8 +1,0 @@
-name: mirrors.tino.org
-address:
-  http: http://mirrors.tino.vn/almalinux/
-  https: https://mirrors.tino.vn/almalinux/
-update_frequency: 1h
-sponsor: TINO GROUP
-sponsor_url: https://tino.vn/
-email: info@tino.org
