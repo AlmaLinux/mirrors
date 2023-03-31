@@ -2,7 +2,6 @@ name: mirror.host4.biz
 address:
   http: http://mirror.host4biz.eu/almalinux
   https: https://mirror.host4biz.eu/almalinux
-  rsync: rsync://mirror.host4biz.eu/almalinux
 update_frequency: 3h
 sponsor: Host4Biz
 sponsor_url: https://host4.biz/
