@@ -1,0 +1,14 @@
+---
+name: it1.mirror.vhosting-it.com
+address:
+  http: http://it1.mirror.vhosting-it.com/almalinux/
+  https: https://it1.mirror.vhosting-it.com/almalinux/
+geolocation:
+  country: IT
+  state_province: Milan
+  city: Milan
+update_frequency: 1h
+sponsor: VHosting Solution
+sponsor_url: https://www.vhosting-it.com/
+email: lorenzo@almalinux.org
+...

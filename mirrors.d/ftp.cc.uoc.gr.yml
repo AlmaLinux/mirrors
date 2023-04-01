@@ -1,0 +1,15 @@
+---
+name: ftp.cc.uoc.gr
+address:
+  http: http://ftp.cc.uoc.gr/mirrors/linux/almalinux/
+  https: https://ftp.cc.uoc.gr/mirrors/linux/almalinux/
+  ftp: ftp://ftp.cc.uoc.gr/mirrors/linux/almalinux/
+  rsync: rsync://ftp.cc.uoc.gr/almalinux/
+geolocation:
+  country: GR
+  state_province: Crete
+  city: Heraklion
+update_frequency: 4h
+sponsor: University of Crete - Department of Physics
+sponsor_url: https://www.physics.uoc.gr
+email: mirrors@cc.uoc.gr

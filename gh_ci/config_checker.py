@@ -1,9 +1,9 @@
 #!/usr/bin/env python3.9
 import argparse
 import logging
+import os.path
 
 import yaml
-import json
 import requests
 
 from aiohttp import (
@@ -21,6 +21,7 @@ from yaml_snippets.utils import (
     process_main_config,
     process_mirror_config,
     mirror_available,
+    load_json_schema,
 )
 
 logger = logging.getLogger(__name__)
@@ -46,19 +47,6 @@ class YamlFileType(argparse.FileType):
             )
 
 
-class JsonFileType(argparse.FileType):
-
-    def __call__(self, string):
-        file_stream = super(JsonFileType, self).__call__(string)
-        try:
-            return json.load(file_stream)
-        except json.JSONDecodeError as err:
-            raise argparse.ArgumentTypeError(
-                f'The JSON file by path "{file_stream.name}" '
-                f'is invalid because "{err}"'
-            )
-
-
 def create_parser():
     parser = argparse.ArgumentParser(
         description='The script checks validity of config (mirror or service) '
@@ -75,14 +63,6 @@ def create_parser():
         type=YamlFileType('r'),
     )
     parser.add_argument(
-        '-ss',
-        '--service-config-json-schema',
-        dest='service_config_json_schema',
-        help='Path to a JSON schema of service config.',
-        required=True,
-        type=JsonFileType('r'),
-    )
-    parser.add_argument(
         '-mc',
         '--mirror-configs',
         dest='mirror_configs',
@@ -90,13 +70,6 @@ def create_parser():
         default=[],
         nargs='+',
         type=YamlFileType('r'),
-    )
-    parser.add_argument(
-        '-ms',
-        '--mirror-config-json-schema',
-        dest='mirror_config_json_schema',
-        help='Path to a JSON schema of mirror config.',
-        type=JsonFileType('r'),
     )
     return parser
 
@@ -114,12 +87,9 @@ async def are_mirrors_available(
         for mirror in mirrors:
             mirror_name, is_available = await mirror_available(
                 mirror_info=mirror,
-                versions=main_config.versions,
-                repos=main_config.repos,
                 http_session=http_session,
-                arches=main_config.arches,
-                required_protocols=main_config.required_protocols,
                 logger=logger,
+                main_config=main_config,
             )
             if not is_available:
                 ret_code = 1
@@ -176,9 +146,16 @@ def do_mirrors_have_valid_geo_data(
 
 
 def main(args):
+    service_config_data = args.service_config['config_data']
+    service_config_version = service_config_data.get('config_version', 1)
+    json_schema_path = os.path.join(
+        'gh_ci/yaml_snippets/json_schemas/service_config',
+        f'v{service_config_version}.json',
+    )
+    json_schema = load_json_schema(path=json_schema_path)
     is_validity, err = config_validation(
-        yaml_data=args.service_config['config_data'],
-        json_schema=args.service_config_json_schema,
+        yaml_data=service_config_data,
+        json_schema=json_schema,
     )
     if is_validity:
         logger.info(
@@ -194,9 +171,16 @@ def main(args):
         exit(1)
     exit_code = 0
     for mirror_config in args.mirror_configs:
+        mirror_config_data = mirror_config['config_data']
+        mirror_config_version = mirror_config_data.get('config_version', 1)
+        json_schema_path = os.path.join(
+            'gh_ci/yaml_snippets/json_schemas/mirror_config',
+            f'v{mirror_config_version}.json',
+        )
+        json_schema = load_json_schema(path=json_schema_path)
         is_validity, err = config_validation(
-            yaml_data=args.service_config['config_data'],
-            json_schema=args.service_config_json_schema,
+            yaml_data=mirror_config_data,
+            json_schema=json_schema,
         )
         if is_validity:
             logger.info(

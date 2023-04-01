@@ -1,0 +1,13 @@
+---
+name: ap.edge.kernel.org
+address:
+  https: https://ap.edge.kernel.org/almalinux
+geolocation:
+  continent: Asia
+  country: Japan
+  city: Tokyo
+update_frequency: 3h
+sponsor: Linux Kernel Archives
+sponsor_url: https://kernel.org
+email: ftpadmin@kernel.org
+...

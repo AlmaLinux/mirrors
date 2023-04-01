@@ -1,0 +1,15 @@
+---
+name: mirror.anquan.cl
+address:
+  http: http://mirror.anquan.cl/almalinux/
+  https: https://mirror.anquan.cl/almalinux/
+  rsync: rsync://mirror.anquan.cl/almalinux/
+geolocation:
+  country: CL
+  state_province: Santiago
+  city: Santiago
+update_frequency: 1h
+sponsor: ANQUAN LTDA
+sponsor_url: https://www.anquan.cl
+email: sistemas@anquan.cl
+...

@@ -12,4 +12,7 @@ update_frequency: 4h
 sponsor: Rackspace Technology
 sponsor_url: https://www.rackspace.com
 email: mirroradmin@rackspace.com
+# used to disable mirror due to slow speeds
+# mirror owner is aware and working on it
+private: True
 ...

@@ -1,15 +1,15 @@
 ---
-name: KACST - MAEEN
+name: mirrors.isu.net.sa
 address:
   https: https://mirrors.isu.net.sa/almalinuxos-mirror/
   http: http://mirrors.isu.net.sa/almalinuxos-mirror/
-  ftp: ftp://mirrors.isu.net.sa/pub/mirror/almalinuxos-mirror/
+  rsync: rsync://mirror.isu.net.sa/almalinuxos/
 geolocation:
   country: SA
   state_province: Riyadh
   city: Riyadh
 update_frequency: 1h
-sponsor: King Abdulaziz City for Science and Technology (KACST)
+sponsor: Maeen Network
 sponsor_url: https://maeen.sa/
 email: mirrors@isu.net.sa
 ...

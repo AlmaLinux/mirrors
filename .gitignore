@@ -1,8 +1,7 @@
+!mirrors.d
+!.github
+!gh_ci
+!.gitmodules
+!LICENSE
+!config.yml
 .idea
-.venv
-.package-lock.json
-node_modules
-mirrors.db
-ci/ansible
-mirrors
-src

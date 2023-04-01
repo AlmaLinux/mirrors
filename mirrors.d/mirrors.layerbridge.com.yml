@@ -4,6 +4,10 @@ address:
   http: http://mirrors.layerbridge.com/almalinux/
   https: https://mirrors.layerbridge.com/almalinux/
   rsync: rsync://mirrors.layerbridge.com/almalinux/
+geolocation:
+  country: RO
+  state_province: 
+  city: Bucharest
 update_frequency: 4h
 sponsor: LayerBridge
 sponsor_url: https://www.layerbridge.com

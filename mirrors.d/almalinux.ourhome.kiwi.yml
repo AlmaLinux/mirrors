@@ -3,6 +3,7 @@ name: almalinux.ourhome.kiwi
 address:
   https: https://almalinux.ourhome.kiwi
 geolocation:
+  continent: Oceania
   country: NZ
   state_province:
   city:
