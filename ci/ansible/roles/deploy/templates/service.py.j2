@@ -1,6 +1,6 @@
 wsgi_app = 'utilities:app'
 bind = '[::1]:{{ utilities_port }}'
-workers = 1
+workers = 4
 user = '{{ service_user }}'
 group = '{{ service_user }}'
 raw_env = [
