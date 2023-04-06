@@ -91,9 +91,12 @@ def _get_nearest_mirrors_by_network_data(
         all suitable private mirrors we already found,
         using ASN or subnets data
         """
-        return mirror_data.status == 'ok' and \
-            not mirror_data.private and \
+        return (
+            mirror_data.status == 'ok' and
+            not mirror_data.private and
+            mirror_data.cloud_type in ('', None) and
             mirror_data not in main_list_of_mirrors
+        )
 
     match = get_geo_data_by_ip(ip_address)
     asn = get_asn_by_ip(ip_address)
@@ -221,7 +224,7 @@ def _get_nearest_mirrors(
             ip_address=ip_address,
             get_working_mirrors=get_working_mirrors,
             get_expired_mirrors=get_expired_mirrors,
-            # we already get private and cloud mirrors by network data
+            # we get private and cloud mirrors by network data
             get_without_cloud_mirrors=True,
             get_without_private_mirrors=True,
             get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos
