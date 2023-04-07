@@ -14,7 +14,7 @@
 - name: Prepare Gunicorn SELinux module
   block:
     - name: Check already installed module
-      command:
+      ansible.builtin.command:
         argv:
           - "semodule"
           - "--list-modules"
@@ -23,7 +23,7 @@
     - name: Compile SELinux module
       block:
         - name: Create gunicorn.mod
-          command:
+          ansible.builtin.command:
             argv:
               - "checkmodule"
               - "-M"
@@ -33,7 +33,7 @@
               - "{{ source_path }}/src/gunicorn.tt"
 
         - name: Create gunicorn.pp
-          command:
+          ansible.builtin.command:
             argv:
               - "semodule_package"
               - "-m"
@@ -42,7 +42,7 @@
               - "{{ source_path }}/src/gunicorn.pp"
 
         - name: Install Gunicorn SELinux module
-          command:
+          ansible.builtin.command:
             argv:
               - "semodule"
               - "-i"
@@ -71,13 +71,16 @@
 
 - name: Prepare started script of backend service
   template:
-    dest: "{{ scripts_path }}/{{ mirrors_service }}.sh"
-    src: "{{ mirrors_service }}.sh.j2"
+    dest: "{{ scripts_path }}/{{ item }}.sh"
+    src: "{{ item }}.sh.j2"
     owner: "{{ service_user }}"
     group: "{{ service_user }}"
     setype: bin_t
     seuser: system_u
     mode: 0740
+  with_items:
+    - "{{ utilities_service }}"
+    - "{{ mirrors_service }}"
 
 - name: Install systemd service of Gunicorn backend
   template:

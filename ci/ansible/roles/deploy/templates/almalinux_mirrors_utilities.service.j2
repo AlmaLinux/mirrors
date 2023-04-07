@@ -12,6 +12,7 @@ Restart=on-failure
 RestartSec=5
 TimeoutStopSec=10
 WorkingDirectory={{ source_path }}/src/backend
+ExecStartPre={{ scripts_path }}/{{ utilities_service }}.sh
 ExecStart={{ source_path }}/bin/gunicorn -c {{ source_path }}/src/backend/service.py
 
 LimitAS=infinity

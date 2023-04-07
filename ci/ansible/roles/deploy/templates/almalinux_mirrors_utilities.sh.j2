@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+if [[ -f "{{ mirrors_list_update_pid }}" ]]; then
+    rm -f "{{ mirrors_list_update_pid }}"
+fi
+exit 0

@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
 pid_path="{{ mirrors_list_update_pid }}"
-[[ -e "${pid_path}" ]] && echo "Update is already running" && exit 0
+if [[ -e "${pid_path}" ]]; then
+    echo "Update is already running"
+    exit 0
+fi
 pushd {{ config_root }}/mirrors/updates
 git fetch --all
 git reset --hard origin/master
