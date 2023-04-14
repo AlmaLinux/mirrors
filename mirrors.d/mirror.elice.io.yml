@@ -1,0 +1,12 @@
+name: mirror.elice.io
+address:
+  http: http://mirror.elice.io/almalinux/
+  https: https://mirror.elice.io/almalinux
+geolocation:
+  country: KR
+  state_province: Seoul Province
+  city: Gangnam-gu
+update_frequency: 3h
+sponsor: Elice Inc.
+sponsor_url: https://elice.io
+email: backend@elicer.com
