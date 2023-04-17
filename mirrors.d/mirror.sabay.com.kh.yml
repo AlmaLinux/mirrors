@@ -3,7 +3,7 @@ name: mirror.sabay.com.kh
 address:
   http: http://mirror.sabay.com.kh/almalinux/
   https: https://mirror.sabay.com.kh/almalinux/
-update_frequency: every 6hours
+update_frequency: 6h
 sponsor: Sabay
 sponsor_url: http://sabay.com.kh
 email: kh.mirrors@sabay.com
