@@ -18,8 +18,17 @@
         body {
             padding-top: 65px;
             padding-bottom: 35px;
-            font-size: 16px !important;
+            font-size: 16px;
+            font-weight: 400;
             color: #2c3e50;
+            font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .lead {
+            font-size: 16px!important;
+            font-weight: 400!important;
+            line-height: 1.7;
         }
         .table {
             border-color: #dee2e6;
@@ -29,8 +38,17 @@
         .table th {
             width: 1px !important;
         }
+        table.dataTable thead th,
+        table.dataTable tfoot th {
+            font-weight: 500;
+        }
+        table.dataTable thead th,
+        table.dataTable thead td {
+            padding: 5px 20px 5px 10px !important;
+        }
         h1 {
             font-weight: 600 !important;
+            font-size: 1.75rem !important;
         }
         table.dataTable thead .sorting:after,
         table.dataTable thead .sorting:before,
@@ -48,6 +66,32 @@
             .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
                 max-width: 1600px;
             }
+        }
+        .link-success {
+            color: #017698;
+        }
+        .link-success:hover {
+            color: #004bbc;
+        }
+        .bg-light {
+            background-color: #082336!important;
+        }
+        .navbar {
+            padding-top: 0.4rem;
+            padding-bottom: 0.4rem;
+        }
+        .navbar-light .navbar-nav .nav-link {
+            color: #fff!important;
+            font-family: montserrat,-apple-system,BlinkMacSystemFont,segoe ui,roboto,oxygen-sans,ubuntu,cantarell,helvetica neue,arial,sans-serif,apple color emoji,segoe ui emoji,segoe ui symbol;
+            font-weight: 500;
+            font-size: 15px;
+            padding-right: 10px;
+        }
+        .dataTables_filter {
+            padding-bottom: 5px;
+        }
+        .icon.outbound {
+            display: none;
         }
     </style>
 {% endblock styles -%}
