@@ -1,0 +1,16 @@
+---
+name: mirror.limda.net
+address:
+  http: http://mirror.limda.net/almalinux
+  https: https://mirror.limda.net/almalinux
+geolocation:
+  continent: Asia
+  country: BD
+  state_province: Dhaka
+  city: Dhaka
+  asn: 141988
+update_frequency: 3h
+sponsor: Limda Host
+sponsor_url: https://www.limda.net
+email: mirror@limda.net
+...
