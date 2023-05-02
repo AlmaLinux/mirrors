@@ -3,6 +3,7 @@ name: mirror.limda.net
 address:
   http: http://mirror.limda.net/almalinux
   https: https://mirror.limda.net/almalinux
+  rsync: rsync://mirror.limda.net/almalinux
 geolocation:
   continent: Asia
   country: BD
