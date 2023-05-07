@@ -1,0 +1,8 @@
+name: almamirror.netdirekt.com.tr
+address:
+  http: http://almamirror.netdirekt.com.tr/almalinux/
+  https: https://almamirror.netdirekt.com.tr/almalinux/
+update_frequency: 1h
+sponsor: Netdirekt A.S.
+sponsor_url: https://www.netdirekt.com.tr
+email: nobetci@netdirekt.com.tr

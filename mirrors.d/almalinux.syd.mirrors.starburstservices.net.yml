@@ -1,0 +1,13 @@
+---
+name: almalinux.syd.mirrors.starburstservices.net
+address:
+  http: http://almalinux.syd.mirrors.starburstservices.net
+  https: https://almalinux.syd.mirrors.starburstservices.net
+update_frequency: 3h
+sponsor: Starburst Services
+sponsor_url: https://starburstservices.com
+email: sysops@starburstservices.com
+geolocation:
+  continent: Australia
+  country: AU
+  city: Sydney
