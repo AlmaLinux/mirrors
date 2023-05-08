@@ -1,0 +1,14 @@
+---
+name: almalinux.us.ssimn.org
+address:
+  http: http://almalinux.us.ssimn.org
+  https: https://almalinux.us.ssimn.org
+update_frequency: 3h
+sponsor: Starburst Services
+sponsor_url: https://starburstservices.com
+email: sysops@starbursthosting.com
+geolocation:
+  continent: North America
+  country: US
+  state_province: Missouri
+  city: St. Louis

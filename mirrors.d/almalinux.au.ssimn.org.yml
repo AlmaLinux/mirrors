@@ -1,0 +1,13 @@
+---
+name: almalinux.au.ssimn.org
+address:
+  http: http://almalinux.au.ssimn.org
+  https: https://almalinux.au.ssimn.org
+update_frequency: 3h
+sponsor: Starburst Services
+sponsor_url: https://starburstservices.com
+email: sysops@starburstservices.com
+geolocation:
+  continent: Australia
+  country: AU
+  city: Sydney
