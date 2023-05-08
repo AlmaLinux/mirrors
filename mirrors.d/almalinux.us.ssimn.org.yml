@@ -1,8 +1,8 @@
 ---
-name: almalinux.starbursthosting.com
+name: almalinux.us.ssimn.org
 address:
-  http: http://almalinux.starbursthosting.com
-  https: https://almalinux.starbursthosting.com
+  http: http://almalinux.us.ssimn.org
+  https: https://almalinux.us.ssimn.org
 update_frequency: 3h
 sponsor: Starburst Services
 sponsor_url: https://starburstservices.com

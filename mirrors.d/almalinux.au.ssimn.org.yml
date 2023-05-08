@@ -1,8 +1,8 @@
 ---
-name: almalinux.syd.mirrors.starburstservices.net
+name: almalinux.au.ssimn.org
 address:
-  http: http://almalinux.syd.mirrors.starburstservices.net
-  https: https://almalinux.syd.mirrors.starburstservices.net
+  http: http://almalinux.au.ssimn.org
+  https: https://almalinux.au.ssimn.org
 update_frequency: 3h
 sponsor: Starburst Services
 sponsor_url: https://starburstservices.com
