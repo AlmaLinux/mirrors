@@ -1,12 +1,12 @@
 ---
-name: almalinux.starbursthosting.co.uk
+name: almalinux.gb.ssimn.org
 address:
-  http: http://almalinux.starbursthosting.co.uk
-  https: https://almalinux.starbursthosting.co.uk
+  http: http://almalinux.gb.ssimn.org
+  https: https://almalinux.gb.ssimn.org
 update_frequency: 3h
 sponsor: Starburst Services
-sponsor_url: https://starbursthosting.co.uk
-email: sysops@starbursthosting.com
+sponsor_url: https://starburstservices.com
+email: sysops@starburstservices.com
 geolocation:
   continent: Europe
   country: GB
