@@ -1,0 +1,18 @@
+---
+name: mirror.web4africa.co.za
+address:
+  http: http://mirror.web4africa.co.za/almalinux/
+  https: https://mirror.web4africa.co.za/almalinux/
+  rsync: rsync://mirror.web4africa.co.za/almalinux/
+update_frequency: 1h
+sponsor: Web4Africa
+sponsor_url: https://web4africa.com
+email: info@web4africa.net
+geolocation:
+  continent: Africa
+  country: ZA
+  state_province: Gauteng
+  city: Johannesburg
+private: false
+monopoly: false
+asn: 327813
