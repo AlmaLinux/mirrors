@@ -1,0 +1,13 @@
+---
+name: mirror.aptus.co.tz
+address:
+  http: http://mirror.aptus.co.tz/pub/almalinux
+  https: https://mirror.aptus.co.tz/pub/almalinux
+update_frequency: 6h
+sponsor: Aptus Solutions Ltd
+sponsor_url: https://aptus.co.tz
+email: noc@aptus.co.tz
+geolocation:
+  continent: Africa
+  country: TZ
+  city: Dar es Salaam

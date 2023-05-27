@@ -1,0 +1,11 @@
+---
+name: mirrors.xtom.au
+address:
+  http: http://mirrors.xtom.au/almalinux/
+  https: https://mirrors.xtom.au/almalinux/
+  rsync: rsync://mirrors.xtom.au/almalinux/
+update_frequency: 3h
+sponsor: xTom
+sponsor_url: https://xtom.com/
+email: mirrors@xtom.com
+...

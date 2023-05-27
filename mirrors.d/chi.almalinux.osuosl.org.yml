@@ -1,0 +1,18 @@
+---
+name: chi.almalinux.osuosl.org
+address:
+  http: http://chi.almalinux.osuosl.org
+  https: https://chi.almalinux.osuosl.org
+  rsync: rsync://chi.almalinux.osuosl.org/almalinux
+  ftp: ftp://chi.almalinux.osuosl.org/pub/almalinux/
+update_frequency: 3h
+sponsor: Oregon State University Open Source Lab
+sponsor_url: https://osuosl.org
+email: support@osuosl.org
+geolocation:
+  continent: North America
+  country: US
+  state_province: Illinois
+  city: Chicago
+asn: 4181
+...

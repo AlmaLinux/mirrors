@@ -1,8 +1,9 @@
 ---
-name: Maeen Network
+name: mirrors.isu.net.sa
 address:
   https: https://mirrors.isu.net.sa/almalinuxos-mirror/
   http: http://mirrors.isu.net.sa/almalinuxos-mirror/
+  rsync: rsync://mirror.isu.net.sa/almalinuxos/
 geolocation:
   country: SA
   state_province: Riyadh

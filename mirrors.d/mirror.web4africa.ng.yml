@@ -1,0 +1,17 @@
+---
+name: mirror.web4africa.ng
+address:
+  http: http://mirror.web4africa.ng/almalinux/
+  https: https://mirror.web4africa.ng/almalinux/
+update_frequency: 1h
+sponsor: Web4Africa Nigeria
+sponsor_url: https://web4africa.ng
+email: info@web4africa.net
+geolocation:
+  continent: Africa
+  country: NG
+  state_province: Lagos
+  city: Victoria Island
+private: false
+monopoly: false
+asn: 327813

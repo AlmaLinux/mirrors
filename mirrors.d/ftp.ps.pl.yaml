@@ -1,0 +1,16 @@
+---
+name: ftp.ps.pl
+address:
+  http: http://ftp.ps.pl/pub/Linux/almalinux/
+  https: https://ftp.ps.pl/pub/Linux/almalinux/
+  ftp: ftp://ftp.ps.pl/pub/Linux/almalinux/
+geolocation:
+  continent: Europe
+  country: PL
+  city: Szczecin
+update_frequency: 4h
+sponsor: West Pomeranian University of Technology in Szczecin
+sponsor_url: https://www.zut.edu.pl
+email: adam@popik.eu
+private: false
+asn: 8286
