@@ -1,0 +1,15 @@
+---
+name: mirror.yuki.net.uk
+address:
+  http: http://mirror.yuki.net.uk/almalinux/
+  https: https://mirror.yuki.net.uk/almalinux/
+  rsync: rsync://rsync.yuki.net.uk/almalinux/
+geolocation:
+  country: KR
+  state_province: Seoul
+  city: Seoul
+update_frequency: 6h
+sponsor: Yuki Network LTD
+sponsor_url: https://yuki.net.uk/
+email: noc@yuki.net.uk
+...
