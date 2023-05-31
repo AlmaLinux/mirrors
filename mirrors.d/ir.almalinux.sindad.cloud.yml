@@ -4,7 +4,6 @@ address:
   http: http://ir.almalinux.sindad.cloud
   https: https://ir.almalinux.sindad.cloud
   rsync: rsync://ir.almalinux.sindad.cloud/almalinux
-  ftp:
 update_frequency: 3h
 geolocation:
   continent: Asia
