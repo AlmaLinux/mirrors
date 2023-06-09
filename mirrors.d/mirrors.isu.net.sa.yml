@@ -4,12 +4,16 @@ address:
   https: https://mirrors.isu.net.sa/almalinuxos-mirror/
   http: http://mirrors.isu.net.sa/almalinuxos-mirror/
   rsync: rsync://mirror.isu.net.sa/almalinuxos/
+update_frequency: 1h
+sponsor: Maeen Network
+sponsor_url: https://www.maeen.sa
+email: mirrors@isu.net.sa
 geolocation:
+  continent: Asia
   country: SA
   state_province: Riyadh
   city: Riyadh
-update_frequency: 1h
-sponsor: Maeen Network
-sponsor_url: https://maeen.sa/
-email: mirrors@isu.net.sa
+private: false
+monopoly: false
+asn: 8895
 ...
