@@ -1,0 +1,13 @@
+---
+name: almalinux.mirror.sfinnov.com
+address:
+  http: http://almalinux.mirror.sfinnov.com
+geolocation:
+  country: US
+  state_province: California
+  city: Los Angeles
+update_frequency: 3h
+sponsor: SF Innovations Inc
+sponsor_url: https://sfinnov.com/
+email: noc@sfinnov.com
+...

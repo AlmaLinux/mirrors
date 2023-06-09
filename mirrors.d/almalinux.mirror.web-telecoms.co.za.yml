@@ -1,7 +1,6 @@
 ---
 name: almalinux.mirror.web-telecoms.co.za
 address:
-  http: http://almalinux.mirror.web-telecoms.co.za/
   https: https://almalinux.mirror.web-telecoms.co.za/
 geolocation:
   country: ZA

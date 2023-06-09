@@ -1,5 +1,5 @@
 ---
-name: https://mirror.hostidadns.com
+name: mirror.hostidadns.com
 address:
   http: http://mirror.hostidadns.com/almalinux
   https: https://mirror.hostidadns.com/almalinux
