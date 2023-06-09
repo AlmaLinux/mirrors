@@ -7,8 +7,8 @@ geolocation:
   country: ID
   state_province: DKI Jakarta
   city: Jakarta
-update_frequency: 4h
-sponsor: heru.id
+update_frequency: 3h
+sponsor: Heru Nugroho
 sponsor_url: https://heru.id/
 email: me@heru.id
 ...
