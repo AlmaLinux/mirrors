@@ -1,0 +1,19 @@
+---
+name: homeserver.zelgray.work
+address:
+  http: http://homeserver.zelgray.work/almalinux/
+update_frequency: 1h
+sponsor: homeserver.zelgray.work
+sponsor_url: homeserver.zelgray.work
+email: zel.gray@gmail.com
+geolocation:
+  continent: Europe
+  country: UA
+  state_province: Cherkasy
+  city: Cherkasy
+private: true
+monopoly: true
+subnets:
+  - 77.121.201.30/32
+asn: 25229
+...
