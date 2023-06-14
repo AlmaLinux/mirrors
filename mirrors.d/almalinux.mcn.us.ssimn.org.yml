@@ -1,0 +1,15 @@
+---
+name: almalinux.mcn.us.ssimn.org
+address:
+  http: http://almalinux.mcn.us.ssimn.org
+  https: https://almalinux.mcn.us.ssimn.org
+geolocation:
+  continent: North America
+  country: US
+  state_province: Georgia
+  city: Macon
+update_frequency: 3h
+sponsor: Starburst Services
+sponsor_url: https://starburstservices.com
+email: sysops@starburstservices.com
+...
