@@ -1,0 +1,13 @@
+---
+name: ftp.psnc.pl
+address:
+  http: http://ftp.psnc.pl/linux/almalinux/
+  https: https://ftp.psnc.pl/linux/almalinux/
+geolocation:
+  country: PL
+  city: Poznan
+update_frequency: 3h
+sponsor: Poznan Supercomputing and Networking Center
+sponsor_url: https://www.psnc.pl/
+email: mirrors@man.poznan.pl
+...
