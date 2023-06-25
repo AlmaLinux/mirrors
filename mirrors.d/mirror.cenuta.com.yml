@@ -1,15 +1,10 @@
 ---
-name: mirror.cenuta.com
+name: mirror-denizli.cenuta.com
 address:
-  http: http://mirror.cenuta.com/almalinux
-  https: https://mirror.centos.com/almalinux
-geolocation:
-  country: TR
-  state_province: Izmir
-  city: Izmir
+  http: http://mirror-denizli.cenuta.com/almalinux/
+  https: https://mirror-denizli.cenuta.com/almalinux/
 update_frequency: 3h
 sponsor: Cenuta Hosting
 sponsor_url: https://www.cenuta.com
-email: noc@cenuta.com
-
----
+email: info@cenuta.com
+...
