@@ -1,0 +1,14 @@
+---
+name: mirror.0-1.cloud
+address:
+  http: http://mirror.0-1.cloud/almalinux
+  https: https://mirror.0-1.cloud/almalinux
+geolocation:
+  country: IR
+  state_province: Tehran
+  city: Tehran
+update_frequency: 6h
+sponsor: Sefroyek Pardaz Engineering Co.
+sponsor_url: https://0-1.ir/
+email: info@0-1.ir
+...

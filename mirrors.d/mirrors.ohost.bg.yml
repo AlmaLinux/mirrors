@@ -1,0 +1,16 @@
+---
+name: mirrors.ohost.bg
+address:
+  http: http://mirrors.ohost.bg/almalinux/
+  https: https://mirrors.ohost.bg/almalinux/
+  rsync: rsync://mirrors.ohost.bg/almalinux
+  ftp: ftp://mirrors.ohost.bg/almalinux
+geolocation:
+  country: BG
+  state_province: Sofia
+  city: Sofia
+update_frequency: 3h
+sponsor: OHOST LLC
+sponsor_url: https://ohost.bg
+email: v.mateev@colopoint.bg
+...

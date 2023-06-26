@@ -1,0 +1,15 @@
+---
+name: ftp.bme.hu
+address:
+  http: http://ftp.bme.hu/almalinux/
+  https: https://ftp.bme.hu/almalinux/
+  rsync: rsync://ftp.bme.hu/almalinux
+geolocation:
+  country: HU
+  state_province: Budapest
+  city: Budapest
+update_frequency: 3h
+sponsor: BME
+sponsor_url: https://www.bme.hu
+email: ftp@eik.bme.hu
+...

@@ -1,0 +1,13 @@
+---
+name: mirror.rackspeed.de
+address:
+  http: http://mirror.rackspeed.de/almalinux/
+  https: https://mirror.rackspeed.de/almalinux/
+geolocation:
+  country: DE
+  state_province: NRW
+  city: Düsseldorf
+update_frequency: 3h
+sponsor: rackSPEED GmbH
+sponsor_url: https://rackspeed.de
+email: info@rackspeed.de

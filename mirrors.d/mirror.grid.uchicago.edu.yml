@@ -1,0 +1,15 @@
+---
+name: mirror.grid.uchicago.edu
+address:
+  http: http://mirror.grid.uchicago.edu/pub/linux/alma/
+  https: https://mirror.grid.uchicago.edu/pub/linux/alma/
+  rsync: rsync://mirror.grid.uchicago.edu/alma
+geolocation:
+  country: US
+  state_province: IL
+  city: Chicago
+update_frequency: 6h
+sponsor: University of Chicago - MANIAC Lab
+sponsor_url: https://maniaclab.uchicago.edu/
+email: maniaclab-ops@lists.uchicago.edu
+...

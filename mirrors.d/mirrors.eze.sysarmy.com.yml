@@ -1,0 +1,13 @@
+---
+name: mirrors.eze.sysarmy.com
+address:
+  http: http://mirrors.eze.sysarmy.com/almalinux/
+  https: https://mirrors.eze.sysarmy.com/almalinux/
+geolocation:
+  country: AR
+  state_province: Buenos Aires
+  city: Ciudad Autonoma de Buenos Aires
+update_frequency: 6h
+sponsor: Sysarmy
+sponsor_url: https://www.sysarmy.com
+email: mirrors@sysarmy.com.ar

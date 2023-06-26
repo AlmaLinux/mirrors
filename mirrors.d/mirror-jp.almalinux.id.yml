@@ -1,0 +1,10 @@
+---
+name: mirror-jp.almalinux.id
+address:
+  http: http://mirror-jp.almalinux.id/almalinux/
+  https: https://mirror-jp.almalinux.id/almalinux/
+update_frequency: 1h
+sponsor: HostKita
+sponsor_url: https://hostkita.net
+email: admin@hostkita.net
+...

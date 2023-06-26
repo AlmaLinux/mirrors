@@ -1,0 +1,11 @@
+name: almalinux.hqserv.co.il
+address:
+  http: http://almalinux.hqserv.co.il
+geolocation:
+  country: IL
+  state_province: Hadarom
+  city: Ashdod
+update_frequency: 3h
+sponsor: HQSERV NETWORKS
+sponsor_url: https://www.hqserv.co.il
+email: support@hqserv.co.il

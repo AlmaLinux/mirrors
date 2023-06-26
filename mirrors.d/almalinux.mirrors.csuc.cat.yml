@@ -1,0 +1,13 @@
+name: ftp.csuc.cat
+address:
+  http: http://ftp.csuc.cat/almalinux/
+  https: https://ftp.csuc.cat/almalinux/
+  rsync: rsync://ftp.csuc.cat/almalinux/
+geolocation:
+  country: ES
+  state_province: Catalonia
+  city: Barcelona
+update_frequency: 3h
+sponsor: CSUC
+sponsor_url: https://www.csuc.cat
+

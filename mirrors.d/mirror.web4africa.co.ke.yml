@@ -1,0 +1,17 @@
+---
+name: mirror.web4africa.co.ke
+address:
+  http: http://mirror.web4africa.co.ke/almalinux/
+  https: https://mirror.web4africa.co.ke/almalinux/
+update_frequency: 1h
+sponsor: Web4Africa Kenya
+sponsor_url: https://web4africa.co.ke
+email: info@web4africa.net
+geolocation:
+  continent: Africa
+  country: KE
+  state_province: Nairobi
+  city: Nairobi
+private: false
+monopoly: false
+asn: 327813

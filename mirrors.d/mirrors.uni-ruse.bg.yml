@@ -1,0 +1,11 @@
+---
+name: mirrors.uni-ruse.bg
+address:
+  http: http://mirrors.uni-ruse.bg/almalinux/
+  https: https://mirrors.uni-ruse.bg/almalinux/
+  rsync: rsync://mirrors.uni-ruse.bg/almalinux/
+update_frequency: 8h
+sponsor: University of Ruse
+sponsor_url: https://www.uni-ruse.bg
+email: mirrors@uni-ruse.bg
+...

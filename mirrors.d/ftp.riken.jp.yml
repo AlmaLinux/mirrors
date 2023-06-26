@@ -1,0 +1,11 @@
+---
+name: ftp.riken.jp
+address:
+  http: http://ftp.riken.jp/Linux/almalinux/
+  https: https://ftp.riken.jp/Linux/almalinux/
+  rsync: rsync://ftp.riken.jp/almalinux
+update_frequency: 6h
+sponsor: RIKEN 
+sponsor_url: https://www.riken.jp/en/
+email: ftp-admin@ftp.riken.jp
+...

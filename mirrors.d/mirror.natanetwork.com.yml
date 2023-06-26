@@ -1,0 +1,15 @@
+---
+name: mirror.natanetwork.com
+address:
+  http: http://mirror.natanetwork.com/almalinux/
+  https: https://mirror.natanetwork.com/almalinux/
+  rsync: rsync://mirror.natanetwork.com/almalinux
+geolocation:
+  country: ID
+  state_province: DKI Jakarta
+  city: Jakarta
+update_frequency: 3h
+sponsor: NATANETWORK
+sponsor_url: https://www.natanetwork.com
+email: support@natanetwork.co.id
+...

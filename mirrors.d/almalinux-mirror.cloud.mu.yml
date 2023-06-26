@@ -1,0 +1,13 @@
+---
+name: almalinux-mirror.cloud.mu
+address:
+  http: http://almalinux-mirror.cloud.mu
+  https: https://almalinux-mirror.cloud.mu
+geolocation:
+  country: MU
+  city: Ebène
+update_frequency: 3h
+sponsor: cloud.mu
+sponsor_url: https://cloud.mu
+email: mirrors@sysadmin-journal.com
+...

@@ -1,0 +1,13 @@
+name: mirror.amberit.com.bd
+address:
+  http: http://mirror.dhakacom.com/almalinux/
+  https:
+  rsync:
+geolocation:
+  country: BD
+  state_province: Dhaka
+  city: Dhaka
+update_frequency: 3h
+sponsor: Amber IT Ltd.
+sponsor_url: https://www.amberit.com.bd
+email: mirror@amberit.com.bd

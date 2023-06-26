@@ -1,0 +1,12 @@
+name: phx.mirrors.clouvider.net
+address:
+  http: http://phx.mirrors.clouvider.net/almalinux/
+  https: https://phx.mirrors.clouvider.net/almalinux/
+geolocation:
+  country: US
+  state_province: Arizona
+  city: Phoenix
+update_frequency: 3h
+sponsor: Clouvider
+sponsor_url: https://www.clouvider.com
+...

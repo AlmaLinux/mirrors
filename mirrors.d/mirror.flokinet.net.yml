@@ -1,0 +1,15 @@
+---
+name: mirror.flokinet.net
+address:
+  http: http://mirror.flokinet.net/almalinux/
+  https: https://mirror.flokinet.net/almalinux/
+  rsync: rsync://mirror.flokinet.net/almalinux
+geolocation:
+  country: RO
+  state_province:
+  city: Bucharest
+update_frequency: 3h
+sponsor: FlokiNET
+sponsor_url: https://flokinet.is
+email: noc@flokinet.is
+...

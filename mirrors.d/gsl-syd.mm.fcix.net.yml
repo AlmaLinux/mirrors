@@ -1,0 +1,18 @@
+---
+name: gsl-syd.mm.fcix.net
+address:
+  http: http://gsl-syd.mm.fcix.net/almalinux/
+  https: https://gsl-syd.mm.fcix.net/almalinux/
+  rsync: rsync://gsl-syd.mm.fcix.net/almalinux/
+update_frequency: 2h
+sponsor: Fremont Cabal Internet Exchange
+sponsor_url: https://fcix.net/
+email: mirror@fcix.net
+geolocation:
+  continent: Australia
+  country: AU
+  state_province: New South Wales
+  city: Sydney
+private: false
+monopoly: false
+...

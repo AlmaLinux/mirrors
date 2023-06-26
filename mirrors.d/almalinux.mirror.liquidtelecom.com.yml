@@ -1,0 +1,16 @@
+---
+name: almalinux.mirror.liquidtelecom.com
+address:
+  http: http://almalinux.mirror.liquidtelecom.com/
+  https: https://almalinux.mirror.liquidtelecom.com/
+  rsync: rsync://almalinux.mirror.liquidtelecom.com/almalinux
+update_frequency: 3h
+sponsor: Liquid Intelligent Technologies
+sponsor_url: https://www.liquid.tech
+email: mirror@liquid.tech
+geolocation:
+  continent: Africa
+  country: KE
+  city: Nairobi
+asn: [30844, 30969, 37006, 36937]
+...

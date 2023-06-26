@@ -1,0 +1,14 @@
+---
+name: almalinux.excellmedia.net
+address:
+  http: http://almalinux.excellmedia.net
+  https: https://almalinux.excellmedia.net
+geolocation:
+  country: IN
+  state_province: Telangana
+  city: Hyderabad
+update_frequency: 3h
+sponsor: Excell Media
+sponsor_url: https://www.excellmedia.net/
+email: raj@excellmedia.net
+...
