@@ -1,0 +1,10 @@
+---
+name: mirror.se.altushost.com
+address:
+  http: http://mirror.se.altushost.com/almalinux/
+  https: https://mirror.se.altushost.com/almalinux/
+update_frequency: 4h
+sponsor: AltusHost B.V.
+sponsor_url: https://www.altushost.com/
+email: mirrors@altushost.com
+...
