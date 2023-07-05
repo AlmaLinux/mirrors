@@ -400,6 +400,8 @@ async def update_mirrors_handler() -> str:
                 (True, False),
                 repeat=len(signature(get_all_mirrors_db).parameters),
         ):
+            cache_key = _generate_redis_key_for_the_mirrors_list(*args)
+            cache.delete(cache_key)
             get_all_mirrors_db(*args)
     finally:
         logger.info(
@@ -614,24 +616,14 @@ def get_mirrors_list(
             version,
             repo_path,
         )
-    if iso_list:
-        nearest_mirrors = _get_nearest_mirrors(
-            ip_address=ip_address,
-            get_mirrors_with_full_set_of_isos=True,
-            get_without_private_mirrors=True,
-            get_working_mirrors=True,
-            get_without_cloud_mirrors=True,
-            get_expired_mirrors=False,
-        )
-    else:
-        nearest_mirrors = _get_nearest_mirrors(
-            ip_address=ip_address,
-            get_mirrors_with_full_set_of_isos=False,
-            get_without_private_mirrors=False,
-            get_working_mirrors=True,
-            get_without_cloud_mirrors=False,
-            get_expired_mirrors=False,
-        )
+    nearest_mirrors = _get_nearest_mirrors(
+        ip_address=ip_address,
+        get_mirrors_with_full_set_of_isos=iso_list,
+        get_without_private_mirrors=iso_list,
+        get_working_mirrors=True,
+        get_without_cloud_mirrors=iso_list,
+        get_expired_mirrors=False,
+    )
     if debug_info:
         data = defaultdict(dict)
         match = get_geo_data_by_ip(ip_address)

@@ -54,9 +54,12 @@
         path: "{{ item }}"
         setype: bin_t
         seuser: system_u
+        state: file
       with_items:
         - "{{ source_path }}/bin/python3.9"
         - "{{ source_path }}/bin/gunicorn"
+      tags:
+        - backend_selinux
 
 - name: Prepare started Py script
   template:

@@ -5,5 +5,7 @@ After=network.target network-online.target
 After=almalinux_mirrors_utilities.service
 
 [Service]
+User={{ service_user }}
+Group={{ service_user }}
 Type=oneshot
 ExecStart={{ scripts_path }}/{{ mirrors_list_update }}.sh

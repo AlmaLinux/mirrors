@@ -1,4 +1,15 @@
 ---
+- name: Set git safe directory
+  community.general.git_config:
+    name: safe.directory
+    scope: global
+    value: "*"
+  become_user: "{{ item }}"
+  with_items:
+    - "{{ service_user }}"
+    - "root"
+    - "ec2-user"
+
 - name: Update local repo with mirrors list
   git:
     repo: "https://github.com/AlmaLinux/mirrors.git"

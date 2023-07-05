@@ -6,6 +6,8 @@ if [[ -e "${pid_path}" ]]; then
     exit 0
 fi
 pushd {{ config_root }}/mirrors/updates
+echo `id -u`
+echo `id -g`
 git fetch --all
 git reset --hard origin/master
 git pull
