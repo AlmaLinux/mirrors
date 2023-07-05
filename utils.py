@@ -385,6 +385,7 @@ def process_mirror_config(
             yaml_data.get('geolocation', {}),
         ),
         private=yaml_data.get('private', False),
+        monopoly=yaml_data.get('monopoly', False),
     )
     mirror_info.mirror_url = get_mirror_url(
         main_config=main_config,
