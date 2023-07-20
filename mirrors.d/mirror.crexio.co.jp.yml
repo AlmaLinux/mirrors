@@ -1,0 +1,11 @@
+---
+name: mirror.crexio.co.jp
+address:
+  http: http://mirror.crexio.co.jp/almalinux
+  https: https://mirror.crexio.co.jp/almalinux
+  rsync: rsync://mirror.crexio.co.jp/almalinux
+update_frequency: 1h
+sponsor: CREXIO
+sponsor_url: https://crexio.com
+email: mirror@crexio.com
+...

@@ -1,0 +1,14 @@
+---
+name: mirror.hostidadns.com
+address:
+  http: http://mirror.hostidadns.com/almalinux
+  https: https://mirror.hostidadns.com/almalinux
+update_frequency: 3h
+geolocation:
+  country: IR
+  state_province: Tehran
+  city: Tehran
+sponsor: Hostida
+sponsor_url: https://hostida.com
+email: mirror@hostida.com
+...

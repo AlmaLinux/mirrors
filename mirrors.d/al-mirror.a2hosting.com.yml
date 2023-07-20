@@ -1,0 +1,14 @@
+---
+name: al-mirror.a2hosting.com
+address:
+  http: http://al-mirror.a2hosting.com
+  https: https://al-mirror.a2hosting.com
+update_frequency: 3h
+geolocation:
+  country: US
+  state_province: Michigan
+  city: Southfield
+sponsor: A2Hosting
+sponsor_url: https://a2hosting.com
+email: sysadmin@a2hosting.com
+...

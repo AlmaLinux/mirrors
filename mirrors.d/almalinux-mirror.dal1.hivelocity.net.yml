@@ -1,0 +1,15 @@
+---
+name: almalinux-mirror.dal1.hivelocity.net
+address:
+  http: http://almalinux-mirror.dal1.hivelocity.net/
+  https: https://almalinux-mirror.dal1.hivelocity.net/
+  rsync: rsync://almalinux-mirror.dal1.hivelocity.net
+geolocation:
+  country: US
+  state_province: Texas
+  city: Dallas
+update_frequency: 3h
+sponsor: Hivelocity Hosting
+sponsor_url: https://hivelocity.net/
+email: devops@hivelocity.net
+...

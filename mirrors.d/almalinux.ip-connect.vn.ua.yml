@@ -1,0 +1,11 @@
+---
+name: almalinux.ip-connect.vn.ua
+address:
+  http: http://almalinux.ip-connect.vn.ua/
+  https: https://almalinux.ip-connect.vn.ua/
+  rsync: rsync://almalinux.ip-connect.vn.ua/almalinux
+update_frequency: 1h
+sponsor: IP-Connect LLC, Vinnytsia, Ukraine
+sponsor_url: https://ip-connect.vn.ua
+email: mirrors@ip-connect.vn.ua
+...

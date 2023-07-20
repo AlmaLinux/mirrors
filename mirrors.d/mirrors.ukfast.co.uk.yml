@@ -1,0 +1,15 @@
+---
+name: mirrors.ukfast.co.uk
+address:
+  http: http://mirrors.ukfast.co.uk/sites/almalinux.org/
+  https: https://mirrors.ukfast.co.uk/sites/almalinux.org/
+  rsync: rsync://mirrors.ukfast.co.uk/sites/almalinux.org/
+geolocation:
+  country: GB
+  state_province: Greater Manchester
+  city: Manchester
+update_frequency: 3h
+sponsor: ANS Group
+sponsor_url: https://www.ans.co.uk/
+email: mirrors@ans.co.uk
+...

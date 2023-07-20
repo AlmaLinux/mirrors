@@ -1,0 +1,15 @@
+---
+name: alma.acidman.thelefty.org
+address:
+  http: http://alma.acidman.thelefty.org/almalinux/
+  https: https://alma.acidman.thelefty.org/almalinux/
+geolocation:
+  continent: Asia
+  country: JP
+  city: Fukuoka
+update_frequency: 3h
+sponsor: Monochrome Rainbow
+sponsor_url: http://www.thelefty.org/
+email: meta@almalinux.org
+asn: 59105
+...

@@ -1,0 +1,11 @@
+---
+name: mirror.hs-esslingen.de
+address:
+  http: http://mirror.hs-esslingen.de/Mirrors/almalinux/
+  https: https://mirror.hs-esslingen.de/Mirrors/almalinux/
+  rsync: rsync://mirror.hs-esslingen.de/almalinux/
+update_frequency: 4h
+sponsor: Hochschule Esslingen
+sponsor_url: https://www.hs-esslingen.de/
+email: adrian@hs-esslingen.de
+...

@@ -1,0 +1,10 @@
+---
+name: bom.mirror.leapswitch.com
+address:
+  http: http://bom.mirror.leapswitch.com/almalinux/
+  https: https://bom.mirror.leapswitch.com/almalinux/
+update_frequency: 1h
+sponsor: Leapswitch Networks Pvt Ltd
+sponsor_url: https://leapswitch.com
+email: support@leapswitch.com
+...

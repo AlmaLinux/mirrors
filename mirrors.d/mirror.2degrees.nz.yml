@@ -1,0 +1,11 @@
+---
+name: mirror.2degrees.nz
+address:
+  http: http://mirror.2degrees.nz/almalinux/
+  https: https://mirror.2degrees.nz/almalinux/
+  rsync: rsync://mirror.2degrees.nz/almalinux
+update_frequency: 1h
+sponsor: 2degrees
+sponsor_url: https://www.2degrees.nz
+email: mirrors@snap.net.nz
+...

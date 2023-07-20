@@ -1,0 +1,8 @@
+name: mirror.packet.stream
+address:
+  http: http://mirror.packet.stream/almalinux
+  https: https://mirror.packet.stream/almalinux
+update_frequency: 12h
+sponsor: PacketStream LLC
+sponsor_url: https://packet.stream/
+email: tech@packet.stream

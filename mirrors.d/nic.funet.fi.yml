@@ -1,0 +1,16 @@
+---
+name: nic.funet.fi
+address:
+  http: http://www.nic.funet.fi/pub/mirrors/almalinux.org/
+  https: https://www.nic.funet.fi/pub/mirrors/almalinux.org/
+  rsync: rsync://rsync.nic.funet.fi/ftp/pub/mirrors/almalinux.org/
+  ftp:  ftp://ftp.funet.fi/pub/mirrors/almalinux.org/
+geolocation:
+  country: FI
+  state_province: Uusimaa
+  city: Espoo
+update_frequency: 3h
+sponsor: CSC - IT Center for Science ltd / Finnish University and Research Network
+sponsor_url: https://www.csc.fi/en/home
+email: noc@funet.fi
+...

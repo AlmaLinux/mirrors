@@ -1,0 +1,15 @@
+---
+name: mirrors.nav.ro
+address:
+  http: http://mirrors.nav.ro/almalinux/
+  https: https://mirrors.nav.ro/almalinux/
+  rsync: rsync://mirrors.nav.ro/almalinux
+geolocation:
+  country: RO
+  state_province:
+  city: Bucharest
+update_frequency: 3h
+sponsor: NAV Communications
+sponsor_url: https://www.nav.ro
+email: daniel@nav.ro
+...

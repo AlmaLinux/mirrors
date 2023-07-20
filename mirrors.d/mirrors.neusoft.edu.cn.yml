@@ -1,0 +1,15 @@
+---
+name: mirrors.neusoft.edu.cn
+address:
+  http: http://mirrors.neusoft.edu.cn/almalinux/
+  https: https://mirrors.neusoft.edu.cn/almalinux/
+  rsync: rsync://mirrors.neusoft.edu.cn/almalinux
+geolocation:
+  country: CN
+  state_province: Liaoning
+  city: Dalian
+update_frequency: 1h
+sponsor: Dalian Neusoft University of Information (大连东软信息学院)
+sponsor_url: http://www.neusoft.edu.cn
+email: sfl@neusoft.edu.cn
+...

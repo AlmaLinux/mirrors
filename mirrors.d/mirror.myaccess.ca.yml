@@ -1,0 +1,13 @@
+---
+name: mirror.myaccess.ca
+address:
+  http: http://mirror.myaccess.ca/
+geolocation:
+  country: CA
+  state_province: Saskatchewan
+  city: Regina
+update_frequency: 3h
+sponsor: Access Comunications Co-operative
+sponsor_url: https://myaccess.ca
+email: maksim.glazyrin@myaccess.ca
+...

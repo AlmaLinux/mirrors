@@ -1,0 +1,7 @@
+name: dist-mirror.fibernetics.ca
+address:
+  http: http://dist-mirror.fibernetics.ca/almalinux
+update_frequency: 3h
+sponsor: Fibernetics
+sponsor_url: https://www.fibernetics.ca
+email: saso-alerts@corp.fibernetics.ca

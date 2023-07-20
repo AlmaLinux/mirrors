@@ -1,0 +1,15 @@
+---
+name: mirror.hnd.cl
+address:
+  http: http://mirror.hnd.cl/almalinux/
+  https: https://mirror.hnd.cl/almalinux/
+  rsync: rsync://mirror.hnd.cl/almalinux
+geolocation:
+  country: CL
+  state_province: Region Metropolitana
+  city: Santiago
+update_frequency: 3h
+sponsor: Hostednode SpA
+sponsor_url: https://hnd.cl
+email: mirrors@hnd.cl
+...

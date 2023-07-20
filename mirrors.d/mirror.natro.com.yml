@@ -1,0 +1,12 @@
+name: mirror.natro.com
+address:
+  http: http://mirror.natro.com/almalinux/
+  https: https://mirror.natro.com/almalinux/
+geolocation:
+  country: TR
+  state_province: Istanbul
+  city: Istanbul
+update_frequency: 3h
+sponsor: Natro Hosting
+sponsor_url: https://www.natro.com
+email: emre.keles@natro.com

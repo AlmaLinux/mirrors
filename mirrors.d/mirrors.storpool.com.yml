@@ -1,0 +1,14 @@
+---
+name: mirrors.storpool.com
+address:
+  http: http://mirrors.storpool.com/almalinux/
+  https: https://mirrors.storpool.com/almalinux/
+update_frequency: 3h
+sponsor: StorPool Storage
+sponsor_url: https://storpool.com/
+email: mirrors@storpool.com
+geolocation:
+  continent: Europe
+  country: BG
+  city: Sofia
+...
