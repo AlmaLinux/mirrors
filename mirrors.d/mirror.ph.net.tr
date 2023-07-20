@@ -1,0 +1,13 @@
+---
+name: http://mirror.ph.net.tr
+address:
+  https: http://mirror.ph.net.tr/almalinux/
+geolocation:
+  country: TR
+  state_province: Bursa Province
+  city: Bursa
+update_frequency: 3h
+sponsor: Poyraz Hosting
+sponsor_url: https://poyrazhosting.com.tr
+email: mert@poyrazhosting.com.tr
+...
