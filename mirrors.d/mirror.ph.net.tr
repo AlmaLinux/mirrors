@@ -1,6 +1,7 @@
 ---
 name: http://mirror.ph.net.tr
 address:
+  http: http://mirror.ph.net.tr/almalinux/
   https: http://mirror.ph.net.tr/almalinux/
 geolocation:
   country: TR
