@@ -1,5 +1,5 @@
 ---
-name: http://mirror.ph.net.tr
+name: mirror.ph.net.tr
 address:
   http: http://mirror.ph.net.tr/almalinux/
   https: https://mirror.ph.net.tr/almalinux/
