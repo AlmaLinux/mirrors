@@ -85,14 +85,15 @@ async def are_mirrors_available(
             headers={"Connection": "close"}
     ) as http_session:
         for mirror in mirrors:
-            mirror_name, is_available = await mirror_available(
+            is_available = await mirror_available(
                 mirror_info=mirror,
                 http_session=http_session,
                 logger=logger,
                 main_config=main_config,
             )
-            if not is_available:
-                ret_code = 1
+            # True is 1, False is 0, so
+            # we get 1 if a mirror is not available
+            ret_code += int(not is_available)
     return ret_code
 
 
@@ -107,12 +108,12 @@ def do_mirrors_have_valid_geo_data(
     ui_url = 'https://nominatim.openstreetmap.org/ui/details.html'
     for mirror in mirrors:
         if any(getattr(mirror.geolocation, geo_attr) is None for geo_attr in (
-            'city', 'state', 'country'
+            'city', 'state_province', 'country'
         )):
             continue
         params = {
             'city': mirror.geolocation.city,
-            'state': mirror.geolocation.state,
+            'state': mirror.geolocation.state_province,
             'country': mirror.geolocation.country,
             'format': 'json',
         }
