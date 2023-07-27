@@ -40,12 +40,13 @@ jobs:
       - name: Check YAML configs
         run: |
           mirror_regexp="mirrors.d/.*.(yml)$"
-          if ! echo "${{ steps.files.outputs.added_modified }}" | grep -E "${mirror_regexp}" &> /dev/null; then
+          modified_files="${{ steps.files.outputs.added_modified }} ${{steps.files.outputs.renamed}}"
+          if ! echo "${modified_files}" | grep -E "${mirror_regexp}" &> /dev/null; then
             # we check only the main config if PR doesn't contain any new or modified mirror config
             python3.9 gh_ci/config_checker.py -sc config.yml
           else
             changed_files=""
-            for changed_file in ${{ steps.files.outputs.added_modified }}; do
+            for changed_file in ${modified_files}; do
               if echo "${changed_file}" | grep -E "${mirror_regexp}" &> /dev/null; then
                 changed_files="${changed_file} ${changed_files}"
               elif echo "${changed_file}" | grep "mirrors.d" &> /dev/null; then
