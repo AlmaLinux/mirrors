@@ -1,0 +1,14 @@
+---
+name: mirror.pulsant.com
+address:
+  http: http://mirror.pulsant.com/sites/almalinux/
+  https: https://mirror.pulsant.com/sites/almalinux/
+geolocation:
+  country: GB
+  state_province: Buckinghamshire
+  city: Milton Keynes
+update_frequency: 3h
+sponsor: Pulsant Ltd
+sponsor_url: https://www.pulsant.com
+email: mirrors@pulsant.com
+...
