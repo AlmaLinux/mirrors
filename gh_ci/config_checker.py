@@ -85,14 +85,15 @@ async def are_mirrors_available(
             headers={"Connection": "close"}
     ) as http_session:
         for mirror in mirrors:
-            mirror_name, is_available = await mirror_available(
+            is_available = await mirror_available(
                 mirror_info=mirror,
                 http_session=http_session,
                 logger=logger,
                 main_config=main_config,
             )
-            if not is_available:
-                ret_code = 1
+            # True is 1, False is 0, so
+            # we get 1 if a mirror is not available
+            ret_code += int(not is_available)
     return ret_code
 
 
