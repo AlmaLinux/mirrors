@@ -1,5 +1,5 @@
 ---
-name: test.almalinux.org
+name: https://test.almalinux.org
 address:
   http: http://test.almalinux.org/almalinux/
   https: https://test.almalinux.org/almalinux/

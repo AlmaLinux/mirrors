@@ -107,12 +107,12 @@ def do_mirrors_have_valid_geo_data(
     ui_url = 'https://nominatim.openstreetmap.org/ui/details.html'
     for mirror in mirrors:
         if any(getattr(mirror.geolocation, geo_attr) is None for geo_attr in (
-            'city', 'state', 'country'
+            'city', 'state_province', 'country'
         )):
             continue
         params = {
             'city': mirror.geolocation.city,
-            'state': mirror.geolocation.state,
+            'state': mirror.geolocation.state_province,
             'country': mirror.geolocation.country,
             'format': 'json',
         }
