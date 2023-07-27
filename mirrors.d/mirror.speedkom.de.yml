@@ -1,0 +1,15 @@
+---
+name: mirror.speedkom.de
+address:
+  ftp: ftp://mirror.speedkom.de/almalinux/
+  http: http://mirror.speedkom.de/almalinux/
+  https: https://mirror.speedkom.de/almalinux/
+geolocation:
+  country: DE
+  state_province: Bavaria
+  city: Kempten
+update_frequency: 3h
+sponsor: IDKOM Networks GmbH
+sponsor_url: https://www.idkom.de
+email: ipnoc@idkom.de
+...

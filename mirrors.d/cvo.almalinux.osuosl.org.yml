@@ -1,0 +1,18 @@
+---
+name: cvo.almalinux.osuosl.org
+address:
+  http: http://cvo.almalinux.osuosl.org
+  https: https://cvo.almalinux.osuosl.org
+  rsync: rsync://cvo.almalinux.osuosl.org/almalinux
+  ftp: ftp://cvo.almalinux.osuosl.org/pub/almalinux/
+update_frequency: 3h
+sponsor: Oregon State University Open Source Lab
+sponsor_url: https://osuosl.org
+email: support@osuosl.org
+geolocation:
+  continent: North America
+  country: US
+  state_province: Oregon
+  city: Corvallis
+asn: 3701
+...

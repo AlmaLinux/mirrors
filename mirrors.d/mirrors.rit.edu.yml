@@ -7,7 +7,7 @@ geolocation:
   country: US
   state_province: New Jersey
   city: Newark
-update_frequency: Unknown
+update_frequency: 3h
 sponsor: Rutgers University
 sponsor_url: https://rit.edu
 email: mirrors@rit.edu
