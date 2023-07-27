@@ -1,9 +1,9 @@
 ---
-name: repo.almalinux.org
+name: test.almalinux.org
 address:
-  http: http://repo.almalinux.org/almalinux/
-  https: https://repo.almalinux.org/almalinux/
-  rsync: rsync://rsync.repo.almalinux.org/almalinux
+  http: http://test.almalinux.org/almalinux/
+  https: https://test.almalinux.org/almalinux/
+  rsync: rsync://rsync.test.almalinux.org/almalinux
 geolocation:
   country: US
   continent: North America
