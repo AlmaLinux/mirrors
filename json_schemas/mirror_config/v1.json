@@ -1,133 +1,153 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
-    "properties": {
-        "cloud_type": {
-            "type": "string"
-        },
-        "cloud_regions": {
-            "type": "array",
-            "items": {
-                "type": "string"
-            }
-        },
-        "name": {
-            "type": "string"
-        },
-        "address": {
+    "$ref": "#/definitions/Welcome4",
+    "definitions": {
+        "Welcome4": {
             "type": "object",
             "properties": {
-                "http": {
+                "cloud_type": {
                     "type": "string"
                 },
-                "https": {
-                    "type": "string"
-                },
-                "rsync": {
-                    "type": "string"
-                },
-                "ftp": {
-                    "type": "string"
-                }
-            },
-            "anyOf": [
-                {
-                    "required": [
-                        "http"
-                    ]
-                },
-                {
-                    "required": [
-                        "https"
-                    ]
-                }
-            ]
-        },
-        "geolocation": {
-            "type": "object",
-            "properties": {
-                "country": {
-                    "type": "string"
-                },
-                "state_province": {
-                    "type": ["string", "null"]
-                },
-                "city": {
-                    "type": ["string", "null"]
-                }
-            }
-        },
-        "update_frequency": {
-            "type": "string"
-        },
-        "sponsor": {
-            "type": "string"
-        },
-        "sponsor_url": {
-            "type": "string"
-        },
-        "email": {
-            "type": "string"
-        },
-        "asn": {
-            "oneOf": [
-                {
-                    "type": "integer"
-                },
-                {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                }
-            ]
-        },
-        "subnets": {
-            "oneOf": [
-                {
+                "cloud_regions": {
                     "type": "array",
                     "items": {
                         "type": "string"
                     }
                 },
-                {
-                    "type": "string"
-                }
-            ]
-        },
-        "private": {
-            "type": "boolean"
-        }
-    },
-    "required": [
-        "name",
-        "address",
-        "update_frequency",
-        "sponsor",
-        "sponsor_url"
-    ],
-    "allOf": [
-        {
-            "if": {
-                "properties": {
-                    "private": {
-                        "const": true
+                "name": {
+                    "$ref": "#/definitions/Name"
+                },
+                "address": {
+                    "type": "object",
+                    "properties": {
+                        "http": {
+                            "type": "string"
+                        },
+                        "https": {
+                            "type": "string"
+                        },
+                        "rsync": {
+                            "type": "string"
+                        },
+                        "ftp": {
+                            "type": "string"
+                        }
+                    },
+                    "anyOf": [
+                        {
+                            "required": [
+                                "http"
+                            ]
+                        },
+                        {
+                            "required": [
+                                "https"
+                            ]
+                        }
+                    ]
+                },
+                "geolocation": {
+                    "type": "object",
+                    "properties": {
+                        "country": {
+                            "type": "string"
+                        },
+                        "state_province": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "city": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
                     }
                 },
-                "required": [
-                    "subnets"
+                "update_frequency": {
+                    "type": "string"
+                },
+                "sponsor": {
+                    "type": "string"
+                },
+                "sponsor_url": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "asn": {
+                    "oneOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    ]
+                },
+                "subnets": {
+                    "oneOf": [
+                        {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ]
+                },
+                "private": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "name",
+                "address",
+                "update_frequency",
+                "sponsor",
+                "sponsor_url"
+            ],
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "private": {
+                                "const": true
+                            }
+                        },
+                        "required": [
+                            "subnets"
+                        ]
+                    }
+                }
+            ],
+            "dependentRequired": {
+                "monopoly": [
+                    "private"
                 ]
+            },
+            "dependencies": {
+                "cloud_type": {
+                    "required": [
+                        "cloud_regions"
+                    ]
+                }
             }
-        }
-    ],
-    "dependentRequired": {
-        "monopoly": [
-            "private"
-        ]
-    },
-    "dependencies": {
-        "cloud_type": {
-            "required": ["cloud_regions"]
+        },
+        "Name": {
+            "oneOf": [
+                {
+                    "pattern": "^(?!(http:\\/\\/|https:\\/\\/)).*(?<!(\\/))$"
+                }
+            ]
         }
     }
 }
