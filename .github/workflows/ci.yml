@@ -51,7 +51,7 @@ jobs:
               else
                 echo "You add a config with wrong extension. Should be *.yml or *.yaml"
                 exit 1
-              if
+              fi
             done
             python3.9 gh_ci/config_checker.py -sc config.yml -mc ${changed_files}
           fi
