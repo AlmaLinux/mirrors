@@ -1,0 +1,14 @@
+---
+name: mirror.jingk.ai
+address:
+  http: http://mirror.jingk.ai/almalinux/
+  https: https://mirror.jingk.ai/almalinux/
+  rsync: rsync://mirror.jingk.ai/almalinux/
+geolocation:
+  country: SG
+  state_province: Singapore
+  city: Singapore
+update_frequency: 3h
+sponsor: Jingkai Tan
+sponsor_url: https://jingk.ai
+email: contact@jingk.ai
