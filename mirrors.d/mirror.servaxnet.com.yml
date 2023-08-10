@@ -1,0 +1,28 @@
+---
+name: mirror.servaxnet.com
+address:
+  http: http://mirror.servaxnet.com/almalinux/
+  https: https://mirror.servaxnet.com/almalinux/
+update_frequency: 1h
+sponsor: ServaxNet, LLC.
+sponsor_url: https://www.servaxnet.com/
+email: mirroradmin@servaxet.com
+geolocation:
+  country: US
+  state_province: Pennsylvania
+  city: Pittsburgh
+private: false
+monopoly: false
+# The list will be required if a mirror is local or cloud.
+# It contains subnets behind which located a private mirror.
+# Also, it can be string and contains URL which returns json list with subnets
+subnets:
+  - 162.255.224.0/24
+  - 162.255.225.0/24
+  - 162.255.226.0/24
+  - 162.255.227.0/24
+  - 204.141.164.0/22
+  - 204.141.168.0/22
+  - 204.141.180.0/22
+asn: 46974
+...

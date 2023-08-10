@@ -1,8 +1,6 @@
 name: mirror.amberit.com.bd
 address:
   http: http://mirror.dhakacom.com/almalinux/
-  https:
-  rsync:
 geolocation:
   country: BD
   state_province: Dhaka

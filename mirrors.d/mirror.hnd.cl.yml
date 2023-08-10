@@ -3,6 +3,7 @@ name: mirror.hnd.cl
 address:
   http: http://mirror.hnd.cl/almalinux/
   https: https://mirror.hnd.cl/almalinux/
+  rsync: rsync://mirror.hnd.cl/almalinux
 geolocation:
   country: CL
   state_province: Region Metropolitana
