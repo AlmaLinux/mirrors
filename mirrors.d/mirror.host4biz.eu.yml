@@ -1,4 +1,4 @@
-name: mirror.host4.biz
+name: mirror.host4biz.eu
 address:
   http: http://mirror.host4biz.eu/almalinux
   https: https://mirror.host4biz.eu/almalinux
@@ -9,6 +9,7 @@ email: noc@host4.biz
 geolocation:
   continent: Europe
   country: PL
+  state_province: Mazowieckie
   city: Warsaw
 private: false
 monopoly: false
