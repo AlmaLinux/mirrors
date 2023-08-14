@@ -9,6 +9,7 @@ email: noc@host4.biz
 geolocation:
   continent: Europe
   country: PL
+  state_province: Mazowieckie
   city: Warsaw
 private: false
 monopoly: false
