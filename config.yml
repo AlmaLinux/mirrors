@@ -100,6 +100,11 @@ repos:
     versions:
       - "8.8"
       - "9.2"
+  - name: synergy
+    path: synergy/$basearch/os/
+    versions:
+      - "8.8"
+      - "9.2"
 
   # sources repos
   - name: baseos-source
@@ -165,6 +170,12 @@ repos:
       - "9.2"
   - name: plus-source
     path: plus/Source/
+    vault: true
+    versions:
+      - "8.8"
+      - "9.2"
+  - name: synergy-source
+    path: synergy/Source/
     vault: true
     versions:
       - "8.8"
@@ -301,6 +312,12 @@ repos:
     path: plus/debug/$basearch/
     vault: true
     versions:
+      - "9.2"
+  - name: synergy-debuginfo
+    path: synergy/debug/$basearch/
+    vault: true
+    versions:
+      - "8.8"
       - "9.2"
 
   ## raspberry pi repos
