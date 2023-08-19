@@ -1,0 +1,17 @@
+---
+name: mirror.webhostingghana.com
+address:
+  http: http://mirror.webhostingghana.com/almalinux/
+  https: https://mirror.webhostingghana.com/almalinux/
+update_frequency: 1h
+sponsor: Web4Africa Ghana
+sponsor_url: https://webhostingghana.com
+email: info@web4africa.net
+geolocation:
+  continent: Africa
+  country: GH
+  state_province: Greater Accra
+  city: Accra
+private: false
+monopoly: false
+asn: 327813

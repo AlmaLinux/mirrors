@@ -1,0 +1,12 @@
+name: mirrors.hosting.in.th
+address:
+  http: http://mirrors.hosting.in.th/almalinux/
+  https: https://mirrors.hosting.in.th/almalinux/
+geolocation:
+  country: TH
+  state_province: Bangkok
+  city: Bangkok
+update_frequency: 1h
+sponsor: Hosting.in.th Hosting Solution
+sponsor_url: https://www.hosting.in.th
+email: piyaphan@hosting.in.th

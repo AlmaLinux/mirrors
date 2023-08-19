@@ -1,9 +1,14 @@
 ---
 name: mirrors.gigenet.com
 address:
-  http: https://mirrors.gigenet.com/almalinux/
+  http: http://mirrors.gigenet.com/almalinux/
+  https: https://mirrors.gigenet.com/almalinux/
+geolocation:
+  country: US
+  state_province: IL
+  city: Chicago
 update_frequency: 3h
-sponsor: Hosting
+sponsor: GigeNET
 sponsor_url: https://gigenet.com/
 email: support@gigenet.com
 ...

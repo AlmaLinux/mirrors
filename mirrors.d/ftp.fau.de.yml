@@ -4,6 +4,10 @@ address:
   http: http://ftp.fau.de/almalinux/
   https: https://ftp.fau.de/almalinux/
   rsync: rsync://ftp.fau.de/almalinux
+geolocation:
+  country: DE
+  state_province: Bavaria
+  city: Erlangen
 update_frequency: 3h
 sponsor: Friedrich-Alexander-Universitaet Erlangen-Nuernberg
 sponsor_url: https://www.rrze.fau.de

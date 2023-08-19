@@ -1,0 +1,14 @@
+---
+name: it2.mirror.vhosting-it.com
+address:
+  http: http://it2.mirror.vhosting-it.com/almalinux/
+  https: https://it2.mirror.vhosting-it.com/almalinux/
+geolocation:
+  country: IT
+  state_province: Turin
+  city: Turin
+update_frequency: 1h
+sponsor: VHosting Solution
+sponsor_url: https://www.vhosting-it.com/
+email: lorenzo@almalinux.org
+...

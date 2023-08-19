@@ -3,6 +3,10 @@ name: mirror.cloudpropeller.com
 address:
   http: http://mirror.cloudpropeller.com/almalinux/
   https: https://mirror.cloudpropeller.com/almalinux/
+geolocation:
+  country: US
+  state_province: Ohio
+  city: Columbus
 update_frequency: 1h
 sponsor: Cloud Propeller, Inc.
 sponsor_url: https://cloudpropeller.com

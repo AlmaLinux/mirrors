@@ -1,0 +1,14 @@
+---
+name: mirror.parsdev.com
+address:
+  http: http://mirror.parsdev.com/Almalinux
+  https: https://mirror.parsdev.com/Almalinux
+update_frequency: 3h
+geolocation:
+  country: IR
+  state_province: Tehran
+  city: Tehran
+sponsor: Negah Roshan Pars(PJS)
+sponsor_url: https://parsdev.com
+email: noc@nrp-network.com
+...

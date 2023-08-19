@@ -1,0 +1,15 @@
+---
+name: mirror.dimensiondata.com
+address:
+  https: https://alma.dimensiondata.com/
+  rsync: rsync://alma.dimensiondata.com/mirror/almalinux.org/
+  ftp: ftp://alma.dimensiondata.com/mirror/almalinux.org/
+update_frequency: 3h
+sponsor: Dimension Data
+sponsor_url: https://www.dimensiondata.com
+email: mirror@dimensiondata.com
+geolocation:
+  continent: Africa
+  country: ZA
+  state_province: Gauteng
+  city: Johannesburg

@@ -1,0 +1,13 @@
+---
+name: mirror.soonkeat.sg
+address:
+  http: http://mirror.soonkeat.sg/almalinux/
+geolocation:
+  country: SG
+  state_province:
+  city: Singapore
+update_frequency: 4h
+sponsor: Neo Soon Keat
+sponsor_url: https://soonkeat.sg/
+email: neo@soonkeat.sg
+...

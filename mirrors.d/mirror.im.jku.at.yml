@@ -1,0 +1,15 @@
+---
+name: mirror.im.jku.at
+address:
+  http: http://mirror.im.jku.at/mirror/alma/
+  https: http://mirror.im.jku.at/mirror/alma/
+  https: rsync://mirror.im.jku.at/alma/
+geolocation:
+  country: AT
+  state_province: Upper Austria
+  city: Linz
+update_frequency: 4h
+sponsor: Johannes Kepler University (JKU)
+sponsor_url: https://www.jku.at/
+email: apps-db@jku.at
+...

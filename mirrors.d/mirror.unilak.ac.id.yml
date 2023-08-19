@@ -1,0 +1,10 @@
+---
+name: mirror.unilak.ac.id
+address:
+  http: http://mirror.unilak.ac.id/almalinux/
+  https: https://mirror.unilak.ac.id/almalinux/
+update_frequency: 4h
+sponsor: Lancang Kuning University
+sponsor_url: https://unilak.ac.id
+email: malhuda@unilak.ac.id
+...

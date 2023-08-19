@@ -3,6 +3,10 @@ name: almalinux.mirrors.as212647.net
 address:
   http: http://almalinux.mirrors.as212647.net
   https: https://almalinux.mirrors.as212647.net
+geolocation:
+  country: US
+  state_province: Florida
+  city: Tampa
 update_frequency: 3h
 sponsor: Spearware Networks LLC
 sponsor_url: https://spearwarenetworks.com
