@@ -1,6 +1,5 @@
 service_user: "mirror-service"
 source_path: "/home/{{ service_user }}/mirrors_service"
-redis_socket_path: "/var/run/redis/redis.sock"
 sentry_environments:
   - "Production"
   - "Staging"

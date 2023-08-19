@@ -4,7 +4,6 @@ from flask import (
     Response,
 )
 
-from api.handlers import update_mirrors_handler
 from werkzeug.exceptions import InternalServerError
 
 from api.exceptions import (
@@ -31,19 +30,6 @@ Bootstrap(app)
 logger = get_logger(__name__)
 init_sentry_client()
 cache = FlaskCacheEngine.get_instance(app)
-
-
-@app.route(
-    '/update_mirrors',
-    methods=('POST',),
-)
-@success_result
-@error_result
-@auth_key_required
-async def update_mirrors():
-    result = await update_mirrors_handler()
-    return result
-
 
 
 @app.errorhandler(AuthException)

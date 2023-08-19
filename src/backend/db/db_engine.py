@@ -9,7 +9,7 @@ from flask_caching import Cache
 GEOIP_PATH = os.environ.get('GEOIP_PATH')
 ASN_PATH = os.environ.get('ASN_PATH')
 SQLITE_PATH = os.environ.get('SQLITE_PATH')
-REDIS_SOCKET = os.environ.get('REDIS_SOCKET')
+REDIS_URI = os.environ.get('REDIS_URI')
 REDIS_DB = 0
 
 if GEOIP_PATH:
@@ -72,7 +72,7 @@ class FlaskCacheEngine:
 
     cache_config = {
         'CACHE_TYPE': 'RedisCache',
-        'CACHE_REDIS_URL': f'unix://{REDIS_SOCKET}',
+        'CACHE_REDIS_URL': f'{REDIS_URI}',
         'CACHE_REDIS_DB': REDIS_DB,
     }
 

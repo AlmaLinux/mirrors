@@ -29,11 +29,3 @@
       src: "{{ mirrors_list_update }}.timer.j2"
       setype: systemd_unit_file_t
       seuser: system_u
-
-- name: Enable systemd timer
-  systemd:
-    name: "{{ mirrors_list_update }}.timer"
-    state: started
-    enabled: true
-    masked: false
-    daemon_reload: true

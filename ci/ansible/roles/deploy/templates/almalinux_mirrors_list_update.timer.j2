@@ -1,14 +1,12 @@
 [Unit]
-Description={{ description }} Service
+Description=Update a local mirrors list Service
 Wants=network-online.target
 After=network.target network-online.target
-Requires={{ mirrors_list_update }}.service
-Requires=almalinux_mirrors_utilities.service
+Requires=almalinux_mirrors_list_update.service
 
 [Timer]
 OnStartupSec=60
-OnUnitActiveSec=3600
-RandomizedDelaySec=300
+OnUnitActiveSec=900
 
 [Install]
 WantedBy=timers.target

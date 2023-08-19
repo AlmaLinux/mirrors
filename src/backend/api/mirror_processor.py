@@ -89,14 +89,14 @@ class MirrorProcessor:
             force_close=True,
         )
         self.retry_options = ExponentialRetry(
-            attempts=3,
+            attempts=2,
             exceptions={
                 ServerDisconnectedError,
                 TimeoutError,
             },
         )
         self.client_session = ClientSession(
-            conn_timeout=15,
+            conn_timeout=10,
             connector=self.tcp_connector,
             headers=HEADERS,
             raise_for_status=True,
@@ -182,7 +182,7 @@ class MirrorProcessor:
         mirror_info.iso_url = urljoin(
             mirror_info.mirror_url + '/',
             '%s/isos/%s',
-        )
+            )
 
     async def set_geo_and_location_data_from_db(
             self,
@@ -208,11 +208,11 @@ class MirrorProcessor:
                 location.longitude,
             ) = match
         except StopIteration:
-            self.logger.warning(
-                'Mirror "%s" does not have geo data for any its IP',
-                mirror_info.name,
-            )
             if not mirror_info.private:
+                self.logger.warning(
+                    'Mirror "%s" does not have geo data for any of its IPs',
+                    mirror_info.name,
+                )
                 mirror_info.status = 'Unknown geodata for any IP of the mirror'
         mirror_info.location = location
         mirror_info.geolocation.update_from_existing_object(geo_location_data)
@@ -294,18 +294,18 @@ class MirrorProcessor:
                     longitude=result[0]['lon'],
                 )
         except (
-            TimeoutError,
-            HTTPError,
-            ValueError,
-            ClientError,
-            CancelledError,
+                TimeoutError,
+                HTTPError,
+                ValueError,
+                ClientError,
+                CancelledError,
         ) as err:
             self.logger.warning(
                 'Cannot get geodata for mirror'
                 ' "%s" from online DB because "%s"',
                 mirror_info.name,
                 str(err) or str(type(err)),
-            )
+                )
 
     async def set_ipv6_support_of_mirror(
             self,
@@ -343,19 +343,19 @@ class MirrorProcessor:
             mirror_info.status = "ok"
             return
         result, reason = await is_url_available(
-                url=mirror_info.mirror_url,
-                http_session=self.client,
-                logger=self.logger,
-                is_get_request=True,
-                success_msg=None,
-                success_msg_vars=None,
-                error_msg='Mirror "%(mirror_name)s" '
-                          'is not available by url "%(url)s" '
-                          'because "%(err)s"',
-                error_msg_vars={
-                    'mirror_name': mirror_info.name,
-                    'url': mirror_info.mirror_url,
-                },
+            url=mirror_info.mirror_url,
+            http_session=self.client,
+            logger=self.logger,
+            is_get_request=True,
+            success_msg=None,
+            success_msg_vars=None,
+            error_msg='Mirror "%(mirror_name)s" '
+                      'is not available by url "%(url)s" '
+                      'because "%(err)s"',
+            error_msg_vars={
+                'mirror_name': mirror_info.name,
+                'url': mirror_info.mirror_url,
+            },
         )
         if not result:
             self.logger.info(
@@ -370,8 +370,8 @@ class MirrorProcessor:
             mirror_info.status = reason
             return
         if await self.is_mirror_expired(
-            mirror_info=mirror_info,
-            main_config=main_config,
+                mirror_info=mirror_info,
+                main_config=main_config,
         ):
             self.logger.info(
                 'Mirror "%s" is expired',
@@ -417,7 +417,7 @@ class MirrorProcessor:
                 mirror_info=mirror_info,
             ) + '/',
             'TIME',
-        )
+            )
         try:
             result = await (await self.request(
                 url=str(timestamp_url),
@@ -425,20 +425,20 @@ class MirrorProcessor:
                 headers=HEADERS,
             )).text()
         except (
-            TimeoutError,
-            HTTPError,
-            ClientError,
-            CancelledError,
-            # E.g. repomd.xml is broken.
-            # It can't be decoded in that case
-            UnicodeError,
+                TimeoutError,
+                HTTPError,
+                ClientError,
+                CancelledError,
+                # E.g. repomd.xml is broken.
+                # It can't be decoded in that case
+                UnicodeError,
         ) as err:
             self.logger.warning(
                 'Mirror "%s" has no timestamp file by url "%s" because "%s"',
                 mirror_info.name,
                 timestamp_url,
                 str(err) or str(type(err)),
-            )
+                )
             return True
         try:
             mirror_last_updated = float(result)
@@ -486,7 +486,7 @@ class MirrorProcessor:
                     url=(url := urljoin(
                         mirror_info.mirror_url + '/',
                         iso_uri,
-                    )),
+                        )),
                     http_session=self.client,
                     logger=self.logger,
                     is_get_request=False,
