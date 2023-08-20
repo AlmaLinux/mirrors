@@ -7,11 +7,6 @@ git fetch --all
 git reset --hard origin/master
 git pull
 popd
-# healthcheck, 10 minutes
-for i in $(seq 1 40); do
-        curl -I http://[::1]:80 && break
-        sleep 15
-done
 
 export GEOIP_PATH={{ config_root }}/mirrors/geoip_db.mmdb
 export ASN_PATH={{ config_root }}/mirrors/asn_db.mmdb
