@@ -6,7 +6,7 @@ address:
 geolocation:
   country: TR
   state_province: Istanbul
-  city: İstanbul
+  city: Istanbul
 update_frequency: 3h
 sponsor: Hosting Dünyam
 sponsor_url: https://hostingdunyam.com.tr
