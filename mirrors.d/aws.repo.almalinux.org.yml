@@ -1,7 +1,7 @@
 ---
 name: aws.repo.almalinux.org
 address:
-  http: http://aws.repo.almalinux.org/almalinux/
+  http: http://aws.repo.almalinux.org/
 update_frequency: 0h
 geolocation:
   country: US
