@@ -1,0 +1,16 @@
+---
+name: aws.repo.almalinux.org
+address:
+  http: http://aws.repo.almalinux.org/almalinux/
+update_frequency: 0h
+geolocation:
+  country: US
+  state_province: Virginia
+  city: Sterling
+sponsor: AlmaLinux OS Foundation
+sponsor_url: https://www.almalinux.org
+email: infra-team@almalinux.org
+cloud_type: aws
+cloud_regions:
+  - us-east-1
+...
