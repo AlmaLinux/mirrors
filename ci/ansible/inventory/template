@@ -11,4 +11,5 @@ test_ip_address=<ip_address_of_request_for_debugging>
 gunicorn_port=<port of uwsgi service>
 utilities_port=<port of utilities service>
 license_key=<License key from MaxMind site>
-rsyslog_server=172.30.122.99
+rsyslog_server=10.0.0.134
+redis_uri=redis://mirrorlistservice-ecredis.tpowt8.ng.0001.use1.cache.amazonaws.com:6379

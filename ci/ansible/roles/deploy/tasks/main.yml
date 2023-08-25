@@ -21,9 +21,6 @@
         - import_tasks: create_mirrors_systemd_timer.yml
           tags:
             - update_list_timer
-        - import_tasks: redis_configuration.yml
-          tags:
-            - redis_config
         - import_tasks: backend_installation.yml
           tags:
             - backend

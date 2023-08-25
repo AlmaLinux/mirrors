@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-pid_path="{{ mirrors_list_update_pid }}"
-if [[ -e "${pid_path}" ]]; then
-    echo "Update is already running"
-    exit 0
-fi
 pushd {{ config_root }}/mirrors/updates
 echo `id -u`
 echo `id -g`
@@ -12,9 +7,15 @@ git fetch --all
 git reset --hard origin/master
 git pull
 popd
-# healthcheck, 10 minutes
-for i in $(seq 1 40); do
-        curl -I http://[::1]:80 && break
-        sleep 15
-done
-curl --cookie 'AUTH_KEY={{ auth_key }}' -X POST http://[::1]:{{ utilities_port }}/update_mirrors
+
+export GEOIP_PATH={{ config_root }}/mirrors/geoip_db.mmdb
+export ASN_PATH={{ config_root }}/mirrors/asn_db.mmdb
+export SQLITE_PATH={{ config_root }}/data/mirrors.db
+export SENTRY_DSN={{ sentry_dsn }}
+export PYTHONPATH={{ source_path }}/src/backend/
+export CONFIG_ROOT={{ config_root }}
+export SOURCE_PATH={{ source_path }}
+export DEPLOY_ENVIRONMENT={{ config_root }}/deploy_environment.var
+export TEST_IP_ADDRESS={{ test_ip_address }}
+export AUTH_KEY={{ auth_key }}
+export REDIS_URI=redis://mirrorlistservice-ecredis.tpowt8.ng.0001.use1.cache.amazonaws.com:6379

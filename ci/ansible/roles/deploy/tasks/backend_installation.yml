@@ -70,7 +70,6 @@
     mode: 0600
   with_items:
     - "gunicorn.py"
-    - "service.py"
 
 - name: Prepare started script of backend service
   template:
@@ -82,7 +81,6 @@
     seuser: system_u
     mode: 0740
   with_items:
-    - "{{ utilities_service }}"
     - "{{ mirrors_service }}"
 
 - name: Install systemd service of Gunicorn backend
@@ -96,7 +94,6 @@
     mode: 0640
   with_items:
     - "{{ mirrors_service }}"
-    - "{{ utilities_service }}"
 
 - name: Enable systemd service of Gunicorn backend
   systemd:
@@ -110,4 +107,3 @@
     - deploy_files
   with_items:
     - "{{ mirrors_service }}"
-    - "{{ utilities_service }}"
