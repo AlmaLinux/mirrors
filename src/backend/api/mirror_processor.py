@@ -12,6 +12,7 @@ from aiodns.error import DNSError
 from aiohttp import (
     ClientSession,
     ClientError,
+    ClientTimeout,
     ServerDisconnectedError,
     TCPConnector,
     ClientResponse,
@@ -96,7 +97,7 @@ class MirrorProcessor:
             },
         )
         self.client_session = ClientSession(
-            conn_timeout=10,
+            timeout=ClientTimeout(total=15,connect=10),
             connector=self.tcp_connector,
             headers=HEADERS,
             raise_for_status=True,
