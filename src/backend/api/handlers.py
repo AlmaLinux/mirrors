@@ -120,7 +120,7 @@ def _get_nearest_mirrors_by_network_data(
                 return [mirror]
             else:
                 suitable_mirrors.append(mirror)
-    if 1 <= len(suitable_mirrors) < LENGTH_CLOUD_MIRRORS_LIST\
+    if 1 <= len(suitable_mirrors) < LENGTH_CLOUD_MIRRORS_LIST \
             and match is not None:
         continent, country, _, _, latitude, longitude = match
         not_sorted_additional_mirrors = [
@@ -262,16 +262,17 @@ def get_all_mirrors(
     return mirrors
 
 
-@cache.cached(
-    timeout=MIRRORS_LIST_EXPIRED_TIME,
-    make_cache_key=_generate_redis_key_for_the_mirrors_list,
-)
+# @cache.cached(
+#     timeout=MIRRORS_LIST_EXPIRED_TIME,
+#     make_cache_key=_generate_redis_key_for_the_mirrors_list,
+# )
 def get_all_mirrors_db(
         get_working_mirrors: bool = False,
         get_expired_mirrors: bool = False,
         get_without_cloud_mirrors: bool = False,
         get_without_private_mirrors: bool = False,
-        get_mirrors_with_full_set_of_isos: bool = False
+        get_mirrors_with_full_set_of_isos: bool = False,
+        bypass_cache: bool = False
 ) -> list[MirrorData]:
     """
     Get a mirrors list from DB
@@ -286,6 +287,20 @@ def get_all_mirrors_db(
            per each version and architecture
     """
     mirrors_list = []
+
+    cache_key = _generate_redis_key_for_the_mirrors_list(
+        get_working_mirrors=get_working_mirrors,
+        get_expired_mirrors=get_expired_mirrors,
+        get_without_cloud_mirrors=get_without_cloud_mirrors,
+        get_without_private_mirrors=get_without_private_mirrors,
+        get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos
+    )
+
+    if not bypass_cache:
+        mirrors = cache.get(cache_key)
+        if mirrors:
+            return mirrors
+
     with session_scope() as session:
         mirrors_query = session.query(
             Mirror
@@ -324,6 +339,8 @@ def get_all_mirrors_db(
         for mirror in mirrors:
             mirror_data = mirror.to_dataclass()
             mirrors_list.append(mirror_data)
+
+    cache.set(cache_key, mirrors_list, 86400)
     return mirrors_list
 
 
