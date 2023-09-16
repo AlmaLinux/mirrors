@@ -155,6 +155,7 @@ def get_mirror_list(
         repository=repository,
     )
     cache.set(make_redis_key(version=version, repository=repository), mirrors, CACHE_EXPIRED_TIME)
+    return mirrors
 
 
 @app.route(
