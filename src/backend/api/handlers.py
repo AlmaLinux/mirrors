@@ -16,7 +16,7 @@ from sqlalchemy.orm import joinedload
 
 from api.exceptions import UnknownRepoAttribute
 from api.mirror_processor import MirrorProcessor
-from db.db_engine import FlaskCacheEngine
+from db.db_engine import FlaskCacheEngine, FlaskCacheEngineRo
 from yaml_snippets.utils import (
     get_config,
     get_mirrors_info,
@@ -50,6 +50,7 @@ from common.sentry import get_logger
 
 logger = get_logger(__name__)
 cache = FlaskCacheEngine.get_instance()
+cache_ro = FlaskCacheEngineRo.get_instance()
 
 
 LENGTH_GEO_MIRRORS_LIST = 10
@@ -297,7 +298,7 @@ def get_all_mirrors_db(
     )
 
     if not bypass_cache:
-        mirrors = cache.get(cache_key)
+        mirrors = cache_ro.get(cache_key)
         if mirrors:
             return mirrors
 
