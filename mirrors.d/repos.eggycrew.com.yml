@@ -4,6 +4,10 @@ address:
   https: https://repos.eggycrew.com/almalinux
   http:  http://repos.eggycrew.com/almalinux
   rsync:  rsync://repos.eggycrew.com/almalinux
+geolocation:
+  country: US
+  state_province: MO
+  city: Kansas City
 update_frequency: 2h
 sponsor: EggyCrew
 sponsor_url: NA
