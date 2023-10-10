@@ -167,11 +167,9 @@ async def update_mirrors_handler() -> str:
         # update all mirrors lists in the Redis cache
         for args in itertools.product(
                 (True, False),
-                repeat=len(signature(get_all_mirrors_db).parameters),
+                repeat=len(signature(get_all_mirrors_db).parameters)-1,
         ):
-            cache_key = _generate_redis_key_for_the_mirrors_list(*args)
-            cache.delete(cache_key)
-            get_all_mirrors_db(*args)
+            get_all_mirrors_db(bypass_cache=True, *args)
     finally:
         logger.info(
             'Update of the mirrors list is finished at "%s"',

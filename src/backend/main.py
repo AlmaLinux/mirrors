@@ -28,7 +28,7 @@ from api.exceptions import (
     UnknownRepoAttribute,
 )
 from api.redis import CACHE_EXPIRED_TIME, URL_TYPES_LIST_EXPIRED_TIME
-from db.db_engine import FlaskCacheEngine
+from db.db_engine import FlaskCacheEngine, FlaskCacheEngineRo
 from db.models import Url
 from db.utils import session_scope
 from yaml_snippets.utils import get_config
@@ -51,6 +51,7 @@ Bootstrap(app)
 logger = get_logger(__name__)
 init_sentry_client()
 cache = FlaskCacheEngine.get_instance(app)
+cache_ro = FlaskCacheEngineRo.get_instance(app)
 
 
 @app.context_processor
@@ -137,11 +138,6 @@ def my_ip_and_headers():
     '/mirrorlist/<version>/<repository>',
     methods=('GET',),
 )
-@cache.cached(
-    timeout=CACHE_EXPIRED_TIME,
-    make_cache_key=make_redis_key,
-    unless=unless_make_cache,
-)
 @success_result
 @error_result
 def get_mirror_list(
@@ -149,12 +145,17 @@ def get_mirror_list(
         repository: str,
 ):
     ip_address = _get_request_ip()
-    return get_mirrors_list(
+    mirrors = cache_ro.get(make_redis_key(version=version, repository=repository))
+    if mirrors:
+        return mirrors
+    mirrors = get_mirrors_list(
         ip_address=ip_address,
         version=version,
         arch=None,
         repository=repository,
     )
+    cache.set(make_redis_key(version=version, repository=repository), mirrors, CACHE_EXPIRED_TIME)
+    return mirrors
 
 
 @app.route(

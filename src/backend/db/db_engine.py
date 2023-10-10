@@ -10,6 +10,7 @@ GEOIP_PATH = os.environ.get('GEOIP_PATH')
 ASN_PATH = os.environ.get('ASN_PATH')
 SQLITE_PATH = os.environ.get('SQLITE_PATH')
 REDIS_URI = os.environ.get('REDIS_URI')
+REDIS_URI_RO = os.environ.get('REDIS_URI_RO')
 REDIS_DB = 0
 
 if GEOIP_PATH:
@@ -73,6 +74,24 @@ class FlaskCacheEngine:
     cache_config = {
         'CACHE_TYPE': 'RedisCache',
         'CACHE_REDIS_URL': f'{REDIS_URI}',
+        'CACHE_REDIS_DB': REDIS_DB,
+    }
+
+    @classmethod
+    def get_instance(cls, app: Flask = None):
+        if cls.__instance is None:
+            cls.__instance = Cache(config=cls.cache_config)
+        if app is not None:
+            cls.__instance.init_app(app)
+        return cls.__instance
+
+
+class FlaskCacheEngineRo:
+    __instance = None
+
+    cache_config = {
+        'CACHE_TYPE': 'RedisCache',
+        'CACHE_REDIS_URL': f'{REDIS_URI_RO}',
         'CACHE_REDIS_DB': REDIS_DB,
     }
 
