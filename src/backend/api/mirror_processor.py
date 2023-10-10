@@ -283,7 +283,7 @@ class MirrorProcessor:
             )).json()
             if result:
                 latitude = result[0]['lat']
-                longitude = result[0]['lat']
+                longitude = result[0]['lon']
                 set_geolocation_to_cache(
                     key=redis_key,
                     cache=self.cache,
