@@ -24,6 +24,7 @@ from yaml_snippets.utils import (
 from api.redis import (
     _generate_redis_key_for_the_mirrors_list,
     MIRRORS_LIST_EXPIRED_TIME,
+    CACHE_EXPIRED_TIME
 )
 from api.utils import (
     get_geo_data_by_ip,
@@ -93,10 +94,10 @@ def _get_nearest_mirrors_by_network_data(
         using ASN or subnets data
         """
         return (
-            mirror_data.status == 'ok' and
-            not mirror_data.private and
-            mirror_data.cloud_type in ('', None) and
-            mirror_data not in main_list_of_mirrors
+                mirror_data.status == 'ok' and
+                not mirror_data.private and
+                mirror_data.cloud_type in ('', None) and
+                mirror_data not in main_list_of_mirrors
         )
 
     match = get_geo_data_by_ip(ip_address)
@@ -114,8 +115,8 @@ def _get_nearest_mirrors_by_network_data(
         if mirror.status != "ok":
             continue
         if (asn is not None and asn in mirror.asn) or is_ip_in_any_subnet(
-            ip_address=ip_address,
-            subnets=mirror.subnets,
+                ip_address=ip_address,
+                subnets=mirror.subnets,
         ):
             if mirror.monopoly:
                 return [mirror]
@@ -229,7 +230,7 @@ def _get_nearest_mirrors(
             get_without_cloud_mirrors=True,
             get_without_private_mirrors=True,
             get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos
-            )
+        )
     return suitable_mirrors
 
 
@@ -409,6 +410,7 @@ def get_mirrors_list(
         repository: Optional[str],
         iso_list: bool = False,
         debug_info: bool = False,
+        redis_key: Optional[str] = None
 ) -> Union[str, dict]:
     mirrors_list = []
     config = get_config(
@@ -444,23 +446,28 @@ def get_mirrors_list(
 
     # if a client requests global vault version or vault repo
     if _is_vault_repo(
-        version=version,
-        vault_versions=vault_versions,
-        repo=repo
+            version=version,
+            vault_versions=vault_versions,
+            repo=repo
     ):
-        return os.path.join(
+        return [os.path.join(
             vault_mirror,
             version,
             repo_path,
+        )]
+
+
+    if redis_key:
+        nearest_mirrors = cache_ro.get(redis_key)
+    if not redis_key or not nearest_mirrors:
+        nearest_mirrors = _get_nearest_mirrors(
+            ip_address=ip_address,
+            get_mirrors_with_full_set_of_isos=iso_list,
+            get_without_private_mirrors=iso_list,
+            get_working_mirrors=True,
+            get_without_cloud_mirrors=iso_list,
+            get_expired_mirrors=False,
         )
-    nearest_mirrors = _get_nearest_mirrors(
-        ip_address=ip_address,
-        get_mirrors_with_full_set_of_isos=iso_list,
-        get_without_private_mirrors=iso_list,
-        get_working_mirrors=True,
-        get_without_cloud_mirrors=iso_list,
-        get_expired_mirrors=False,
-    )
     if debug_info:
         data = defaultdict(dict)
         match = get_geo_data_by_ip(ip_address)
@@ -487,10 +494,12 @@ def get_mirrors_list(
         full_mirror_path = urljoin(
             mirror.mirror_url + '/',
             f'{version}/{repo_path}',
-        )
+            )
         mirrors_list.append(full_mirror_path)
+    if redis_key:
+        cache.set(redis_key, nearest_mirrors, CACHE_EXPIRED_TIME)
 
-    return '\n'.join(mirrors_list)
+    return mirrors_list
 
 
 def get_isos_list_by_countries(
@@ -498,10 +507,10 @@ def get_isos_list_by_countries(
 ) -> tuple[dict[str, list[MirrorData]], list[MirrorData]]:
     mirrors_by_countries = defaultdict(list)
     for mirror_info in get_all_mirrors(
-        get_without_private_mirrors=True,
-        get_mirrors_with_full_set_of_isos=True,
-        get_without_cloud_mirrors=True,
-        get_working_mirrors=True,
+            get_without_private_mirrors=True,
+            get_mirrors_with_full_set_of_isos=True,
+            get_without_cloud_mirrors=True,
+            get_working_mirrors=True,
     ):
         mirrors_by_countries[
             mirror_info.geolocation.country
@@ -523,7 +532,7 @@ def get_main_isos_table(config: MainConfig) -> dict[str, list[str]]:
         result[arch] = [
             version for version in config.versions
             if version not in config.duplicated_versions and
-            arch in config.versions_arches.get(version, config.arches)
+               arch in config.versions_arches.get(version, config.arches)
         ]
 
     return result

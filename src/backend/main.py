@@ -44,6 +44,7 @@ from common.sentry import (
 )
 from flask_api.status import HTTP_200_OK
 from flask_bs4 import Bootstrap
+from urllib.parse import urljoin
 
 app = Flask('app')
 app.url_map.strict_slashes = False
@@ -52,7 +53,6 @@ logger = get_logger(__name__)
 init_sentry_client()
 cache = FlaskCacheEngine.get_instance(app)
 cache_ro = FlaskCacheEngineRo.get_instance(app)
-
 
 @app.context_processor
 def inject_now_date():
@@ -84,9 +84,10 @@ def _get_request_ip(*args, **kwargs) -> Optional[str]:
     return test_ip_address or result
 
 
-def make_redis_key(version: str, repository: str, *args, **kwargs) -> str:
-    ip = _get_request_ip()
-    return f'{ip}_{version}_{repository}'
+def make_redis_key(ip = None, *args, **kwargs) -> str:
+    if not ip:
+        ip = _get_request_ip()
+    return f'{ip}'
 
 
 def unless_make_cache(*args, **kwargs) -> bool:
@@ -142,20 +143,20 @@ def my_ip_and_headers():
 @error_result
 def get_mirror_list(
         version: str,
-        repository: str,
+        repository: str
 ):
     ip_address = _get_request_ip()
-    mirrors = cache_ro.get(make_redis_key(version=version, repository=repository))
-    if mirrors:
-        return mirrors
+
     mirrors = get_mirrors_list(
         ip_address=ip_address,
         version=version,
         arch=None,
         repository=repository,
+        debug_info=False,
+        redis_key=make_redis_key(ip=ip_address)
     )
-    cache.set(make_redis_key(version=version, repository=repository), mirrors, CACHE_EXPIRED_TIME)
-    return mirrors
+
+    return '\n'.join(mirrors)
 
 
 @app.route(
