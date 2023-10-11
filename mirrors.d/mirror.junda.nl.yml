@@ -1,6 +1,5 @@
 ---
 name: www.junda.nl
-cloud_type: 
 address:
   http: http://mirror.junda.nl/almalinux/
 update_frequency: 24h
