@@ -1,0 +1,15 @@
+---
+name: mirror.siwoo.org
+address:
+  http: http://mirror.siwoo.org/almalinux/
+  https: https://mirror.siwoo.org/almalinux/
+  rsync: rsync://mirror.siwoo.org/almalinux
+geolocation:
+  country: KR
+  state_province: 
+  city: Gwangju
+update_frequency: 2h
+sponsor: Archive of Siwoo
+sponsor_url: https://www.siwoo.org
+email: dlatldn426@gmail.com
+...
