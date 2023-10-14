@@ -1,5 +1,5 @@
 ---
-name: mirror.sindad.cloud
+name: ir.almalinux.sindad.cloud
 address:
   http: http://ir.almalinux.sindad.cloud
   https: https://ir.almalinux.sindad.cloud
