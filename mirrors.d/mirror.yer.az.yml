@@ -4,7 +4,6 @@ address:
   http: http://mirror.yer.az/almalinux/
   https: https://mirror.yer.az/almalinux/
 geolocation:
-  continent: Europe
   country: AZ
   state_province: Baku
   city: Baku
