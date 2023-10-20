@@ -1,0 +1,13 @@
+---
+name: ftp.tc.edu.tw
+address:
+  http: https://ftp.tc.edu.tw/Linux/almalinux/
+update_frequency: 3h
+geolocation:
+  country: TW
+  state_province: Taiwan
+  city: Taichung
+sponsor: Taichung City Government Education Bureau
+sponsor_url: https://tc.edu.tw
+email: rray@tc.edu.tw
+...
