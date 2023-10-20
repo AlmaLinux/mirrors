@@ -32,6 +32,7 @@ python_packages:
   - jsonschema==4.17.3
   - Jinja2==3.1.2
   - lxml==4.9.2
+  - maxminddb==2.4.0
   - pycountry==22.3.5
   - pyyaml==6.0
   - redis==4.5.1

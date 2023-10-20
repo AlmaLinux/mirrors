@@ -17,7 +17,6 @@
         - import_tasks: get_mirrors_repo.yml
           tags:
             - git
-        - import_tasks: create_dbs_systemd_timer.yml
         - import_tasks: create_mirrors_systemd_timer.yml
           tags:
             - update_list_timer

@@ -187,8 +187,8 @@ def get_asn_by_ip(
 
     db = AsnEngine.get_instance()
     try:
-        return str(db.asn(ip).autonomous_system_number)
-    except AddressNotFoundError:
+        return str(db.get(ip)['asn'])
+    except TypeError:
         return
 
 

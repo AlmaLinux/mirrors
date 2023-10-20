@@ -10,7 +10,6 @@ auth_key=<your auth key for access to the endpoint of updating mirrors list>
 test_ip_address=<ip_address_of_request_for_debugging>
 gunicorn_port=<port of uwsgi service>
 utilities_port=<port of utilities service>
-license_key=<License key from MaxMind site>
 rsyslog_server=10.0.0.134
 redis_uri=redis://mirrorlistservice-ecredis.tpowt8.ng.0001.use1.cache.amazonaws.com:6379
 redis_uri_ro=redis://mirrorlistservice-ecredis-ro.tpowt8.ng.0001.use1.cache.amazonaws.com:6379

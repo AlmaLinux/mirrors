@@ -25,6 +25,25 @@
   tags:
     - always
 
+- name: Set ipinfo path
+  set_fact:
+    ipinfo_path: "/ipinfo/"
+
+- name: Create ipinfo mount path
+  file:
+    path: "{{ ipinfo_path }}"
+    state: directory
+    mode: '0755'
+
+- name: Mount ipinfo path
+  ansible.posix.mount:
+    src: fs-04029e8b12637703b.efs.us-east-1.amazonaws.com:/
+    opts: ro,nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport
+    state: mounted
+    fstype: nfs
+    boot: true
+    path: "{{ ipinfo_path }}"
+
 - name: Create configs directory
   file:
     name: "{{ config_root }}"
