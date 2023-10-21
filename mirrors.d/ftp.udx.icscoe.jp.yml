@@ -1,0 +1,14 @@
+---
+name: ftp.udx.icscoe.jp
+address:
+  http: http://ftp.udx.icscoe.jp/Linux/almalinux/
+  https: https://ftp.udx.icscoe.jp/Linux/almalinux/
+update_frequency: 3h
+geolocation:
+  country: JP
+  state_province: Tokyo
+  city: Tokyo
+sponsor: Industrial Cyber Security Center (ICSCOE) Education and Research System
+sponsor_url: https://icscoe.jp
+email: system-wg@ml.icscoe.jp
+...
