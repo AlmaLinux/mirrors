@@ -1,0 +1,14 @@
+---
+name: mirrors.hit.edu.cn
+address:
+  http: http://mirrors.hit.edu.cn/almalinux/
+  https: https://mirrors.hit.edu.cn/almalinux/
+geolocation:
+  country: CN
+  state_province: Beijing
+  city: Haidian
+update_frequency: 3h
+sponsor: Harbin Institute of Technology Open Source Mirror Station
+sponsor_url: https://hit.edu.cn
+email: mirrors@hit.edu.cn
+...
