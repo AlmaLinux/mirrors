@@ -8,8 +8,9 @@ git reset --hard origin/master
 git pull
 popd
 
-export GEOIP_PATH={{ config_root }}/mirrors/geoip_db.mmdb
-export ASN_PATH={{ config_root }}/mirrors/asn_db.mmdb
+export GEOIP_PATH={{ ipinfo_path }}/standard_location.mmdb
+export ASN_PATH={{ ipinfo_path }}/asn.mmdb
+export CONTINENT_PATH={{ ipinfo_path }}/continent.json
 export SQLITE_PATH={{ config_root }}/data/mirrors.db
 export SENTRY_DSN={{ sentry_dsn }}
 export PYTHONPATH={{ source_path }}/src/backend/
@@ -17,5 +18,7 @@ export CONFIG_ROOT={{ config_root }}
 export SOURCE_PATH={{ source_path }}
 export DEPLOY_ENVIRONMENT={{ config_root }}/deploy_environment.var
 export TEST_IP_ADDRESS={{ test_ip_address }}
-export AUTH_KEY={{ auth_key }}
-export REDIS_URI=redis://mirrorlistservice-ecredis.tpowt8.ng.0001.use1.cache.amazonaws.com:6379
+export REDIS_URI={{ redis_uri }}
+export REDIS_URI_RO={{ redis_uri_ro }}
+
+/home/mirror-service/mirrors_service/bin/python -u /home/mirror-service/mirrors_service/src/backend/update_mirrors.py

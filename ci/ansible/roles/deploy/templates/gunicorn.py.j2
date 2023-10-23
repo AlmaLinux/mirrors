@@ -20,6 +20,7 @@ raw_env = [
     'TEST_IP_ADDRESS={{ test_ip_address }}',
     'AUTH_KEY={{ auth_key }}',
     'REDIS_URI={{ redis_uri }}',
+    'REDIS_URI_RO={{ redis_uri_ro }}'
 ]
 accesslog = '-'
 access_log_format = '"%({X-Forwarded-For}i)s" %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"'
