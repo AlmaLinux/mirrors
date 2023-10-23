@@ -21,7 +21,7 @@ from aiohttp_retry.types import ClientType
 from bs4 import BeautifulSoup
 from geoip2.errors import AddressNotFoundError
 
-from db.db_engine import GeoIPEngine, FlaskCacheEngine
+from db.db_engine import GeoIPEngine, FlaskCacheEngine, ContinentEngine
 from yaml_snippets.data_models import MirrorData
 from api.exceptions import (
     BaseCustomException,
@@ -157,23 +157,26 @@ def get_geo_data_by_ip(
     """
 
     db = GeoIPEngine.get_instance()
+    continent = ContinentEngine.get_instance()
     try:
-        city = db.city(ip)
+        geoipdb = db.get(ip)
     # ValueError will be raised in case of incorrect IP
     except (AddressNotFoundError, ValueError):
         return
+    if not geoipdb:
+        return
     try:
-        city_name = city.city.name
-    except AttributeError:
+        city_name = geoipdb['city']
+    except TypeError:
         city_name = None
     try:
-        state = city.subdivisions.most_specific.name
-    except AttributeError:
+        state = geoipdb['region']
+    except TypeError:
         state = None
-    country = city.country.iso_code
-    continent = city.continent.name
-    latitude = city.location.latitude
-    longitude = city.location.longitude
+    country = geoipdb['country']
+    continent = continent[country]
+    latitude = float(geoipdb['lat'])
+    longitude = float(geoipdb['lng'])
     if any(item is None for item in (latitude, longitude)):
         return None
     return continent, country, state, city_name, latitude, longitude
@@ -213,9 +216,9 @@ async def get_azure_subnets_json(
         return
     try:
         async with http_session.get(
-            link_to_json_url,
-            timeout=AIOHTTP_TIMEOUT,
-            raise_for_status=True
+                link_to_json_url,
+                timeout=AIOHTTP_TIMEOUT,
+                raise_for_status=True
         ) as resp:
             response_json = await resp.json(
                 content_type='application/octet-stream',
@@ -234,9 +237,9 @@ async def get_aws_subnets_json(http_session: ClientSession) -> Optional[dict]:
     url = 'https://ip-ranges.amazonaws.com/ip-ranges.json'
     try:
         async with http_session.get(
-            url,
-            timeout=AIOHTTP_TIMEOUT,
-            raise_for_status=True
+                url,
+                timeout=AIOHTTP_TIMEOUT,
+                raise_for_status=True
         ) as resp:
             response_json = await resp.json()
     except (ClientConnectorError, TimeoutError) as err:
@@ -316,8 +319,8 @@ def set_subnets_for_hyper_cloud_mirror(
 
 
 def get_distance_in_km(
-    mirror_coords: tuple[float, float],
-    request_coords: tuple[float, float]
+        mirror_coords: tuple[float, float],
+        request_coords: tuple[float, float]
 ):
     km = int(haversine(mirror_coords, request_coords))
     return km

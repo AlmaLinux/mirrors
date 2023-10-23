@@ -1,8 +1,9 @@
 # coding=utf-8
 import os
+import json
 
 from flask import Flask
-from geoip2.database import Reader
+import maxminddb
 from sqlalchemy import create_engine
 from flask_caching import Cache
 
@@ -12,6 +13,7 @@ SQLITE_PATH = os.environ.get('SQLITE_PATH')
 REDIS_URI = os.environ.get('REDIS_URI')
 REDIS_URI_RO = os.environ.get('REDIS_URI_RO')
 REDIS_DB = 0
+CONTINENT_PATH = os.environ.get('CONTINENT_PATH')
 
 if GEOIP_PATH:
     GEOIP_DATABASE = GEOIP_PATH
@@ -20,7 +22,7 @@ else:
         os.path.dirname(
             os.path.abspath(__file__),
         ),
-        'geoip_db.mmdb',
+        'standard_location.mmdb',
     )
 if ASN_PATH is not None:
     ASN_DATABASE = ASN_PATH
@@ -29,7 +31,7 @@ else:
         os.path.dirname(
             os.path.abspath(__file__),
         ),
-        'asn_db.mmdb',
+        'asn.mmdb',
     )
 
 if SQLITE_PATH is not None:
@@ -48,13 +50,24 @@ class Engine:
         return cls.__instance
 
 
+class ContinentEngine:
+    __instance = None
+
+    @classmethod
+    def get_instance(cls):
+        if not cls.__instance:
+            f = open(CONTINENT_PATH)
+            cls.__instance = json.load(f)
+        return cls.__instance
+
+
 class GeoIPEngine:
     __instance = None
 
     @classmethod
     def get_instance(cls):
         if not cls.__instance:
-            cls.__instance = Reader(GEOIP_DATABASE)
+            cls.__instance = maxminddb.Reader(GEOIP_DATABASE)
         return cls.__instance
 
 
@@ -64,7 +77,7 @@ class AsnEngine:
     @classmethod
     def get_instance(cls):
         if not cls.__instance:
-            cls.__instance = Reader(ASN_DATABASE)
+            cls.__instance = maxminddb.Reader(ASN_DATABASE)
         return cls.__instance
 
 
@@ -102,4 +115,3 @@ class FlaskCacheEngineRo:
         if app is not None:
             cls.__instance.init_app(app)
         return cls.__instance
-

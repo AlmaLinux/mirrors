@@ -1,111 +1,131 @@
 {% extends "main.html" %}
 
 {% block text_1 %}
-    {{ super() }}
-    Mirrors are extremely important to provide a fast and reliable infrastructure,
-    and we are very grateful to people and organizations that are helping us with this.
-    <br>
-    AlmaLinux would like to personally thank
-    <a href="https://www.hivelocity.net/"
-       target="_blank"
-       class="link-success text-decoration-none"
-    >HiVelocity</a> {% include "snipets/link_icon.html" %} for
-    their sponsorship of the AlmaLinux OS Foundation and sponsorship of our primary
-    rsync mirror and bandwidth. Please support those that support the community.
-    Check out
-    <a href="https://www.hivelocity.net/"
-       target="_blank"
-       class="link-success text-decoration-none"
-    >HiVelocity</a> {% include "snipets/link_icon.html" %} for all your dedicated server,
-    bare metal, colo, CDN and hosting needs.
-    <br>
+{{ super() }}
+Mirrors are extremely important to provide a fast and reliable infrastructure,
+and we are very grateful to people and organizations that are helping us with this.
+<br><br>
+AlmaLinux would like to personally thank
+<a href="https://www.hivelocity.net/"
+   target="_blank"
+   class="link-success text-decoration-none"
+>HiVelocity</a> {% include "snipets/link_icon.html" %} and
+<a href="https://ziplyfiber.com/"
+   target="_blank"
+   class="link-success text-decoration-none"
+>Ziply Fiber</a> for
+their sponsorship of the AlmaLinux OS Foundation and sponsorship of our primary
+rsync mirrors and bandwidth, as well as
+<a href="https://ipinfo.io"
+   target="_blank"
+   class="link-success text-decoration-none"
+>IPinfo</a> for IP address data. Please support those who support the community.
 {% endblock text_1 %}
 {% block sponsor_link %}
-    <a href="https://www.hivelocity.net/"
-       target="_blank"
-       class="link-success text-decoration-none"
-    >
-        <img src="{{ url_for('static', filename='images/hivelocity.svg') }}"
-             alt="HiVelocity logo"
-             width="180"
-             height="67"
-             class="d-inline-block align-text-top">
-    </a>
+<a href="https://www.hivelocity.net/"
+   target="_blank"
+   class="link-success text-decoration-none"
+>
+    <img src="{{ url_for('static', filename='images/hivelocity.svg') }}"
+         alt="HiVelocity logo"
+         height="67"
+         class="d-inline-block align-text-top">
+</a>
+&nbsp;&nbsp;&nbsp;
+<a href="https://ziplyfiber.com/"
+   target="_blank"
+   class="link-success text-decoration-none"
+>
+    <img src="{{ url_for('static', filename='images/ziply.png') }}"
+         alt="Ziply Fiber logo"
+         height="67"
+         class="d-inline-block align-text-top">
+</a>
+&nbsp;&nbsp;&nbsp;
+<a href="https://ipinfo.io"
+   target="_blank"
+   class="link-success text-decoration-none"
+>
+    <img src="{{ url_for('static', filename='images/ipinfo.svg') }}"
+         alt="IPinfo logo"
+         height="67"
+         class="d-inline-block align-text-top">
+</a>
 {% endblock sponsor_link %}
 {% block text_2 %}
 {{ super() }}
-    This page contains a list of official
-    <a href="https://almalinux.org/"
-       target="_blank"
-       class="link-success text-decoration-none">AlmaLinux</a> {% include "snipets/link_icon.html" %}
-    mirrors.
-    If you want to set up a public mirror, please read
-    <a href="https://wiki.almalinux.org/Mirrors.html"
-       target="_blank"
-       class="link-success text-decoration-none">our mirror guidelines</a> {% include "snipets/link_icon.html" %}
-    <br>
-    You can find the list of links to ISOs for all of mirrors by
-    <a href="{{ url_for('.isos') }}"
-       target="_self"
-       class="link-success text-decoration-none">this link</a>.
+This page contains a list of official
+<a href="https://almalinux.org/"
+   target="_blank"
+   class="link-success text-decoration-none">AlmaLinux</a> {% include "snipets/link_icon.html" %}
+mirrors.
+If you want to set up a public mirror, please read
+<a href="https://wiki.almalinux.org/Mirrors.html"
+   target="_blank"
+   class="link-success text-decoration-none">our mirror guidelines</a> {% include "snipets/link_icon.html" %}
+<br>
+You can find the list of links to ISOs for all of mirrors by
+<a href="{{ url_for('.isos') }}"
+   target="_self"
+   class="link-success text-decoration-none">this link</a>.
 
-    <br>
+<br>
 {% endblock text_2 %}
 
 {% block table %}
-    {{ super() }}
-    <table id="dtBasic" class="table table-striped table-bordered table-responsive-sm" data-order='[[ 3, "asc" ], [4, "asc"]]'>
-        <thead>
-            <tr>
-                {% for column_name in column_names %}
-                    <th class="th-sm sorting">{{ column_name }}</th>
-                {% endfor %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for mirror in mirror_list %}
-                <tr>
-                    <td>{{ mirror.name }}</td>
-                    <td>
-                        <a href="{{ mirror.sponsor_url }}"
-                           target="_blank"
-                           class="link-success text-decoration-none">
-                            {{ mirror.sponsor_name }}
-                        </a> {% include "snipets/link_icon.html" %}
-                    </td>
-                    <td>{{ mirror.status }}</td>
-                    <td>{{ mirror.geolocation.continent }}</td>
-                    <td>
-                        {% if mirror.geolocation.country not in ('Unknown', 'TW') %}
-                            <span data-flag="{{ mirror.geolocation.country }}"></span>&nbsp;
-                        {% endif %}
-                        {{ mirror.geolocation.country }}
-                    </td>
-                    {% for url_type in url_types %}
-                        <td>
-                            {% if mirror.urls.get(url_type) %}
-                                <a href="{{ mirror.urls.get(url_type, '') }}"
-                                   target="_blank"
-                                   class="link-success text-decoration-none">
-                                    {% if url_type in ['http','https'] %}
-                                        Mirror
-                                    {% else %}
-                                        Link
-                                    {% endif %}
-                                </a>
-                                {% if url_type == 'http' or url_type == 'https' %}
-                                    {% include "snipets/link_icon.html" %}
-                                {% endif %}
-                            {% endif %}
-                        </td>
-                    {% endfor %}
-                    <td>
-                        {% if mirror.ipv6 %}
-                        <span>&check;</span>
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+{{ super() }}
+<table id="dtBasic" class="table table-striped table-bordered table-responsive-sm" data-order='[[2, "desc"], [ 3, "asc" ], [4, "asc"]]'>
+    <thead>
+    <tr>
+        {% for column_name in column_names %}
+        <th class="th-sm sorting">{{ column_name }}</th>
+        {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for mirror in mirror_list %}
+    <tr>
+        <td>{{ mirror.name }}</td>
+        <td>
+            <a href="{{ mirror.sponsor_url }}"
+               target="_blank"
+               class="link-success text-decoration-none">
+                {{ mirror.sponsor_name }}
+            </a> {% include "snipets/link_icon.html" %}
+        </td>
+        <td>{{ mirror.status }}</td>
+        <td>{{ mirror.geolocation.continent }}</td>
+        <td>
+            {% if mirror.geolocation.country not in ('Unknown', 'TW') %}
+            <span data-flag="{{ mirror.geolocation.country }}"></span>&nbsp;
+            {% endif %}
+            {{ mirror.geolocation.country }}
+        </td>
+        {% for url_type in url_types %}
+        <td>
+            {% if mirror.urls.get(url_type) %}
+            <a href="{{ mirror.urls.get(url_type, '') }}"
+               target="_blank"
+               class="link-success text-decoration-none">
+                {% if url_type in ['http','https'] %}
+                Mirror
+                {% else %}
+                Link
+                {% endif %}
+            </a>
+            {% if url_type == 'http' or url_type == 'https' %}
+            {% include "snipets/link_icon.html" %}
+            {% endif %}
+            {% endif %}
+        </td>
+        {% endfor %}
+        <td>
+            {% if mirror.ipv6 %}
+            <span>&check;</span>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
 {% endblock table %}

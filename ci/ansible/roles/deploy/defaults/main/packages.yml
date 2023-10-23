@@ -26,12 +26,12 @@ python_packages:
   - Flask-API==3.0.post1
   - flask-caching==2.0.2
   - geopy==2.3.0
-  - geoip2==4.6.0
   - gunicorn[gthread]==20.1.0
   - haversine==2.8.0
   - jsonschema==4.17.3
   - Jinja2==3.1.2
   - lxml==4.9.2
+  - maxminddb==2.4.0
   - pycountry==22.3.5
   - pyyaml==6.0
   - redis==4.5.1
