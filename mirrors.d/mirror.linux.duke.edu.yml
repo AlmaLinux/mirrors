@@ -1,0 +1,14 @@
+---
+name: mirror.linux.duke.edu
+address:
+  http: http://mirror.linux.duke.edu/almalinux/
+  https: https://mirror.linux.duke.edu/almalinux/
+update_frequency: 3h
+geolocation:
+  country: US
+  state_province: North Carolina
+  city: Durham
+sponsor: Duke University
+sponsor_url: https://linux.duke.edu
+email: kambiz@linux.duke.edu 
+...
