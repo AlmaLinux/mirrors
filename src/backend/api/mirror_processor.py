@@ -480,29 +480,29 @@ class MirrorProcessor:
             'ISO artifact by URL "%(url)s" '
             'is unavailable because "%(err)s"'
         )
-        iso_semaphore = asyncio.Semaphore(5)
-        async with iso_semaphore:
-            tasks = [asyncio.ensure_future(
-                is_url_available(
-                    url=(url := urljoin(
-                        mirror_info.mirror_url + '/',
-                        iso_uri,
-                        )),
-                    http_session=self.client,
-                    logger=self.logger,
-                    is_get_request=False,
-                    success_msg=None,
-                    success_msg_vars=None,
-                    error_msg=error_msg,
-                    error_msg_vars={
-                        'url': url,
-                    },
-                )
-            ) for iso_uri in mirror_iso_uris]
-
-            self.logger.info(
-                'Set the mirrors have full ISO set is started for mirror "%s"',
-                mirror_info.name,
+        iso_semaphore = asyncio.Semaphore(3)
+        tasks = [asyncio.ensure_future(
+            is_url_available(
+                url=(url := urljoin(
+                    mirror_info.mirror_url + '/',
+                    iso_uri,
+                    )),
+                http_session=self.client,
+                logger=self.logger,
+                is_get_request=False,
+                success_msg=None,
+                success_msg_vars=None,
+                error_msg=error_msg,
+                error_msg_vars={
+                    'url': url,
+                },
+                sem = iso_semaphore
             )
-            result, _ = await check_tasks(tasks)
-            mirror_info.has_full_iso_set = result
+        ) for iso_uri in mirror_iso_uris]
+
+        self.logger.info(
+            'Set the mirrors have full ISO set is started for mirror "%s"',
+            mirror_info.name,
+        )
+        result, _ = await check_tasks(tasks)
+        mirror_info.has_full_iso_set = result

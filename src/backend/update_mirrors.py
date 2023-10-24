@@ -86,7 +86,7 @@ async def update_mirrors_handler() -> str:
     message = 'Update of the mirrors list is finished at "%s"'
     try:
         logger.info('Update of the mirrors list is started')
-        mirror_check_sem = asyncio.Semaphore(20)
+        mirror_check_sem = asyncio.Semaphore(100)
         mirrors_len = len(all_mirrors)
         async with mirror_check_sem, MirrorProcessor(
                 logger=logger,
