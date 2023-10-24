@@ -148,36 +148,40 @@ async def is_url_available(
         success_msg_vars: Optional[dict],
         error_msg: Optional[str],
         error_msg_vars: Optional[dict],
+        sem: asyncio.Semaphore = None
 ):
-    try:
-        if is_get_request:
-            method = 'get'
-        else:
-            method = 'head'
-        response = await http_session.request(
-            method=method,
-            url=str(url),
-            headers=HEADERS,
-        )
-        if is_get_request:
-            await response.text()
-        if success_msg is not None and success_msg_vars is not None:
-            logger.info(success_msg, success_msg_vars)
-        return True, None
-    except (
-            TimeoutError,
-            HTTPError,
-            ClientError,
-            # E.g. repomd.xml is broken.
-            # It can't be decoded in that case
-            UnicodeError,
-    ) as err:
-        if error_msg is not None and error_msg_vars is not None:
-            error_msg_vars['err'] = str(err) or str(type(err))
-            logger.warning(error_msg, error_msg_vars)
-        return False, str(err) or str(type(err))
-    except CancelledError as err:
-        return False, str(err) or str(type(err))
+    if not sem:
+        sem = asyncio.Semaphore(1)
+    async with sem:
+        try:
+            if is_get_request:
+                method = 'get'
+            else:
+                method = 'head'
+            response = await http_session.request(
+                method=method,
+                url=str(url),
+                headers=HEADERS,
+            )
+            if is_get_request:
+                await response.text()
+            if success_msg is not None and success_msg_vars is not None:
+                logger.info(success_msg, success_msg_vars)
+            return True, None
+        except (
+                TimeoutError,
+                HTTPError,
+                ClientError,
+                # E.g. repomd.xml is broken.
+                # It can't be decoded in that case
+                UnicodeError,
+        ) as err:
+            if error_msg is not None and error_msg_vars is not None:
+                error_msg_vars['err'] = str(err) or str(type(err))
+                logger.warning(error_msg, error_msg_vars)
+            return False, str(err) or str(type(err))
+        except CancelledError as err:
+            return False, str(err) or str(type(err))
 
 
 def load_json_schema(
@@ -586,25 +590,25 @@ async def mirror_available(
         'Mirror "%(name)s" is not available for version '
         '"%(version)s" and repo path "%(repo)s" because "%(err)s"'
     )
-    mirror_availability_semaphore = asyncio.Semaphore(10)
-    async with mirror_availability_semaphore:
-        tasks = [asyncio.ensure_future(
-            is_url_available(
-                url=check_url,
-                http_session=http_session,
-                logger=logger,
-                is_get_request=True,
-                success_msg=success_msg,
-                success_msg_vars=None,
-                error_msg=error_msg,
-                error_msg_vars={
-                    'name': mirror_name,
-                    'version': url_info['version'],
-                    'repo': url_info['repo_path'],
-                },
-            )
-        ) for check_url, url_info in urls_for_checking.items()]
-        result, reason = await check_tasks(tasks)
+    mirror_availability_semaphore = asyncio.Semaphore(5)
+    tasks = [asyncio.ensure_future(
+        is_url_available(
+            url=check_url,
+            http_session=http_session,
+            logger=logger,
+            is_get_request=True,
+            success_msg=success_msg,
+            success_msg_vars=None,
+            error_msg=error_msg,
+            error_msg_vars={
+                'name': mirror_name,
+                'version': url_info['version'],
+                'repo': url_info['repo_path'],
+            },
+            sem=mirror_availability_semaphore
+        )
+    ) for check_url, url_info in urls_for_checking.items()]
+    result, reason = await check_tasks(tasks)
 
     if result:
         logger.info(
