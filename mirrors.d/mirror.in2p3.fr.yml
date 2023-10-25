@@ -1,0 +1,14 @@
+---
+name: mirror.in2p3.fr
+address:
+  http: http://mirror.in2p3.fr/pub/linux/almalinux/
+  https: https://mirror.in2p3.fr/pub/linux/almalinux/
+update_frequency: 3h
+geolocation:
+  country: FR
+  state_province: Auvergne-Rhône-Alpes
+  city: Villeurbanne
+sponsor: Centre de Calcul de l’IN2P3
+sponsor_url: https://cc.in2p3.fr
+email: mirror@cc.in2p3.fr
+...

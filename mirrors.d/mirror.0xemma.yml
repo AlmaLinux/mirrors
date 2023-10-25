@@ -1,0 +1,17 @@
+---
+name: mirror.0xem.ma
+address:
+  http: http://mirror.0xem.ma/almalinux
+  https: https://mirror.0xem.ma/almalinux
+  rsync: rsync://mirror.0xem.ma/almalinux
+update_frequency: 3h
+sponsor: Emma Ruby
+sponsor_url: https://0xem.ma
+email: mirror-admin@0xem.ma
+geolocation:
+  continent: North America
+  country: CA
+  state_province: Quebec
+  city: Montreal
+private: false
+monopoly: false

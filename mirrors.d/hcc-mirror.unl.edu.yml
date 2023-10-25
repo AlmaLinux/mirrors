@@ -1,0 +1,14 @@
+---
+name: hcc-mirror.unl.edu
+address:
+  http: http://hcc-mirror.unl.edu/almalinux/
+  rsync: rsync://hcc-mirror.unl.edu/almalinux/
+update_frequency: 3h
+geolocation:
+  country: US
+  state_province: Nebraska
+  city: Lincoln
+sponsor: University of Nebraska–Lincoln Holland Computing Center
+sponsor_url: https://hcc.unl.edu/
+email: hcc-support@unl.edu
+...
