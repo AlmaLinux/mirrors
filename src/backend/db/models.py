@@ -187,7 +187,7 @@ def get_asn_by_ip(
 
     db = AsnEngine.get_instance()
     try:
-        return str(db.get(ip)['asn'])
+        return str(db.get(ip)['asn']).lstrip('AS')
     except TypeError:
         return
 
