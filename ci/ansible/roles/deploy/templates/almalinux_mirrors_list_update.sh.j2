@@ -1,12 +1,23 @@
 #!/usr/bin/env bash
 
-pushd {{ config_root }}/mirrors/updates
+while getopts g opt; do
+    case $opt in
+        g ) gitonly=true ;;
+    esac
+done
+shift $((OPTIND-1))
+
+pushd /etc/mirrors_service/prod/mirrors/updates
 echo `id -u`
 echo `id -g`
-git fetch --all
+git fetch origin master
 git reset --hard origin/master
 git pull
 popd
+
+if [ "$gitonly" = true ]; then
+    exit 0
+fi
 
 export GEOIP_PATH={{ ipinfo_path }}/standard_location.mmdb
 export ASN_PATH={{ ipinfo_path }}/asn.mmdb
@@ -21,4 +32,4 @@ export TEST_IP_ADDRESS={{ test_ip_address }}
 export REDIS_URI={{ redis_uri }}
 export REDIS_URI_RO={{ redis_uri_ro }}
 
-/home/mirror-service/mirrors_service/bin/python -u /home/mirror-service/mirrors_service/src/backend/update_mirrors.py
+/home/mirror-service/mirrors_service/bin/python -u {{ source_path }}/update_mirrors.py
