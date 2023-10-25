@@ -1,0 +1,11 @@
+[Unit]
+Description={{ description }} Service
+Wants=network-online.target
+After=network.target network-online.target
+
+[Service]
+User={{ service_user }}
+Group={{ service_user }}
+Type=oneshot
+ExecStart={{ scripts_path }}/{{ mirrors_list_update }}.sh -g
+TimeoutStartSec=10min

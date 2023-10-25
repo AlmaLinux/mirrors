@@ -29,3 +29,19 @@
       src: "{{ mirrors_list_update }}.timer.j2"
       setype: systemd_unit_file_t
       seuser: system_u
+    - dst: "{{ mirrors_service_git_updater }}.service"
+      src: "{{ mirrors_service_git_updater }}.service.j2"
+      setype: systemd_unit_file_t
+      seuser: system_u
+    - dst: "{{ mirrors_service_git_updater }}.timer"
+      src: "{{ mirrors_service_git_updater }}.timer.j2"
+      setype: systemd_unit_file_t
+      seuser: system_u
+
+- name: Enable git updater systemd timer
+  systemd:
+    name: "{{ mirrors_service_git_updater }}.timer"
+    state: started
+    enabled: true
+    masked: false
+    daemon_reload: true
