@@ -1,0 +1,16 @@
+---
+name: ftp.lip6.fr
+address:
+  ftp: http://ftp.lip6.fr/pub/linux/distributions/AlmaLinux/
+  http: http://ftp.lip6.fr/pub/linux/distributions/AlmaLinux/
+  https: https://ftp.lip6.fr/pub/linux/distributions/AlmaLinux/
+  rsync: rsync://ftp.lip6.fr/ftp/pub/linux/distributions/AlmaLinux/
+geolocation:
+  country: FR
+  state_province: IDF
+  city: Paris
+update_frequency: 6h
+sponsor: LIP6
+sponsor_url: https://www.lip6.fr/
+email: ftpmaint@lip6.fr
+...
