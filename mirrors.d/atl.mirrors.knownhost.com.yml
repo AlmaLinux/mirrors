@@ -15,4 +15,5 @@ email: mirrors@knownhost.com
 subnets:
   - 64.74.200.0/22
   - 67.222.0.0/24
+  - 170.249.192.0/19
 ...
