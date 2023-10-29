@@ -1,7 +1,6 @@
 ---
 name: mirror.linux.ec
 address:
-  http: http://mirror.linux.ec/almalinux/
   https: https://mirror.linux.ec/almalinux/
   rsync: rsync://mirror.linux.ec/almalinux
 geolocation:
