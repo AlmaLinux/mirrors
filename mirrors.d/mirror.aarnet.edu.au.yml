@@ -1,0 +1,12 @@
+---
+name: mirror.aarnet.edu.au
+address:
+  http: http://mirror.aarnet.edu.au/pub/almalinux
+  https: https://mirror.aarnet.edu.au/pub/almalinux
+  rsync: rsync://mirror.aarnet.edu.au/almalinux
+asn: [7575]
+update_frequency: 3h
+sponsor: Australian Academic and Research Network
+sponsor_url: https://www.aarnet.edu.au
+email: mirror@aarnet.edu.au
+...
