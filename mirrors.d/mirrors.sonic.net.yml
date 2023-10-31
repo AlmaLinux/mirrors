@@ -1,0 +1,20 @@
+---
+name: mirrors.sonic.net
+address:
+   https: https://mirrors.sonic.net/almalinux/
+   http: http://mirrors.sonic.net/almalinux/
+   ftp: ftp://mirrors.sonic.net/almalinux/
+geolocation:
+   continent: North America
+   country: US
+   state_province: California
+   city: Santa Rosa
+asn:
+   - 7065
+   - 46375
+   - 
+update_frequency: 3h
+sponsor: Sonic.net, LLC
+sponsor_url: https://www.sonic.com/
+email: hostmaster@sonic.net
+...
