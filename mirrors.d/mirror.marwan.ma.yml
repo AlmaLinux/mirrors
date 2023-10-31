@@ -1,0 +1,15 @@
+---
+name: mirror.marwan.ma
+address:
+  http: http://mirror.marwan.ma/alma/
+  https: https://mirror.marwan.ma/alma/
+  rsync: rsync://mirror.marwan.ma/alma
+update_frequency: 3h
+sponsor: MARWAN
+sponsor_url: https://marwan.ma
+email: noc@marwan.ma
+geolocation:
+  continent: Africa
+  country: MA
+  state_province: MA-04
+  city: Rabat
