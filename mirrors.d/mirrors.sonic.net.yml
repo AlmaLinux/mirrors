@@ -12,7 +12,6 @@ geolocation:
 asn:
    - 7065
    - 46375
-   - 
 update_frequency: 3h
 sponsor: Sonic.net, LLC
 sponsor_url: https://www.sonic.com/
