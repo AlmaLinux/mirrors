@@ -4,6 +4,7 @@ address:
    https: https://mirrors.sonic.net/almalinux/
    http: http://mirrors.sonic.net/almalinux/
    ftp: ftp://mirrors.sonic.net/almalinux/
+   rsync: rsync://mirrors.sonic.net/almalinux/
 geolocation:
    continent: North America
    country: US
