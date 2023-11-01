@@ -1,0 +1,14 @@
+---
+name: qro.aws.repo.almalinux.org
+address:
+  http: http://qro.aws.repo.almalinux.org/
+  https: https://qro.aws.repo.almalinux.org/
+update_frequency: 1h
+geolocation:
+  country: MX
+  state_province:
+  city: Querétaro
+sponsor: AlmaLinux OS Foundation
+sponsor_url: https://www.almalinux.org
+email: infra-team@almalinux.org
+...
