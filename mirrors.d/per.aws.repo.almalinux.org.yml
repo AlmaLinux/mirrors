@@ -6,7 +6,7 @@ address:
 update_frequency: 1h
 geolocation:
   country: AU
-  state_province:
+  state_province: Western Australia
   city: Perth
 sponsor: AlmaLinux OS Foundation
 sponsor_url: https://www.almalinux.org
