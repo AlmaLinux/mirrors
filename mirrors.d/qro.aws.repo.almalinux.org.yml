@@ -6,7 +6,7 @@ address:
 update_frequency: 1h
 geolocation:
   country: MX
-  state_province:
+  state_province: Querétaro
   city: Querétaro
 sponsor: AlmaLinux OS Foundation
 sponsor_url: https://www.almalinux.org

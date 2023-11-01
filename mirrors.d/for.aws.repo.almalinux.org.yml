@@ -6,7 +6,7 @@ address:
 update_frequency: 1h
 geolocation:
   country: BR
-  state_province:
+  state_province: Northeast Region
   city: Fortaleza
 sponsor: AlmaLinux OS Foundation
 sponsor_url: https://www.almalinux.org

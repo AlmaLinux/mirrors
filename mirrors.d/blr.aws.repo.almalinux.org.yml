@@ -6,7 +6,7 @@ address:
 update_frequency: 1h
 geolocation:
   country: IN
-  state_province:
+  state_province: Karnataka
   city: Bengaluru
 sponsor: AlmaLinux OS Foundation
 sponsor_url: https://www.almalinux.org
