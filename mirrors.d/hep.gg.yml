@@ -1,0 +1,15 @@
+---
+name: mirror.hep.gg
+address:
+  http: http://mirror.hep.gg/almalinux
+  https: https://mirror.hep.gg/almalinux
+  rsync: rsync://mirror.hep.gg/almalinux
+geolocation:
+  country: CA
+  state_province: ON
+  city: Niagara Falls
+update_frequency: 3h
+sponsor: Team Hydra
+sponsor_url: https://teamhydra.dev
+email: contact@teamhydra.dev
+...
