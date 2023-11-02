@@ -6,7 +6,7 @@ address:
   rsync: rsync://mirror.hep.gg/almalinux
 geolocation:
   country: CA
-  state_province: ON
+  state_province: "ON"
   city: Niagara Falls
 update_frequency: 3h
 sponsor: Team Hydra
