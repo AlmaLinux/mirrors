@@ -1,0 +1,16 @@
+---
+name: mirrorservice.org
+address:
+  http: http://almalinux.mirrorservice.org/
+  https: https://almalinux.mirrorservice.org/
+  rsync: rsync://rsync.mirrorservice.org/repo.almalinux.org/almalinux/
+  ftp: ftp://ftp.mirrorservice.org/sites/repo.almalinux.org/almalinux/
+geolocation:
+  country: GB
+  state_province: Kent
+  city: Canterbury
+update_frequency: 3h
+sponsor: University of Kent
+sponsor_url: https://www.kent.ac.uk/
+email: archive-admin@mirrorservice.org
+...
