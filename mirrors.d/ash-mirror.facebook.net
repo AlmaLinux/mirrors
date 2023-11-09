@@ -1,0 +1,15 @@
+---
+name: ash-mirror.facebook.net
+address:
+  http: http://mirror.facebook.net/almalinux/
+  https: https://mirror.facebook.net/almalinux/
+  rsync: rsync://mirror.facebook.net/almalinux/
+geolocation:
+  country: US
+  state_province: Ashburn
+  city: Virginia
+update_frequency: 3h
+sponsor: Meta Platforms Inc
+sponsor_url: https://opensource.fb.com/
+email: mirror-external@meta.com
+...
