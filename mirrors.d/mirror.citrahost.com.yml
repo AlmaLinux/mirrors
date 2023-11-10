@@ -1,0 +1,12 @@
+name: mirror.citrahost.com
+address:
+  http: http://mirror.citrahost.com/almalinux/
+  https: https://mirror.citrahost.com/almalinux/
+geolocation:
+  country: ID
+  state_province: Yogyakarta
+  city: Sleman
+update_frequency: 4h
+sponsor: Citrahost powered by Citranet
+sponsor_url: https://citrahost.com
+email: mirror@citrahost.com

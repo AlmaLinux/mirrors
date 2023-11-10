@@ -1,0 +1,14 @@
+---
+name: mnl.aws.repo.almalinux.org
+address:
+  http: http://mnl.aws.repo.almalinux.org/
+  https: https://mnl.aws.repo.almalinux.org/
+update_frequency: 1h
+geolocation:
+  country: PH
+  state_province: Metro Manila
+  city: Manila
+sponsor: AlmaLinux OS Foundation
+sponsor_url: https://www.almalinux.org
+email: infra-team@almalinux.org
+...
