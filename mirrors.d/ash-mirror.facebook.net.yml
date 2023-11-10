@@ -1,5 +1,5 @@
 ---
-name: ash-mirror.facebook.net
+name: mirror.facebook.net
 address:
   http: http://mirror.facebook.net/almalinux/
   https: https://mirror.facebook.net/almalinux/
