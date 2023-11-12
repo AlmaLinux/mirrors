@@ -342,6 +342,7 @@ repos:
     vault: true
     versions:
       - "9.2"
+      - "9.3"
   - name: synergy-debuginfo
     path: synergy/debug/$basearch/
     vault: true
