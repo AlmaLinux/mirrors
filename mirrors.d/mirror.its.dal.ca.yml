@@ -1,0 +1,11 @@
+---
+name: mirror.its.dal.ca
+address:
+  http: http://mirror.its.dal.ca/almalinux/
+  https: https://mirror.its.dal.ca/almalinux/
+  rsync: rsync://mirror.its.dal.ca/almalinux/
+update_frequency: 8h
+sponsor: ACORN-NS, Dalhousie University
+sponsor_url: https://acorn-ns.ca
+email: karl.vollmer@dal.ca
+...

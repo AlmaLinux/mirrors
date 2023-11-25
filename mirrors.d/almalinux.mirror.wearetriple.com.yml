@@ -1,0 +1,14 @@
+---
+name: almalinux.mirror.wearetriple.com
+address:
+  http: http://almalinux.mirror.wearetriple.com
+  https: https://almalinux.mirror.wearetriple.com
+geolocation:
+  country: NL
+  state_province: Noord Holland
+  city: Amsterdam
+update_frequency: 3h
+sponsor: Triple
+sponsor_url: https://www.wearetriple.com
+email: mirror@wearetriple.com
+...

@@ -1,0 +1,15 @@
+---
+name: mirror.realcompute.io
+address:
+  http: http://mirror.realcompute.io/almalinux/
+  https: https://mirror.realcompute.io/almalinux/
+  rsync: rsync://mirror.realcompute.io/almalinux
+geolocation:
+  country: AU
+  state_province: NSW
+  city: Sydney
+update_frequency: 1h
+sponsor: Real World Group
+sponsor_url: https://www.rwts.com.au
+email: noc@rwts.com.au
+...

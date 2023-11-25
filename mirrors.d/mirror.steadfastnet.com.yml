@@ -4,6 +4,10 @@ address:
   http: http://mirror.steadfastnet.com/almalinux/
   https: https://mirror.steadfastnet.com/almalinux/
   rsync: rsync://mirror.steadfastnet.com/almalinux
+geolocation:
+  country: US
+  state_province: Illinois
+  city: Chicago
 update_frequency: 3h
 sponsor: Steadfast Networks, LLC
 sponsor_url: https://www.steadfast.net/

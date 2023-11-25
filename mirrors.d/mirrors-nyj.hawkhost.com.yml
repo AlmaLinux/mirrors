@@ -1,0 +1,18 @@
+---
+name: mirrors-nyj.hawkhost.com
+address:
+  http: http://mirrors-nyj.hawkhost.com/almalinux
+  https: https://mirrors-nyj.hawkhost.com/almalinux
+  rsync: rsync://rsync@mirrors-nyj.hawkhost.com:/almalinux
+geolocation:
+  continent: North America
+  country: US
+  state_province: New Jersey
+  city: Newark
+update_frequency: 3h
+private: false
+monopoly: false
+sponsor: Hawk Host Inc.
+sponsor_url: https://www.hawkhost.com
+email: almalinux@hawkhost.com
+...

@@ -1,0 +1,15 @@
+---
+name: mirrors.ocf.berkeley.edu
+address:
+  http: http://mirrors.ocf.berkeley.edu/almalinux/
+  https: https://mirrors.ocf.berkeley.edu/almalinux/
+  rsync: rsync://rsync.repo.almalinux.org/almalinux
+geolocation:
+  country: US
+  state_province: California
+  city: Berkeley
+update_frequency: 4h
+sponsor: Open Computing Facility at UC Berkeley
+sponsor_url: https://ocf.berkeley.edu
+email: sm+mirrors@ocf.berkeley.edu
+...

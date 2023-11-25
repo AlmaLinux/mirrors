@@ -1,0 +1,19 @@
+---
+name: ftp.sh.cvut.cz
+address:
+  http: http://ftp.sh.cvut.cz/almalinux/
+  https: https://ftp.sh.cvut.cz/almalinux/
+  rsync: rsync://ftp.sh.cvut.cz/almalinux/
+  ftp: ftp://ftp.sh.cvut.cz/almalinux/
+update_frequency: 30m
+sponsor: Silicon Hill
+sponsor_url: https://siliconhill.cz/
+email: ftp@sh.cvut.cz
+geolocation:
+  continent: Europe
+  country: CZ
+  city: Prague
+private: false
+monopoly: false
+subnets: ['147.32.0.0/16', '2001:718:2::/48']
+asn: 2852

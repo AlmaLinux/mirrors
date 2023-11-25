@@ -1,0 +1,15 @@
+---
+name: mirrors.idcloudhost.com
+address:
+  http: http://mirrors.idcloudhost.com/almalinux/
+  https: https://mirrors.idcloudhost.com/almalinux/
+  rsync: rsync://mirrors.idcloudhost.com/almalinux/
+geolocation:
+  country: ID
+  state_province: 
+  city: Jakarta Special Capital Region
+update_frequency: 3h
+sponsor: PT Cloud Hosting Indonesia
+sponsor_url: https://idcloudhost.com/
+email: cdoktor19@gmail.com
+...

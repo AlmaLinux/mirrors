@@ -1,0 +1,14 @@
+---
+name: mirrors.rit.edu
+address:
+  http: http://mirrors.rit.edu/almalinux/
+  https: https://mirrors.rit.edu/almalinux/
+geolocation:
+  country: US
+  state_province: New York
+  city: Rochester
+update_frequency: 3h
+sponsor: Rochester Institute of Technology
+sponsor_url: https://rit.edu
+email: mirrors@rit.edu
+...

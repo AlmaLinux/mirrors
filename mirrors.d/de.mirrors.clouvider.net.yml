@@ -1,0 +1,14 @@
+---
+name: de.mirrors.clouvider.net
+address:
+  http: http://de.mirrors.clouvider.net/almalinux/
+  https: https://de.mirrors.clouvider.net/almalinux/
+geolocation:
+  country: DE
+  state_province: Hesse
+  city: Frankfurt am Main
+update_frequency: 3h
+sponsor: Clouvider
+sponsor_url: https://www.clouvider.com
+email: tech@clouvider.co.uk
+...

@@ -1,0 +1,15 @@
+---
+name: alma.mirror.ate.info
+address:
+  http: http://alma.mirror.ate.info/
+  https: https://alma.mirror.ate.info/
+  rsync: rsync://alma.mirror.ate.info/almalinux
+update_frequency: 3h
+geolocation:
+  country: FR
+  state_province: Hauts-de-France
+  city: Villeneuve-d'Ascq
+sponsor: ATE
+sponsor_url: https://www.ate.info
+email: support@ate.info
+...

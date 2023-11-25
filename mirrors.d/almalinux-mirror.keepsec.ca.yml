@@ -1,0 +1,14 @@
+---
+name: almalinux-mirror.keepsec.ca
+address:
+  http: http://almalinux-mirror.keepsec.ca/
+  https: https://almalinux-mirror.keepsec.ca/
+update_frequency: 3h
+sponsor: KeepSec
+sponsor_url: https://www.keepsec.ca/
+email: almalinux@keepsec.ca
+geolocation:
+  country: CA
+  state_province: Quebec
+  city: Montreal
+...

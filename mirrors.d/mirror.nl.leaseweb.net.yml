@@ -1,0 +1,14 @@
+---
+name: mirror.nl.leaseweb.net
+address:
+  http: http://mirror.nl.leaseweb.net/almalinux/
+  https: https://mirror.nl.leaseweb.net/almalinux/
+update_frequency: 3h
+geolocation:
+  country: NL
+  state_province: North Holland
+  city: Haarlem
+sponsor: Leaseweb
+sponsor_url: https://leaseweb.com
+email: mirrorlsw@leaseweb.com
+...

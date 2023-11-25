@@ -1,0 +1,11 @@
+---
+name: mirrors.coreix.net
+address:
+  http: http://mirrors.coreix.net/almalinux/
+  ftp: ftp://mirrors.coreix.net/almalinux/
+  rsync: rsync://mirrors.coreix.net/mirrors/almalinux/
+update_frequency: 1h
+sponsor: Coreix ltd
+sponsor_url: https://www.coreix.net
+email: mirrors@coreix.net
+...

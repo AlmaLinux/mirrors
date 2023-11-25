@@ -1,0 +1,15 @@
+---
+name: repo.jing.rocks
+address:
+  http: http://repo.jing.rocks/almalinux/
+  https: https://repo.jing.rocks/almalinux/
+  rsync: rsync://repo.jing.rocks/almalinux/
+geolocation:
+  country: JP
+  state_province: Tokyo
+  city: Shinjuku
+update_frequency: 2h
+sponsor: self
+sponsor_url: https://jing.rocks/
+email: szmun.luoj@gmail.com
+...

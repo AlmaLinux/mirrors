@@ -1,0 +1,14 @@
+---
+name: la.mirrors.clouvider.net
+address:
+  http: http://la.mirrors.clouvider.net/almalinux/
+  https: https://la.mirrors.clouvider.net/almalinux/
+geolocation:
+  country: US
+  state_province: California
+  city: Los Angeles
+update_frequency: 3h
+sponsor: Clouvider
+sponsor_url: https://www.clouvider.com
+email: tech@clouvider.co.uk
+...
