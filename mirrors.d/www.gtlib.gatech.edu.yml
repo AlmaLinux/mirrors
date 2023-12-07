@@ -1,0 +1,14 @@
+---
+name: www.gtlib.gatech.edu
+address:
+  http: http://www.gtlib.gatech.edu/pub/almalinux/
+  rsync: rsync://rsync.gtlib.gatech.edu/almalinux/
+geolocation:
+  country: US
+  state_province: GA
+  city: Atlanta
+update_frequency: 3h
+sponsor: Georgia Tech OIT
+sponsor_url: https://oit.gatech.edu/
+email: hello@almalinux.org
+...
