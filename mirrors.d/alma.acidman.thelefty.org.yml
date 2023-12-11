@@ -4,7 +4,6 @@ address:
   http: http://alma.acidman.thelefty.org/almalinux/
   https: https://alma.acidman.thelefty.org/almalinux/
 geolocation:
-  continent: Asia
   country: JP
   city: Fukuoka
 update_frequency: 3h
