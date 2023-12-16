@@ -12,4 +12,5 @@ geolocation:
   country: US
   state_province: Florida
   city: Miami
+private: True
 ...
