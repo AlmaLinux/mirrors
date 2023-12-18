@@ -6,7 +6,7 @@ address:
   https: https://ftp.cixug.es/almalinux/
 geolocation:
   country: ES
-  state_province: A Coruña (Galicia)
+  state_province: Galicia
   city: A Coruña
 update_frequency: 3h
 sponsor: Consorcio CIXUG and Universidade da Coruña
