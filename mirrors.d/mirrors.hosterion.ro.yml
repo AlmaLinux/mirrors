@@ -6,7 +6,7 @@ address:
   rsync: 
 geolocation:
   country: RO
-  state_province: B
+  state_province:
   city: Bucharest
 update_frequency: 3h
 sponsor: Hosterion
