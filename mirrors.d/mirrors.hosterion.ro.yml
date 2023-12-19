@@ -1,7 +1,7 @@
 ---
 name: mirrors.hosterion.ro
 address:
-  http: https://mirrors.hosterion.ro/almalinux/
+  http: http://mirrors.hosterion.ro/almalinux/
   https: https://mirrors.hosterion.ro/almalinux/
   rsync: 
 geolocation:
@@ -10,6 +10,6 @@ geolocation:
   city: Bucharest
 update_frequency: 3h
 sponsor: Hosterion
-sponsor_url: https://hosterion.com/
+sponsor_url: https://hosterion.ro
 email: mirrors@hosterion.com
 ...
