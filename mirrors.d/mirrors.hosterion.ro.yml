@@ -3,7 +3,6 @@ name: mirrors.hosterion.ro
 address:
   http: http://mirrors.hosterion.ro/almalinux/
   https: https://mirrors.hosterion.ro/almalinux/
-  rsync: 
 geolocation:
   country: RO
   state_province:
