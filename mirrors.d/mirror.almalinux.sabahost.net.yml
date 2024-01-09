@@ -5,6 +5,7 @@ address:
   https: https://mirror.almalinux.sabahost.net
 update_frequency: 3h
 geolocation:
+  continent: Asia
   country: IR
   state_province: Tehran
   city: Tehran
