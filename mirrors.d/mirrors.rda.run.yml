@@ -11,4 +11,5 @@ update_frequency: 3h
 sponsor: Rodrigo de Avila
 sponsor_url: https://rda.run
 email: mirrors@rda.run
+private: true
 ...
