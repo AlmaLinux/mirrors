@@ -1,0 +1,12 @@
+name: mirror.tres.net.tr
+address:
+  http: http://mirror.tres.net.tr/almalinux
+  https: https://mirror.tres.net.tr/almalinux
+geolocation:
+  country: TR
+  state_province: Istanbul
+  city: Istanbul
+update_frequency: 1h
+sponsor: Tres Teknoloji
+sponsor_url: https://www.tresteknoloji.com
+email: info@tresteknoloji.com
