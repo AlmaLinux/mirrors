@@ -2,7 +2,7 @@
 name: mirrors.atlas.net.co
 address:
   https: https://mirrors.atlas.net.co/almalinux/
-update_frequency: 12h
+update_frequency: 3h
 sponsor: Atlas Internet
 sponsor_url: https://atlas.net.co/
 email: info@atlas.net.co
