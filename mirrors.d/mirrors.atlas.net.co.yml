@@ -1,0 +1,16 @@
+---
+name: mirrors.atlas.net.co
+address:
+  https: https://mirrors.atlas.net.co/almalinux/
+update_frequency: 12h
+sponsor: Atlas Internet
+sponsor_url: https://atlas.net.co/
+email: info@atlas.net.co
+geolocation:
+  continent: South America
+  country: CO
+  state_province: Cordoba
+  city: Sahagun
+private: false
+monopoly: false
+...
