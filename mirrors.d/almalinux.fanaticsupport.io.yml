@@ -1,0 +1,17 @@
+---
+name: almalinux.fanaticsupport.io
+address:
+  http: http://almalinux.fanaticsupport.io/
+  https: https://almalinux.fanaticsupport.io/
+update_frequency: 2h
+sponsor: Fanatic Support
+sponsor_url: https://fanaticsupport.io
+email: leo@fanaticsupport.io
+geolocation:
+  continent: Southern California
+  country: US
+  state_province: California
+  city: Los Angeles
+private: false
+monopoly: false
+...
