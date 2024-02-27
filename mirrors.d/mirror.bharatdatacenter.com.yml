@@ -1,0 +1,14 @@
+---
+name: mirror.bharatdatacenter.com
+address:
+  http: http://mirror.bharatdatacenter.com/almalinux/
+  https: https://mirror.bharatdatacenter.com/almalinux/
+geolocation:
+  country: IN
+  state_province: Uttar Pradesh
+  city: Noida
+update_frequency: 3h
+sponsor: Bharat Datacenter
+sponsor_url: https://bharatdatacenter.com
+email: noc@bharatdatacenter.com
+...
