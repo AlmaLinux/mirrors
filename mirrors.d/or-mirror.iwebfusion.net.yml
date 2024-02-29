@@ -11,4 +11,5 @@ update_frequency: 3h
 sponsor: iWebFusion
 sponsor_url: https://www.iwebfusion.net
 email: netops@iwebfusion.net
+private: true
 ...
