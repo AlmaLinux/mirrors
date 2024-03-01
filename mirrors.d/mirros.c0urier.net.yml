@@ -3,6 +3,7 @@ name: mirrors.c0urier.net
 address:
   http: http://mirrors.c0urier.net/linux/almalinux/
   https: https://mirrors.c0urier.net/linux/almalinux/
+  rsync: rsync://mirrors.c0urier.net/almalinux
 geolocation:
   country: DK
   state_province: Jutland
