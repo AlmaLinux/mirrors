@@ -1,7 +1,8 @@
 ---
-name: centos.corp.cloudlinux.com
+name: alma-repo.atm.svcs.io
 address:
-  http: http://centos.corp.cloudlinux.com/almalinux/
+  http: http://alma-repo.atm.svcs.io/
+  https: https://alma-repo.atm.svcs.io/
 update_frequency: 6h
 sponsor: CloudLinux Inc.
 sponsor_url: https://cloudlinux.com
