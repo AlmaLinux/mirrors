@@ -4,6 +4,10 @@ address:
   http: http://syd.mirror.rackspace.com/almalinux/
   https: https://syd.mirror.rackspace.com/almalinux/
   rsync: rsync://syd.mirror.rackspace.com/almalinux
+geolocation:
+  country: Australia
+  state_province: New South Wales
+  city: Sydney
 update_frequency: 4h
 sponsor: Rackspace Technology
 sponsor_url: https://www.rackspace.com

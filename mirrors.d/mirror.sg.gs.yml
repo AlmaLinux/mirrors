@@ -1,0 +1,14 @@
+---
+name: mirror.sg.gs
+address:
+  http: https://mirror.sg.gs/almalinux/
+  https: https://mirror.sg.gs/almalinux/
+geolocation:
+  country: SG
+  state_province: Singapore
+  city: Singapore
+update_frequency: 3h
+sponsor: SG.GS
+sponsor_url: https://sg.gs
+email: mirror@mirror.sg.gs
+...

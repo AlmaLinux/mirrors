@@ -1,0 +1,15 @@
+---
+name: free.nchc.org.tw
+address:
+  http: http://free.nchc.org.tw/almalinux/
+  https: https://free.nchc.org.tw/almalinux/
+  ftp: ftp://free.nchc.org.tw/almalinux
+geolocation:
+  country: TW
+  state_province: Taiwan
+  city: Shinchu
+update_frequency: 6h
+sponsor: National Center for High-performance Computing
+sponsor_url: https://nchc.org.tw
+email: webmaster@narlabs.org.tw
+...

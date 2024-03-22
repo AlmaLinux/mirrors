@@ -1,0 +1,15 @@
+---
+name: mirrors.rda.run
+address:
+  https: https://mirrors.rda.run/almalinux/
+geolocation:
+  continent: South America
+  country: BR
+  state_province: Rio Grande do Sul
+  city: Brochier
+update_frequency: 3h
+sponsor: Rodrigo de Avila
+sponsor_url: https://rda.run
+email: mirrors@rda.run
+private: true
+...

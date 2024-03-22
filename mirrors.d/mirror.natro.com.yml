@@ -6,7 +6,7 @@ geolocation:
   country: TR
   state_province: Istanbul
   city: Istanbul
-update_frequency: 3h
+update_frequency: 2h
 sponsor: Natro Hosting
 sponsor_url: https://www.natro.com
 email: emre.keles@natro.com

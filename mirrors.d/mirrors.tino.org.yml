@@ -7,3 +7,7 @@ update_frequency: 1h
 sponsor: TINO GROUP
 sponsor_url: https://tino.org/
 email: info@tino.org
+geolocation:
+  continent: Asia
+  country: VN
+  city: Ho Chi Minh

@@ -1,0 +1,14 @@
+---
+name: mirror.mia11.us.leaseweb.net
+address:
+  http: http://mirror.mia11.us.leaseweb.net/almalinux/
+  https: https://mirror.mia11.us.leaseweb.net/almalinux/
+update_frequency: 3h
+geolocation:
+  country: US
+  state_province: Florida
+  city: Miami
+sponsor: Leaseweb
+sponsor_url: https://leaseweb.com
+email: mirrorlsw@leaseweb.com
+...

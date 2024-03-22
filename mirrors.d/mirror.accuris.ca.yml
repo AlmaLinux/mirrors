@@ -1,0 +1,16 @@
+name: mirror.accuris.ca
+address:
+  http: http://mirror.accuris.ca/almalinux/
+  https: https://mirror.accuris.ca/almalinux/
+  rsync: rsync://mirror.accuris.ca/almalinux/
+update_frequency: 3h
+sponsor: Accuris Technologies Ltd.
+sponsor_url: https://accuris.ca/
+email: domainsupport@accur.is
+geolocation:
+  continent: North America
+  country: CA
+  state_province: Ontario
+  city: Ottawa
+private: false
+monopoly: false

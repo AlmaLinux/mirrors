@@ -1,0 +1,15 @@
+---
+name: almalinux.ipacct.com
+address:
+  http: http://almalinux.ipacct.com/almalinux/
+  https: https://almalinux.ipacct.com/almalinux/
+  rsync: rsync://almalinux.ipacct.com/almalinux
+geolocation:
+  country: BG
+  state_province: Sofia
+  city: Sofia
+update_frequency: 3h
+sponsor: IPACCT Ltd.
+sponsor_url: http://ipacct.com
+email: bbonev@ipacct.com
+...

@@ -1,0 +1,15 @@
+---
+name: mirror.serverfreak.com
+address:
+  http: http://mirror.serverfreak.com/almalinux/
+  https: https://mirror.serverfreak.com/almalinux/
+  rsync: rsync://mirror.serverfreak.com/almalinux
+geolocation:
+  country: MY
+  state_province: Selangor
+  city: Cyberjaya
+update_frequency: 3h
+sponsor: ServerFreak Technologies Sdn Bhd
+sponsor_url: https://www.web-hosting.net.my
+email: rick@serverfreak.com
+...

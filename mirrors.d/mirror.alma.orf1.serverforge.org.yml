@@ -1,0 +1,17 @@
+---
+name: mirror.alma.orf1.serverforge.org
+address:
+  http: http://mirror.alma.orf1.serverforge.org
+  https: https://mirror.alma.orf1.serverforge.org
+update_frequency: 2h
+sponsor: ServerForge
+sponsor_url: https://serverforge.org/
+email: noc@serverforge.org
+geolocation:
+  continent: North America
+  country: US
+  state_province: virginia
+  city: Hampton
+private: false
+monopoly: false
+...

@@ -3,8 +3,12 @@ name: mirror.ath1.fusioned.net
 address:
   http: http://mirror.ath1.fusioned.net/almalinux/
   https: https://mirror.ath1.fusioned.net/almalinux/
+geolocation:
+  country: GR
+  state_province: Attica
+  city: Athens
 update_frequency: 1h
 sponsor: Fusioned Ltd
 sponsor_url: https://www.fusioned.net/
-email: support@fusioned.net
+email: noc@fusioned.net
 ...
