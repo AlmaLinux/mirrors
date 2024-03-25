@@ -1,0 +1,13 @@
+---
+name: almalinux.web.trex.fi
+address:
+  http: http://almalinux.web.trex.fi/almalinux
+  https: https://almalinux.web.trex.fi/almalinux
+  rsync: rsync://almalinux.web.trex.fi/almalinux
+geolocation:
+  country: FI
+  city: Tampere
+update_frequency: 9h
+sponsor: TREX Regional Exchanges Oy
+sponsor_url: https://www.trex.fi/
+email: mirrors@trex.fi
