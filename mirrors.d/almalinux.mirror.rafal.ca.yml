@@ -6,7 +6,7 @@ address:
   rsync: rsync://almalinux.mirror.rafal.ca/almalinux
 geolocation:
   country: CA
-  state_province: ON
+  state_province: "ON"
   city: Hamilton
 update_frequency: 3h
 sponsor: Rafał Rzeczkowski
