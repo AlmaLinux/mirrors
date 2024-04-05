@@ -10,6 +10,6 @@ geolocation:
   city: Hamilton
 update_frequency: 3h
 sponsor: Rafał Rzeczkowski
-sponsor_url:
+sponsor_url: ""
 email: mirror-almalinux@mail.rafal.ca
 ...
