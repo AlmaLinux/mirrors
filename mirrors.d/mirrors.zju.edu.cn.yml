@@ -1,0 +1,14 @@
+---
+name: mirrors.zju.edu.cn
+address:
+  http: http://mirrors.zju.edu.cn/almalinux/
+  https: https://mirrors.zju.edu.cn/almalinux/
+geolocation:
+  country: CN
+  state_province: Zhejiang
+  city: Hangzhou
+update_frequency: 12h
+sponsor: Zhejiang University Information Technology Center
+sponsor_url: https://itc.zju.edu.cn
+email: mirrors@zju.edu.cn
+...
