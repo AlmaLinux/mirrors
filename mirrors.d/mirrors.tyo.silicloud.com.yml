@@ -1,0 +1,10 @@
+---
+name: mirrors.tyo.silicloud.com
+address:
+  http: http://mirrors.tyo.silicloud.com/almalinux/
+  https: https://mirrors.tyo.silicloud.com/almalinux/
+update_frequency: 3h
+sponsor: Silicon Cloud
+sponsor_url: https://silicloud.com/
+email: noc@mail.cloudyes.jp
+...

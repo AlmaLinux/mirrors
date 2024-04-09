@@ -1,0 +1,15 @@
+---
+name: pkg.adfinis-on-exoscale.ch
+address:
+  http: http://pkg.adfinis-on-exoscale.ch/almalinux/
+  https: https://pkg.adfinis-on-exoscale.ch/almalinux/
+geolocation:
+  country: CH
+  state_province: GE
+  city: Geneva
+update_frequency: 3h
+sponsor: Adfinis and Exoscale
+sponsor_url: https://www.adfinis.com
+sponsor_url: https://www.exoscale.com
+email: wolf@adfinis.com
+...

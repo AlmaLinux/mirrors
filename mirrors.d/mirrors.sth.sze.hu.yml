@@ -4,6 +4,10 @@ address:
   http: http://mirrors.sth.sze.hu/almalinux/
   https: https://mirrors.sth.sze.hu/almalinux/
   rsync: rsync://mirrors.sth.sze.hu/almalinux
+geolocation:
+  country: HU
+  state_province: Gyor-Moson-Sopron
+  city: Gyor
 update_frequency: 6h
 sponsor: SzE - NetClub
 sponsor_url: https://internet.sth.sze.hu

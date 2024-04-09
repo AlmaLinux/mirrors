@@ -2,8 +2,11 @@ name: mirror.natro.com
 address:
   http: http://mirror.natro.com/almalinux/
   https: https://mirror.natro.com/almalinux/
-  rsync: rsync://mirror.natro.com/almalinux/
-update_frequency: 1h
-sponsor: Natro
+geolocation:
+  country: TR
+  state_province: Istanbul
+  city: Istanbul
+update_frequency: 2h
+sponsor: Natro Hosting
 sponsor_url: https://www.natro.com
-email: mirror@natro.com
+email: emre.keles@natro.com

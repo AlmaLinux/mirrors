@@ -4,6 +4,10 @@ address:
   http: http://mirror.lyrahosting.com/almalinux/
   https: https://mirror.lyrahosting.com/almalinux/
   rsync: rsync://mirror.lyrahosting.com/almalinux/
+geolocation:
+  country: NL
+  state_province: Flevoland
+  city: Dronten
 update_frequency: 3h
 sponsor: LyraHosting
 sponsor_url: https://lyrahosting.com

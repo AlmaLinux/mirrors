@@ -1,0 +1,15 @@
+---
+name: mirror.datamossa.io
+address:
+  http: https://mirror.datamossa.io/almalinux/
+  https: https://mirror.datamossa.io/almalinux/
+  rsync: rsync://mirror.datamossa.io/almalinux
+geolocation:
+  country: AU
+  state_province: NSW
+  city: Sydney
+update_frequency: 3h
+sponsor: DataMossa
+sponsor_url: https://datamossa.com/
+email: support+almalinux@datamossa.com
+...

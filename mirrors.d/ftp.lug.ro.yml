@@ -2,6 +2,10 @@
 name: ftp.lug.ro
 address:
   http: http://ftp.lug.ro/almalinux/
+geolocation:
+  country: RO
+  state_province:
+  city: Bucharest
 update_frequency: 2h
 sponsor: lug.ro
 sponsor_url: https://wiki.lug.ro

@@ -1,0 +1,16 @@
+---
+name: mirror.vanehost.com
+address:
+  http: http://bd.mirror.vanehost.com/AlmaLinux/
+  https: https://bd.mirror.vanehost.com/AlmaLinux/
+  rsync: rsync://rsyncbd.mirror.vanehost.com/AlmaLinux
+geolocation:
+  continent: Asia
+  country: BD
+  state_province: Dhaka
+  city: Dhaka
+update_frequency: 6h
+sponsor: Vane Host Limited
+sponsor_url: https://www.vanehost.com
+email: mirror@vanehost.com
+...

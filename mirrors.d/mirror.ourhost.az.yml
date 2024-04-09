@@ -1,0 +1,15 @@
+---
+name: mirror.ourhost.az
+address:
+  http: http://mirror.ourhost.az/almalinux/
+  https: https://mirror.ourhost.az/almalinux/
+  rsync: rsync://mirror.ourhost.az/almalinux
+geolocation:
+  country: AZ
+  state_province: Baku
+  city: Baku
+update_frequency: 1h
+sponsor: OUR Host
+sponsor_url: https://ourhost.az
+email: mirror@ourhost.az
+...

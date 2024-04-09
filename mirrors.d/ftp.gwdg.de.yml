@@ -4,8 +4,12 @@ address:
   http: http://ftp.gwdg.de/pub/linux/almalinux/
   https: https://ftp.gwdg.de/pub/linux/almalinux/
   rsync: rsync://ftp.gwdg.de/almalinux
+geolocation:
+  country: DE
+  state_province: Lower Saxony
+  city: Göttingen
 update_frequency: 3h
 sponsor: Gesellschaft für wissenschaftliche Datenverarbeitung mbH Göttingen
 sponsor_url: https://www.gwdg.de
-email: ftpmaster@gwdg.de
+email: ftp@gwdg.de
 ...

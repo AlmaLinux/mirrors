@@ -1,0 +1,14 @@
+---
+name: mirror.yer.az
+address:
+  http: http://mirror.yer.az/almalinux/
+  https: https://mirror.yer.az/almalinux/
+geolocation:
+  country: AZ
+  state_province: Baku
+  city: Baku
+update_frequency: 3h
+sponsor: YER Hosting
+sponsor_url: https://yer.az
+email: support@yer.az
+...

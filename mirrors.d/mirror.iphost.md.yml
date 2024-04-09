@@ -1,0 +1,15 @@
+---
+name: mirror.iphost.md
+address:
+  http: http://mirror.iphost.md/almalinux/
+  https: https://mirror.iphost.md/almalinux/
+  rsync: rsync://mirror.iphost.md/almalinux
+geolocation:
+  country: MD
+  state_province: Chisinau
+  city: Chisinau
+update_frequency: 3h
+sponsor: IP HOST Data Center
+sponsor_url: https://iphost.md
+email: noc@iphost.md
+...

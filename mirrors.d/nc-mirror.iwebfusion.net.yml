@@ -1,0 +1,14 @@
+---
+name: nc-mirror.iwebfusion.net
+address:
+  http: http://nc-mirror.iwebfusion.net/almalinux/
+  https: https://nc-mirror.iwebfusion.net/almalinux/
+geolocation:
+  city: Charlotte
+  state_province: North Carolina
+  country: US
+update_frequency: 3h
+sponsor: iWebFusion
+sponsor_url: https://www.iwebfusion.net
+email: netops@iwebfusion.net
+...

@@ -1,0 +1,16 @@
+---
+name: mirror.sitsa.com.ar
+address:
+  http: http://mirror.sitsa.com.ar/almalinux/
+  https: https://mirror.sitsa.com.ar/almalinux/
+  ftp: ftp://mirror.sitsa.com.ar/almalinux/
+  rsync: rsync://mirror.sitsa.com.ar/almalinux/
+update_frequency: 3h
+geolocation:
+  country: AR
+  state_province: Cordoba
+  city: Villa María
+sponsor: SiTSA Telecomunicaciones
+sponsor_url: http://www.sitsa.com.ar
+email: franco.lazos@sitsa.com.ar
+...

@@ -1,0 +1,14 @@
+---
+name: mirror.bardia.tech
+address:
+  http: http://mirror.bardia.tech/almalinux
+  https: https://mirror.bardia.tech/almalinux
+geolocation:
+  country: IR
+  state_province: Qom
+  city: Qom
+update_frequency: 3h
+sponsor: Bardia Moshiri
+sponsor_url: https://bardia.tech
+email: fakeshell@bardia.tech
+...

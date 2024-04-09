@@ -3,8 +3,21 @@ name: mirror.cov.ukservers.com
 address:
   http: http://mirror.cov.ukservers.com/almalinux/
   https: https://mirror.cov.ukservers.com/almalinux/
+geolocation:
+  country: GB
+  state_province: West Midlands
+  city: Coventry
 update_frequency: 1h
 sponsor: UK Dedicated Servers Limited
 sponsor_url: https://www.ukservers.com/
 email: noc@ukservers.com
+geolocation:
+  continent: Europe
+  country: GB
+  state_province: West Midlands
+  city: Coventry
+private: false
+monopoly: false 
+asn: 
+  - 42831
 ...

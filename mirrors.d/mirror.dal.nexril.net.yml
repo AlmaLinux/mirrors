@@ -1,0 +1,16 @@
+---
+name: mirror.dal.nexril.net
+address:
+  http: http://mirror.dal.nexril.net/almalinux/
+  https: https://mirror.dal.nexril.net/almalinux/
+  rsync: rsync://mirror.dal.nexril.net/almalinux/
+update_frequency: 3h
+sponsor: Nexril
+sponsor_url: https://nexril.net/
+email: noc@nexril.net
+geolocation:
+  continent: North America
+  country: US
+  state_province: Texas
+  city: Dallas
+...

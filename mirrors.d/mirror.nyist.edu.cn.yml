@@ -1,0 +1,15 @@
+---
+name: mirror.nyist.edu.cn
+address:
+  http: http://mirror.nyist.edu.cn/almalinux/
+  https: https://mirror.nyist.edu.cn/almalinux/
+  rsync: rsync://mirror.nyist.edu.cn/almalinux/
+geolocation:
+  country: CN
+  state_province: Henan
+  city: Nanyang
+update_frequency: 6h
+sponsor: Nanyang Institute of Technology Open Source Mirror
+sponsor_url: https://www.nyist.edu.cn
+email: cips@nyist.edu.cn
+...

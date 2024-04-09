@@ -2,8 +2,15 @@
 name: mirror.xeonbd.com
 address:
   http: http://mirror.xeonbd.com/almalinux/
+  https: https://mirror.xeonbd.com/almalinux/
 update_frequency: 3h
 sponsor: XeonBD 
 sponsor_url: https://www.xeonbd.com 
 email: mirror@xeonbd.com
+geolocation:
+  continent: Asia
+  country: BD
+  state_province: Dhaka
+  city: Dhaka
+asn: [133938]
 ...

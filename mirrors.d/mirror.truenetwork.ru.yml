@@ -1,0 +1,16 @@
+---
+name: mirror.truenetwork.ru
+address:
+  http: http://mirror.truenetwork.ru/almalinux/
+  https: https://mirror.truenetwork.ru/almalinux/
+  rsync: rsync://mirror.truenetwork.ru/almalinux/
+geolocation:
+  country: RU
+  state_province: Novosibirsk
+  city: Novosibirsk
+update_frequency: 2h
+sponsor: Truenetwork
+sponsor_url: https://truenetwork.ru
+email: mirror@truenetwork.ru
+asn: 49673
+...
