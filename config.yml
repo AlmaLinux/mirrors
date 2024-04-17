@@ -22,6 +22,7 @@ vault_versions:
   - "8.7-beta"
   - "8.8-beta"
   - "8.9-beta"
+  - "8.10-beta"
   - "9.0"
   - "9.1"
   - "9.2"
