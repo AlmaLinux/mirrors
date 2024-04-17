@@ -1,0 +1,8 @@
+---
+name: almalinux.mirror.letscloud.io
+address:
+  http: http://almalinux.mirror.letscloud.io
+  https: https://almalinux.mirror.letscloud.io
+update_frequency: 3h
+email: noc@letscloud.io
+...
