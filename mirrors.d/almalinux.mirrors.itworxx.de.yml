@@ -4,11 +4,12 @@ address:
   http: http://almalinux.mirrors.itworxx.de/
   https: https://almalinux.mirrors.itworxx.de/
 geolocation:
+  continent: Europe
   country: DE
   state_province: Bavaria
-  city: Falkenstein
+  city: Heldenstein
 update_frequency: 1h
 sponsor: ITWorxx
 sponsor_url: https://www.itworxx.de
-email: support@itworxx.de
+email: markus@itworxx.de
 ...
