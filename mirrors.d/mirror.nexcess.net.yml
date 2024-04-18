@@ -1,0 +1,16 @@
+---
+name: mirror.nexcess.net
+address:
+  http: http://mirror.us-midwest-1.nexcess.net/almalinux/
+  https: https://mirror.us-midwest-1.nexcess.net/almalinux/
+update_frequency: 3h
+sponsor: Liquid Web, LLC
+sponsor_url: https://www.liquidweb.com/
+email: mirroradmin@nexcess.net
+geolocation:
+  continent: North America
+  country: US
+  state_province: Michigan
+  city: Southfield
+asn: 32244
+...

@@ -1,0 +1,19 @@
+---
+name: mirror.twds.com.tw
+address:
+  http: http://mirror.twds.com.tw/almalinux
+  https: https://mirror.twds.com.tw/almalinux
+  rsync: rsync://mirror.twds.com.tw/almalinux
+update_frequency: 3h
+sponsor: Taiwan Digital Streaming Co.
+sponsor_url: https://www.twds.com.tw
+email: mirror@twds.tw
+geolocation:
+  continent: Asia
+  country: TW
+  state_province: Taiwan
+  city: Taipei
+private: false
+monopoly: false
+asn: [18041]
+...
