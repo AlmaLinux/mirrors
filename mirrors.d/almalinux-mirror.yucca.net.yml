@@ -1,8 +1,8 @@
 ---
 name: almalinux-mirror.yucca.net
 address:
-  http: http:// almalinux-mirror.yucca.net
-  https: https:// almalinux-mirror.yucca.net
+  http: http://almalinux-mirror.yucca.net
+  https: https://almalinux-mirror.yucca.net
 geolocation:
   country: US
   state_province: NM
