@@ -3,6 +3,8 @@ name: mirror.bharatdatacenter.com
 address:
   http: http://mirror.bharatdatacenter.com/almalinux/
   https: https://mirror.bharatdatacenter.com/almalinux/
+  rsync: rsync://mirror.bharatdatacenter.com/almalinux/
+  ftp: ftp://mirror.bharatdatacenter.com/almalinux/
 geolocation:
   country: IN
   state_province: Uttar Pradesh
