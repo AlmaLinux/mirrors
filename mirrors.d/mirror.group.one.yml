@@ -1,16 +1,16 @@
-name: mirror.one.com
+name: mirror.group.one
 address:
-  http: http://mirror.one.com/almalinux
-  https: https://mirror.one.com/almalinux
-  rsync: rsync://mirror.one.com/almalinux
+  http: http://mirror.group.one/almalinux
+  https: https://mirror.group.one/almalinux
+  rsync: rsync://mirror.group.one/almalinux
 update_frequency: 1h
-sponsor: one.com
-sponsor_url: https://www.one.com/
-email: mirror@one.com
+sponsor: group.one
+sponsor_url: https://www.group.one/
+email: mirror@group.one
 geolocation:
   continent: Europe
   country: DK
-  city: Copenhagen 
+  city: Copenhagen
 private: false
 monopoly: false
 asn: 51468
