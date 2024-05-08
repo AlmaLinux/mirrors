@@ -1,0 +1,15 @@
+---
+name: almalinux.mirror.beocat.ksu.edu
+address:
+  http: http://almalinux.mirror.beocat.ksu.edu/
+  https: https://almalinux.mirror.beocat.ksu.edu/
+  rsync: rsync://almalinux.mirror.beocat.ksu.edu/almalinux/
+update_frequency: 3h
+sponsor: Kansas State University Institute for Computational Research
+sponsor_url: https://beocat.ksu.edu/
+email: kylehutson@ksu.edu
+geolocation:
+  continent: North America
+  country: US
+  state_province: Kansas
+  city: Manhattan

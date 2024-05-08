@@ -2,7 +2,12 @@ name: mirrors.tino.org
 address:
   http: http://mirrors.tino.org/almalinux/
   https: https://mirrors.tino.org/almalinux/
+  rsync: rsync://mirrors.tino.org/almalinux
 update_frequency: 1h
 sponsor: TINO GROUP
 sponsor_url: https://tino.org/
 email: info@tino.org
+geolocation:
+  continent: Asia
+  country: VN
+  city: Ho Chi Minh

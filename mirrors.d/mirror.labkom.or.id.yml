@@ -1,0 +1,12 @@
+name: mirror.labkom.or.id
+address:
+  http: http://mirror.labkom.or.id/almalinux
+  https: https://mirror.labkom.or.id/almalinux
+geolocation:
+  country: ID
+  state_province: West Java
+  city: Bekasi
+update_frequency: 1h
+sponsor: HostKita.NET - PT. Detroit Network Indonesia
+sponsor_url: https://hostkita.net/
+email: mirrors-admin@hostkita.net

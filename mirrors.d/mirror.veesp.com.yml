@@ -1,0 +1,14 @@
+---
+name: mirror.veesp.com
+address:
+  http: http://mirror.veesp.com/almalinux/
+  https: https://mirror.veesp.com/almalinux/
+geolocation:
+  country: LV
+  state_province: Riga
+  city: Riga
+update_frequency: 3h
+sponsor: Veesp
+sponsor_url: https://veesp.com
+email: admin@veesp.com
+...

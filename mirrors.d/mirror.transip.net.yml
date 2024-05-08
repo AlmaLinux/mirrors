@@ -1,0 +1,14 @@
+---
+name: mirror.transip.net
+address:
+  http: http://mirror.transip.net/almalinux/
+  https: https://mirror.transip.net/almalinux/
+update_frequency: 3h
+geolocation:
+  country: NL
+  state_province: North Holland
+  city: Amsterdam
+sponsor: transip
+sponsor_url: https://www.transip.nl/
+email: noc@transip.nl
+...

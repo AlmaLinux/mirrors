@@ -3,8 +3,9 @@ name: ap.edge.kernel.org
 address:
   https: https://ap.edge.kernel.org/almalinux
 geolocation:
-  country: Japan
-  city: Tokyo
+  country: Australia
+  state_province: New South Wales
+  city: Sydney
 update_frequency: 3h
 sponsor: Linux Kernel Archives
 sponsor_url: https://kernel.org

@@ -1,0 +1,15 @@
+---
+name: mirror.reenigne.net
+address:
+  http: http://mirror.reenigne.net/almalinux/
+  https: https://mirror.reenigne.net/almalinux/
+  rsync: rsync://mirror.reenigne.net/almalinux
+geolocation:
+  country: CA
+  state_province: NB
+  city: Moncton
+update_frequency: 3h
+sponsor: Reenigne Cloud
+sponsor_url: https://reenigne.net
+email: noc@reenigne.net
+...

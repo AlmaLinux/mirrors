@@ -1,0 +1,15 @@
+---
+name: mirrors.c0urier.net
+address:
+  http: http://mirrors.c0urier.net/linux/almalinux/
+  https: https://mirrors.c0urier.net/linux/almalinux/
+  rsync: rsync://mirrors.c0urier.net/almalinux
+geolocation:
+  country: DK
+  state_province: Jutland
+  city: Horsens
+update_frequency: 3h
+sponsor: c0urier.net
+sponsor_url: https://www.c0urier.net
+email: mirrors@c0urier.net
+...
