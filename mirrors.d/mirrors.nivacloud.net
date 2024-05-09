@@ -1,0 +1,14 @@
+---
+name: mirrors.nivacloud.net
+address:
+  http: http://mirrors.nivacloud.net/almalinux/
+  https: https://mirrors.nivacloud.net/almalinux/
+  rsync: rsync://mirrors.nivacloud.net/almalinux
+update_frequency: 3h
+sponsor: NIVACLOUD
+sponsor_url: https://nivacloud.net
+email: contact@nivacloud.net
+geolocation:
+  continent: Asia
+  country: VN
+  city: Ho Chi Minh
