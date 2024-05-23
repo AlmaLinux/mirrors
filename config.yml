@@ -5,13 +5,14 @@ mirrors_dir: mirrors.d
 versions:
   - "8"
   - "8.9"
+  - "8.10"
   - "9"
   - "9.3"
   - "9.4"
 # it's also used for mapping <major version>:<full version>
 # if a client requests only major version
 duplicated_versions:
-  "8": "8.9"
+  "8": "8.10"
   "9": "9.4"
 vault_versions:
   - "8.3"
@@ -50,6 +51,7 @@ repos:
     path: PowerTools/$basearch/os/
     versions:
       - "8.9"
+      - "8.10"
   - name: crb
     path: CRB/$basearch/os/
     versions:
@@ -59,6 +61,7 @@ repos:
     path: NFV/$basearch/os/
     versions:
       - "8.9"
+      - "8.10"
       - "9.3"
       - "9.4"
     arches:
@@ -67,6 +70,7 @@ repos:
     path: RT/$basearch/os/
     versions:
       - "8.9"
+      - "8.10"
       - "9.3"
       - "9.4"
     arches:
@@ -77,6 +81,7 @@ repos:
     path: HighAvailability/$basearch/os/
     versions:
       - "8.9"
+      - "8.10"
   - name: highavailability
     path: HighAvailability/$basearch/os/
     versions:
@@ -86,12 +91,14 @@ repos:
     path: SAP/$basearch/os/
     versions:
       - "8.9"
+      - "8.10"
       - "9.3"
       - "9.4"
   - name: saphana
     path: SAPHANA/$basearch/os/
     versions:
       - "8.9"
+      - "8.10"
       - "9.3"
       - "9.4"
   - name: resilientstorage
@@ -104,6 +111,7 @@ repos:
     path: devel/$basearch/os/
     versions:
       - "8.9"
+      - "8.10"
       - "9.3"
       - "9.4"
     arches:
@@ -113,12 +121,14 @@ repos:
     path: plus/$basearch/os/
     versions:
       - "8.9"
+      - "8.10"
       - "9.3"
       - "9.4"
   - name: synergy
     path: synergy/$basearch/os/
     versions:
       - "8.9"
+      - "8.10"
       - "9.3"
       - "9.4"
 
@@ -134,6 +144,7 @@ repos:
     vault: true
     versions:
       - "8.9"
+      - "8.10"
   - name: crb-source
     path: CRB/Source/
     vault: true
@@ -145,6 +156,7 @@ repos:
     vault: true
     versions:
       - "8.9"
+      - "8.10"
       - "9.3"
       - "9.4"
   - name: rt-source
@@ -152,6 +164,7 @@ repos:
     vault: true
     versions:
       - "8.9"
+      - "8.10"
       - "9.3"
       - "9.4"
   - name: extras-source
@@ -162,6 +175,7 @@ repos:
     vault: true
     versions:
       - "8.9"
+      - "8.10"
   - name: highavailability-source
     path: HighAvailability/Source/
     vault: true
@@ -173,6 +187,7 @@ repos:
     vault: true
     versions:
       - "8.9"
+      - "8.10"
       - "9.3"
       - "9.4"
   - name: saphana-source
@@ -180,6 +195,7 @@ repos:
     vault: true
     versions:
       - "8.9"
+      - "8.10"
   - name: resilientstorage-source
     path: ResilientStorage/Source/
     vault: true
@@ -188,6 +204,7 @@ repos:
     vault: true
     versions:
       - "8.9"
+      - "8.10"
       - "9.3"
       - "9.4"
   - name: plus-source
@@ -195,6 +212,7 @@ repos:
     vault: true
     versions:
       - "8.9"
+      - "8.10"
       - "9.3"
       - "9.4"
   - name: synergy-source
@@ -202,6 +220,7 @@ repos:
     vault: true
     versions:
       - "8.9"
+      - "8.10"
       - "9.3"
       - "9.4"
 
@@ -211,6 +230,7 @@ repos:
     vault: true
     versions:
       - "8.9"
+      - "8.10"
   - name: baseos-debug
     path: BaseOS/debug/$basearch/
     vault: true
@@ -222,6 +242,7 @@ repos:
     vault: true
     versions:
       - "8.9"
+      - "8.10"
   - name: appstream-debug
     path: AppStream/debug/$basearch/
     vault: true
@@ -233,6 +254,7 @@ repos:
     vault: true
     versions:
       - "8.9"
+      - "8.10"
   - name: crb-debug
     path: CRB/debug/$basearch/
     vault: true
@@ -244,6 +266,7 @@ repos:
     vault: true
     versions:
       - "8.9"
+      - "8.10"
   - name: nfv-debug
     path: NFV/debug/$basearch/
     vault: true
@@ -257,6 +280,7 @@ repos:
     vault: true
     versions:
       - "8.9"
+      - "8.10"
   - name: rt-debug
     path: RT/debug/$basearch/
     vault: true
@@ -270,6 +294,7 @@ repos:
     vault: true
     versions:
       - "8.9"
+      - "8.10"
   - name: extras-debug
     path: extras/debug/$basearch/
     vault: true
@@ -281,6 +306,7 @@ repos:
     vault: true
     versions:
       - "8.9"
+      - "8.10"
   - name: highavailability-debug
     path: HighAvailability/debug/$basearch/
     vault: true
@@ -304,16 +330,19 @@ repos:
     vault: true
     versions:
       - "8.9"
+      - "8.10"
   - name: saphana-debuginfo
     path: SAPHANA/debug/$basearch/
     vault: true
     versions:
       - "8.9"
+      - "8.10"
   - name: resilientstorage-debuginfo
     path: ResilientStorage/debug/$basearch/
     vault: true
     versions:
       - "8.9"
+      - "8.10"
   - name: resilientstorage-debug
     path: ResilientStorage/debug/$basearch/
     vault: true
@@ -329,6 +358,7 @@ repos:
     vault: true
     versions:
       - "8.9"
+      - "8.10"
     arches:
       - x86_64
       - aarch64
@@ -343,6 +373,7 @@ repos:
     vault: true
     versions:
       - "8.9"
+      - "8.10"
   - name: plus-debug
     path: plus/debug/$basearch/
     vault: true
@@ -354,6 +385,7 @@ repos:
     vault: true
     versions:
       - "8.9"
+      - "8.10"
       - "9.3"
       - "9.4"
 
@@ -364,11 +396,13 @@ repos:
       - aarch64
     versions:
       - "8.9"
+      - "8.10"
   - name: raspberrypi-source
     path: raspberrypi/Source
     vault: true
     versions:
       - "8.9"
+      - "8.10"
   - name: raspberrypi-debuginfo
     path: raspberrypi/debug/$basearch/
     vault: true
@@ -376,4 +410,5 @@ repos:
       - aarch64
     versions:
       - "8.9"
+      - "8.10"
 ...
