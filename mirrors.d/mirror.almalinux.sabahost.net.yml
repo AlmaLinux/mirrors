@@ -3,6 +3,7 @@ name: mirror.almalinux.sabahost.net
 address:
   http: http://mirror.almalinux.sabahost.net
   https: https://mirror.almalinux.sabahost.net
+  ftp: ftp://mirror.almalinux.sabahost.net
 update_frequency: 3h
 geolocation:
   continent: Asia
