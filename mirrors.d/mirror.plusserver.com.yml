@@ -1,0 +1,14 @@
+---
+name: mirror.plusserver.com
+address:
+  http: http://mirror.plusserver.com/almalinux/
+  https: https://mirror.plusserver.com/almalinux/
+update_frequency: 3h
+geolocation:
+  country: DE
+  state_province: Hesse
+  city: Frankfurt am Main
+sponsor: PlusServer GmbH
+sponsor_url: https://plusserver.com
+email: mhsys-lists@plusserver.com 
+...

@@ -1,0 +1,14 @@
+---
+name: blr.aws.repo.almalinux.org
+address:
+  http: http://blr.aws.repo.almalinux.org/
+  https: https://blr.aws.repo.almalinux.org/
+update_frequency: 1h
+geolocation:
+  country: IN
+  state_province: Karnataka
+  city: Bengaluru
+sponsor: AlmaLinux OS Foundation
+sponsor_url: https://www.almalinux.org
+email: infra-team@almalinux.org
+...

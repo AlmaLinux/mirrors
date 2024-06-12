@@ -1,0 +1,14 @@
+---
+name: mirror.sfo12.us.leaseweb.net
+address:
+  http: http://mirror.sfo12.us.leaseweb.net/almalinux/
+  https: https://mirror.sfo12.us.leaseweb.net/almalinux/
+update_frequency: 3h
+geolocation:
+  country: US
+  state_province: California
+  city: Los Angeles
+sponsor: Leaseweb
+sponsor_url: https://leaseweb.com
+email: mirrorlsw@leaseweb.com
+...

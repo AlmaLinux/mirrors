@@ -1,0 +1,15 @@
+---
+name: mirror.nl.mirhosting.net
+address:
+  http: http://mirror.nl.mirhosting.net/almalinux/
+  https: https://mirror.nl.mirhosting.net/almalinux/
+  rsync: rsync://mirror.nl.mirhosting.net/almalinux
+update_frequency: 3h
+geolocation:
+  country: NL
+  state_province: Flevoland
+  city: Dronten
+sponsor: MIRhosting
+sponsor_url: https://mirhosting.com/
+email: mirror@mirhosting.com
+...

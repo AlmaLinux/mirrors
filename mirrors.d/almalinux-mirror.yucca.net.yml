@@ -1,0 +1,15 @@
+---
+name: almalinux-mirror.yucca.net
+address:
+  http: http://almalinux-mirror.yucca.net
+  https: https://almalinux-mirror.yucca.net
+geolocation:
+  country: US
+  state_province: NM
+  city: Portales
+update_frequency: 3h
+sponsor: Yucca Telecom
+sponsor_url: https://www.yuccatelecom.com/
+email: almalinux@yuccatelecom.com
+asn: 12056
+...

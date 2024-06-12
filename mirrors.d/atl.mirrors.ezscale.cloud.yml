@@ -1,0 +1,16 @@
+---
+name: atl.mirrors.ezscale.cloud
+address:
+  http: http://atl.mirrors.ezscale.cloud/almalinux
+  https: https://atl.mirrors.ezscale.cloud/almalinux
+  rsync: rsync://atl.mirrors.ezscale.cloud/almalinux
+update_frequency: 3h
+sponsor: EZSCALE Hosting
+sponsor_url: https://ezscale.cloud
+email: support@ezscale.cloud
+geolocation:
+  continent: North America
+  country: US
+  state_province: Georgia
+  city: Atlanta
+...

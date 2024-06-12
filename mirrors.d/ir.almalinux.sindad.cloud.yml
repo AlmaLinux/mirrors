@@ -1,5 +1,5 @@
 ---
-name: mirror.sindad.cloud
+name: ir.almalinux.sindad.cloud
 address:
   http: http://ir.almalinux.sindad.cloud
   https: https://ir.almalinux.sindad.cloud
@@ -12,5 +12,5 @@ geolocation:
   city: Tehran
 sponsor: Sindad LLC
 sponsor_url: https://sindad.com
-email: mirror@sindad.com
+email: noc@sindad.com
 ...

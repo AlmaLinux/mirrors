@@ -1,0 +1,14 @@
+---
+name: in.mirrors.cicku.me
+address:
+  http: http://in.mirrors.cicku.me/almalinux
+  https: https://in.mirrors.cicku.me/almalinux
+geolocation:
+  country: IN
+  state_province: Telangana
+  city: Hyderabad
+update_frequency: 3h
+sponsor: CICKU
+sponsor_url: https://mirror.cicku.me
+email: mirrors@cicku.me
+...

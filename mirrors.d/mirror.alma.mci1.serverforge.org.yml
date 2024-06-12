@@ -1,0 +1,17 @@
+---
+name: mirror.mci-1.serverforge.org
+address:
+  http: http://mirror.mci-1.serverforge.org/alma/
+  https: https://mirror.mci-1.serverforge.org/alma/
+update_frequency: 2h
+sponsor: ServerForge
+sponsor_url: https://serverforge.org/
+email: noc@serverforge.org
+geolocation:
+  continent: North America
+  country: US
+  state_province: Missouri
+  city: Kansas City
+private: false
+monopoly: false
+...
