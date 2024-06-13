@@ -1,0 +1,15 @@
+---
+name: almalinux.in.ssimn.org
+address:
+  http: http://almalinux.in.ssimn.org
+  https: https://almalinux.in.ssimn.org
+update_frequency: 3h
+sponsor: Starburst Services
+sponsor_url: https://starburstservices.com
+email: sysops@starburstservices.com
+geolocation:
+  continent: Asia
+  country: IN
+  state_province: Maharashtra
+  city: Mumbai
+...
