@@ -1,0 +1,16 @@
+---
+name: mirror.selfnet.de
+address:
+  http: http://mirror.selfnet.de/almalinux
+  https: https://mirror.selfnet.de/almalinux
+  rsync: rsync://mirror.selfnet.de/almalinux
+update_frequency: 1h
+sponsor: Selfnet e.V.
+sponsor_url: https://selfnet.de
+email: admin@selfnet.de
+geolocation:
+  continent: Europe
+  country: Germany
+  state_province: BW
+  city: Stuttgart
+...
