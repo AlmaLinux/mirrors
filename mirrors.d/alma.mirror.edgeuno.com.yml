@@ -9,6 +9,7 @@ email: mirrors@edgeuno.com
 geolocation:
   continent: South America
   country: CO
+  state_province: Cundinamarca
   city: Bogota
 private: false
 monopoly: false
