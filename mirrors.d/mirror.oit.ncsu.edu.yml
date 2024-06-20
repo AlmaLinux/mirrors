@@ -1,10 +1,10 @@
 ---
 name: mirror.oit.ncsu.edu
 address:
-  http: http://mirror.oit.ncsu.edu/almalinux/
-  https: https://mirror.oit.ncsu.edu/almalinux/
-  rsync: rsync://mirror.oit.ncsu.edu/almalinux/
-update_frequency: 3h
+  http: http://mirror.linux.ncsu.edu/almalinux/
+  https: https://mirror.linux.ncsu.edu/almalinux/
+  rsync: rsync://mirror.linux.ncsu.edu/almalinux/
+update_frequency: 15m
 geolocation:
   country: US
   state_province: North Carolina
