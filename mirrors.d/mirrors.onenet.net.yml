@@ -11,6 +11,5 @@ update_frequency: 6h
 sponsor: onenet
 sponsor_url: https://www.onenet.net
 email: support@onenet.net
-private: false
 asn: 5078
 ...
