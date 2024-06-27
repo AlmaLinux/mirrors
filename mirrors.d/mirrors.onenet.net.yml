@@ -7,7 +7,7 @@ geolocation:
   country: US
   state_province: OK
   city: Tulsa
-update_frequency: 6h
+update_frequency: 3h
 sponsor: onenet
 sponsor_url: https://www.onenet.net
 email: support@onenet.net
