@@ -13,4 +13,4 @@ update_frequency: 6h
 sponsor: University of Oxford
 sponsor_url: https://www.ox.ac.uk
 email: unix-team-comms@it.ox.ac.uk
-private: true
+private: false
