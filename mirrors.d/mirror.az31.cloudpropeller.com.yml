@@ -1,8 +1,8 @@
 ---
-name: mirror.cloudpropeller.com
+name: mirror.az31.cloudpropeller.com
 address:
-  http: http://mirror.cloudpropeller.com/almalinux/
-  https: https://mirror.cloudpropeller.com/almalinux/
+  http: http://mirror.az31.cloudpropeller.com/almalinux/
+  https: https://mirror.az31.cloudpropeller.com/almalinux/
 geolocation:
   continent: North America
   country: US
@@ -12,4 +12,5 @@ update_frequency: 1h
 sponsor: Cloud Propeller, Inc.
 sponsor_url: https://cloudpropeller.com
 email: mirror@cloudpropeller.com
+asn: AS397018
 ...
