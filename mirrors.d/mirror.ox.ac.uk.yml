@@ -9,7 +9,7 @@ geolocation:
   country: UK
   state_province: Oxfordshire
   city: Oxford
-update_frequency: 6h
+update_frequency: 3h
 sponsor: University of Oxford
 sponsor_url: https://www.ox.ac.uk
 email: unix-team-comms@it.ox.ac.uk
