@@ -1,0 +1,15 @@
+---
+name: elmirror.cl
+address:
+  http: http://elmirror.cl/almalinux/
+  https: https://elmirror.cl/almalinux/
+  rsync: rsync://elmirror.cl/almalinux/
+geolocation:
+  country: CL
+  state_province: Santiago
+  city: Santiago
+update_frequency: 3h
+sponsor: ElMirror.cl Team
+sponsor_url: https://elmirror.cl
+email: info@elmirror.cl
+...
