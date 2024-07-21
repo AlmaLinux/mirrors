@@ -3,6 +3,8 @@ name: almalinux.mobinhost.com
 address:
   http: http://almalinux.mobinhost.com
   https: https://almalinux.mobinhost.com
+  rsync: rsync://almalinux.mobinhost.com/almalinux/
+  ftp: ftp://almalinux.mobinhost.com/almalinux/
 geolocation:
   continent: Asia
   country: IR
