@@ -1,0 +1,11 @@
+name: vn-mirrors.vhost.vn
+address:
+  http: http://vn-mirrors.vhost.vn/almalinux/
+  https: https://vn-mirrors.vhost.vn/almalinux/
+geolocation:
+  country: VN
+  city: HoChiMinh
+update_frequency: 3h
+sponsor: VHOST.VN
+sponsor_url: https://vhost.vn/
+email: tech@vhost.vn
