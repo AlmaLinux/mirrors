@@ -4,7 +4,8 @@ address:
   https: https://vn-mirrors.vhost.vn/almalinux/
 geolocation:
   country: VN
-  city: HoChiMinh
+  city: Ho Chi Minh City
+  state_province:
 update_frequency: 3h
 sponsor: VHOST.VN
 sponsor_url: https://vhost.vn/
