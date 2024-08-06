@@ -3,10 +3,12 @@ name: mirrors.bytes.ua
 address:
   http: http://mirrors.bytes.ua/
 geolocation:
+  continent: Europe
   country: UA
   city: Vinnytsia
 update_frequency: 3h
 sponsor: bytes.ua
 sponsor_url: https://bytes.ua
 email: admin@bytes.ua
+asn: 50321
 ...
