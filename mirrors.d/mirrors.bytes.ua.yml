@@ -1,7 +1,7 @@
 ---
 name: mirrors.bytes.ua
 address:
-  http: http://mirrors.bytes.ua/
+  http: http://mirrors.bytes.ua/almalinux/
 geolocation:
   continent: Europe
   country: UA
