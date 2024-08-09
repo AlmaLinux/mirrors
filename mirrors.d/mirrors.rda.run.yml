@@ -6,10 +6,9 @@ geolocation:
   continent: South America
   country: BR
   state_province: Rio Grande do Sul
-  city: Brochier
-update_frequency: 3h
+  city: Porto Alegre
+update_frequency: 1h
 sponsor: Rodrigo de Avila
 sponsor_url: https://rda.run
 email: mirrors@rda.run
-private: true
 ...
