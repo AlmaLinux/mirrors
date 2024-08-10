@@ -5,6 +5,7 @@ address:
 geolocation:
   continent: Europe
   country: UA
+  sate_province:
   city: Vinnytsia Oblast
 update_frequency: 3h
 sponsor: bytes.ua
