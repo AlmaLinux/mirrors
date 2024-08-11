@@ -6,7 +6,7 @@ geolocation:
   continent: Europe
   country: UA
   sate_province:
-  city: Vinnytsia Oblast
+  city: Vinnytsia
 update_frequency: 3h
 sponsor: bytes.ua
 sponsor_url: https://bytes.ua
