@@ -1,0 +1,18 @@
+---
+name: mirror.leitecastro.com
+address:
+  http: http://mirror.leitecastro.com/almalinux/
+  https: https://mirror.leitecastro.com/almalinux/
+  rsync: rsync://mirror.leitecastro.com/almalinux/
+update_frequency: 3h
+sponsor: Tomas Leite de Castro
+sponsor_url: https://leitecastro.com/
+email: tomas@leitecastro.com
+geolocation:
+  continent: EU
+  country: PT
+  state_province: Lisbon
+  city: Lisbon
+private: false
+monopoly: false
+...
