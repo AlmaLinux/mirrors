@@ -8,7 +8,7 @@ geolocation:
   country: UK
   state_province: Greater London
   city: London
-update_frequency: 12h
+update_frequency: 1h
 sponsor: LinuxPatch.com
 sponsor_url: https://linuxpatch.com/
 email: support@linuxpatch.com
