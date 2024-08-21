@@ -1,0 +1,14 @@
+---
+name: mirror.isoc.org.il
+address:
+  http: http://mirror.isoc.org.il/pub/almalinux
+  https: https://mirror.isoc.org.il/pub/almalinux
+geolocation:
+  country: IL
+  state_province: Central District
+  city: Petaẖ Tiqva
+update_frequency: 3h
+sponsor: ISOC-IL
+sponsor_url: https://www.isoc.org.il
+email: mirrormaster@isoc.org.il
+...
