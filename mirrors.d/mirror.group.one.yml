@@ -11,6 +11,7 @@ geolocation:
   continent: Europe
   country: DK
   city: Copenhagen
+  state_province:
 private: false
 monopoly: false
 asn: 51468
