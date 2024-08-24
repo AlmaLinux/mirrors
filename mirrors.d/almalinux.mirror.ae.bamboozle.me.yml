@@ -1,0 +1,15 @@
+---
+name: almalinux.mirror.ae.bamboozle.me
+address:
+  http: http://almalinux.mirror.ae.bamboozle.me
+  https: https://almalinux.mirror.ae.bamboozle.me
+  rsync: <rsync URL to a mirror, e.g. rsync://almalinux.mirror.link/almalinux>
+update_frequency: 3h
+sponsor: Bamboozle Web Services Inc.
+sponsor_url: https://bamboozle.me
+email: noc@bamboozle.me
+geolocation:
+  continent: Asia
+  country: AE
+  state_province: Dubai
+  city: Dubai
