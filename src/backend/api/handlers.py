@@ -459,6 +459,9 @@ def get_mirrors_list(
 
     if redis_key:
         nearest_mirrors = cache_ro.get(redis_key)
+        from_cache = True
+        if not nearest_mirrors:
+            from_cache = False
     if not redis_key or not nearest_mirrors:
         nearest_mirrors = _get_nearest_mirrors(
             ip_address=ip_address,
@@ -496,7 +499,7 @@ def get_mirrors_list(
             f'{version}/{repo_path}',
             )
         mirrors_list.append(full_mirror_path)
-    if redis_key:
+    if not from_cache:
         cache.set(redis_key, nearest_mirrors, CACHE_EXPIRED_TIME)
 
     return mirrors_list
