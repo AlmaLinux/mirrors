@@ -195,28 +195,7 @@ class MirrorProcessor:
         )
         geo_location_data = GeoLocationData()
         location = LocationData()
-        try:
-            match = next(
-                geo_data for ip in mirror_info.ip.split(',')
-                if (geo_data := get_geo_data_by_ip(ip)) is not None
-            )
-            (
-                geo_location_data.continent,
-                geo_location_data.country,
-                geo_location_data.state_province,
-                geo_location_data.city,
-                location.latitude,
-                location.longitude,
-            ) = match
-        except StopIteration:
-            if not mirror_info.private:
-                self.logger.warning(
-                    'Mirror "%s" does not have geo data for any of its IPs',
-                    mirror_info.name,
-                )
-                mirror_info.status = 'Unknown geodata for any IP of the mirror'
-        mirror_info.location = location
-        mirror_info.geolocation.update_from_existing_object(geo_location_data)
+        
         try:
             if mirror_info.geolocation.country == 'Unknown':
                 return
@@ -230,7 +209,29 @@ class MirrorProcessor:
                 mirror_info.geolocation.__dict__['country'] = \
                     country.alpha_2
         except LookupError:
-            pass
+            try:
+                match = next(
+                    geo_data for ip in mirror_info.ip.split(',')
+                    if (geo_data := get_geo_data_by_ip(ip)) is not None
+                )
+                (
+                    geo_location_data.continent,
+                    geo_location_data.country,
+                    geo_location_data.state_province,
+                    geo_location_data.city,
+                    location.latitude,
+                    location.longitude,
+                ) = match
+            except StopIteration:
+                if not mirror_info.private:
+                    self.logger.warning(
+                        'Mirror "%s" does not have geo data for any of its IPs',
+                        mirror_info.name,
+                    )
+                    mirror_info.status = 'Unknown geodata for any IP of the mirror'
+        mirror_info.location = location
+        mirror_info.geolocation.update_from_existing_object(geo_location_data)
+
 
     async def set_location_data_from_online_service(
             self,
