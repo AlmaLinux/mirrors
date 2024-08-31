@@ -106,7 +106,7 @@ def success_result(f):
 
     @wraps(f)
     async def decorated_function(*args, **kwargs):
-        logger.info('success f: %s', inspect.iscoroutinefunction(f))
+        # logger.info('success f: %s', inspect.iscoroutinefunction(f))
         if inspect.iscoroutinefunction(f):
             result = await f(*args, **kwargs)
         else:
