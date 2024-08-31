@@ -7,7 +7,7 @@ while getopts g opt; do
 done
 shift $((OPTIND-1))
 
-pushd /etc/mirrors_service/{{ container_env_prefix }}/mirrors/updates
+pushd /etc/mirrors_service/mirrors/updates
 echo `id -u`
 echo `id -g`
 git fetch origin master

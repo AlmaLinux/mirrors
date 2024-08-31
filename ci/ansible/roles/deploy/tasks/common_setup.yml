@@ -21,7 +21,7 @@
 
 - name: Set config_root
   set_fact:
-    config_root: "/etc/mirrors_service/{{ container_env_prefix }}"
+    config_root: "/etc/mirrors_service/"
   tags:
     - always
 
@@ -38,6 +38,7 @@
     path: "{{ ipinfo_path }}"
     state: directory
     mode: '0755'
+  when: deploy_environment == 'prod'
 
 - name: Mount ipinfo path
   ansible.posix.mount:
@@ -47,6 +48,7 @@
     fstype: nfs
     boot: true
     path: "{{ ipinfo_path }}"
+  when: deploy_environment == 'prod'
 
 - name: Create configs directory
   file:
