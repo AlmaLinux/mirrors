@@ -4,7 +4,7 @@
     state: present
     name: "{{ python_packages }}"
     virtualenv: "{{ source_path }}/venv"
-    virtualenv_command: "python3.9 -m venv"
+    virtualenv_command: "python3.12 -m venv"
   become: yes
   become_user: "{{ service_user }}"
   tags:
@@ -56,7 +56,7 @@
         seuser: system_u
         state: file
       with_items:
-        - "{{ source_path }}/venv/bin/python3.9"
+        - "{{ source_path }}/venv/bin/python3.12"
         - "{{ source_path }}/venv/bin/gunicorn"
       tags:
         - backend_selinux
