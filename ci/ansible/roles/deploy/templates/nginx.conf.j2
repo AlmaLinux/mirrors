@@ -72,6 +72,10 @@ http {
                     limit_req_status 429;
                 }
 
+                location /static/ {
+                    alias {{ source_path }}/src/backend/static/;
+                }
+
 
         }
         {% if local_dev is not defined or not local_dev %}
