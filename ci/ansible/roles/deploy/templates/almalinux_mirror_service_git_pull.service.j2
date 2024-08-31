@@ -7,5 +7,5 @@ After=network.target network-online.target
 User={{ service_user }}
 Group={{ service_user }}
 Type=oneshot
-ExecStart={{ scripts_path }}/{{ mirrors_list_update }}.sh -g
+ExecStart={{ scripts_path }}/{{ mirror_list_update }}.sh -g
 TimeoutStartSec=10min

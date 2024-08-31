@@ -2,7 +2,7 @@
 Description=Update local git repo of mirrors, including the config
 Wants=network-online.target
 After=network.target network-online.target
-Requires=almalinux_mirrors_service_git_pull.service
+Requires=almalinux_mirror_service_git_pull.service
 
 [Timer]
 OnStartupSec=30

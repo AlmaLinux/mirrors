@@ -2,7 +2,7 @@
 
 - name: Wait for update the mirrors list before run test
   wait_for:
-    path: "/var/run/{{ mirrors_list_update }}.pid"
+    path: "/var/run/{{ mirror_list_update }}.pid"
     state: absent
 
 

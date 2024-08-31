@@ -10,7 +10,7 @@ import os
 class TheMirrorsService(unittest.TestCase):
 
     service_url = os.environ.get(
-        'al_mirrors_service_url',
+        'al_mirror_service_url',
         'http://mirrors-dev.almalinux.org',
     )
     config = None

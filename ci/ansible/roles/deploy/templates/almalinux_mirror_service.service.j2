@@ -1,5 +1,5 @@
 [Unit]
-Description=AlmaLinux mirrors service (Gunicorn backend)
+Description=AlmaLinux mirror service (Gunicorn backend)
 After=syslog.target
 
 [Service]
@@ -10,8 +10,8 @@ Restart=on-failure
 RestartSec=5
 TimeoutStopSec=10
 WorkingDirectory={{ source_path }}/src/backend
-ExecStartPre={{ scripts_path }}/{{ mirrors_service }}.sh
-ExecStart={{ source_path }}/bin/gunicorn -c {{ source_path }}/src/backend/gunicorn.py
+ExecStartPre={{ scripts_path }}/{{ mirror_service }}.sh
+ExecStart={{ source_path }}/venv/bin/gunicorn -c {{ source_path }}/src/backend/gunicorn.py
 
 LimitAS=infinity
 LimitRSS=infinity

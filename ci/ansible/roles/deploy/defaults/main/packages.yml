@@ -6,7 +6,6 @@ dnf_packages:
   - python3
   - python3-devel
   - git
-  - redis
   - nginx
   - gcc
   # for testing purposes
@@ -14,6 +13,7 @@ dnf_packages:
   - sqlite
   - bash-completion
   - setools-console
+  - epel-release
 python_packages:
   - aiodns==3.2.0
   - aiohttp-retry==2.8.3
