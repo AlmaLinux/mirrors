@@ -26,6 +26,10 @@
         - import_tasks: nginx_configuration.yml
           tags:
             - nginx
+        - import_tasks: local_valkey_setup.yml
+          tags:
+            - valkey
+          when: local_dev is defined and local_dev
       tags:
         - deploy
 

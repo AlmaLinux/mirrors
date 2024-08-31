@@ -1,0 +1,11 @@
+---
+- name: Install valkey
+  package:
+    name: valkey
+    state: present
+
+- name: Start and enable valkey
+  systemd_service:
+    name: valkey
+    enabled: true
+    state: started
