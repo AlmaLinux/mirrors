@@ -1,7 +1,6 @@
 wsgi_app = 'main:app'
 bind = '[::1]:{{ gunicorn_port }}'
 workers = {{ backend_workers }}
-threads = 8
 worker_connections = 1000
 max_requests = 10000
 max_requests_jitter = 5
