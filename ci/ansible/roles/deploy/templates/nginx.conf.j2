@@ -74,7 +74,7 @@ http {
 
 
         }
-        {% if container_env_prefix == 'prod' or container_env_prefix == 'stg' %}
+        {% if local_dev is not defined or not local_dev %}
         # log real IPs in access logs, not aws load balancer IPs
         log_format main '$http_x_forwarded_for - $remote_user [$time_local] "$request" '
         '$status $body_bytes_sent "$http_referer" '
@@ -83,7 +83,7 @@ http {
         {% if rsyslog_server is defined and rsyslog_server %}
         access_log syslog:server={{ rsyslog_server }}:514,facility=local7,tag=nginx,severity=info main;
         {% else %}
-        access_log /var/log/nginx/logs/access.log;
+        access_log /var/log/nginx/access.log;
         {% endif %}
 
 }
