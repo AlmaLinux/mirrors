@@ -7,7 +7,7 @@ while getopts g opt; do
 done
 shift $((OPTIND-1))
 
-pushd /etc/mirrors_service/prod/mirrors/updates
+pushd /etc/mirrors_service/{{ container_env_prefix }}/mirrors/updates
 echo `id -u`
 echo `id -g`
 git fetch origin master
@@ -32,4 +32,4 @@ export TEST_IP_ADDRESS={{ test_ip_address }}
 export REDIS_URI={{ redis_uri }}
 export REDIS_URI_RO={{ redis_uri_ro }}
 
-/home/mirror-service/mirrors_service/bin/python -u {{ source_path }}/update_mirrors.py
+/home/mirror-service/mirrors_service/bin/python -u {{ source_path }}/src/backend/update_mirrors.py
