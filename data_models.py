@@ -95,6 +95,7 @@ class MirrorData:
     monopoly: bool = False
     urls: dict[str, str] = field(default_factory=dict)
     subnets: list[str] = field(default_factory=list)
+    subnets_int: list[tuple] = field(default_factory=tuple)
     has_full_iso_set: bool = False
 
     @staticmethod
@@ -123,6 +124,7 @@ class MirrorData:
             asn=dct.get('asn'),
             urls=dct.get('urls'),
             subnets=dct.get('subnets'),
+            subnets_int=dct.get('subnets_int'),
             monopoly=dct.get('monopoly'),
             has_full_iso_set=dct.get('has_full_iso_set'),
         )
