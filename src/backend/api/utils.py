@@ -289,9 +289,11 @@ async def get_aws_subnets(http_session: ClientType):
     if data_json is None:
         return subnets
     for v4_prefix in data_json['prefixes']:
-        subnets[v4_prefix['region'].lower()].append(v4_prefix['ip_prefix'])
+        if v4_prefix['ip_prefix'] not in subnets[v4_prefix['region'].lower()]:
+            subnets[v4_prefix['region'].lower()].append(v4_prefix['ip_prefix'])
     for v6_prefix in data_json['ipv6_prefixes']:
-        subnets[v6_prefix['region'].lower()].append(v6_prefix['ipv6_prefix'])
+        if v6_prefix['ipv6_prefix'] not in subnets[v6_prefix['region'].lower()]:
+            subnets[v6_prefix['region'].lower()].append(v6_prefix['ipv6_prefix'])
     await set_subnets_to_cache(
         key='aws_subnets',
         cache=cache,
