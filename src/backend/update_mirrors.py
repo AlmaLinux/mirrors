@@ -128,6 +128,7 @@ async def update_mirrors_handler() -> str:
             db_session.query(Mirror).delete()
             db_session.query(Url).delete()
             db_session.query(Subnet).delete()
+            db_session.query(SubnetInt).delete()
             for mirror_info in all_mirrors:
                 urls_to_create = [
                     Url(
