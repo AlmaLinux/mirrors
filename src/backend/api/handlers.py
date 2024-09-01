@@ -116,7 +116,7 @@ def _get_nearest_mirrors_by_network_data(
             continue
         if (asn is not None and asn in mirror.asn) or is_ip_in_any_subnet(
                 ip_address=ip_address,
-                subnets=mirror.subnets,
+                subnets_int=mirror.subnets_int,
         ):
             if mirror.monopoly:
                 return [mirror]

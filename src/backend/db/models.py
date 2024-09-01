@@ -1,5 +1,6 @@
 # coding=utf-8
-from ipaddress import ip_network
+import json
+from ipaddress import ip_network, IPv4Network, IPv6Network
 
 from geoip2.errors import AddressNotFoundError
 from sqlalchemy import (
@@ -37,6 +38,14 @@ class Subnet(Base):
 
     id = Column(Integer, nullable=False, primary_key=True)
     subnet = Column(String, nullable=False)
+    
+
+class SubnetInt(Base):
+    __tablename__ = 'subnets_int'
+    
+    id = Column(Integer, nullable=False, primary_key=True)
+    subnet_start = Column(String, nullable=False)
+    subnet_end = Column(String, nullable=False)
 
 
 class Url(Base):
@@ -86,6 +95,23 @@ mirrors_subnets = Table(
     ),
 )
 
+mirrors_subnets_int = Table(
+    'mirrors_subnets_int',
+    Base.metadata,
+    Column(
+        'mirror_id', Integer, ForeignKey(
+            'mirrors.id',
+            ondelete='CASCADE',
+        ),
+    ),
+    Column(
+        'subnet_int_id', Integer, ForeignKey(
+            'subnets_int.id',
+            ondelete='CASCADE'
+        )
+    )
+)
+
 
 class Mirror(Base):
     __tablename__ = 'mirrors'
@@ -122,6 +148,11 @@ class Mirror(Base):
         'Subnet',
         secondary=mirrors_subnets,
         passive_deletes=True,
+    )
+    subnets_int = relationship(
+        'SubnetInt',
+        secondary=mirrors_subnets_int,
+        passive_deletes=True
     )
 
     @hybrid_method
@@ -164,6 +195,7 @@ class Mirror(Base):
                 url.type: url.url for url in self.urls
             },
             subnets=[subnet.subnet for subnet in self.subnets],
+            subnets_int=[(int(subnet.subnet_start), int(subnet.subnet_end)) for subnet in self.subnets_int],
             cloud_type=self.cloud_type,
             cloud_region=self.cloud_region,
             private=False if self.private is None else self.private,
@@ -194,12 +226,12 @@ def get_asn_by_ip(
 
 def is_ip_in_any_subnet(
         ip_address: str,
-        subnets: list[str]
+        subnets_int: list[tuple]
 ) -> bool:
     ip_address = ip_network(ip_address)
-    for subnet in subnets:
-        subnet = ip_network(subnet)
-        if ip_address.version == subnet.version and \
-                ip_address.subnet_of(subnet):
+    if isinstance(ip_address, IPv4Network) or isinstance(ip_address, IPv6Network):
+        ip_int = int(ip_address.network_address)
+    for start, end in subnets_int:
+        if start <= ip_int <= end:
             return True
     return False

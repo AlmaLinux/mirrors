@@ -371,6 +371,8 @@ def handle_unknown_repository_or_version(
 
 
 if __name__ == '__main__':
+    # from werkzeug.middleware.profiler import ProfilerMiddleware
+    # app.wsgi_app = ProfilerMiddleware(app.wsgi_app)
     app.run(
         debug=True,
         host='0.0.0.0',

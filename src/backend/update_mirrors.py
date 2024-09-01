@@ -3,9 +3,10 @@ import asyncio
 import itertools
 import os
 import time
+import json
 from inspect import signature
 from urllib.parse import urljoin
-
+from sqlalchemy import insert
 import dateparser
 
 from api.mirror_processor import MirrorProcessor
@@ -28,9 +29,16 @@ from db.models import (
     Url,
     Mirror,
     Subnet,
+    SubnetInt,
+    mirrors_subnets_int
 )
 from db.utils import session_scope
 from common.sentry import get_logger
+from ipaddress import (
+    ip_network,
+    IPv4Network,
+    IPv6Network
+)
 
 logger = get_logger(__name__)
 cache = FlaskCacheEngine.get_instance()
@@ -155,6 +163,10 @@ async def update_mirrors_handler() -> str:
                     asn=','.join(mirror_info.asn),
                     has_full_iso_set=mirror_info.has_full_iso_set,
                 )
+                
+                db_session.add(mirror_to_create)
+                db_session.flush()
+                
                 if mirror_info.subnets:
                     subnets_to_create = [
                         Subnet(
@@ -163,7 +175,30 @@ async def update_mirrors_handler() -> str:
                     ]
                     db_session.add_all(subnets_to_create)
                     mirror_to_create.subnets = subnets_to_create
-                db_session.add(mirror_to_create)
+                    
+                    # convert IP ranges/CIDRs to integers and store in cache so we can
+                    # check if IPs are within subnets faster than the ipaddress module
+                    subnets_int_to_create = []
+                    for subnet in mirror_info.subnets:
+                        subnet = ip_network(subnet)
+                        if isinstance(subnet, IPv4Network) or isinstance(subnet, IPv6Network):
+                            # convert to str so sqlalchemy "magic" doesn't try to make sqlite use it as an int, which ipv6 overflows
+                            start = str(int(subnet.network_address))
+                            end = str(int(subnet.broadcast_address))
+
+                            # Using sqlalchemy ORM here is incredibly slow and problematic so we do it a bit more direct
+                            # insert the subnets first, returning their row ids so we can create the proper entries in the association table/FKs
+                            result = db_session.execute(insert(SubnetInt).values(
+                                subnet_start = start,
+                                subnet_end = end
+                            ))
+                            result = db_session.execute(insert(mirrors_subnets_int).values(
+                                mirror_id = mirror_to_create.id,
+                                subnet_int_id = result.inserted_primary_key[0]
+                            ))
+
+        db_session.commit()
+
         # update all mirrors lists in the Redis cache
         for args in itertools.product(
                 (True, False),
