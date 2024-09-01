@@ -128,8 +128,6 @@ class MirrorProcessor:
             params = {}
         if headers is None:
             headers = {}
-        if data is None:
-            data = {}
 
         return await self.client.request(
             method=method,
