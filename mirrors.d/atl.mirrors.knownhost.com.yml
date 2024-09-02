@@ -4,6 +4,10 @@ address:
   http: http://atl.mirrors.knownhost.com/almalinux
   https: https://atl.mirrors.knownhost.com/almalinux
   rsync: rsync://atl.mirrors.knownhost.com/almalinux
+address_kitten:
+  http: http://atl.mirrors.knownhost.com/almalinux-kitten
+  https: https://atl.mirrors.knownhost.com/almalinux-kitten
+  rsync: rsync://atl.mirrors.knownhost.com/almalinux-kitten
 update_frequency: 1h
 geolocation:
   city: Atlanta
