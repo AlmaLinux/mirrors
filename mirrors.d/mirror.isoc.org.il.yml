@@ -5,8 +5,8 @@ address:
   https: https://mirror.isoc.org.il/pub/almalinux
 geolocation:
   country: IL
-  state_province: Central District
-  city: Petaẖ Tiqva
+  state_province: Center District
+  city: Petah Tikva
 update_frequency: 3h
 sponsor: Israel Internet Association
 sponsor_url: https://www.isoc.org.il
