@@ -21,17 +21,18 @@
 
 - name: Set config_root
   set_fact:
-    config_root: "/etc/mirrors_service/{{ container_env_prefix }}"
+    config_root: "/etc/mirror_service/"
   tags:
     - always
 
 - name: Set ipinfo path
   set_fact:
-    ipinfo_path: "/ipinfo/"
+    ipinfo_path: "/var/ipinfo/"
 
 - name: Set ipinfo NFS
   set_fact:
     ipinfo_nfs: "fs-04029e8b12637703b.efs.us-east-1.amazonaws.com:/"
+  when: local_dev is not defined or not local_dev
 
 - name: Create ipinfo mount path
   file:
@@ -47,7 +48,26 @@
     fstype: nfs
     boot: true
     path: "{{ ipinfo_path }}"
+  when: local_dev is not defined or not local_dev
 
+- name: Fetch sample IPinfo location database
+  ansible.builtin.get_url:
+    url: https://github.com/ipinfo/sample-database/raw/main/IP%20Geolocation/ip_geolocation_sample.mmdb
+    dest: /var/ipinfo/standard_location.mmdb
+  when: local_dev is not defined or not local_dev
+
+- name: Fetch free continent database
+  ansible.builtin.get_url:
+    url: https://country.io/continent.json
+    dest: /var/ipinfo/continent.json
+  when: local_dev is not defined or not local_dev
+
+- name: Fetch sample IPinfo ASN database
+  ansible.builtin.get_url:
+    url: https://github.com/ipinfo/sample-database/raw/main/ASN%20Database/asn_sample.mmdb
+    dest: /var/ipinfo/asn.mmdb
+  when: local_dev is not defined or not local_dev
+  
 - name: Create configs directory
   file:
     name: "{{ config_root }}"
@@ -64,7 +84,7 @@
     owner: "{{ service_user }}"
     mode: '0755'
 
-- name: Create MaxMind DBs directory
+- name: Create config directory
   file:
     name: "{{ config_root }}/mirrors"
     state: directory

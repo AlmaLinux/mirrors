@@ -19,8 +19,10 @@ depends_on = None
 def upgrade():
     op.execute('DELETE FROM mirrors')
     op.execute('DELETE FROM mirrors_subnets')
+    op.execute('DELETE FROM mirrors_subnets_int')
     op.execute('DELETE FROM mirrors_urls')
     op.execute('DELETE FROM subnets')
+    op.execute('DELETE FROM subnets_int')
     op.execute('DELETE FROM urls')
 
 

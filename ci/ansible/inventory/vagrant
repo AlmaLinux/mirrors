@@ -1,11 +1,11 @@
-[mirrors_service]
+[mirror_service]
 10.0.0.10
 
 [all:vars]
 ansible_connection=ssh
 ansible_user=vagrant
 ansible_ssh_pass=vagrant
-container_env_prefix=prod
+local_dev=true
 sentry_dsn=<place here a DSN key of your Sentry>
 deploy_environment=Production
 backend_workers=4

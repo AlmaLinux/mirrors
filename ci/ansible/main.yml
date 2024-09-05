@@ -1,5 +1,5 @@
 ---
 - name: Deploy the mirror service
-  hosts: mirrors_service
+  hosts: mirror_service
   tasks:
     - import_role: name=deploy

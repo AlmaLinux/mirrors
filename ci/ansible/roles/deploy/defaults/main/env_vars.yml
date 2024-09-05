@@ -1,5 +1,5 @@
 service_user: "mirror-service"
-source_path: "/home/{{ service_user }}/mirrors_service"
+source_path: "/opt/mirror_service"
 sentry_environments:
   - "Production"
   - "Staging"

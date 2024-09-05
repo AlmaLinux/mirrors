@@ -1,8 +1,8 @@
 ---
 - name: Prepare script for updating local mirrors list
   template:
-    src: "{{ mirrors_list_update }}.sh.j2"
-    dest: "{{ scripts_path }}/{{ mirrors_list_update }}.sh"
+    src: "{{ mirror_list_update }}.sh.j2"
+    dest: "{{ scripts_path }}/{{ mirror_list_update }}.sh"
     group: "{{ service_user }}"
     owner: "{{ service_user }}"
     setype: bin_t
@@ -21,26 +21,26 @@
   vars:
     description: Update a local mirrors list
   with_items:
-    - dst: "{{ mirrors_list_update }}.service"
-      src: "{{ mirrors_list_update }}.service.j2"
+    - dst: "{{ mirror_list_update }}.service"
+      src: "{{ mirror_list_update }}.service.j2"
       setype: systemd_unit_file_t
       seuser: system_u
-    - dst: "{{ mirrors_list_update }}.timer"
-      src: "{{ mirrors_list_update }}.timer.j2"
+    - dst: "{{ mirror_list_update }}.timer"
+      src: "{{ mirror_list_update }}.timer.j2"
       setype: systemd_unit_file_t
       seuser: system_u
-    - dst: "{{ mirrors_service_git_updater }}.service"
-      src: "{{ mirrors_service_git_updater }}.service.j2"
+    - dst: "{{ mirror_service_git_updater }}.service"
+      src: "{{ mirror_service_git_updater }}.service.j2"
       setype: systemd_unit_file_t
       seuser: system_u
-    - dst: "{{ mirrors_service_git_updater }}.timer"
-      src: "{{ mirrors_service_git_updater }}.timer.j2"
+    - dst: "{{ mirror_service_git_updater }}.timer"
+      src: "{{ mirror_service_git_updater }}.timer.j2"
       setype: systemd_unit_file_t
       seuser: system_u
 
 - name: Enable git updater systemd timer
   systemd:
-    name: "{{ mirrors_service_git_updater }}.timer"
+    name: "{{ mirror_service_git_updater }}.timer"
     state: started
     enabled: true
     masked: false

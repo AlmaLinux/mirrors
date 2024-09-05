@@ -3,6 +3,6 @@ export SQLITE_PATH={{ config_root }}/data/mirrors.db
 export PYTHONPATH={{ source_path }}/src/backend
 export DEPLOY_ENVIRONMENT={{ config_root }}/deploy_environment.var
 pushd {{ source_path }}/src/backend/
-{{ source_path }}/bin/python db/db_actions.py create_db
-{{ source_path }}/bin/python db/db_actions.py migrate
+{{ source_path }}/venv/bin/python db/db_actions.py create_db
+{{ source_path }}/venv/bin/python db/db_actions.py migrate
 popd

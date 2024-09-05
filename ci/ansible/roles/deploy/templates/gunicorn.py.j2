@@ -1,7 +1,6 @@
 wsgi_app = 'main:app'
 bind = '[::1]:{{ gunicorn_port }}'
 workers = {{ backend_workers }}
-threads = 8
 worker_connections = 1000
 max_requests = 10000
 max_requests_jitter = 5
@@ -10,7 +9,7 @@ group = '{{ service_user }}'
 raw_env = [
     'GEOIP_PATH={{ ipinfo_path }}/standard_location.mmdb',
     'ASN_PATH={{ ipinfo_path }}/asn.mmdb',
-    'CONTINENT_PATH={{ ipinfo_path }}/continent.json'
+    'CONTINENT_PATH={{ ipinfo_path }}/continent.json',
     'SQLITE_PATH={{ config_root }}/data/mirrors.db',
     'SENTRY_DSN={{ sentry_dsn }}',
     'PYTHONPATH={{ source_path }}/src/backend/',
@@ -22,7 +21,7 @@ raw_env = [
     'REDIS_URI={{ redis_uri }}',
     'REDIS_URI_RO={{ redis_uri_ro }}'
 ]
-accesslog = '-'
-access_log_format = '"%({X-Forwarded-For}i)s" %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"'
+#accesslog = '-'
+#access_log_format = '"%({X-Forwarded-For}i)s" %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"'
 errorlog = '-'
 timeout = 900

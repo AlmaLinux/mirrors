@@ -84,10 +84,15 @@ def _get_request_ip(*args, **kwargs) -> Optional[str]:
     return test_ip_address or result
 
 
-def make_redis_key(ip = None, *args, **kwargs) -> str:
+def make_redis_key(ip = None, protocol = None, country = None, *args, **kwargs) -> str:
     if not ip:
         ip = _get_request_ip()
-    return f'{ip}'
+    cache_key = f'{ip}'
+    if protocol:
+        cache_key = f'{cache_key}_{protocol}'
+    if country:
+        cache_key = f'{cache_key}_{country}'
+    return cache_key
 
 
 def unless_make_cache(*args, **kwargs) -> bool:
@@ -145,6 +150,12 @@ def get_mirror_list(
         version: str,
         repository: str
 ):
+    request_protocol = request.args.get('protocol')
+    if request_protocol and request_protocol not in ["http","https"]:
+        return "Invalid input for protocol, valid options: http, https"
+    request_country = request.args.get('country')
+    if request_country and len(request_country) != 2:
+        return "Invalid input for country, valid options are 2 letter country codes"
     ip_address = _get_request_ip()
 
     mirrors = get_mirrors_list(
@@ -152,8 +163,10 @@ def get_mirror_list(
         version=version,
         arch=None,
         repository=repository,
+        request_protocol=request_protocol,
+        request_country=request_country,
         debug_info=False,
-        redis_key=make_redis_key(ip=ip_address)
+        redis_key=make_redis_key(ip=ip_address, protocol=request_protocol, country=request_country)
     )
 
     return '\n'.join(mirrors)
@@ -371,6 +384,8 @@ def handle_unknown_repository_or_version(
 
 
 if __name__ == '__main__':
+    # from werkzeug.middleware.profiler import ProfilerMiddleware
+    # app.wsgi_app = ProfilerMiddleware(app.wsgi_app)
     app.run(
         debug=True,
         host='0.0.0.0',

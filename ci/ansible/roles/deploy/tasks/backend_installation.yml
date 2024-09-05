@@ -3,8 +3,8 @@
   pip:
     state: present
     name: "{{ python_packages }}"
-    virtualenv: "{{ source_path }}"
-    virtualenv_command: "python3.9 -m venv"
+    virtualenv: "{{ source_path }}/venv"
+    virtualenv_command: "python3.12 -m venv"
   become: yes
   become_user: "{{ service_user }}"
   tags:
@@ -56,8 +56,8 @@
         seuser: system_u
         state: file
       with_items:
-        - "{{ source_path }}/bin/python3.9"
-        - "{{ source_path }}/bin/gunicorn"
+        - "{{ source_path }}/venv/bin/python3.12"
+        - "{{ source_path }}/venv/bin/gunicorn"
       tags:
         - backend_selinux
 
@@ -81,7 +81,7 @@
     seuser: system_u
     mode: 0740
   with_items:
-    - "{{ mirrors_service }}"
+    - "{{ mirror_service }}"
 
 - name: Install systemd service of Gunicorn backend
   template:
@@ -93,7 +93,7 @@
     seuser: system_u
     mode: 0640
   with_items:
-    - "{{ mirrors_service }}"
+    - "{{ mirror_service }}"
 
 - name: Enable systemd service of Gunicorn backend
   systemd:
@@ -106,4 +106,4 @@
     - backend_systemd_service
     - deploy_files
   with_items:
-    - "{{ mirrors_service }}"
+    - "{{ mirror_service }}"
