@@ -54,18 +54,21 @@
   ansible.builtin.get_url:
     url: https://github.com/ipinfo/sample-database/raw/main/IP%20Geolocation/ip_geolocation_sample.mmdb
     dest: /var/ipinfo/standard_location.mmdb
+    force: false
   when: local_dev is defined and local_dev
 
 - name: Fetch free continent database
   ansible.builtin.get_url:
     url: https://country.io/continent.json
     dest: /var/ipinfo/continent.json
+    force: false
   when: local_dev is defined and local_dev
 
 - name: Fetch sample IPinfo ASN database
   ansible.builtin.get_url:
     url: https://github.com/ipinfo/sample-database/raw/main/ASN%20Database/asn_sample.mmdb
     dest: /var/ipinfo/asn.mmdb
+    force: false
   when: local_dev is defined and local_dev
   
 - name: Create configs directory
