@@ -15,7 +15,6 @@ from db.db_engine import FlaskCacheEngine
 from api.utils import (
     success_result,
     error_result,
-    auth_key_required,
     jsonify_response,
 )
 from common.sentry import (
