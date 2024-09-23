@@ -1,0 +1,17 @@
+---
+name: mirror.fiu.edu
+address:
+  http: http://mirror.fiu.edu/almalinux/
+geolocation:
+  country: US
+  state_province: FL
+  city: Westchester
+update_frequency: 3h
+sponsor: Florida International University
+sponsor_url: https://www.fiu.edu
+# Please do not use an email piped to a helpdesk or similar.
+# Use an address or alias that goes directly to those responsible for
+# mirror management.
+# Remove these comments before submitting your pull request.
+email: hpcadmin@fiu.edu
+...
