@@ -533,6 +533,8 @@ def get_mirrors_list(
                 mirror.mirror_url + '/',
                 f'{version}/{repo_path}',
                 )
+        if arch:
+            full_mirror_path = full_mirror_path.replace('$basearch', arch)
         mirrors_list.append(full_mirror_path)
     if not from_cache:
         cache.set(redis_key, nearest_mirrors, CACHE_EXPIRED_TIME)

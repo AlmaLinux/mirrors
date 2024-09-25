@@ -151,18 +151,32 @@ def get_mirror_list(
         version: str,
         repository: str
 ):
+    # protocol get arg
     request_protocol = request.args.get('protocol')
     if request_protocol and request_protocol not in ["http","https"]:
         return "Invalid input for protocol, valid options: http, https"
+    # country get arg
     request_country = request.args.get('country')
     if request_country and len(request_country) != 2:
         return "Invalid input for country, valid options are 2 letter country codes"
+    # arch get arg
+    request_arch = request.args.get('arch')
+    if request_arch:
+        config = get_config(
+            logger=logger,
+            path_to_config=SERVICE_CONFIG_PATH,
+            path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
+        )
+        if not request_arch in config.arches:
+            arches = ' '.join(config.arches)
+            return f"Invalid arch requested, valid options are {arches}"
+    
     ip_address = _get_request_ip()
 
     mirrors = get_mirrors_list(
         ip_address=ip_address,
         version=version,
-        arch=None,
+        arch=request_arch,
         repository=repository,
         request_protocol=request_protocol,
         request_country=request_country,
