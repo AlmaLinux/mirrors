@@ -47,9 +47,6 @@ from api.redis import (
 logger = get_logger(__name__)
 cache = FlaskCacheEngine.get_instance()
 
-
-AUTH_KEY = os.environ.get('AUTH_KEY')
-
 RANDOMIZE_WITHIN_KM = 500
 
 AIOHTTP_TIMEOUT = 30
@@ -80,23 +77,6 @@ def textify_response(
     )
     response.mimetype = 'text/plain'
     return response
-
-
-def auth_key_required(f):
-    """
-    Decorator: Check auth key
-    """
-    @wraps(f)
-    async def decorated_function(*args, **kwargs):
-        if request.method == 'GET' or \
-                AUTH_KEY == request.cookies.get('AUTH_KEY'):
-            if inspect.iscoroutinefunction(f):
-                return await f(*args, **kwargs)
-            else:
-                return f(*args, **kwargs)
-        else:
-            raise AuthException('Invalid auth key is passed')
-    return decorated_function
 
 
 def success_result(f):

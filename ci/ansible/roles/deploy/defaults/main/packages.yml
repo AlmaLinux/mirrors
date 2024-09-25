@@ -8,12 +8,13 @@ dnf_packages:
   - git
   - nginx
   - gcc
+  - epel-release
+  - nfs-utils
   # for testing purposes
   - checkpolicy
   - sqlite
   - bash-completion
   - setools-console
-  - epel-release
 python_packages:
   - aiodns==3.2.0
   - aiohttp-retry==2.8.3
