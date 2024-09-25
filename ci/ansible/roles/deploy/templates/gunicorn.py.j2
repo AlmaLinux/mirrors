@@ -11,7 +11,9 @@ raw_env = [
     'ASN_PATH={{ ipinfo_path }}/asn.mmdb',
     'CONTINENT_PATH={{ ipinfo_path }}/continent.json',
     'SQLITE_PATH={{ config_root }}/data/mirrors.db',
+{% if sentry_dsn is defined %}
     'SENTRY_DSN={{ sentry_dsn }}',
+{% endif %}
     'PYTHONPATH={{ source_path }}/src/backend/',
     'CONFIG_ROOT={{ config_root }}',
     'SOURCE_PATH={{ source_path }}',
