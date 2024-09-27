@@ -17,6 +17,7 @@ from api.handlers import (
     get_all_mirrors,
     get_isos_list_by_countries,
     get_main_isos_table,
+    get_allowed_arch,
     SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
     SERVICE_CONFIG_PATH, get_allowed_version, get_allowed_arch,
 )
@@ -167,9 +168,8 @@ def get_mirror_list(
             path_to_config=SERVICE_CONFIG_PATH,
             path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
         )
-        if not request_arch in config.arches:
-            arches = ' '.join(config.arches)
-            return f"Invalid arch requested, valid options are {arches}"
+        if not get_allowed_arch(arch=request_arch, version=version, arches=config.arches, duplicated_versions=config.duplicated_versions):
+            return f"Invalid arch/version combination requested, valid options are {config.arches}"
     
     ip_address = _get_request_ip()
 
@@ -297,7 +297,9 @@ def isos(
         )
         arch = get_allowed_arch(
             arch=arch,
+            version=version,
             arches=config.arches,
+            duplicated_versions=config.duplicated_versions
         )
         data.update({
             'arch': arch,

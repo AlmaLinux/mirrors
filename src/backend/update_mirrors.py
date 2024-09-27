@@ -102,7 +102,8 @@ async def update_mirrors_handler() -> str:
             mirror_iso_uris = mirror_processor.get_mirror_iso_uris(
                 versions=set(main_config.versions) -
                          set(main_config.duplicated_versions),
-                arches=main_config.arches
+                arches=main_config.arches,
+                duplicated_versions=main_config.duplicated_versions
             )
             subnets = await get_aws_subnets(
                 http_session=mirror_processor.client

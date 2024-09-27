@@ -453,11 +453,13 @@ class MirrorProcessor:
     def get_mirror_iso_uris(
             self,
             versions: set[str],
-            arches: list[str],
+            arches: list,
+            duplicated_versions
     ) -> list[str]:
         result = []
         for version in versions:
-            for arch in arches:
+            base_version = next((i for i in duplicated_versions if duplicated_versions[i] == version), version)
+            for arch in arches[base_version]:
                 for iso_file_template in self.iso_files_templates:
                     iso_file = iso_file_template.format(
                         version=f'{version}'

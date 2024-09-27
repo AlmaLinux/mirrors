@@ -392,13 +392,16 @@ def _is_vault_repo(
 
 def get_allowed_arch(
         arch: str,
-        arches: list[str],
+        version: float,
+        arches: list,
+        duplicated_versions: dict[str, str]
 ) -> str:
-    if arch not in arches:
+    version = next((i for i in duplicated_versions if duplicated_versions[i] == version), version)
+    if arch not in arches[version]:
         raise UnknownRepoAttribute(
             'Unknown architecture "%s". Allowed list of arches "%s"',
             arch,
-            ', '.join(arches),
+            arches,
         )
     return arch
 
@@ -568,11 +571,11 @@ def get_isos_list_by_countries(
 
 def get_main_isos_table(config: MainConfig) -> dict[str, list[str]]:
     result = defaultdict(list)
-    for arch in config.arches:
-        result[arch] = [
-            version for version in config.versions
-            if version not in config.duplicated_versions and
-               arch in config.versions_arches.get(version, config.arches)
-        ]
+    for version, arches in config.arches.items():
+        for arch in arches:
+            if version in config.duplicated_versions and arch in config.versions_arches.get(version, config.arches[version]):
+                if not result.get(arch):
+                    result[arch] = []
+                result[arch].append(config.duplicated_versions[version])
 
     return result
