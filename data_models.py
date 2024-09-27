@@ -138,7 +138,7 @@ class RepoData:
     name: str
     path: str
     vault: bool
-    arches: list[str] = field(default_factory=list)
+    arches: list = field(default_factory=list)
     versions: list[str] = field(default_factory=list)
 
 
@@ -148,7 +148,7 @@ class MainConfig:
     mirrors_dir: str
     vault_mirror: str
     versions: list[str] = field(default_factory=list)
-    arches: list[str] = field(default_factory=list)
+    arches: list = field(default_factory=list)
     duplicated_versions: dict[str, str] = field(default_factory=dict)
     vault_versions: list[str] = field(default_factory=list)
     versions_arches: dict[str, list[str]] = field(

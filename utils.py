@@ -231,13 +231,17 @@ def process_main_config(
     def _process_repo_attributes(
             repo_name: str,
             repo_attributes: list[str],
-            attributes: list[str],
+            attributes: dict[str, list[str]],
+            version: str = None,
     ) -> list[str]:
         for repo_arch in repo_attributes:
-            if repo_arch not in attributes:
+            # rules for major versions listed in duplicates will be used if found
+            if version:
+                version = next((i for i in yaml_data['duplicated_versions'] if yaml_data['duplicated_versions'][i] == version), version)
+            if repo_arch not in attributes.get(version, list(set(val for sublist in attributes.values() for val in sublist))):
                 raise ValidationError(
                     f'Attr "{repo_arch}" of repo "{repo_name}" is absent '
-                    f'in the main list of attrs "{", ".join(attributes)}"'
+                    f'in the main list of attrs "{", ".join(attributes.get(version, list(set(val for sublist in attributes.values() for val in sublist))))}"'
                 )
         return repo_attributes
 
@@ -270,14 +274,15 @@ def process_main_config(
                     arches=_process_repo_attributes(
                         repo_name=repo['name'],
                         repo_attributes=repo.get('arches', []),
-                        attributes=yaml_data['arches']
+                        attributes=yaml_data['arches'],
+                        version=repo.get('versions', [None])[0]  # Assuming each repo has at least one version
                     ),
                     versions=_process_repo_attributes(
                         repo_name=repo['name'],
                         repo_attributes=[
                             str(ver) for ver in repo.get('versions', [])
                         ],
-                        attributes=[str(ver) for ver in yaml_data['versions']]
+                        attributes={str(ver): yaml_data['versions'] for ver in repo.get('versions', [])}
                     ),
                     vault=repo.get('vault', False),
                 ) for repo in yaml_data['repos']
@@ -550,9 +555,10 @@ async def mirror_available(
                 continue
             if repo_data.vault:
                 continue
+            base_version = next((i for i in main_config.duplicated_versions if main_config.duplicated_versions[i] == version), version)
             arches = _get_arches_for_version(
                 repo_arches=repo_data.arches,
-                global_arches=main_config.arches,
+                global_arches=main_config.arches[base_version],
             )
             repo_versions = repo_data.versions
             if repo_versions and version not in repo_versions:
