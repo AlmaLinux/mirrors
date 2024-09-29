@@ -1,0 +1,16 @@
+name: mirror.one.com
+address:
+  http: http://alma.mirror.edgeuno.com
+  https: https://alma.mirror.edgeuno.com
+update_frequency: 2h
+sponsor: EdgeUno
+sponsor_url: https://www.edgeuno.com/
+email: mirrors@edgeuno.com
+geolocation:
+  continent: South America
+  country: CO
+  state_province: Cundinamarca
+  city: Bogota
+private: false
+monopoly: false
+asn: 7195
