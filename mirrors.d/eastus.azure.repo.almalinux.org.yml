@@ -2,6 +2,7 @@
 name: eastus.azure.repo.almalinux.org
 address:
 #  http: http://eastus.azure.repo.almalinux.org/almalinux/
+  http: http://azure.repo.almalinux.org/
   https: https://azure.repo.almalinux.org/
 update_frequency: 1h
 sponsor: AlmaLinux OS Foundation
