@@ -1,0 +1,14 @@
+---
+name: hnl.fastly.repo.almalinux.org
+address:
+  http: http://hnl.fastly.repo.almalinux.org/almalinux/
+  https: https://hnl.fastly.repo.almalinux.org/almalinux/
+geolocation:
+  country: US
+  state_province: HI
+  city: Honolulu
+update_frequency: 1h
+sponsor: Fastly
+sponsor_url: https://www.fastly.com/
+email: hello@almalinux.org
+...
