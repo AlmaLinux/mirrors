@@ -175,7 +175,7 @@ repos:
       - "8.10"
       - "9.4"
   - name: extras-common-source
-    path: extras/Source/
+    path: extras-common/Source/
     vault: true
     versions:
       - "10-kitten"
@@ -288,7 +288,7 @@ repos:
     versions:
       - "9.4"
   - name: extras-common-debug
-    path: extras/debug/$basearch/
+    path: extras-common/debug/$basearch/
     vault: true
     versions:
       - "10-kitten"
