@@ -238,7 +238,7 @@ def process_main_config(
             # rules for major versions listed in duplicates will be used if found
             if version:
                 version = next((i for i in yaml_data['duplicated_versions'] if yaml_data['duplicated_versions'][i] == version), version)
-            if repo_arch not in attributes.get(version, list(set(val for sublist in attributes.values() for val in sublist))):
+            if repo_arch not in attributes.get(version, list(set(val for sublist in attributes.values() for val in sublist))) and repo_arch not in yaml_data['arches']:
                 raise ValidationError(
                     f'Attr "{repo_arch}" of repo "{repo_name}" is absent '
                     f'in the main list of attrs "{", ".join(attributes.get(version, list(set(val for sublist in attributes.values() for val in sublist))))}"'
@@ -672,7 +672,7 @@ async def optional_modules_available(
                 url_for_check = urljoin(
                     urljoin(
                         urljoin(
-                            mirror_info.mirror_url + '/',
+                            mirror_info.module_urls[module].get('http', mirror_info.module_urls[module].get('https', None)) + '/',
                             f'{ver}-{module}',
                         ) + '/',
                         repo_path,
