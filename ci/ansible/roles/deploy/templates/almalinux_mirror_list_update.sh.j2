@@ -23,7 +23,9 @@ export GEOIP_PATH={{ ipinfo_path }}/standard_location.mmdb
 export ASN_PATH={{ ipinfo_path }}/asn.mmdb
 export CONTINENT_PATH={{ ipinfo_path }}/continent.json
 export SQLITE_PATH={{ config_root }}/data/mirrors.db
+{% if sentry_dsn is defined %}
 export SENTRY_DSN={{ sentry_dsn }}
+{% endif %}
 export PYTHONPATH={{ source_path }}/src/backend/
 export CONFIG_ROOT={{ config_root }}
 export SOURCE_PATH={{ source_path }}

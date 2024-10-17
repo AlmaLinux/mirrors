@@ -79,7 +79,8 @@ def _get_nearest_mirrors_by_network_data(
         get_working_mirrors: bool,
         get_expired_mirrors: bool,
         request_protocol = None,
-        request_country = None
+        request_country = None,
+        request_module = None,
 ) -> list[MirrorData]:
     """
     The function returns mirrors which are in the same subnet or have the same
@@ -114,7 +115,8 @@ def _get_nearest_mirrors_by_network_data(
         get_without_private_mirrors=get_without_private_mirrors,
         get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos,
         request_protocol=request_protocol,
-        request_country=request_country
+        request_country=request_country,
+        request_module=request_module,
     )
     for mirror in mirrors:
         if mirror.status != "ok":
@@ -157,7 +159,8 @@ def _get_nearest_mirrors_by_geo_data(
         get_working_mirrors: bool,
         get_expired_mirrors: bool,
         request_protocol = None,
-        request_country = None
+        request_country = None,
+        request_module = None,
 ) -> list[MirrorData]:
     """
     The function returns nearest N mirrors to a client
@@ -171,7 +174,8 @@ def _get_nearest_mirrors_by_geo_data(
         get_without_private_mirrors=get_without_private_mirrors,
         get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos,
         request_protocol=request_protocol,
-        request_country=request_country
+        request_country=request_country,
+        request_module=request_module
     )
     # We return all mirrors if we can't
     # determine geo data of a request's IP
@@ -211,7 +215,8 @@ def _get_nearest_mirrors(
         get_working_mirrors: bool,
         get_expired_mirrors: bool,
         request_protocol: Optional[str] = None,
-        request_country: Optional[str] = None
+        request_country: Optional[str] = None,
+        request_module: Optional[str] = None
 ) -> list[MirrorData]:
     """
     Get the nearest mirrors by geo-data or by subnet/ASN
@@ -224,7 +229,8 @@ def _get_nearest_mirrors(
             get_without_private_mirrors=get_without_private_mirrors,
             get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos,
             request_protocol=request_protocol,
-            request_country=request_country
+            request_country=request_country,
+            request_module=request_module,
         )
     suitable_mirrors = _get_nearest_mirrors_by_network_data(
         ip_address=ip_address,
@@ -234,7 +240,8 @@ def _get_nearest_mirrors(
         get_without_private_mirrors=get_without_private_mirrors,
         get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos,
         request_protocol=request_protocol,
-        request_country=request_country
+        request_country=request_country,
+        request_module=request_module,
     )
     if not suitable_mirrors:
         suitable_mirrors = _get_nearest_mirrors_by_geo_data(
@@ -246,7 +253,8 @@ def _get_nearest_mirrors(
             get_without_private_mirrors=True,
             get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos,
             request_protocol=request_protocol,
-            request_country=request_country
+            request_country=request_country,
+            request_module=request_module
         )
     return suitable_mirrors
 
@@ -258,7 +266,8 @@ def get_all_mirrors(
         get_without_private_mirrors: bool = False,
         get_mirrors_with_full_set_of_isos: bool = False,
         request_protocol: Optional[str] = None,
-        request_country: Optional[str] = None
+        request_country: Optional[str] = None,
+        request_module: Optional[str] = None
 ) -> list[MirrorData]:
     """
     Get the list of all mirrors from cache or regenerate one if it's empty
@@ -289,6 +298,10 @@ def get_all_mirrors(
     if request_country:
         for mirror in mirrors[:]:
             if mirror.geolocation.country.lower() != request_country.lower():
+                mirrors.remove(mirror)
+    if request_module:
+        for mirror in mirrors[:]:
+            if not mirror.has_optional_modules or request_module not in mirror.has_optional_modules.split(','):
                 mirrors.remove(mirror)
     return mirrors
 
@@ -392,13 +405,16 @@ def _is_vault_repo(
 
 def get_allowed_arch(
         arch: str,
-        arches: list[str],
+        version: float,
+        arches: list,
+        duplicated_versions: dict[str, str]
 ) -> str:
-    if arch not in arches:
+    version = next((i for i in duplicated_versions if duplicated_versions[i] == version), version)
+    if arch not in arches[version]:
         raise UnknownRepoAttribute(
             'Unknown architecture "%s". Allowed list of arches "%s"',
             arch,
-            ', '.join(arches),
+            arches,
         )
     return arch
 
@@ -408,24 +424,44 @@ def get_allowed_version(
         vault_versions: list[str],
         duplicated_versions: dict[str, str],
         version: str,
+        optional_module_versions: dict[str, list]
 ) -> str:
 
     if version not in versions and version not in vault_versions:
-        try:
-            major_version = next(
-                ver for ver in duplicated_versions if version.startswith(ver)
-            )
-            return duplicated_versions[major_version]
-        except StopIteration:
-            raise UnknownRepoAttribute(
-                'Unknown version "%s". Allowed list of versions "%s"',
-                version,
-                ', '.join(versions + vault_versions),
-            )
+        optional_versions = check_optional_version(version=version, optional_module_versions=optional_module_versions)
+        if version not in optional_versions:
+            try:
+                major_version = next(
+                    ver for ver in duplicated_versions if version.startswith(ver)
+                )
+                return duplicated_versions[major_version]
+            except StopIteration:
+                raise UnknownRepoAttribute(
+                    'Unknown version "%s". Allowed list of versions "%s"',
+                    version,
+                    ', '.join(versions + vault_versions + optional_versions),
+                )
+        elif version in optional_versions:
+            return version
     elif version in versions and version in duplicated_versions:
         return duplicated_versions[version]
     else:
         return version
+
+
+def check_optional_version(version: str, optional_module_versions: dict[str, list]) -> list:
+    result = []
+    for module, versions in optional_module_versions.items():
+        for version in versions:
+            result.append(f"{version}-{module}")
+    return result
+
+
+def get_optional_module_from_version(version: str, optional_module_versions: dict[str, list]) -> Union[str, None]:
+    for module, versions in optional_module_versions.items():
+        for ver in versions:
+            if f"{ver}-{module}" == version:
+                return module
 
 
 def get_mirrors_list(
@@ -437,7 +473,8 @@ def get_mirrors_list(
         request_country: Optional[str] = None,
         iso_list: bool = False,
         debug_info: bool = False,
-        redis_key: Optional[str] = None
+        redis_key: Optional[str] = None,
+        module: Optional[str] = None
 ) -> Union[str, dict]:
     mirrors_list = []
     config = get_config(
@@ -463,6 +500,7 @@ def get_mirrors_list(
         vault_versions=vault_versions,
         duplicated_versions=duplicated_versions,
         version=version,
+        optional_module_versions=config.optional_module_versions
     )
     if iso_list:
         repo_path = f'isos/{arch}'
@@ -498,7 +536,8 @@ def get_mirrors_list(
             get_without_cloud_mirrors=iso_list,
             get_expired_mirrors=False,
             request_protocol=request_protocol,
-            request_country=request_country
+            request_country=request_country,
+            request_module=module
         )
     if debug_info:
         data = defaultdict(dict)
@@ -523,16 +562,19 @@ def get_mirrors_list(
             data['mirrors'][mirror.name] = asdict(mirror)
         return data
     for mirror in nearest_mirrors:
+        urls = mirror.module_urls[module] if module else mirror.urls
         if request_protocol:
             full_mirror_path = urljoin(
-                mirror.urls[request_protocol] + '/',
+                urls[request_protocol] + '/',
                 f'{version}/{repo_path}',
                 )
         else:
             full_mirror_path = urljoin(
-                mirror.mirror_url + '/',
+                urls.get('http') or urls.get('https') + '/',
                 f'{version}/{repo_path}',
                 )
+        if arch:
+            full_mirror_path = full_mirror_path.replace('$basearch', arch)
         mirrors_list.append(full_mirror_path)
     if not from_cache:
         cache.set(redis_key, nearest_mirrors, CACHE_EXPIRED_TIME)
@@ -566,11 +608,11 @@ def get_isos_list_by_countries(
 
 def get_main_isos_table(config: MainConfig) -> dict[str, list[str]]:
     result = defaultdict(list)
-    for arch in config.arches:
-        result[arch] = [
-            version for version in config.versions
-            if version not in config.duplicated_versions and
-               arch in config.versions_arches.get(version, config.arches)
-        ]
+    for version, arches in config.arches.items():
+        for arch in arches:
+            if version in config.duplicated_versions and arch in config.versions_arches.get(version, config.arches[version]):
+                if not result.get(arch):
+                    result[arch] = []
+                result[arch].append(config.duplicated_versions[version])
 
     return result

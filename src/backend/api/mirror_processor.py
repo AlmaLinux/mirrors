@@ -41,6 +41,7 @@ from yaml_snippets.data_models import (
 from yaml_snippets.utils import (
     HEADERS,
     mirror_available,
+    optional_modules_available,
     is_url_available,
     WHITELIST_MIRRORS,
     check_tasks,
@@ -401,6 +402,15 @@ class MirrorProcessor:
             mirror_info.name,
         )
         mirror_info.status = 'ok'
+        
+        for module in main_config.optional_module_versions.keys():
+            await optional_modules_available(
+                mirror_info=mirror_info,
+                http_session=self.client,
+                main_config=main_config,
+                logger=self.logger,
+                module=module
+            )
 
     async def is_mirror_expired(
             self,
@@ -453,11 +463,13 @@ class MirrorProcessor:
     def get_mirror_iso_uris(
             self,
             versions: set[str],
-            arches: list[str],
+            arches: list,
+            duplicated_versions
     ) -> list[str]:
         result = []
         for version in versions:
-            for arch in arches:
+            base_version = next((i for i in duplicated_versions if duplicated_versions[i] == version), version)
+            for arch in arches[base_version]:
                 for iso_file_template in self.iso_files_templates:
                     iso_file = iso_file_template.format(
                         version=f'{version}'

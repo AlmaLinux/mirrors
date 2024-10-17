@@ -2,6 +2,8 @@
 import json
 from ipaddress import ip_network, IPv4Network, IPv6Network
 
+from collections import defaultdict
+
 from geoip2.errors import AddressNotFoundError
 from sqlalchemy import (
     Column,
@@ -59,6 +61,22 @@ class Url(Base):
         return {
             self.type: self.url,
         }
+        
+        
+class ModuleUrl(Base):
+    __tablename__ = 'module_urls'
+
+    id = Column(Integer, nullable=False, primary_key=True)
+    url = Column(String, nullable=False)
+    type = Column(String, nullable=False)
+    module = Column(String, nullable=False)
+
+    def to_dict(self) -> dict[str, str]:
+        return {
+            self.module: {
+                self.type: self.url
+            }
+        }
 
 
 mirrors_urls = Table(
@@ -73,6 +91,23 @@ mirrors_urls = Table(
     Column(
         'url_id', Integer, ForeignKey(
             'urls.id',
+            ondelete='CASCADE',
+        )
+    ),
+)
+
+mirrors_module_urls = Table(
+    'mirrors_module_urls',
+    Base.metadata,
+    Column(
+        'mirror_id', Integer, ForeignKey(
+            'mirrors.id',
+            ondelete='CASCADE',
+        ),
+    ),
+    Column(
+        'module_url_id', Integer, ForeignKey(
+            'module_urls.id',
             ondelete='CASCADE',
         )
     ),
@@ -139,10 +174,16 @@ class Mirror(Base):
     monopoly = Column(Boolean, nullable=True, default=False)
     ipv6 = Column(Boolean, nullable=False, default=False)
     has_full_iso_set = Column(Boolean, nullable=False, default=False)
+    has_optional_modules = Column(String, nullable=True)
     urls = relationship(
         'Url',
         secondary=mirrors_urls,
         passive_deletes=True,
+    )
+    module_urls = relationship(
+        'ModuleUrl',
+        secondary=mirrors_module_urls,
+        passive_deletes=True
     )
     subnets = relationship(
         'Subnet',
@@ -172,6 +213,12 @@ class Mirror(Base):
         return func.abs(self.longitude - lon) + func.abs(self.latitude - lat)
 
     def to_dataclass(self) -> MirrorData:
+        def format_module_urls(module_urls):
+            result = defaultdict(dict)
+            for url in module_urls:
+                result[url.module].update({url.type: url.url})
+            return dict(result)
+
         return MirrorData(
             name=self.name,
             ip=self.ip,
@@ -194,6 +241,7 @@ class Mirror(Base):
             urls={
                 url.type: url.url for url in self.urls
             },
+            module_urls=format_module_urls(self.module_urls),
             subnets=[subnet.subnet for subnet in self.subnets],
             subnets_int=[(int(subnet.subnet_start), int(subnet.subnet_end)) for subnet in self.subnets_int],
             cloud_type=self.cloud_type,
@@ -204,6 +252,7 @@ class Mirror(Base):
             mirror_url=self.mirror_url,
             iso_url=self.iso_url,
             has_full_iso_set=self.has_full_iso_set,
+            has_optional_modules=self.has_optional_modules
         )
 
     def get_subnets(self) -> list[str]:

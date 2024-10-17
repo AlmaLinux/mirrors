@@ -17,6 +17,9 @@ from api.handlers import (
     get_all_mirrors,
     get_isos_list_by_countries,
     get_main_isos_table,
+    get_allowed_arch,
+    check_optional_version,
+    get_optional_module_from_version,
     SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
     SERVICE_CONFIG_PATH, get_allowed_version, get_allowed_arch,
 )
@@ -50,7 +53,8 @@ app = Flask('app')
 app.url_map.strict_slashes = False
 Bootstrap(app)
 logger = get_logger(__name__)
-init_sentry_client()
+if os.getenv('SENTRY_DSN'):
+    init_sentry_client()
 cache = FlaskCacheEngine.get_instance(app)
 cache_ro = FlaskCacheEngineRo.get_instance(app)
 
@@ -84,7 +88,7 @@ def _get_request_ip(*args, **kwargs) -> Optional[str]:
     return test_ip_address or result
 
 
-def make_redis_key(ip = None, protocol = None, country = None, *args, **kwargs) -> str:
+def make_redis_key(ip = None, protocol = None, country = None, module = None, *args, **kwargs) -> str:
     if not ip:
         ip = _get_request_ip()
     cache_key = f'{ip}'
@@ -92,6 +96,8 @@ def make_redis_key(ip = None, protocol = None, country = None, *args, **kwargs) 
         cache_key = f'{cache_key}_{protocol}'
     if country:
         cache_key = f'{cache_key}_{country}'
+    if module:
+        cache_key = f'{cache_key}_{module}'
     return cache_key
 
 
@@ -150,23 +156,43 @@ def get_mirror_list(
         version: str,
         repository: str
 ):
+    config = get_config(
+        logger=logger,
+        path_to_config=SERVICE_CONFIG_PATH,
+        path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
+    )
+    
+    # protocol get arg
     request_protocol = request.args.get('protocol')
     if request_protocol and request_protocol not in ["http","https"]:
         return "Invalid input for protocol, valid options: http, https"
+    # country get arg
     request_country = request.args.get('country')
     if request_country and len(request_country) != 2:
         return "Invalid input for country, valid options are 2 letter country codes"
+    # arch get arg
+    request_arch = request.args.get('arch')
+    if request_arch:
+        if not get_allowed_arch(arch=request_arch, version=version, arches=config.arches, duplicated_versions=config.duplicated_versions):
+            return f"Invalid arch/version combination requested, valid options are {config.arches}"
+    
+    # check if optional module
+    module = None
+    if version in check_optional_version(version=version, optional_module_versions=config.optional_module_versions):
+        module = get_optional_module_from_version(version=version, optional_module_versions=config.optional_module_versions)
+    
     ip_address = _get_request_ip()
 
     mirrors = get_mirrors_list(
         ip_address=ip_address,
         version=version,
-        arch=None,
+        arch=request_arch,
         repository=repository,
         request_protocol=request_protocol,
         request_country=request_country,
         debug_info=False,
-        redis_key=make_redis_key(ip=ip_address, protocol=request_protocol, country=request_country)
+        redis_key=make_redis_key(ip=ip_address, protocol=request_protocol, country=request_country, module=module),
+        module=module
     )
 
     return '\n'.join(mirrors)
@@ -279,10 +305,13 @@ def isos(
             vault_versions=[],
             duplicated_versions=config.duplicated_versions,
             version=version,
+            optional_module_versions=config.optional_module_versions
         )
         arch = get_allowed_arch(
             arch=arch,
+            version=version,
             arches=config.arches,
+            duplicated_versions=config.duplicated_versions
         )
         data.update({
             'arch': arch,

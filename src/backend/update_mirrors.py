@@ -27,6 +27,7 @@ from api.handlers import get_all_mirrors_db
 
 from db.models import (
     Url,
+    ModuleUrl,
     Mirror,
     Subnet,
     SubnetInt,
@@ -102,7 +103,8 @@ async def update_mirrors_handler() -> str:
             mirror_iso_uris = mirror_processor.get_mirror_iso_uris(
                 versions=set(main_config.versions) -
                          set(main_config.duplicated_versions),
-                arches=main_config.arches
+                arches=main_config.arches,
+                duplicated_versions=main_config.duplicated_versions
             )
             subnets = await get_aws_subnets(
                 http_session=mirror_processor.client
@@ -136,7 +138,15 @@ async def update_mirrors_handler() -> str:
                         type=url_type,
                     ) for url_type, url in mirror_info.urls.items()
                 ]
-                db_session.add_all(urls_to_create)
+                module_urls_to_create = [
+                    ModuleUrl(
+                        url=url,
+                        type=url_type,
+                        module=module
+                    )
+                    for module, url_info in mirror_info.module_urls.items()
+                    for url_type, url in url_info.items()
+                ]
                 mirror_to_create = Mirror(
                     name=mirror_info.name,
                     continent=mirror_info.geolocation.continent,
@@ -159,10 +169,12 @@ async def update_mirrors_handler() -> str:
                     cloud_type=mirror_info.cloud_type,
                     cloud_region=mirror_info.cloud_region,
                     urls=urls_to_create,
+                    module_urls=module_urls_to_create,
                     private=mirror_info.private,
                     monopoly=mirror_info.monopoly,
                     asn=','.join(mirror_info.asn),
                     has_full_iso_set=mirror_info.has_full_iso_set,
+                    has_optional_modules=mirror_info.has_optional_modules
                 )
                 
                 db_session.add(mirror_to_create)
