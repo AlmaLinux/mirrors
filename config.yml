@@ -1,5 +1,5 @@
 ---
-config_version: 2
+config_version: 3
 allowed_outdate: 12h
 mirrors_dir: mirrors.d
 versions:
@@ -7,6 +7,10 @@ versions:
   - "8.10"
   - "9"
   - "9.4"
+# requires full version in arches, no base version inheritance
+optional_module_versions:
+  kitten:
+    - "10"
 # it's also used for mapping <major version>:<full version>
 # if a client requests only major version
 duplicated_versions:
@@ -34,11 +38,24 @@ vault_versions:
   - "9.4-beta"
   - "9.5-beta"
 vault_mirror: http://vault.almalinux.org/
+# concat option_module_versions in the format <version>-<module>
 arches:
-  - x86_64
-  - aarch64
-  - ppc64le
-  - s390x
+  "10-kitten":
+    - x86_64
+    - x86_64_v2
+    - aarch64
+    - ppc64le
+    - s390x
+  "9":
+    - x86_64
+    - aarch64
+    - ppc64le
+    - s390x
+  "8":
+    - x86_64
+    - aarch64
+    - ppc64le
+    - s390x
 # one of them should be in a mirror's config
 required_protocols:
   - http
