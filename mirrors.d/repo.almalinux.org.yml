@@ -4,6 +4,10 @@ address:
   http: http://repo.almalinux.org/almalinux/
   https: https://repo.almalinux.org/almalinux/
   rsync: rsync://rsync.repo.almalinux.org/almalinux
+address_optional:
+  kitten:
+    http: http://repo.almalinux.org/almalinux-kitten
+    https: https://repo.almalinux.org/almalinux-kitten
 geolocation:
   country: US
   state_province: GA
@@ -17,5 +21,6 @@ sponsor_url: https://www.almalinux.org
 # Remove these comments before submitting your pull request.
 email: hello@almalinux.org
 # This prevents mirror from serving double-duty since it is currently the same as the KH mirror
-private: true
+# private: true
+# repo.almalinux.org is now on fastly CDN, so we'll just let it serve for atlanta
 ...
