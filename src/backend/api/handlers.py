@@ -570,7 +570,7 @@ def get_mirrors_list(
                 )
         else:
             full_mirror_path = urljoin(
-                urls.get('http') or urls.get('https') + '/',
+                urls.get('http', urls.get('https', None)) + '/',
                 f'{version}/{repo_path}',
                 )
         if arch:
