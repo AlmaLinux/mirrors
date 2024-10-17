@@ -1,8 +1,12 @@
 ---
 name: almalinux-mirror.yucca.net
 address:
-  http: http://almalinux-mirror.yucca.net
-  https: https://almalinux-mirror.yucca.net
+  http: http://almalinux-mirror.yucca.net/almalinux/
+  https: https://almalinux-mirror.yucca.net/almalinux/
+address_optional:
+  kitten:
+    http: http://almalinux-mirror.yucca.net/almalinux-kitten/
+    https: https://almalinux-mirror.yucca.net/almalinux-kitten/
 geolocation:
   country: US
   state_province: NM
