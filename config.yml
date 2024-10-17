@@ -89,6 +89,13 @@ repos:
       - x86_64
   - name: extras
     path: extras/$basearch/os/
+    versions:
+      - "8.10"
+      - "9.4"
+  - name: extras-common
+    path: extras-common/$basearch/os/
+    versions:
+      - "10-kitten"
   - name: ha
     path: HighAvailability/$basearch/os/
     versions:
@@ -164,6 +171,9 @@ repos:
   - name: extras-source
     path: extras/Source/
     vault: true
+    versions:
+      - "8.10"
+      - "9.4"
   - name: ha-source
     path: HighAvailability/Source/
     vault: true
