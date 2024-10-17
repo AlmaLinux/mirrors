@@ -21,6 +21,14 @@
                 "versions": {
                     "$ref": "#/definitions/Versions"
                 },
+                "optional_module_versions": {
+                    "type": "object",
+                    "patternProperties": {
+                        "^.*$": {
+                            "$ref": "#/definitions/Versions"
+                        }
+                    }
+                },
                 "duplicated_versions": {
                     "type": "object",
                     "patternProperties": {

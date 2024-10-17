@@ -55,7 +55,10 @@
                     }
                 },
                 "arches": {
-                    "$ref": "#/definitions/Arches"
+                    "type": "object",
+                    "items": {
+                        "$ref": "#/definitions/ArchesVersions"
+                    }
                 },
                 "repos": {
                     "type": "array",
@@ -110,12 +113,23 @@
             ],
             "title": "Repo"
         },
+        "ArchesVersions": {
+            "type": "object",
+            "additionalProperties": false,
+            "patternProperties": {
+                "^.*$": {
+                    "$ref": "#/definitions/Arches"
+                }
+            },
+            "title": "ArchesVersions"
+        },
         "Arches": {
             "type": "array",
             "contains": {
                 "type": "string",
                 "enum": [
                     "x86_64",
+                    "x86_64_v2",
                     "aarch64",
                     "ppc64le",
                     "s390x"

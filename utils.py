@@ -259,6 +259,7 @@ def process_main_config(
             mirrors_dir=yaml_data['mirrors_dir'],
             vault_mirror=yaml_data.get('vault_mirror'),
             versions=[str(version) for version in yaml_data['versions']],
+            optional_module_versions=yaml_data.get('optional_module_versions', {}),
             duplicated_versions=duplicated_versions,
             vault_versions=vault_versions,
             arches=yaml_data['arches'],
@@ -381,6 +382,11 @@ def process_mirror_config(
         email=yaml_data.get('email', 'unknown'),
         urls={
             _type: url for _type, url in yaml_data['address'].items()
+        },
+        module_urls = {
+            module: {
+                _type: url for _type, url in urls.items()
+            } for module, urls in yaml_data.get('address_optional', {}).items()
         },
         subnets=_get_mirror_subnets(
             subnets_field=yaml_data.get('subnets', []),
@@ -621,4 +627,101 @@ async def mirror_available(
             'Mirror "%s" is available',
             mirror_name,
         )
+    return result, reason
+
+
+async def optional_modules_available(
+        mirror_info: MirrorData,
+        http_session: ClientType,
+        main_config: MainConfig,
+        logger: Logger,
+        module: str
+):
+    if not mirror_info.module_urls or not mirror_info.module_urls.get(module):
+        return
+    
+    mirror_name = mirror_info.name
+    logger.info('Checking optional module "%s" on mirror "%s"...', module, mirror_name)
+    if mirror_info.private:
+        logger.info(
+            'Mirror "%s" is private and optional modules won\'t be checked',
+            mirror_name,
+        )
+        return True
+    urls_for_checking = {}
+    
+    for ver in main_config.optional_module_versions[module]:
+        for repo_data in main_config.repos:
+            repo_versions = repo_data.versions
+            if repo_versions and f'{ver}-{module}' not in repo_versions:
+                continue
+            if repo_data.vault:
+                continue
+            arches = _get_arches_for_version(
+                repo_arches=repo_data.arches,
+                global_arches=main_config.arches[f'{ver}-{module}'],
+            )
+            for arch in arches:
+                if not _is_permitted_arch_for_this_version_and_repo(
+                    version=f'{ver}-{module}',
+                    arch=arch,
+                    versions_arches=main_config.versions_arches,
+                ):
+                    continue
+                repo_path = repo_data.path.replace('$basearch', arch)
+                url_for_check = urljoin(
+                    urljoin(
+                        urljoin(
+                            mirror_info.mirror_url + '/',
+                            f'{ver}-{module}',
+                        ) + '/',
+                        repo_path,
+                    ) + '/',
+                    'repodata/repomd.xml',
+                )
+                urls_for_checking[url_for_check] = {
+                    'version': f'{ver}-{module}',
+                    'repo_path': repo_path,
+                    'module': module
+                }
+
+    success_msg = (
+        'Mirror "%(name)s" optional module "%(module)s" is available by url "%(url)s"'
+    )
+    error_msg = (
+        'Mirror "%(name)s" optional module "%(module)s" is not available for version '
+        '"%(version)s" and repo path "%(repo)s" because "%(err)s"'
+    )
+    
+    mirror_availability_semaphore = asyncio.Semaphore(5)
+    tasks = [asyncio.ensure_future(
+        is_url_available(
+            url=check_url,
+            http_session=http_session,
+            logger=logger,
+            is_get_request=True,
+            success_msg=success_msg,
+            success_msg_vars=None,
+            error_msg=error_msg,
+            error_msg_vars={
+                'name': mirror_name,
+                'version': url_info['version'],
+                'repo': url_info['repo_path'],
+                'module': url_info['module'],
+            },
+            sem=mirror_availability_semaphore
+        )
+    ) for check_url, url_info in urls_for_checking.items()]
+    result, reason = await check_tasks(tasks)
+
+    if result:
+        logger.info(
+            'Mirror "%s" optional module "%s" is available',
+            mirror_name,
+            module
+        )
+        if not mirror_info.has_optional_modules:
+            mirror_info.has_optional_modules = module
+        else:
+            mirror_info.has_optional_modules = f'{mirror_info.has_optional_modules},{module}'
     return result, reason

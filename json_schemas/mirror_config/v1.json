@@ -46,6 +46,39 @@
                         }
                     ]
                 },
+                "address_optional": {
+                    "type": "object",
+                    "patternProperties": {
+                        "^(kitten)$": {
+                            "properties": {
+                                "http": {
+                                    "type": "string"
+                                },
+                                "https": {
+                                    "type": "string"
+                                },
+                                "rsync": {
+                                    "type": "string"
+                                },
+                                "ftp": {
+                                    "type": "string"
+                                }
+                            },
+                            "anyOf": [
+                                {
+                                    "required": [
+                                        "http"
+                                    ]
+                                },
+                                {
+                                    "required": [
+                                        "https"
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                },
                 "geolocation": {
                     "type": "object",
                     "properties": {

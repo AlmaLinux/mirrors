@@ -94,6 +94,8 @@ class MirrorData:
     asn: list[str] = None
     monopoly: bool = False
     urls: dict[str, str] = field(default_factory=dict)
+    module_urls: dict[str, list] = field(default_factory=dict)
+    has_optional_modules: Optional[str] = None
     subnets: list[str] = field(default_factory=list)
     subnets_int: list[tuple] = field(default_factory=tuple)
     has_full_iso_set: bool = False
@@ -123,10 +125,12 @@ class MirrorData:
             isos_link=dct.get('isos_link'),
             asn=dct.get('asn'),
             urls=dct.get('urls'),
+            module_urls=dct.get('module_urls'),
             subnets=dct.get('subnets'),
             subnets_int=dct.get('subnets_int'),
             monopoly=dct.get('monopoly'),
             has_full_iso_set=dct.get('has_full_iso_set'),
+            has_optional_modules=dct.get('has_optional_modules')
         )
 
     def to_json(self):
@@ -148,6 +152,7 @@ class MainConfig:
     mirrors_dir: str
     vault_mirror: str
     versions: list[str] = field(default_factory=list)
+    optional_module_versions: dict[list] = field(default_factory=dict)
     arches: list = field(default_factory=list)
     duplicated_versions: dict[str, str] = field(default_factory=dict)
     vault_versions: list[str] = field(default_factory=list)
