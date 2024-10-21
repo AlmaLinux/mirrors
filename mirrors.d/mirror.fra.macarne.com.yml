@@ -3,6 +3,10 @@ name: mirror.fra.macarne.com
 address:
   http: http://mirror.fra.macarne.com/almalinux/
   https: https://mirror.fra.macarne.com/almalinux/
+address_optional:
+  kitten:
+    http: http://mirror.fra.macarne.com/alma-kitten/
+    https: https://mirror.fra.macarne.com/alma-kitten/
 geolocation:
   country: DE
   state_province: Hessen
