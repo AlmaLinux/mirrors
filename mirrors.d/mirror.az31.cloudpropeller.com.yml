@@ -13,4 +13,8 @@ sponsor: Cloud Propeller, Inc.
 sponsor_url: https://cloudpropeller.com
 email: mirror@cloudpropeller.com
 asn: 397018
+address_optional:
+  kitten:
+    http: http://mirror.az31.cloudpropeller.com/almalinux-kitten/
+    https: https://mirror.az31.cloudpropeller.com/almalinux-kitten/
 ...
