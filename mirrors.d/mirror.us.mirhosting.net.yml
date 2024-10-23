@@ -1,0 +1,15 @@
+---
+name: mirror.us.mirhosting.net
+address:
+  http: http://mirror.us.mirhosting.net/almalinux/
+  https: https://mirror.us.mirhosting.net/almalinux/
+  rsync: rsync://mirror.us.mirhosting.net/almalinux
+update_frequency: 3h
+geolocation:
+  country: US
+  state_province: NY
+  city: New York
+sponsor: MIRhosting
+sponsor_url: https://mirhosting.com/
+email: mirror@mirhosting.com
+...

@@ -1,0 +1,13 @@
+---
+name: alma-repo.atm.svcs.io
+address:
+  http: http://alma-repo.atm.svcs.io/
+  https: https://alma-repo.atm.svcs.io/
+update_frequency: 6h
+sponsor: CloudLinux Inc.
+sponsor_url: https://cloudlinux.com
+email: support@cloudlinux.com
+private: true
+subnets:
+  - 77.79.198.14/32
+...

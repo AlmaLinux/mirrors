@@ -1,0 +1,12 @@
+---
+name: alma.mirror.nyuad.nyu.edu
+address:
+  https: https://alma.mirror.nyuad.nyu.edu
+update_frequency: 3h
+sponsor: New York University in Abu Dhabi
+sponsor_url: https://nyuad.nyu.edu/en/
+email: nyuad.cran@nyu.edu
+geolocation:
+  country: AE
+  state_province: Abu Dhabi
+  city: Abu Dhabi

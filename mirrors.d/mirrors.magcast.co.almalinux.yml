@@ -1,0 +1,14 @@
+---
+name: mirrors.magcast.co
+address:
+  https: https://mirrors.magcast.co/Linux/AlmaLinux/
+update_frequency: 3h
+geolocation:
+  continent: Europe
+  country: DE
+  state_province: Saxony
+  city: Falkenstein
+sponsor: MagCast
+sponsor_url: https://magcast.co/
+email: mirrors@magcast.co
+...

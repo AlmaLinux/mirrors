@@ -4,6 +4,10 @@ address:
   http: http://atl.mirrors.knownhost.com/almalinux
   https: https://atl.mirrors.knownhost.com/almalinux
   rsync: rsync://atl.mirrors.knownhost.com/almalinux
+address_optional:
+  kitten:
+    http: http://atl.mirrors.knownhost.com/almalinux-kitten
+    https: https://atl.mirrors.knownhost.com/almalinux-kitten
 update_frequency: 1h
 geolocation:
   city: Atlanta
@@ -14,6 +18,10 @@ sponsor_url: https://www.knownhost.com
 email: mirrors@knownhost.com
 subnets:
   - 64.74.200.0/22
-  - 67.222.0.0/24
+  - 67.222.0.0/21
+  - 67.222.24.0/21
   - 170.249.192.0/19
+  - 2600:4c00:200::/39
+  - 2600:4c00:400::/40
+  - 2600:4c00:80::/41
 ...

@@ -1,0 +1,14 @@
+---
+name: mirror.ibcp.fr
+address:
+  http: http://mirror.ibcp.fr/pub/almalinux/
+  https: http://mirror.ibcp.fr/pub/almalinux/
+geolocation:
+  country: FR
+  state_province: Rhone
+  city: Lyon
+update_frequency: 3h
+sponsor: CNRS IBCP
+sponsor_url: https://www.ibcp.fr
+email: webmaster@ibcp.fr
+...

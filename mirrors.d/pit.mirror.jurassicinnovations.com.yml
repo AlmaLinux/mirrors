@@ -1,0 +1,14 @@
+---
+name: pit.mirror.jurassicinnovations.com
+address:
+  http: http://pit.mirror.jurassicinnovations.com/almalinux/
+  https: https://pit.mirror.jurassicinnovations.com/almalinux/
+geolocation:
+  country: US
+  state_province: Pennsylvania
+  city: Pittsburgh
+update_frequency: 15m
+sponsor: Jurassic Innovations, LLC
+sponsor_url: https://jurassicinnovations.com
+email: mirror@jurassicinnovations.com
+...

@@ -1,0 +1,15 @@
+---
+name: mirrors.onenet.net
+address:
+  http: http://mirrors.onenet.net/almalinux/
+  https: https://mirrors.onenet.net/almalinux/
+geolocation:
+  country: US
+  state_province: OK
+  city: Tulsa
+update_frequency: 3h
+sponsor: onenet
+sponsor_url: https://www.onenet.net
+email: support@onenet.net
+asn: 5078
+...

@@ -3,7 +3,12 @@ name: linuxsoft.cern.ch
 address:
   http: http://linuxsoft.cern.ch/almalinux/
   https: https://linuxsoft.cern.ch/almalinux/
-  rsync: rsync://linuxsoft.cern.ch/almalinux/
+  rsync: rsync://rsync-linuxsoft.cern.ch/almalinux/
+address_optional:
+  kitten:
+    http: http://linuxsoft.cern.ch/almalinux-kitten/
+    https: https://linuxsoft.cern.ch/almalinux-kitten/
+    rsync: rsync://rsync-linuxsoft.cern.ch/almalinux-kitten/
 geolocation:
   country: CH
   state_province: Geneva
@@ -12,3 +17,4 @@ update_frequency: 12h
 sponsor: CERN
 sponsor_url: https://home.cern/
 email: linux-team@cern.ch
+asn: 513

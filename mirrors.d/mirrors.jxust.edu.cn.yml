@@ -1,0 +1,14 @@
+---
+name: mirrors.jxust.edu.cn
+address:
+  http: http://mirrors.jxust.edu.cn/almalinux/
+  https: https://mirrors.jxust.edu.cn/almalinux/
+geolocation:
+  country: CN
+  state_province: Jiangxi
+  city: Ganzhou 
+update_frequency: 3h
+sponsor: Jiangxi University of Science and Technology
+sponsor_url: https://www.jxust.edu.cn
+email: mirrors@jxust.edu.cn
+...

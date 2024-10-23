@@ -2,6 +2,9 @@
 name: mirror.team-cymru.com
 address:
   http: http://mirror.team-cymru.com/almalinux
+  https: https://mirror.team-cymru.com/almalinux
+  rsync: rsync://mirror.team-cymru.com/Almalinux
+  ftp: ftp://mirror.team-cymru.com/almalinux
 geolocation:
   country: US
   state_province: Illinois

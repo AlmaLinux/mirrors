@@ -1,0 +1,16 @@
+---
+name: mirror.ox.ac.uk
+address:
+  http: http://mirror.ox.ac.uk/sites/repo.almalinux.org/
+  https: https://mirror.ox.ac.uk/sites/repo.almalinux.org/
+  ftp: ftp://mirror.ox.ac.uk/sites/repo.almalinux.org/
+  rsync: rsync://mirror.ox.ac.uk/sites/repo.almalinux.org/
+geolocation:
+  country: UK
+  state_province: Oxfordshire
+  city: Oxford
+update_frequency: 3h
+sponsor: University of Oxford
+sponsor_url: https://www.ox.ac.uk
+email: unix-team-comms@it.ox.ac.uk
+private: false

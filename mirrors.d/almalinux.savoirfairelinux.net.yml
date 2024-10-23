@@ -1,0 +1,14 @@
+---
+name: almalinux.savoirfairelinux.net
+address:
+  http: http://almalinux.savoirfairelinux.net/
+  https: https://almalinux.savoirfairelinux.net/
+geolocation:
+  country: CA
+  state_province: QC
+  city: Montreal
+update_frequency: 3h
+sponsor: Savoir-faire Linux
+sponsor_url: https://savoirfairelinux.com
+email: support@savoirfairelinux.com
+...

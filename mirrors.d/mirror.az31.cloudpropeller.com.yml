@@ -1,0 +1,20 @@
+---
+name: mirror.az31.cloudpropeller.com
+address:
+  http: http://mirror.az31.cloudpropeller.com/almalinux/
+  https: https://mirror.az31.cloudpropeller.com/almalinux/
+geolocation:
+  continent: North America
+  country: US
+  state_province: Ohio
+  city: Columbus
+update_frequency: 1h
+sponsor: Cloud Propeller, Inc.
+sponsor_url: https://cloudpropeller.com
+email: mirror@cloudpropeller.com
+asn: 397018
+address_optional:
+  kitten:
+    http: http://mirror.az31.cloudpropeller.com/almalinux-kitten/
+    https: https://mirror.az31.cloudpropeller.com/almalinux-kitten/
+...

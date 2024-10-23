@@ -1,0 +1,14 @@
+---
+name: den.aws.repo.almalinux.org
+address:
+  http: http://den.aws.repo.almalinux.org
+  https: https://den.aws.repo.almalinux.org
+update_frequency: 1h
+geolocation:
+  country: US
+  state_province: Colorado
+  city: Denver
+sponsor: Amazon Web Services
+sponsor_url: https://aws.amazon.com
+email: infra-team@almalinux.org
+...

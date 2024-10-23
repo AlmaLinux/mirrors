@@ -1,0 +1,14 @@
+---
+name: almalinux.jetserver.co.il
+address:
+  http: http://almalinux.jetserver.co.il
+  https: https://almalinux.jetserver.co.il
+update_frequency: 3h
+geolocation:
+  country: IL
+  state_province: Haifa
+  city: Haifa
+sponsor: JetServer Cloud LTD
+sponsor_url: https://jetserver.co.il
+email: support@jetserver.co.il
+...
