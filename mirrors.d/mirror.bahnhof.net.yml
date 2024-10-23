@@ -17,4 +17,5 @@ email: mirror-admin@bahnhof.net
 geolocation:
   country: SE
   city: Stockholm
+  state_province: Stockholm
 ...
