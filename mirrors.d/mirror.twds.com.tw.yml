@@ -16,7 +16,7 @@ email: mirror@twds.tw
 geolocation:
   continent: Asia
   country: TW
-  state_province: Taiwan
+  state_province:
   city: Taipei
 private: false
 monopoly: false
