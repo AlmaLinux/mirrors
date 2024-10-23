@@ -3,8 +3,13 @@ name: alma.acidman.thelefty.org
 address:
   http: http://alma.acidman.thelefty.org/almalinux/
   https: https://alma.acidman.thelefty.org/almalinux/
+address_optional:
+  kitten:
+    http: http://alma.acidman.thelefty.org/almalinux-kitten/
+    https: https://alma.acidman.thelefty.org/almalinux-kitten/
 geolocation:
   country: JP
+  state_province: Fukuoka
   city: Fukuoka
 update_frequency: 3h
 sponsor: Monochrome Rainbow
