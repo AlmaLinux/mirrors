@@ -4,6 +4,11 @@ address:
   http: http://mirror.twds.com.tw/almalinux
   https: https://mirror.twds.com.tw/almalinux
   rsync: rsync://mirror.twds.com.tw/almalinux
+address_optional:
+  kitten:
+    http: http://mirror.twds.com.tw/almalinux-kitten
+    https: https://mirror.twds.com.tw/almalinux-kitten
+    rsync: rsync://mirror.twds.com.tw/almalinux-kitten
 update_frequency: 3h
 sponsor: Taiwan Digital Streaming Co.
 sponsor_url: https://www.twds.com.tw
