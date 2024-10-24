@@ -4,6 +4,11 @@ address:
   http: http://mirror.facebook.net/almalinux/
   https: https://mirror.facebook.net/almalinux/
   rsync: rsync://mirror.facebook.net/almalinux/
+address_optional:
+  kitten:
+    http: http://mirror.facebook.net/almalinux-kitten/
+    https: https://mirror.facebook.net/almalinux-kitten/
+    rsync: rsync://mirror.facebook.net/almalinux-kitten/
 geolocation:
   country: US
   state_province: Ashburn

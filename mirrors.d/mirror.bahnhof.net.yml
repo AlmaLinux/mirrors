@@ -5,6 +5,11 @@ address:
   https: https://mirror.bahnhof.net/pub/almalinux/
   rsync: rsync://mirror.bahnhof.net/almalinux/
   ftp: ftp://mirror.bahnhof.net/pub/almalinux/
+address_optional:
+  kitten:
+    http: http://mirror.bahnhof.net/pub/almalinux-kitten/
+    https: https://mirror.bahnhof.net/pub/almalinux-kitten/
+    rsync: rsync://mirror.bahnhof.net/almalinux-kitten/
 update_frequency: 3h
 sponsor: Bahnhof
 sponsor_url: https://www.bahnhof.net
@@ -12,4 +17,5 @@ email: mirror-admin@bahnhof.net
 geolocation:
   country: SE
   city: Stockholm
+  state_province: Stockholm
 ...
