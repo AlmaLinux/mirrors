@@ -4,6 +4,11 @@ address:
   http: http://mirrors.nju.edu.cn/almalinux/
   https: https://mirrors.nju.edu.cn/almalinux/
   rsync: rsync://mirrors.nju.edu.cn/almalinux/
+address_optional:
+  kitten:
+    http: http://mirrors.nju.edu.cn/almalinux-kitten/
+    https: https://mirrors.nju.edu.cn/almalinux-kitten/
+    rsync: rsync://mirrors.nju.edu.cn/almalinux-kitten/
 geolocation:
   country: CN
   state_province: Jiangsu
