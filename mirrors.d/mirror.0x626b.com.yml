@@ -4,11 +4,16 @@ address:
   http: http://mirror.0x626b.com/almalinux/
   https: https://mirror.0x626b.com/almalinux/
   rsync: rsync://mirror.0x626b.com/almalinux
+address_optional:
+  kitten:
+    http: http://mirror.0x626b.com/almalinux-kitten/
+    https: https://mirror.0x626b.com/almalinux-kitten/
+    rsync: rsync://mirror.0x626b.com/almalinux-kitten
 geolocation:
   continent: North America
   country: US
-  state_province: MO
-  city: Kansas City
+  state_province: OR
+  city: Hillsboro
 update_frequency: 3h
 sponsor: Brent Kolasinski
 sponsor_url: https://brentk.io
