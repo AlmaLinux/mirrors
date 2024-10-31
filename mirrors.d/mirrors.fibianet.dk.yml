@@ -16,6 +16,6 @@ email: mirror-admin@fibianet.dk
 geolocation:
   country: DK
   city: Copenhagen
-asn: 
+asn:
   - AS44869
 ...
