@@ -1,0 +1,19 @@
+---
+name: mirrors.nz.zappie.host
+address:
+  http: http://mirrors.nz.zappie.host/almalinux/
+  https: https://mirrors.nz.zappie.host/almalinux/
+  rsync: rsync://mirrors.nz.zappie.host/almalinux
+update_frequency: 2h
+sponsor: Zappie Host
+sponsor_url: https://zappiehost.com
+email: support@zappiehost.com
+geolocation:
+  continent: Oceania
+  country: NZ
+  state_province: AUK
+  city: Auckland
+asn: 61138
+private: false
+monopoly: false
+...
