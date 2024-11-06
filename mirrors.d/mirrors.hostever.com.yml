@@ -3,8 +3,16 @@ name: mirrors.hostever.com
 address:
   http: http://mirrors.hostever.com/almalinux/
   https: https://mirrors.hostever.com/almalinux/
+address_optional:
+  kitten:
+  http: http://mirrors.hostever.com/almalinux-kitten/
+  https: https://mirrors.hostever.com/almalinux-kitten/
 update_frequency: 3h
 sponsor: CodeforHost Inc
 sponsor_url: https://www.codeforhost.com
 email: support@codeforhost.com
+geolocation:
+  continent: Asia
+  country: BD
+  state_province: Dhaka
 ...
