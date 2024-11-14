@@ -16,7 +16,7 @@ optional_module_versions:
 # if a client requests only major version
 duplicated_versions:
   "8": "8.10"
-  "9": "9.4"
+  "9": "9.5"
 vault_versions:
   - "8.3"
   - "8.4"
