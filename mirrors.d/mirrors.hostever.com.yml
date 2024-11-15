@@ -12,8 +12,7 @@ geolocation:
    country: BD
    state_province: Dhaka
    city: Dhaka
-asn:
-   - 140068
+asn: 140068
 update_frequency: 3h
 sponsor: CodeforHost Inc
 sponsor_url: https://www.codeforhost.com
