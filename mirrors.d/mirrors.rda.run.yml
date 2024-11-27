@@ -2,6 +2,11 @@
 name: mirrors.rda.run
 address:
   https: https://mirrors.rda.run/almalinux/
+  rsync: rsync://rsync.rda.run/almalinux/
+address_optional:
+  kitten:
+    https: https://mirrors.rda.run/almalinux-kitten/
+    rsync: rsync://rsync.rda.run/almalinux-kitten/
 geolocation:
   continent: South America
   country: BR
