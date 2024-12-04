@@ -1,7 +1,9 @@
 name: mirror.quickhost.uk
 address:
-  http: http://mirror.quickhost.uk/AlmaLinux/
-  https: https://mirror.quickhost.uk/AlmaLinux/
+  http: http://mirror.quickhost.uk/almalinux/
+address_optional:
+  kitten:
+    http: http://mirror.quickhost.uk/almalinux-kitten/
 update_frequency: 6h
 geolocation:
   country: GB
