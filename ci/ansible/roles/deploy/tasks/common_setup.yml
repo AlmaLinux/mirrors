@@ -18,6 +18,7 @@
     state: yes
     name: httpd_can_network_connect
     persistent: yes
+  when: ansible_facts.selinux.status == 'enabled'
 
 - name: Set config_root
   set_fact:

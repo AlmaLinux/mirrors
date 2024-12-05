@@ -1,54 +1,40 @@
 # coding=utf-8
-import asyncio
-import itertools
 import os
 import random
-import time
 from collections import defaultdict
-from inspect import signature
-from pathlib import Path
+from dataclasses import asdict
 from typing import Optional, Union
 from urllib.parse import urljoin
 
-import dateparser
-from dataclasses import asdict
 from sqlalchemy.orm import joinedload
+from sqlalchemy.sql.expression import or_
 
 from api.exceptions import UnknownRepoAttribute
-from api.mirror_processor import MirrorProcessor
-from db.db_engine import FlaskCacheEngine, FlaskCacheEngineRo
-from yaml_snippets.utils import (
-    get_config,
-    get_mirrors_info,
-)
 from api.redis import (
     _generate_redis_key_for_the_mirrors_list,
-    MIRRORS_LIST_EXPIRED_TIME,
     CACHE_EXPIRED_TIME
 )
 from api.utils import (
     get_geo_data_by_ip,
-    get_aws_subnets,
-    get_azure_subnets,
     sort_mirrors_by_distance_and_country,
     randomize_mirrors_within_distance,
 )
+from common.sentry import get_logger
+from db.db_engine import FlaskCacheEngine, FlaskCacheEngineRo
+from db.models import (
+    Mirror,
+    get_asn_by_ip,
+    is_ip_in_any_subnet,
+)
+from db.utils import session_scope
 from yaml_snippets.data_models import (
     RepoData,
     MainConfig,
     MirrorData,
 )
-from db.models import (
-    Url,
-    mirrors_urls,
-    Mirror,
-    get_asn_by_ip,
-    is_ip_in_any_subnet,
-    Subnet,
+from yaml_snippets.utils import (
+    get_config,
 )
-from db.utils import session_scope
-from sqlalchemy.sql.expression import or_
-from common.sentry import get_logger
 
 logger = get_logger(__name__)
 cache = FlaskCacheEngine.get_instance()
@@ -404,12 +390,17 @@ def _is_vault_repo(
 
 
 def get_allowed_arch(
-        arch: str,
-        version: float,
-        arches: list,
-        duplicated_versions: dict[str, str]
+    arch: str,
+    version: str,
+    arches: dict[str, list[str]],
 ) -> str:
-    version = next((i for i in duplicated_versions if duplicated_versions[i] == version), version)
+    version = next(
+        (
+            i for i in arches
+            if version.startswith(i)
+        ),
+        version,
+    )
     if arch not in arches[version]:
         raise UnknownRepoAttribute(
             'Unknown architecture "%s". Allowed list of arches "%s"',
@@ -428,11 +419,15 @@ def get_allowed_version(
 ) -> str:
 
     if version not in versions and version not in vault_versions:
-        optional_versions = check_optional_version(version=version, optional_module_versions=optional_module_versions)
+        optional_versions = check_optional_version(
+            version=version,
+            optional_module_versions=optional_module_versions,
+        )
         if version not in optional_versions:
             try:
                 major_version = next(
-                    ver for ver in duplicated_versions if version.startswith(ver)
+                    ver for ver in duplicated_versions
+                    if version.startswith(ver)
                 )
                 return duplicated_versions[major_version]
             except StopIteration:
@@ -475,7 +470,7 @@ def get_mirrors_list(
         debug_info: bool = False,
         redis_key: Optional[str] = None,
         module: Optional[str] = None
-) -> Union[str, dict]:
+) -> Union[list[str], dict]:
     mirrors_list = []
     config = get_config(
         logger=logger,
@@ -518,9 +513,8 @@ def get_mirrors_list(
         return [os.path.join(
             vault_mirror,
             version,
-            repo_path,
+            repo_path.replace('$basearch', arch),
         )]
-
 
     if redis_key:
         nearest_mirrors = cache_ro.get(redis_key)
@@ -610,7 +604,10 @@ def get_main_isos_table(config: MainConfig) -> dict[str, list[str]]:
     result = defaultdict(list)
     for version, arches in config.arches.items():
         for arch in arches:
-            if version in config.duplicated_versions and arch in config.versions_arches.get(version, config.arches[version]):
+            if (
+                version in config.duplicated_versions and
+                arch in config.arches[version]
+            ):
                 if not result.get(arch):
                     result[arch] = []
                 result[arch].append(config.duplicated_versions[version])

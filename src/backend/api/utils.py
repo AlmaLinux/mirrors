@@ -1,6 +1,5 @@
 # coding=utf-8
 import inspect
-import os
 import asyncio
 
 import time
@@ -15,7 +14,7 @@ from typing import (
 
 from aiohttp import (
     ClientSession,
-    ClientConnectorError,
+    ClientError,
 )
 from aiohttp_retry.types import ClientType
 from bs4 import BeautifulSoup
@@ -25,7 +24,6 @@ from db.db_engine import GeoIPEngine, FlaskCacheEngine, ContinentEngine
 from yaml_snippets.data_models import MirrorData
 from api.exceptions import (
     BaseCustomException,
-    AuthException,
 )
 from flask import (
     Response,
@@ -130,7 +128,7 @@ def error_result(f):
 
 
 def get_geo_data_by_ip(
-        ip: str
+    ip: str,
 ) -> Optional[tuple[str, str, str, str, float, float]]:
     """
     The function returns continent, country and locations of IP in English
@@ -176,7 +174,7 @@ async def get_azure_subnets_json(
                 raise_for_status=True
         ) as resp:
             response_text = await resp.text()
-    except (ClientConnectorError, TimeoutError) as err:
+    except (ClientError, asyncio.exceptions.TimeoutError) as err:
         logger.error(
             'Cannot get json with Azure subnets by url "%s" because "%s"',
             url,
@@ -187,7 +185,7 @@ async def get_azure_subnets_json(
         soup = BeautifulSoup(response_text, features='lxml')
         link_tag = soup.find('a', attrs=link_attributes)
         link_to_json_url = link_tag.attrs['href']
-    except (ValueError, KeyError) as err:
+    except (ValueError, KeyError, AttributeError) as err:
         logger.error(
             'Cannot get json link with Azure '
             'subnets from page content because "%s',
@@ -203,7 +201,7 @@ async def get_azure_subnets_json(
             response_json = await resp.json(
                 content_type='application/octet-stream',
             )
-    except (ClientConnectorError, asyncio.exceptions.TimeoutError) as err:
+    except (ClientError, asyncio.exceptions.TimeoutError) as err:
         logger.error(
             'Cannot get json with Azure subnets by url "%s" because "%s"',
             link_to_json_url,
@@ -222,7 +220,7 @@ async def get_aws_subnets_json(http_session: ClientSession) -> Optional[dict]:
                 raise_for_status=True
         ) as resp:
             response_json = await resp.json()
-    except (ClientConnectorError, TimeoutError) as err:
+    except (ClientError, TimeoutError) as err:
         logger.error(
             'Cannot get json with AWS subnets by url "%s" because "%s"',
             url,

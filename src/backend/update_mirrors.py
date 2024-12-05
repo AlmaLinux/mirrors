@@ -3,28 +3,33 @@ import asyncio
 import itertools
 import os
 import time
-import json
 from inspect import signature
-from urllib.parse import urljoin
-from sqlalchemy import insert
-import dateparser
+from ipaddress import (
+    ip_network,
+    IPv4Network,
+    IPv6Network
+)
 
+import dateparser
+from flask import (
+    Flask
+)
+from flask_bs4 import Bootstrap
+from sqlalchemy import insert
+
+from api.handlers import (
+    get_all_mirrors_db,
+    SERVICE_CONFIG_PATH,
+    MIRROR_CONFIG_JSON_SCHEMA_DIR_PATH,
+    SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
+)
 from api.mirror_processor import MirrorProcessor
-from db.db_engine import FlaskCacheEngine
-from yaml_snippets.utils import (
-    get_config,
-    get_mirrors_info,
-)
-from api.redis import (
-    _generate_redis_key_for_the_mirrors_list,
-    MIRRORS_LIST_EXPIRED_TIME,
-)
 from api.utils import (
     get_aws_subnets,
     get_azure_subnets,
 )
-from api.handlers import get_all_mirrors_db
-
+from common.sentry import get_logger, init_sentry_client
+from db.db_engine import FlaskCacheEngine
 from db.models import (
     Url,
     ModuleUrl,
@@ -34,44 +39,19 @@ from db.models import (
     mirrors_subnets_int
 )
 from db.utils import session_scope
-from common.sentry import get_logger
-from ipaddress import (
-    ip_network,
-    IPv4Network,
-    IPv6Network
-)
-
-logger = get_logger(__name__)
-cache = FlaskCacheEngine.get_instance()
-
-
-LENGTH_GEO_MIRRORS_LIST = 10
-LENGTH_CLOUD_MIRRORS_LIST = 10
-SERVICE_CONFIG_PATH = os.path.join(
-    os.environ['CONFIG_ROOT'],
-    'mirrors/updates/config.yml'
-)
-SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH = os.path.join(
-    os.environ['SOURCE_PATH'],
-    'src/backend/yaml_snippets/json_schemas/service_config'
-)
-MIRROR_CONFIG_JSON_SCHEMA_DIR_PATH = os.path.join(
-    os.environ['SOURCE_PATH'],
-    'src/backend/yaml_snippets/json_schemas/mirror_config'
-)
-
-from flask_bs4 import Bootstrap
-
-from flask import (
-    Flask
+from yaml_snippets.utils import (
+    get_config,
+    get_mirrors_info,
 )
 
 app = Flask('app')
 app.url_map.strict_slashes = False
 Bootstrap(app)
 logger = get_logger(__name__)
-# init_sentry_client()
+if os.getenv('SENTRY_DSN'):
+    init_sentry_client()
 cache = FlaskCacheEngine.get_instance(app)
+
 
 async def update_mirrors_handler() -> str:
     main_config = get_config(
@@ -101,8 +81,10 @@ async def update_mirrors_handler() -> str:
                 logger=logger,
         ) as mirror_processor:  # type: MirrorProcessor
             mirror_iso_uris = mirror_processor.get_mirror_iso_uris(
-                versions=set(main_config.versions) -
-                         set(main_config.duplicated_versions),
+                versions=(
+                    set(main_config.versions) -
+                    set(main_config.duplicated_versions)
+                ),
                 arches=main_config.arches,
                 duplicated_versions=main_config.duplicated_versions
             )
