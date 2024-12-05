@@ -1,15 +1,16 @@
 # coding=utf-8
 from __future__ import annotations
+
+import json
 from collections import defaultdict
-from json import JSONEncoder
-from typing import Optional
 from dataclasses import (
     dataclass,
     field,
     is_dataclass,
     asdict,
 )
-import json
+from json import JSONEncoder
+from typing import Optional
 
 
 class DataClassesJSONEncoder(JSONEncoder):
@@ -94,7 +95,7 @@ class MirrorData:
     asn: list[str] = None
     monopoly: bool = False
     urls: dict[str, str] = field(default_factory=dict)
-    module_urls: dict[str, list] = field(default_factory=dict)
+    module_urls: dict[str, dict] = field(default_factory=dict)
     has_optional_modules: Optional[str] = None
     subnets: list[str] = field(default_factory=list)
     subnets_int: list[tuple] = field(default_factory=tuple)
@@ -152,7 +153,7 @@ class MainConfig:
     mirrors_dir: str
     vault_mirror: str
     versions: list[str] = field(default_factory=list)
-    optional_module_versions: dict[list] = field(default_factory=dict)
+    optional_module_versions: dict[str, list] = field(default_factory=dict)
     arches: list = field(default_factory=list)
     duplicated_versions: dict[str, str] = field(default_factory=dict)
     vault_versions: list[str] = field(default_factory=list)

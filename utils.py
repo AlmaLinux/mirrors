@@ -120,7 +120,7 @@ AIOHTTP_TIMEOUT = 30
 
 
 async def check_tasks(
-        created_tasks: list[asyncio.Task],
+    created_tasks: list[asyncio.Task],
 ) -> tuple[bool, Optional[str]]:
     done_tasks, pending_tasks = await asyncio.wait(
         created_tasks,
@@ -140,15 +140,15 @@ async def check_tasks(
 
 
 async def is_url_available(
-        url: str,
-        http_session: ClientType,
-        logger: Logger,
-        is_get_request: bool,
-        success_msg: Optional[str],
-        success_msg_vars: Optional[dict],
-        error_msg: Optional[str],
-        error_msg_vars: Optional[dict],
-        sem: asyncio.Semaphore = None
+    url: str,
+    http_session: ClientType,
+    logger: Logger,
+    is_get_request: bool,
+    success_msg: Optional[str],
+    success_msg_vars: Optional[dict],
+    error_msg: Optional[str],
+    error_msg_vars: Optional[dict],
+    sem: asyncio.Semaphore = None
 ):
     if not sem:
         sem = asyncio.Semaphore(1)
@@ -185,7 +185,7 @@ async def is_url_available(
 
 
 def load_json_schema(
-        path: str,
+    path: str,
 ) -> dict:
     """
     Load and return JSON schema from a file by path
@@ -195,8 +195,8 @@ def load_json_schema(
 
 
 def config_validation(
-        yaml_data: dict,
-        json_schema: dict,
+    yaml_data: dict,
+    json_schema: dict,
 ) -> tuple[bool, Optional[str]]:
     """
     Validate some YAML content by JSON schema
@@ -232,16 +232,33 @@ def process_main_config(
             repo_name: str,
             repo_attributes: list[str],
             attributes: dict[str, list[str]],
-            version: str = None,
+            version: Optional[str] = None,
     ) -> list[str]:
         for repo_arch in repo_attributes:
-            # rules for major versions listed in duplicates will be used if found
+            # Rules for major versions listed
+            # in duplicates will be used if found
             if version:
-                version = next((i for i in yaml_data['duplicated_versions'] if yaml_data['duplicated_versions'][i] == version), version)
-            if repo_arch not in attributes.get(version, list(set(val for sublist in attributes.values() for val in sublist))) and repo_arch not in yaml_data['arches']:
+                version = next(
+                    (
+                        i for i in yaml_data['duplicated_versions']
+                        if yaml_data['duplicated_versions'][i] == version
+                    ),
+                    version
+                )
+            attrs = attributes.get(
+                version,
+                list(set(
+                    val for sublist in attributes.values()
+                    for val in sublist
+                ))
+            )
+            if (
+                repo_arch not in attrs and
+                repo_arch not in yaml_data['arches']
+            ):
                 raise ValidationError(
                     f'Attr "{repo_arch}" of repo "{repo_name}" is absent '
-                    f'in the main list of attrs "{", ".join(attributes.get(version, list(set(val for sublist in attributes.values() for val in sublist))))}"'
+                    f'in the main list of attrs "{", ".join(attrs)}"'
                 )
         return repo_attributes
 
@@ -259,7 +276,9 @@ def process_main_config(
             mirrors_dir=yaml_data['mirrors_dir'],
             vault_mirror=yaml_data.get('vault_mirror'),
             versions=[str(version) for version in yaml_data['versions']],
-            optional_module_versions=yaml_data.get('optional_module_versions', {}),
+            optional_module_versions=yaml_data.get(
+                'optional_module_versions', {}
+            ),
             duplicated_versions=duplicated_versions,
             vault_versions=vault_versions,
             arches=yaml_data['arches'],
@@ -276,14 +295,18 @@ def process_main_config(
                         repo_name=repo['name'],
                         repo_attributes=repo.get('arches', []),
                         attributes=yaml_data['arches'],
-                        version=repo.get('versions', [None])[0]  # Assuming each repo has at least one version
+                        # Assuming each repo has at least one version
+                        version=repo.get('versions', [None])[0]
                     ),
                     versions=_process_repo_attributes(
                         repo_name=repo['name'],
                         repo_attributes=[
                             str(ver) for ver in repo.get('versions', [])
                         ],
-                        attributes={str(ver): yaml_data['versions'] for ver in repo.get('versions', [])}
+                        attributes={
+                            str(ver): yaml_data['versions']
+                            for ver in repo.get('versions', [])
+                        }
                     ),
                     vault=repo.get('vault', False),
                 ) for repo in yaml_data['repos']
@@ -294,15 +317,15 @@ def process_main_config(
 
 
 def get_config(
-        logger: Logger,
-        path_to_config: str = os.path.join(
-            os.getenv('CONFIG_ROOT', '.'),
-            'mirrors/updates/config.yml'
-        ),
-        path_to_json_schema: str = os.path.join(
-            os.path.dirname(os.path.realpath(__file__)),
-            'json_schemas/service_config',
-        ),
+    logger: Logger,
+    path_to_config: str = os.path.join(
+        os.getenv('CONFIG_ROOT', '.'),
+        'mirrors/updates/config.yml'
+    ),
+    path_to_json_schema: str = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        'json_schemas/service_config',
+    ),
 ) -> Optional[MainConfig]:
     """
     Read, validate, parse and return main config of the mirrors service
@@ -336,9 +359,9 @@ def get_config(
 
 
 def process_mirror_config(
-        yaml_data: dict,
-        logger: Logger,
-        main_config: MainConfig,
+    yaml_data: dict,
+    logger: Logger,
+    main_config: MainConfig,
 ) -> MirrorData:
     """
     Process data of a mirror config
@@ -383,8 +406,8 @@ def process_mirror_config(
         urls={
             _type: url for _type, url in yaml_data['address'].items()
         },
-        module_urls = {
-            module: {
+        module_urls={
+            str(module): {
                 _type: url for _type, url in urls.items()
             } for module, urls in yaml_data.get('address_optional', {}).items()
         },
@@ -410,13 +433,13 @@ def process_mirror_config(
 
 
 def get_mirror_config(
-        logger: Logger,
-        path_to_config: Path,
-        main_config: MainConfig,
-        path_to_json_schema: str = os.path.join(
-            os.path.dirname(os.path.realpath(__file__)),
-            'json_schemas/mirror_config',
-        ),
+    logger: Logger,
+    path_to_config: Path,
+    main_config: MainConfig,
+    path_to_json_schema: str = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        'json_schemas/mirror_config',
+    ),
 ) -> Optional[MirrorData]:
     """
     Read, validate, parse and return config of a mirror
@@ -455,13 +478,13 @@ def get_mirror_config(
 
 
 def get_mirrors_info(
-        mirrors_dir: str,
-        logger: Logger,
-        main_config: MainConfig,
-        path_to_json_schema: str = os.path.join(
-            os.path.dirname(os.path.realpath(__file__)),
-            'json_schemas/service_config',
-        ),
+    mirrors_dir: str,
+    logger: Logger,
+    main_config: MainConfig,
+    path_to_json_schema: str = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        'json_schemas/service_config',
+    ),
 ) -> list[MirrorData]:
     """
     Extract info about all mirrors from yaml files
@@ -487,8 +510,8 @@ def get_mirrors_info(
 
 
 def _get_arches_for_version(
-        repo_arches: list[str],
-        global_arches: list[str],
+    repo_arches: list[str],
+    global_arches: list[str],
 ) -> list[str]:
     """
     Get the available arches for specific version
@@ -503,9 +526,9 @@ def _get_arches_for_version(
 
 
 def _is_permitted_arch_for_this_version_and_repo(
-        version: str,
-        arch: str,
-        versions_arches: dict[str, list[str]]
+    version: str,
+    arch: str,
+    versions_arches: dict[str, list[str]]
 ) -> bool:
     if version not in versions_arches:
         return True
@@ -516,8 +539,8 @@ def _is_permitted_arch_for_this_version_and_repo(
 
 
 def get_mirror_url(
-        main_config: MainConfig,
-        mirror_info: MirrorData,
+    main_config: MainConfig,
+    mirror_info: MirrorData,
 ):
     return next(
         url for url_type, url in mirror_info.urls.items()
@@ -526,10 +549,10 @@ def get_mirror_url(
 
 
 async def mirror_available(
-        mirror_info: MirrorData,
-        http_session: ClientType,
-        main_config: MainConfig,
-        logger: Logger,
+    mirror_info: MirrorData,
+    http_session: ClientType,
+    main_config: MainConfig,
+    logger: Logger,
 ) -> tuple[bool, Optional[str]]:
     """
     Check mirror availability
@@ -546,7 +569,7 @@ async def mirror_available(
             'Mirror "%s" is private and won\'t be checked',
             mirror_name,
         )
-        return True
+        return True, None
     urls_for_checking = {}
     for version in main_config.versions:
         # cloud mirrors (Azure/AWS) don't store beta versions
@@ -556,12 +579,20 @@ async def mirror_available(
         if version in main_config.duplicated_versions:
             continue
         for repo_data in main_config.repos:
-            if mirror_info.name in WHITELIST_MIRRORS_PER_ARCH_REPO and \
-                    repo_data.name not in WHITELIST_MIRRORS_PER_ARCH_REPO[mirror_info.name]['repos']:
+            if (
+                mirror_info.name in WHITELIST_MIRRORS_PER_ARCH_REPO and
+                repo_data.name not in WHITELIST_MIRRORS_PER_ARCH_REPO[mirror_info.name]['repos']
+            ):
                 continue
             if repo_data.vault:
                 continue
-            base_version = next((i for i in main_config.duplicated_versions if main_config.duplicated_versions[i] == version), version)
+            base_version = next(
+                (
+                    i for i in main_config.duplicated_versions
+                    if main_config.duplicated_versions[i] == version
+                ),
+                version
+            )
             arches = _get_arches_for_version(
                 repo_arches=repo_data.arches,
                 global_arches=main_config.arches[base_version],
@@ -570,8 +601,10 @@ async def mirror_available(
             if repo_versions and version not in repo_versions:
                 continue
             for arch in arches:
-                if mirror_info.name in WHITELIST_MIRRORS_PER_ARCH_REPO and \
-                        arch not in WHITELIST_MIRRORS_PER_ARCH_REPO[mirror_info.name]['arches']:
+                if (
+                    mirror_info.name in WHITELIST_MIRRORS_PER_ARCH_REPO and
+                    arch not in WHITELIST_MIRRORS_PER_ARCH_REPO[mirror_info.name]['arches']
+                ):
                     continue
                 if not _is_permitted_arch_for_this_version_and_repo(
                     version=version,
@@ -631,17 +664,20 @@ async def mirror_available(
 
 
 async def optional_modules_available(
-        mirror_info: MirrorData,
-        http_session: ClientType,
-        main_config: MainConfig,
-        logger: Logger,
-        module: str
+    mirror_info: MirrorData,
+    http_session: ClientType,
+    main_config: MainConfig,
+    logger: Logger,
+    module: str
 ):
     if not mirror_info.module_urls or not mirror_info.module_urls.get(module):
         return
     
     mirror_name = mirror_info.name
-    logger.info('Checking optional module "%s" on mirror "%s"...', module, mirror_name)
+    logger.info(
+        'Checking optional module "%s" on mirror "%s"...', module,
+        mirror_name,
+    )
     if mirror_info.private:
         logger.info(
             'Mirror "%s" is private and optional modules won\'t be checked',
@@ -686,10 +722,12 @@ async def optional_modules_available(
                 }
 
     success_msg = (
-        'Mirror "%(name)s" optional module "%(module)s" is available by url "%(url)s"'
+        'Mirror "%(name)s" optional module "%(module)s" '
+        'is available by url "%(url)s"'
     )
     error_msg = (
-        'Mirror "%(name)s" optional module "%(module)s" is not available for version '
+        'Mirror "%(name)s" optional module "%(module)s" '
+        'is not available for version '
         '"%(version)s" and repo path "%(repo)s" because "%(err)s"'
     )
     
@@ -723,5 +761,7 @@ async def optional_modules_available(
         if not mirror_info.has_optional_modules:
             mirror_info.has_optional_modules = module
         else:
-            mirror_info.has_optional_modules = f'{mirror_info.has_optional_modules},{module}'
+            mirror_info.has_optional_modules = (
+                f'{mirror_info.has_optional_modules},{module}'
+            )
     return result, reason
