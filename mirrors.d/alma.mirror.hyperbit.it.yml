@@ -1,0 +1,14 @@
+---
+name: alma.mirror.hyperbit.it
+address:
+  http: http://alma.mirror.hyperbit.it
+  https: https://alma.mirror.hyperbit.it
+update_frequency: 1h
+geolocation:
+  country: IT
+  state_province: Milan
+  city: Milan
+sponsor: HyperBit SRLs
+sponsor_url: https://hyperbit.it
+email: noc@hyperbit.it
+...
