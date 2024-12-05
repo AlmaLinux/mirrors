@@ -235,13 +235,29 @@ def process_main_config(
             version: str = None,
     ) -> list[str]:
         for repo_arch in repo_attributes:
-            # rules for major versions listed in duplicates will be used if found
+            # Rules for major versions listed
+            # in duplicates will be used if found
             if version:
-                version = next((i for i in yaml_data['duplicated_versions'] if yaml_data['duplicated_versions'][i] == version), version)
-            if repo_arch not in attributes.get(version, list(set(val for sublist in attributes.values() for val in sublist))) and repo_arch not in yaml_data['arches']:
+                version = next(
+                    (
+                        i for i in yaml_data['duplicated_versions']
+                        if yaml_data['duplicated_versions'][i] == version
+                    ),
+                    version,
+                )
+            ver_attrs = attributes.get(
+                version,
+                list(set(
+                    val for sublist in attributes.values() for val in sublist
+                ))
+            )
+            if (
+                repo_arch not in ver_attrs and
+                repo_arch not in yaml_data['arches']
+            ):
                 raise ValidationError(
                     f'Attr "{repo_arch}" of repo "{repo_name}" is absent '
-                    f'in the main list of attrs "{", ".join(attributes.get(version, list(set(val for sublist in attributes.values() for val in sublist))))}"'
+                    f'in the main list of attrs "{", ".join(ver_attrs)}"'
                 )
         return repo_attributes
 
@@ -259,14 +275,12 @@ def process_main_config(
             mirrors_dir=yaml_data['mirrors_dir'],
             vault_mirror=yaml_data.get('vault_mirror'),
             versions=[str(version) for version in yaml_data['versions']],
-            optional_module_versions=yaml_data.get('optional_module_versions', {}),
+            optional_module_versions=yaml_data.get(
+                'optional_module_versions', {}
+            ),
             duplicated_versions=duplicated_versions,
             vault_versions=vault_versions,
             arches=yaml_data['arches'],
-            versions_arches={
-                arch: versions for arch, versions in
-                yaml_data.get('versions_arches', {}).items()
-            },
             required_protocols=yaml_data['required_protocols'],
             repos=[
                 RepoData(
@@ -276,14 +290,18 @@ def process_main_config(
                         repo_name=repo['name'],
                         repo_attributes=repo.get('arches', []),
                         attributes=yaml_data['arches'],
-                        version=repo.get('versions', [None])[0]  # Assuming each repo has at least one version
+                        # Assuming each repo has at least one version
+                        version=repo.get('versions', [None])[0]
                     ),
                     versions=_process_repo_attributes(
                         repo_name=repo['name'],
                         repo_attributes=[
                             str(ver) for ver in repo.get('versions', [])
                         ],
-                        attributes={str(ver): yaml_data['versions'] for ver in repo.get('versions', [])}
+                        attributes={
+                            str(ver): yaml_data['versions']
+                            for ver in repo.get('versions', [])
+                        }
                     ),
                     vault=repo.get('vault', False),
                 ) for repo in yaml_data['repos']
@@ -383,7 +401,7 @@ def process_mirror_config(
         urls={
             _type: url for _type, url in yaml_data['address'].items()
         },
-        module_urls = {
+        module_urls={
             module: {
                 _type: url for _type, url in urls.items()
             } for module, urls in yaml_data.get('address_optional', {}).items()
@@ -505,11 +523,11 @@ def _get_arches_for_version(
 def _is_permitted_arch_for_this_version_and_repo(
         version: str,
         arch: str,
-        versions_arches: dict[str, list[str]]
+        arches: dict[str, list[str]]
 ) -> bool:
-    if version not in versions_arches:
+    if version not in arches:
         return True
-    elif version in versions_arches and arch in versions_arches[version]:
+    elif version in arches and arch in arches[version]:
         return True
     else:
         return False
@@ -522,6 +540,26 @@ def get_mirror_url(
     return next(
         url for url_type, url in mirror_info.urls.items()
         if url_type in main_config.required_protocols
+    )
+
+
+def _is_excluded_mirror_by_repo(
+    mirror_name: str,
+    repo_name: str,
+) -> bool:
+    return (
+        mirror_name in WHITELIST_MIRRORS_PER_ARCH_REPO and
+        repo_name not in WHITELIST_MIRRORS_PER_ARCH_REPO[mirror_name]['repos']
+    )
+
+
+def _is_excluded_mirror_by_arch(
+    mirror_name: str,
+    arch: str,
+) -> bool:
+    return (
+        mirror_name in WHITELIST_MIRRORS_PER_ARCH_REPO and
+        arch not in WHITELIST_MIRRORS_PER_ARCH_REPO[mirror_name]['arches']
     )
 
 
@@ -546,7 +584,7 @@ async def mirror_available(
             'Mirror "%s" is private and won\'t be checked',
             mirror_name,
         )
-        return True
+        return True, None
     urls_for_checking = {}
     for version in main_config.versions:
         # cloud mirrors (Azure/AWS) don't store beta versions
@@ -556,12 +594,20 @@ async def mirror_available(
         if version in main_config.duplicated_versions:
             continue
         for repo_data in main_config.repos:
-            if mirror_info.name in WHITELIST_MIRRORS_PER_ARCH_REPO and \
-                    repo_data.name not in WHITELIST_MIRRORS_PER_ARCH_REPO[mirror_info.name]['repos']:
+            if _is_excluded_mirror_by_repo(
+                mirror_name=mirror_name,
+                repo_name=repo_data.name,
+            ):
                 continue
             if repo_data.vault:
                 continue
-            base_version = next((i for i in main_config.duplicated_versions if main_config.duplicated_versions[i] == version), version)
+            base_version = next(
+                (
+                    i for i in main_config.arches
+                    if version.startswith(i)
+                ),
+                version
+            )
             arches = _get_arches_for_version(
                 repo_arches=repo_data.arches,
                 global_arches=main_config.arches[base_version],
@@ -570,13 +616,15 @@ async def mirror_available(
             if repo_versions and version not in repo_versions:
                 continue
             for arch in arches:
-                if mirror_info.name in WHITELIST_MIRRORS_PER_ARCH_REPO and \
-                        arch not in WHITELIST_MIRRORS_PER_ARCH_REPO[mirror_info.name]['arches']:
+                if _is_excluded_mirror_by_arch(
+                    mirror_name=mirror_name,
+                    arch=arch,
+                ):
                     continue
                 if not _is_permitted_arch_for_this_version_and_repo(
-                    version=version,
+                    version=base_version,
                     arch=arch,
-                    versions_arches=main_config.versions_arches,
+                    arches=main_config.arches,
                 ):
                     continue
                 repo_path = repo_data.path.replace('$basearch', arch)
@@ -641,7 +689,10 @@ async def optional_modules_available(
         return
     
     mirror_name = mirror_info.name
-    logger.info('Checking optional module "%s" on mirror "%s"...', module, mirror_name)
+    logger.info(
+        'Checking optional module "%s" on mirror "%s"...', module,
+        mirror_name,
+    )
     if mirror_info.private:
         logger.info(
             'Mirror "%s" is private and optional modules won\'t be checked',
@@ -665,14 +716,18 @@ async def optional_modules_available(
                 if not _is_permitted_arch_for_this_version_and_repo(
                     version=f'{ver}-{module}',
                     arch=arch,
-                    versions_arches=main_config.versions_arches,
+                    arches=main_config.arches,
                 ):
                     continue
                 repo_path = repo_data.path.replace('$basearch', arch)
+                module_urls = mirror_info.module_urls[module]
                 url_for_check = urljoin(
                     urljoin(
                         urljoin(
-                            mirror_info.module_urls[module].get('http', mirror_info.module_urls[module].get('https', None)) + '/',
+                            (
+                                module_urls.get('http') or
+                                module_urls.get('https')
+                            ) + '/',
                             f'{ver}-{module}',
                         ) + '/',
                         repo_path,
@@ -686,10 +741,12 @@ async def optional_modules_available(
                 }
 
     success_msg = (
-        'Mirror "%(name)s" optional module "%(module)s" is available by url "%(url)s"'
+        'Mirror "%(name)s" optional module "%(module)s" '
+        'is available by url "%(url)s"'
     )
     error_msg = (
-        'Mirror "%(name)s" optional module "%(module)s" is not available for version '
+        'Mirror "%(name)s" optional module "%(module)s" '
+        'is not available for version '
         '"%(version)s" and repo path "%(repo)s" because "%(err)s"'
     )
     
@@ -723,5 +780,7 @@ async def optional_modules_available(
         if not mirror_info.has_optional_modules:
             mirror_info.has_optional_modules = module
         else:
-            mirror_info.has_optional_modules = f'{mirror_info.has_optional_modules},{module}'
+            mirror_info.has_optional_modules = (
+                f'{mirror_info.has_optional_modules},{module}'
+            )
     return result, reason
