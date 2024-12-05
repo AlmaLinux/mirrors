@@ -3,28 +3,33 @@ import asyncio
 import itertools
 import os
 import time
-import json
 from inspect import signature
-from urllib.parse import urljoin
-from sqlalchemy import insert
-import dateparser
+from ipaddress import (
+    ip_network,
+    IPv4Network,
+    IPv6Network
+)
 
+import dateparser
+from flask import (
+    Flask
+)
+from flask_bs4 import Bootstrap
+from sqlalchemy import insert
+
+from api.handlers import (
+    get_all_mirrors_db,
+    SERVICE_CONFIG_PATH,
+    SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
+    MIRROR_CONFIG_JSON_SCHEMA_DIR_PATH,
+)
 from api.mirror_processor import MirrorProcessor
-from db.db_engine import FlaskCacheEngine
-from yaml_snippets.utils import (
-    get_config,
-    get_mirrors_info,
-)
-from api.redis import (
-    _generate_redis_key_for_the_mirrors_list,
-    MIRRORS_LIST_EXPIRED_TIME,
-)
 from api.utils import (
     get_aws_subnets,
     get_azure_subnets,
 )
-from api.handlers import get_all_mirrors_db
-
+from common.sentry import get_logger, init_sentry_client
+from db.db_engine import FlaskCacheEngine
 from db.models import (
     Url,
     ModuleUrl,
@@ -34,44 +39,20 @@ from db.models import (
     mirrors_subnets_int
 )
 from db.utils import session_scope
-from common.sentry import get_logger
-from ipaddress import (
-    ip_network,
-    IPv4Network,
-    IPv6Network
-)
-
-logger = get_logger(__name__)
-cache = FlaskCacheEngine.get_instance()
-
-
-LENGTH_GEO_MIRRORS_LIST = 10
-LENGTH_CLOUD_MIRRORS_LIST = 10
-SERVICE_CONFIG_PATH = os.path.join(
-    os.environ['CONFIG_ROOT'],
-    'mirrors/updates/config.yml'
-)
-SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH = os.path.join(
-    os.environ['SOURCE_PATH'],
-    'src/backend/yaml_snippets/json_schemas/service_config'
-)
-MIRROR_CONFIG_JSON_SCHEMA_DIR_PATH = os.path.join(
-    os.environ['SOURCE_PATH'],
-    'src/backend/yaml_snippets/json_schemas/mirror_config'
-)
-
-from flask_bs4 import Bootstrap
-
-from flask import (
-    Flask
+from yaml_snippets.data_models import MirrorData, MainConfig
+from yaml_snippets.utils import (
+    get_config,
+    get_mirrors_info,
 )
 
 app = Flask('app')
 app.url_map.strict_slashes = False
 Bootstrap(app)
 logger = get_logger(__name__)
-# init_sentry_client()
+if os.getenv('SENTRY_DSN'):
+    init_sentry_client()
 cache = FlaskCacheEngine.get_instance(app)
+
 
 async def update_mirrors_handler() -> str:
     main_config = get_config(
@@ -101,8 +82,10 @@ async def update_mirrors_handler() -> str:
                 logger=logger,
         ) as mirror_processor:  # type: MirrorProcessor
             mirror_iso_uris = mirror_processor.get_mirror_iso_uris(
-                versions=set(main_config.versions) -
-                         set(main_config.duplicated_versions),
+                versions=(
+                    set(main_config.versions) -
+                    set(main_config.duplicated_versions)
+                ),
                 arches=main_config.arches,
                 duplicated_versions=main_config.duplicated_versions
             )
@@ -120,7 +103,7 @@ async def update_mirrors_handler() -> str:
                     mirror_info=mirror_info,
                     main_config=main_config,
                     mirror_iso_uris=mirror_iso_uris,
-                    subnets=subnets
+                    subnets=subnets,
                 )
                 for mirror_info in all_mirrors
             ]
@@ -189,33 +172,48 @@ async def update_mirrors_handler() -> str:
                     db_session.add_all(subnets_to_create)
                     mirror_to_create.subnets = subnets_to_create
                     
-                    # convert IP ranges/CIDRs to integers and store in cache so we can
-                    # check if IPs are within subnets faster than the ipaddress module
-                    subnets_int_to_create = []
+                    # Convert IP ranges/CIDRs to integers
+                    # and store in cache so we can
+                    # check if IPs are within subnets faster
+                    # than the ipaddress module
                     for subnet in mirror_info.subnets:
                         subnet = ip_network(subnet)
-                        if isinstance(subnet, IPv4Network) or isinstance(subnet, IPv6Network):
-                            # convert to str so sqlalchemy "magic" doesn't try to make sqlite use it as an int, which ipv6 overflows
+                        if any(isinstance(subnet, net_type) for net_type in (
+                            IPv4Network,
+                            IPv6Network,
+                        )):
+                            # Convert to str so sqlalchemy "magic" doesn't try
+                            # to make sqlite use it as an int,
+                            # which ipv6 overflows
                             start = str(int(subnet.network_address))
                             end = str(int(subnet.broadcast_address))
 
-                            # Using sqlalchemy ORM here is incredibly slow and problematic so we do it a bit more direct
-                            # insert the subnets first, returning their row ids so we can create the proper entries in the association table/FKs
-                            result = db_session.execute(insert(SubnetInt).values(
-                                subnet_start = start,
-                                subnet_end = end
-                            ))
-                            result = db_session.execute(insert(mirrors_subnets_int).values(
-                                mirror_id = mirror_to_create.id,
-                                subnet_int_id = result.inserted_primary_key[0]
-                            ))
-
+                            # Using sqlalchemy ORM here is incredibly slow
+                            # and problematic so we do it a bit more direct
+                            # insert the subnets first, returning their row ids
+                            # so we can create the proper entries
+                            # in the association table/FKs
+                            result = db_session.execute(
+                                insert(SubnetInt)
+                                .values(
+                                    subnet_start=start,
+                                    subnet_end=end,
+                                )
+                            )
+                            subnet_int_id = result.inserted_primary_key[0]
+                            db_session.execute(
+                                insert(mirrors_subnets_int)
+                                .values(
+                                    mirror_id=mirror_to_create.id,
+                                    subnet_int_id=subnet_int_id,
+                                )
+                            )
         db_session.commit()
 
         # update all mirrors lists in the Redis cache
         for args in itertools.product(
                 (True, False),
-                repeat=len(signature(get_all_mirrors_db).parameters)-1,
+                repeat=len(signature(get_all_mirrors_db).parameters) - 1,
         ):
             get_all_mirrors_db(bypass_cache=True, *args)
     finally:
@@ -226,7 +224,13 @@ async def update_mirrors_handler() -> str:
     return message % (time.time() - time1)
 
 
-async def check_mirror(mirror_check_sem, mirror_info, main_config, mirror_iso_uris, subnets):
+async def check_mirror(
+    mirror_check_sem: asyncio.Semaphore,
+    mirror_info: MirrorData,
+    main_config: MainConfig,
+    mirror_iso_uris: list[str],
+    subnets: dict[str, list[str]],
+):
     async with mirror_check_sem:
         async with MirrorProcessor(
                 logger=logger,
@@ -242,7 +246,10 @@ async def check_mirror(mirror_check_sem, mirror_info, main_config, mirror_iso_ur
             await mirror_processor.set_iso_url(
                 mirror_info=mirror_info
             )
-            if mirror_info.status in ('ok', 'expired') and mirror_info.ip not in ('Unknown', None):
+            if (
+                mirror_info.status in ('ok', 'expired') and
+                mirror_info.ip not in ('Unknown', None)
+            ):
                 await mirror_processor.set_subnets_for_cloud_mirror(
                     subnets=subnets,
                     mirror_info=mirror_info
@@ -254,7 +261,10 @@ async def check_mirror(mirror_check_sem, mirror_info, main_config, mirror_iso_ur
                 await mirror_processor.set_geo_and_location_data_from_db(
                     mirror_info=mirror_info
                 )
-                if not mirror_info.private and mirror_info.cloud_type in ('', None):
+                if (
+                    not mirror_info.private and
+                    mirror_info.cloud_type in ('', None)
+                ):
                     await mirror_processor.set_mirror_have_full_iso_set(
                         mirror_info=mirror_info,
                         mirror_iso_uris=mirror_iso_uris

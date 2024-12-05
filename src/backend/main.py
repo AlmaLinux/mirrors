@@ -1,7 +1,7 @@
 # coding=utf-8
 import ipaddress
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
 from dataclasses import asdict
@@ -17,11 +17,12 @@ from api.handlers import (
     get_all_mirrors,
     get_isos_list_by_countries,
     get_main_isos_table,
-    get_allowed_arch,
     check_optional_version,
     get_optional_module_from_version,
     SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
-    SERVICE_CONFIG_PATH, get_allowed_version, get_allowed_arch,
+    SERVICE_CONFIG_PATH,
+    get_allowed_version,
+    get_allowed_arch,
 )
 from werkzeug.exceptions import InternalServerError
 
@@ -30,7 +31,7 @@ from api.exceptions import (
     AuthException,
     UnknownRepoAttribute,
 )
-from api.redis import CACHE_EXPIRED_TIME, URL_TYPES_LIST_EXPIRED_TIME
+from api.redis import URL_TYPES_LIST_EXPIRED_TIME
 from db.db_engine import FlaskCacheEngine, FlaskCacheEngineRo
 from db.models import Url
 from db.utils import session_scope
@@ -39,7 +40,7 @@ from api.utils import (
     success_result,
     error_result,
     jsonify_response,
-    get_geo_data_by_ip,
+    get_debug_geo_info,
 )
 from common.sentry import (
     init_sentry_client,
@@ -47,7 +48,6 @@ from common.sentry import (
 )
 from flask_api.status import HTTP_200_OK
 from flask_bs4 import Bootstrap
-from urllib.parse import urljoin
 
 app = Flask('app')
 app.url_map.strict_slashes = False
@@ -58,14 +58,15 @@ if os.getenv('SENTRY_DSN'):
 cache = FlaskCacheEngine.get_instance(app)
 cache_ro = FlaskCacheEngineRo.get_instance(app)
 
+
 @app.context_processor
 def inject_now_date():
     return {
-        'now': datetime.utcnow(),
+        'now': datetime.now(timezone.utc),
     }
 
 
-def _get_request_ip(*args, **kwargs) -> Optional[str]:
+def _get_request_ip() -> Optional[str]:
     test_ip_address = os.getenv('TEST_IP_ADDRESS', None)
     ip_address = request.headers.get('X-Forwarded-For')
     result = None
@@ -88,7 +89,12 @@ def _get_request_ip(*args, **kwargs) -> Optional[str]:
     return test_ip_address or result
 
 
-def make_redis_key(ip = None, protocol = None, country = None, module = None, *args, **kwargs) -> str:
+def make_redis_key(
+    ip=None,
+    protocol=None,
+    country=None,
+    module=None,
+) -> str:
     if not ip:
         ip = _get_request_ip()
     cache_key = f'{ip}'
@@ -121,23 +127,7 @@ def my_ip_and_headers():
             ips.append(ip.strip())
     result['geodata'] = {}
     for ip in ips:
-        match = get_geo_data_by_ip(ip)
-        (
-            continent,
-            country,
-            state,
-            city_name,
-            latitude,
-            longitude,
-        ) = (None, None, None, None, None, None) if not match else match
-        result['geodata'][ip] = {
-            'continent': continent,
-            'country': country,
-            'state': state,
-            'city': city_name,
-            'latitude': latitude,
-            'longitude': longitude,
-        }
+        result['geodata'][ip] = get_debug_geo_info(ip_address=ip)
 
     return jsonify_response(
         status='ok',
@@ -153,8 +143,8 @@ def my_ip_and_headers():
 @success_result
 @error_result
 def get_mirror_list(
-        version: str,
-        repository: str
+    version: str,
+    repository: str
 ):
     config = get_config(
         logger=logger,
@@ -164,22 +154,39 @@ def get_mirror_list(
     
     # protocol get arg
     request_protocol = request.args.get('protocol')
-    if request_protocol and request_protocol not in ["http","https"]:
-        return "Invalid input for protocol, valid options: http, https"
+    if request_protocol and request_protocol not in ['http', 'https']:
+        return 'Invalid input for protocol, valid options: http, https'
     # country get arg
     request_country = request.args.get('country')
     if request_country and len(request_country) != 2:
-        return "Invalid input for country, valid options are 2 letter country codes"
+        return (
+            'Invalid input for country, '
+            'valid options are 2 letter country codes'
+        )
     # arch get arg
     request_arch = request.args.get('arch')
     if request_arch:
-        if not get_allowed_arch(arch=request_arch, version=version, arches=config.arches, duplicated_versions=config.duplicated_versions):
-            return f"Invalid arch/version combination requested, valid options are {config.arches}"
+        if not get_allowed_arch(
+            arch=request_arch,
+            version=version,
+            arches=config.arches,
+            duplicated_versions=config.duplicated_versions,
+        ):
+            return (
+                'Invalid arch/version combination requested, '
+                f'valid options are {config.arches}'
+            )
     
     # check if optional module
     module = None
-    if version in check_optional_version(version=version, optional_module_versions=config.optional_module_versions):
-        module = get_optional_module_from_version(version=version, optional_module_versions=config.optional_module_versions)
+    if version in check_optional_version(
+        version=version,
+        optional_module_versions=config.optional_module_versions,
+    ):
+        module = get_optional_module_from_version(
+            version=version,
+            optional_module_versions=config.optional_module_versions,
+        )
     
     ip_address = _get_request_ip()
 
@@ -191,7 +198,12 @@ def get_mirror_list(
         request_protocol=request_protocol,
         request_country=request_country,
         debug_info=False,
-        redis_key=make_redis_key(ip=ip_address, protocol=request_protocol, country=request_country, module=module),
+        redis_key=make_redis_key(
+            ip=ip_address,
+            protocol=request_protocol,
+            country=request_country,
+            module=module,
+        ),
         module=module
     )
 
@@ -244,8 +256,8 @@ def get_debug_all_mirrors():
 @success_result
 @error_result
 def get_iso_list(
-        version: str,
-        arch: str,
+    version: str,
+    arch: str,
 ):
     ip_address = _get_request_ip()
     return get_mirrors_list(
@@ -274,8 +286,8 @@ def get_iso_list(
     methods=('GET',),
 )
 def isos(
-        arch: str = None,
-        version: str = None,
+    arch: str = None,
+    version: str = None,
 ):
     data = {
         'main_title': 'AlmaLinux ISOs links'

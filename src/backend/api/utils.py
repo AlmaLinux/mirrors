@@ -1,10 +1,8 @@
 # coding=utf-8
-import inspect
-import os
 import asyncio
-
-import time
+import inspect
 import random
+import time
 from collections import defaultdict
 from functools import wraps
 from typing import (
@@ -19,14 +17,6 @@ from aiohttp import (
 )
 from aiohttp_retry.types import ClientType
 from bs4 import BeautifulSoup
-from geoip2.errors import AddressNotFoundError
-
-from db.db_engine import GeoIPEngine, FlaskCacheEngine, ContinentEngine
-from yaml_snippets.data_models import MirrorData
-from api.exceptions import (
-    BaseCustomException,
-    AuthException,
-)
 from flask import (
     Response,
     jsonify,
@@ -34,15 +24,24 @@ from flask import (
     request,
 )
 from flask_api.status import HTTP_200_OK
-from werkzeug.exceptions import InternalServerError
-from common.sentry import (
-    get_logger,
-)
+from geoip2.errors import AddressNotFoundError
 from haversine import haversine
+from werkzeug.exceptions import InternalServerError
+
+from api.exceptions import BaseCustomException
 from api.redis import (
     get_subnets_from_cache,
     set_subnets_to_cache,
 )
+from common.sentry import (
+    get_logger,
+)
+from db.db_engine import (
+    GeoIPEngine,
+    FlaskCacheEngine,
+    ContinentEngine,
+)
+from yaml_snippets.data_models import MirrorData
 
 logger = get_logger(__name__)
 cache = FlaskCacheEngine.get_instance()
@@ -53,9 +52,9 @@ AIOHTTP_TIMEOUT = 30
 
 
 def jsonify_response(
-        status: str,
-        result: dict[str, Any],
-        status_code: int,
+    status: str,
+    result: dict[str, Any],
+    status_code: int,
 ) -> Response:
     return make_response(
         jsonify(
@@ -68,8 +67,8 @@ def jsonify_response(
 
 
 def textify_response(
-        content: str,
-        status_code: int,
+    content: str,
+    status_code: int,
 ) -> Response:
     response = make_response(
         content,
@@ -130,7 +129,7 @@ def error_result(f):
 
 
 def get_geo_data_by_ip(
-        ip: str
+    ip: str
 ) -> Optional[tuple[str, str, str, str, float, float]]:
     """
     The function returns continent, country and locations of IP in English
@@ -162,8 +161,28 @@ def get_geo_data_by_ip(
     return continent, country, state, city_name, latitude, longitude
 
 
+def get_debug_geo_info(ip_address: str):
+    match = get_geo_data_by_ip(ip_address)
+    (
+        continent,
+        country,
+        state,
+        city_name,
+        latitude,
+        longitude,
+    ) = (None, None, None, None, None, None) if not match else match
+    return {
+        'continent': continent,
+        'country': country,
+        'state': state,
+        'city': city_name,
+        'latitude': latitude,
+        'longitude': longitude,
+    }
+
+
 async def get_azure_subnets_json(
-        http_session: ClientSession,
+    http_session: ClientSession,
 ) -> Optional[dict]:
     url = 'https://www.microsoft.com/en-us/download/confirmation.aspx?id=56519'
     link_attributes = {
@@ -268,12 +287,15 @@ async def get_aws_subnets(http_session: ClientType):
     subnets = defaultdict(list)
     if data_json is None:
         return subnets
-    for v4_prefix in data_json['prefixes']:
-        if v4_prefix['ip_prefix'] not in subnets[v4_prefix['region'].lower()]:
-            subnets[v4_prefix['region'].lower()].append(v4_prefix['ip_prefix'])
-    for v6_prefix in data_json['ipv6_prefixes']:
-        if v6_prefix['ipv6_prefix'] not in subnets[v6_prefix['region'].lower()]:
-            subnets[v6_prefix['region'].lower()].append(v6_prefix['ipv6_prefix'])
+    for key in (
+        'prefixes',
+        'ipv6_prefixes',
+    ):
+        for prefix in data_json[key]:
+            region = prefix['region'].lower()
+            ip_prefix = prefix['ip_prefix']
+            if ip_prefix not in subnets[region]:
+                subnets[region].append(ip_prefix)
     await set_subnets_to_cache(
         key='aws_subnets',
         cache=cache,
@@ -283,8 +305,8 @@ async def get_aws_subnets(http_session: ClientType):
 
 
 def set_subnets_for_hyper_cloud_mirror(
-        subnets: dict[str, list[str]],
-        mirror_info: MirrorData,
+    subnets: dict[str, list[str]],
+    mirror_info: MirrorData,
 ):
     cloud_regions = mirror_info.cloud_region.lower().split(',')
     cloud_type = mirror_info.cloud_type.lower()
@@ -301,17 +323,17 @@ def set_subnets_for_hyper_cloud_mirror(
 
 
 def get_distance_in_km(
-        mirror_coords: tuple[float, float],
-        request_coords: tuple[float, float]
+    mirror_coords: tuple[float, float],
+    request_coords: tuple[float, float]
 ):
     km = int(haversine(mirror_coords, request_coords))
     return km
 
 
 def sort_mirrors_by_distance_and_country(
-        request_geo_data: tuple[float, float],
-        mirrors: list[MirrorData],
-        country: str,
+    request_geo_data: tuple[float, float],
+    mirrors: list[MirrorData],
+    country: str,
 ) -> list[dict[str, Union[int, MirrorData]]]:
     mirrors_sorted = []
     for mirror in mirrors:
@@ -336,9 +358,9 @@ def sort_mirrors_by_distance_and_country(
 
 
 def randomize_mirrors_within_distance(
-        mirrors: list[dict[str, Union[int, MirrorData]]],
-        country: str,
-        shuffle_distance: int = RANDOMIZE_WITHIN_KM,
+    mirrors: list[dict[str, Union[int, MirrorData]]],
+    country: str,
+    shuffle_distance: int = RANDOMIZE_WITHIN_KM,
 ):
     mirrors_in_country_shuffled = [
         mirror['mirror'] for mirror in mirrors if

@@ -1,7 +1,7 @@
 # coding=utf-8
 import json
-
 from typing import Union
+
 from flask_caching import Cache
 
 from common.sentry import (
@@ -18,8 +18,8 @@ CLOUDS_SUBNETS_EXPIRED_TIME = 60 * 60 * 24  # 24 hours
 
 
 async def get_subnets_from_cache(
-        key: str,
-        cache: Cache,
+    key: str,
+    cache: Cache,
 ) -> dict:
     """
     Get a cached subnets of Azure/AWS cloud
@@ -33,9 +33,9 @@ async def get_subnets_from_cache(
 
 
 async def set_subnets_to_cache(
-        key: str,
-        cache: Cache,
-        subnets: dict,
+    key: str,
+    cache: Cache,
+    subnets: dict,
 ) -> None:
     """
     Save a mirror list for specified IP to cache
@@ -48,8 +48,8 @@ async def set_subnets_to_cache(
 
 
 def get_geolocation_from_cache(
-        key: str,
-        cache: Cache,
+    key: str,
+    cache: Cache,
 ) -> Union[tuple[float, float], tuple[None, None]]:
     """
     Get coordinates of a triple of country/state/city from cache
@@ -63,10 +63,10 @@ def get_geolocation_from_cache(
 
 
 def set_geolocation_to_cache(
-        key: str,
-        cache: Cache,
-        latitude: float,
-        longitude: float,
+    key: str,
+    cache: Cache,
+    latitude: float,
+    longitude: float,
 ) -> None:
     """
     Save coordinates of a triple of country/state/city to cache
@@ -82,11 +82,11 @@ def set_geolocation_to_cache(
 
 
 def _generate_redis_key_for_the_mirrors_list(
-        get_working_mirrors: bool = False,
-        get_expired_mirrors: bool = False,
-        get_without_cloud_mirrors: bool = False,
-        get_without_private_mirrors: bool = False,
-        get_mirrors_with_full_set_of_isos: bool = False,
+    get_working_mirrors: bool = False,
+    get_expired_mirrors: bool = False,
+    get_without_cloud_mirrors: bool = False,
+    get_without_private_mirrors: bool = False,
+    get_mirrors_with_full_set_of_isos: bool = False,
 ) -> str:
     """
     Generate key of a redis value by passed options
