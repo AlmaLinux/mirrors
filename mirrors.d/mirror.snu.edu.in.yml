@@ -1,5 +1,5 @@
 ---
-name: mirror.snu.du.in
+name: mirror.snu.edu.in
 address:
   http: http://mirror.snu.edu.in/almalinux/
   https: https://mirror.snu.edu.in/almalinux/
@@ -10,6 +10,6 @@ geolocation:
 update_frequency: 3h
 sponsor: Shiv Nadar Institution of Eminence
 sponsor_url: https://snu.edu.in/
-email: bhuvnesh.sharma@snu.du.in
+email: bhuvnesh.sharma@snu.edu.in
 asn: 132785
 ...
