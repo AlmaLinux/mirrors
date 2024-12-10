@@ -41,18 +41,6 @@
                     },
                     "additionalProperties": false
                 },
-                "versions_arches": {
-                    "type": "object",
-                    "patternProperties": {
-                        "^.*$": {
-                            "$ref": "#/definitions/Arches"
-                        }
-                    },
-                    "propertyNames": {
-                        "$ref": "#/definitions/Version"
-                    },
-                    "additionalProperties": false
-                },
                 "vault_versions": {
                     "$ref": "#/definitions/Versions"
                 },

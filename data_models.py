@@ -94,7 +94,7 @@ class MirrorData:
     asn: list[str] = None
     monopoly: bool = False
     urls: dict[str, str] = field(default_factory=dict)
-    module_urls: dict[str, list] = field(default_factory=dict)
+    module_urls: dict[str, dict] = field(default_factory=dict)
     has_optional_modules: Optional[str] = None
     subnets: list[str] = field(default_factory=list)
     subnets_int: list[tuple] = field(default_factory=tuple)
@@ -152,12 +152,11 @@ class MainConfig:
     mirrors_dir: str
     vault_mirror: str
     versions: list[str] = field(default_factory=list)
-    optional_module_versions: dict[list] = field(default_factory=dict)
-    arches: list = field(default_factory=list)
+    optional_module_versions: dict[str, list[str]] = field(
+        default_factory=dict
+    )
+    arches: dict[str, list] = field(default_factory=dict)
     duplicated_versions: dict[str, str] = field(default_factory=dict)
     vault_versions: list[str] = field(default_factory=list)
-    versions_arches: dict[str, list[str]] = field(
-        default_factory=lambda: defaultdict(list)
-    )
     required_protocols: list[str] = field(default_factory=list)
     repos: list[RepoData] = field(default_factory=list)
