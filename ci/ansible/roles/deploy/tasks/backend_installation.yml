@@ -60,6 +60,7 @@
         - "{{ source_path }}/venv/bin/gunicorn"
       tags:
         - backend_selinux
+  when: ansible_facts.selinux.status == 'enabled'
 
 - name: Prepare started Py script
   template:

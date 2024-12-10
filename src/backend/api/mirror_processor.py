@@ -98,7 +98,7 @@ class MirrorProcessor:
             },
         )
         self.client_session = ClientSession(
-            timeout=ClientTimeout(total=15,connect=10),
+            timeout=ClientTimeout(total=15, connect=10),
             connector=self.tcp_connector,
             headers=HEADERS,
             raise_for_status=True,
@@ -463,12 +463,18 @@ class MirrorProcessor:
     def get_mirror_iso_uris(
             self,
             versions: set[str],
-            arches: list,
+            arches: dict[str, list[str]],
             duplicated_versions
     ) -> list[str]:
         result = []
         for version in versions:
-            base_version = next((i for i in duplicated_versions if duplicated_versions[i] == version), version)
+            base_version = next(
+                (
+                    i for i in arches
+                    if version.startswith(i)
+                ),
+                version,
+            )
             for arch in arches[base_version]:
                 for iso_file_template in self.iso_files_templates:
                     iso_file = iso_file_template.format(
