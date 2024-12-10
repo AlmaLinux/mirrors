@@ -527,10 +527,9 @@ def _is_permitted_arch_for_this_version_and_repo(
 ) -> bool:
     if version not in arches:
         return True
-    elif version in arches and arch in arches[version]:
+    elif arch in arches[version]:
         return True
-    else:
-        return False
+    return False
 
 
 def get_mirror_url(
