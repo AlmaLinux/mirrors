@@ -510,10 +510,15 @@ def get_mirrors_list(
             vault_versions=vault_versions,
             repo=repo
     ):
+        if arch is not None:
+            repo_path = repo_path.replace(
+                '$basearch',
+                arch,
+            )
         return [os.path.join(
             vault_mirror,
             version,
-            repo_path.replace('$basearch', arch),
+            repo_path,
         )]
 
     if redis_key:
