@@ -1,15 +1,15 @@
 # coding=utf-8
 from __future__ import annotations
-from collections import defaultdict
-from json import JSONEncoder
-from typing import Optional
+
+import json
 from dataclasses import (
     dataclass,
     field,
     is_dataclass,
     asdict,
 )
-import json
+from json import JSONEncoder
+from typing import Optional
 
 
 class DataClassesJSONEncoder(JSONEncoder):
