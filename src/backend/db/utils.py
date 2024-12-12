@@ -9,12 +9,12 @@ from alembic.config import Config
 from alembic.runtime.migration import MigrationContext
 from sqlalchemy import event
 from sqlalchemy.engine import Engine as SAEngine
+from sqlalchemy.engine.reflection import Inspector
 from sqlalchemy.exc import OperationalError
+from sqlalchemy.orm import Session
 
 from db.db_engine import Engine
 from db.models import Base
-from sqlalchemy.engine.reflection import Inspector
-from sqlalchemy.orm import Session
 
 BASE_REVISION = 'base'
 
@@ -100,10 +100,10 @@ def create_database_if_not_exists(config: Config) -> None:
 
 
 def make_migrations(
-        config: Config,
-        message: str,
-        alembic_env_path: str,
-        revisions_path: str,
+    config: Config,
+    message: str,
+    alembic_env_path: str,
+    revisions_path: str,
 ) -> None:
     """
     Generates revisions by alembic autogenerate feature

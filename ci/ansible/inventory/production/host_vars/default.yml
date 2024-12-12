@@ -1,0 +1,20 @@
+# true will configure local redis/valkey service and fetch geoip files as necessary for development
+local_dev: false
+# used to set sentry env, valid values are "Production" and "Staging"
+deploy_environment: Production
+secrets_url: https://secrets.almalinux.org:8200
+# ex: https://sentry.local.host/1234
+sentry_dsn: "{{ lookup('community.hashi_vault.hashi_vault', 'kv/data/infra/mirror_service:sentry_dsn',
+  token=lookup('env', 'VAULT_TOKEN'), url=secrets_url) }}"
+# ip address of host to show debug info
+test_ip_address:
+gunicorn_port: 3031
+# IP address of rsyslog server.  If undefined local logs will be used for nginx
+rsyslog_server: "{{ lookup('community.hashi_vault.hashi_vault', 'kv/data/infra/mirror_service:rsyslog_server',
+  token=lookup('env', 'VAULT_TOKEN'), url=secrets_url) }}"
+# ex: redis://localhost:6379
+redis_uri: "{{ lookup('community.hashi_vault.hashi_vault', 'kv/data/infra/mirror_service:redis_uri',
+  token=lookup('env', 'VAULT_TOKEN'), url=secrets_url) }}"
+# ex: redis://localhost:6379
+redis_uri_ro: "{{ lookup('community.hashi_vault.hashi_vault', 'kv/data/infra/mirror_service:redis_uri_ro',
+  token=lookup('env', 'VAULT_TOKEN'), url=secrets_url) }}"

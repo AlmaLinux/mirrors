@@ -1,11 +1,11 @@
 # coding=utf-8
-import os
 import json
+import os
 
-from flask import Flask
 import maxminddb
-from sqlalchemy import create_engine
+from flask import Flask
 from flask_caching import Cache
+from sqlalchemy import create_engine
 
 GEOIP_PATH = os.environ.get('GEOIP_PATH')
 ASN_PATH = os.environ.get('ASN_PATH')
@@ -61,11 +61,11 @@ class ContinentEngine:
         return cls.__instance
 
 
-class GeoIPEngine:
+class GeoEngine:
     __instance = None
 
     @classmethod
-    def get_instance(cls):
+    def get_instance(cls, path: str):
         if not cls.__instance:
             cls.__instance = maxminddb.Reader(GEOIP_DATABASE)
         return cls.__instance
@@ -83,35 +83,19 @@ class AsnEngine:
 
 class FlaskCacheEngine:
     __instance = None
-
-    cache_config = {
-        'CACHE_TYPE': 'RedisCache',
-        'CACHE_REDIS_URL': f'{REDIS_URI}',
-        'CACHE_REDIS_DB': REDIS_DB,
-    }
+    CACHE_TYPE = 'RedisCache'
+    CACHE_REDIS_DB = REDIS_DB
 
     @classmethod
-    def get_instance(cls, app: Flask = None):
+    def get_instance(cls, url: str, app: Flask = None):
         if cls.__instance is None:
-            cls.__instance = Cache(config=cls.cache_config)
-        if app is not None:
-            cls.__instance.init_app(app)
-        return cls.__instance
-
-
-class FlaskCacheEngineRo:
-    __instance = None
-
-    cache_config = {
-        'CACHE_TYPE': 'RedisCache',
-        'CACHE_REDIS_URL': f'{REDIS_URI_RO}',
-        'CACHE_REDIS_DB': REDIS_DB,
-    }
-
-    @classmethod
-    def get_instance(cls, app: Flask = None):
-        if cls.__instance is None:
-            cls.__instance = Cache(config=cls.cache_config)
+            cls.__instance = Cache(
+                config={
+                    'CACHE_TYPE': cls.CACHE_TYPE,
+                    'CACHE_REDIS_URL': url,
+                    'CACHE_REDIS_DB': cls.CACHE_REDIS_DB,
+                }
+            )
         if app is not None:
             cls.__instance.init_app(app)
         return cls.__instance

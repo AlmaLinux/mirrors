@@ -29,7 +29,7 @@ from api.utils import (
     get_azure_subnets,
 )
 from common.sentry import get_logger, init_sentry_client
-from db.db_engine import FlaskCacheEngine
+from db.db_engine import FlaskCacheEngine, REDIS_URI
 from db.models import (
     Url,
     ModuleUrl,
@@ -50,7 +50,7 @@ Bootstrap(app)
 logger = get_logger(__name__)
 if os.getenv('SENTRY_DSN'):
     init_sentry_client()
-cache = FlaskCacheEngine.get_instance(app)
+cache = FlaskCacheEngine.get_instance(url=REDIS_URI, app=app)
 
 
 async def update_mirrors_handler() -> str:
@@ -76,7 +76,6 @@ async def update_mirrors_handler() -> str:
     try:
         logger.info('Update of the mirrors list is started')
         mirror_check_sem = asyncio.Semaphore(100)
-        mirrors_len = len(all_mirrors)
         async with mirror_check_sem, MirrorProcessor(
                 logger=logger,
         ) as mirror_processor:  # type: MirrorProcessor
@@ -86,7 +85,6 @@ async def update_mirrors_handler() -> str:
                     set(main_config.duplicated_versions)
                 ),
                 arches=main_config.arches,
-                duplicated_versions=main_config.duplicated_versions
             )
             subnets = await get_aws_subnets(
                 http_session=mirror_processor.client

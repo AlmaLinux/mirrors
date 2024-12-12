@@ -1,17 +1,25 @@
 # coding=utf-8
 import ipaddress
 import os
-from datetime import datetime
+from dataclasses import asdict
+from datetime import datetime, timezone
 from typing import Optional
 
-from dataclasses import asdict
 from flask import (
     Flask,
     request,
     Response,
     render_template,
 )
+from flask_api.status import HTTP_200_OK
+from flask_bs4 import Bootstrap
+from werkzeug.exceptions import InternalServerError
 
+from api.exceptions import (
+    BaseCustomException,
+    AuthException,
+    UnknownRepoAttribute,
+)
 from api.handlers import (
     get_mirrors_list,
     get_all_mirrors,
@@ -24,31 +32,21 @@ from api.handlers import (
     get_allowed_version,
     get_allowed_arch,
 )
-from werkzeug.exceptions import InternalServerError
-
-from api.exceptions import (
-    BaseCustomException,
-    AuthException,
-    UnknownRepoAttribute,
-)
-from api.redis import CACHE_EXPIRED_TIME, URL_TYPES_LIST_EXPIRED_TIME
-from db.db_engine import FlaskCacheEngine, FlaskCacheEngineRo
-from db.models import Url
-from db.utils import session_scope
-from yaml_snippets.utils import get_config
+from api.redis import URL_TYPES_LIST_EXPIRED_TIME
 from api.utils import (
     success_result,
     error_result,
     jsonify_response,
-    get_geo_data_by_ip,
+    get_geo_dict_by_ip,
 )
 from common.sentry import (
     init_sentry_client,
     get_logger,
 )
-from flask_api.status import HTTP_200_OK
-from flask_bs4 import Bootstrap
-from urllib.parse import urljoin
+from db.db_engine import FlaskCacheEngine, REDIS_URI, REDIS_URI_RO
+from db.models import Url
+from db.utils import session_scope
+from yaml_snippets.utils import get_config
 
 app = Flask('app')
 app.url_map.strict_slashes = False
@@ -56,18 +54,18 @@ Bootstrap(app)
 logger = get_logger(__name__)
 if os.getenv('SENTRY_DSN'):
     init_sentry_client()
-cache = FlaskCacheEngine.get_instance(app)
-cache_ro = FlaskCacheEngineRo.get_instance(app)
+cache = FlaskCacheEngine.get_instance(url=REDIS_URI, app=app)
+cache_ro = FlaskCacheEngine.get_instance(url=REDIS_URI_RO, app=app)
 
 
 @app.context_processor
 def inject_now_date():
     return {
-        'now': datetime.utcnow(),
+        'now': datetime.now(timezone.utc),
     }
 
 
-def _get_request_ip(*args, **kwargs) -> Optional[str]:
+def _get_request_ip() -> Optional[str]:
     test_ip_address = os.getenv('TEST_IP_ADDRESS', None)
     ip_address = request.headers.get('X-Forwarded-For')
     result = None
@@ -90,7 +88,12 @@ def _get_request_ip(*args, **kwargs) -> Optional[str]:
     return test_ip_address or result
 
 
-def make_redis_key(ip = None, protocol = None, country = None, module = None, *args, **kwargs) -> str:
+def make_redis_key(
+    ip: Optional[str] = None,
+    protocol: Optional[str] = None,
+    country: Optional[str] = None,
+    module: Optional[str] = None,
+) -> str:
     if not ip:
         ip = _get_request_ip()
     cache_key = f'{ip}'
@@ -103,18 +106,13 @@ def make_redis_key(ip = None, protocol = None, country = None, module = None, *a
     return cache_key
 
 
-def unless_make_cache(*args, **kwargs) -> bool:
-    return _get_request_ip() is None
-
-
 @app.route(
     '/debug/json/ip_info',
     methods=('GET',),
 )
 @error_result
 def my_ip_and_headers():
-    result = {}
-    result.update(request.headers)
+    result = dict(**request.headers)
     ips = [request.remote_addr]
     for ip in [
                   request.headers.get('X-Real-Ip')
@@ -123,23 +121,7 @@ def my_ip_and_headers():
             ips.append(ip.strip())
     result['geodata'] = {}
     for ip in ips:
-        match = get_geo_data_by_ip(ip)
-        (
-            continent,
-            country,
-            state,
-            city_name,
-            latitude,
-            longitude,
-        ) = (None, None, None, None, None, None) if not match else match
-        result['geodata'][ip] = {
-            'continent': continent,
-            'country': country,
-            'state': state,
-            'city': city_name,
-            'latitude': latitude,
-            'longitude': longitude,
-        }
+        result['geodata'][ip] = get_geo_dict_by_ip(ip)
 
     return jsonify_response(
         status='ok',
