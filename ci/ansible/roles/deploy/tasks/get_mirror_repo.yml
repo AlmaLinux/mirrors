@@ -12,7 +12,9 @@
 
 - name: Update local repo with mirrors list
   git:
-    repo: "https://github.com/AlmaLinux/mirrors.git"
+    repo: "{{ repo_url }}"
+    version: "{{ repo_branch }}"
+    single_branch: yes
     dest: "{{ config_root }}/mirrors/updates"
     clone: yes
     update: yes
