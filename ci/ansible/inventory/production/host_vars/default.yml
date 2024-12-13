@@ -18,3 +18,7 @@ redis_uri: "{{ lookup('community.hashi_vault.hashi_vault', 'kv/data/infra/mirror
 # ex: redis://localhost:6379
 redis_uri_ro: "{{ lookup('community.hashi_vault.hashi_vault', 'kv/data/infra/mirror_service:redis_uri_ro',
   token=lookup('env', 'VAULT_TOKEN'), url=secrets_url) }}"
+
+# A repo with a service config and mirrors configs
+repo_url: "https://github.com/AlmaLinux/mirrors.git"
+repo_branch: "master"

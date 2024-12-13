@@ -10,3 +10,7 @@ gunicorn_port: 3031
 rsyslog_server: ""
 redis_uri: "redis://localhost:6379"
 redis_uri_ro: "redis://localhost:6379"
+
+# A repo with a service config and mirrors configs
+repo_url: "https://github.com/AlmaLinux/mirrors.git"
+repo_branch: "master"
