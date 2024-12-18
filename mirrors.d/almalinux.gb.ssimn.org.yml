@@ -3,6 +3,9 @@ name: almalinux.gb.ssimn.org
 address:
   http: http://almalinux.gb.ssimn.org
   https: https://almalinux.gb.ssimn.org
+      kitten:
+    http: http://almalinux-kitten.gb.ssimn.org
+    https: https://almalinux-kitten.gb.ssimn.org
 geolocation:
   country: GB
   city: Portsmouth
