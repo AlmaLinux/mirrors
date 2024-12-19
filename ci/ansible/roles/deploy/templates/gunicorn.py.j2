@@ -1,6 +1,7 @@
 wsgi_app = 'main:app'
 bind = '[::1]:{{ gunicorn_port }}'
-workers = {{ backend_workers }}
+# https://docs.gunicorn.org/en/latest/design.html#how-many-workers
+workers = {{ ansible_processor_nproc - 1 }}
 worker_connections = 1000
 max_requests = 10000
 max_requests_jitter = 5

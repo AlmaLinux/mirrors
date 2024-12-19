@@ -8,7 +8,7 @@
   with_items:
     - "{{ service_user }}"
     - "root"
-    - "ec2-user"
+    - "{{ ansible_user }}"
 
 - name: Update local repo with mirrors list
   git:

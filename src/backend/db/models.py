@@ -1,10 +1,12 @@
 # coding=utf-8
-import json
-from ipaddress import ip_network, IPv4Network, IPv6Network
-
 from collections import defaultdict
+from ipaddress import (
+    ip_network,
+    IPv4Network,
+    IPv6Network,
+)
+from typing import Optional
 
-from geoip2.errors import AddressNotFoundError
 from sqlalchemy import (
     Column,
     String,
@@ -17,18 +19,16 @@ from sqlalchemy import (
     func,
 )
 from sqlalchemy.ext.declarative import declarative_base
-from typing import Optional
-
-from sqlalchemy.orm import relationship
 from sqlalchemy.ext.hybrid import hybrid_method
+from sqlalchemy.orm import relationship
 
 from common.sentry import get_logger
+from db.db_engine import GeoEngine, ASN_PATH, AsnEngine
 from yaml_snippets.data_models import (
     MirrorData,
     LocationData,
     GeoLocationData,
 )
-from db.db_engine import AsnEngine
 
 logger = get_logger(__name__)
 
@@ -243,7 +243,10 @@ class Mirror(Base):
             },
             module_urls=format_module_urls(self.module_urls),
             subnets=[subnet.subnet for subnet in self.subnets],
-            subnets_int=[(int(subnet.subnet_start), int(subnet.subnet_end)) for subnet in self.subnets_int],
+            subnets_int=[
+                (int(subnet.subnet_start), int(subnet.subnet_end))
+                for subnet in self.subnets_int
+            ],
             cloud_type=self.cloud_type,
             cloud_region=self.cloud_region,
             private=False if self.private is None else self.private,

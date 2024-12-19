@@ -4,6 +4,7 @@ import argparse
 import os
 
 from alembic.config import Config
+
 from db.db_engine import Engine
 from db.utils import (
     create_database_if_not_exists,

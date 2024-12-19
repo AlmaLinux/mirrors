@@ -1,10 +1,9 @@
 import asyncio
-from urllib.parse import urljoin
 from asyncio import CancelledError
 from asyncio.exceptions import TimeoutError
 from logging import Logger
-
 from typing import Optional, Union
+from urllib.parse import urljoin
 
 import dateparser
 from aiodns import DNSResolver
@@ -31,7 +30,7 @@ from api.redis import (
     FLAPPED_EXPIRED_TIME,
 )
 from api.utils import get_geo_data_by_ip
-from db.db_engine import FlaskCacheEngine
+from db.db_engine import FlaskCacheEngine, REDIS_URI
 from yaml_snippets.data_models import (
     GeoLocationData,
     MirrorData,
@@ -108,7 +107,7 @@ class MirrorProcessor:
             retry_options=self.retry_options,
             raise_for_status=True,
         )
-        self.cache = FlaskCacheEngine.get_instance()
+        self.cache = FlaskCacheEngine.get_instance(ro=False)
 
     async def __aenter__(self):
         return self
@@ -117,13 +116,13 @@ class MirrorProcessor:
         await self.client.close()
 
     async def request(
-            self,
-            method: str,
-            url: str,
-            params: Optional[dict[str, Union[str, int]]] = None,
-            headers: Optional[dict[str, Union[str, int]]] = None,
-            data: Optional[dict[str, Union[str, int]]] = None,
-            **kwargs,
+        self,
+        method: str,
+        url: str,
+        params: Optional[dict[str, Union[str, int]]] = None,
+        headers: Optional[dict[str, Union[str, int]]] = None,
+        data: Optional[dict[str, Union[str, int]]] = None,
+        **kwargs,
     ) -> ClientResponse:
         if params is None:
             params = {}
@@ -140,9 +139,9 @@ class MirrorProcessor:
         )
 
     async def set_subnets_for_cloud_mirror(
-            self,
-            subnets: dict[str, list[str]],
-            mirror_info: MirrorData,
+        self,
+        subnets: dict[str, list[str]],
+        mirror_info: MirrorData,
     ):
         self.logger.info(
             'Set subnets for mirror "%s"',
@@ -158,8 +157,8 @@ class MirrorProcessor:
         ]
 
     async def set_ip_for_mirror(
-            self,
-            mirror_info: MirrorData,
+        self,
+        mirror_info: MirrorData,
     ):
         self.logger.info('Set IPs for mirror "%s"', mirror_info.name)
         ip = 'Unknown'
@@ -175,8 +174,8 @@ class MirrorProcessor:
         mirror_info.ip = ip
 
     async def set_iso_url(
-            self,
-            mirror_info: MirrorData,
+        self,
+        mirror_info: MirrorData,
     ):
         self.logger.info('Set iso URL for "%s"', mirror_info.name)
         mirror_info.iso_url = urljoin(
@@ -185,8 +184,8 @@ class MirrorProcessor:
             )
 
     async def set_geo_and_location_data_from_db(
-            self,
-            mirror_info: MirrorData,
+        self,
+        mirror_info: MirrorData,
     ):
         self.logger.info(
             'Set geodata for mirror "%s" from offline DB',
@@ -232,8 +231,8 @@ class MirrorProcessor:
             pass
 
     async def set_location_data_from_online_service(
-            self,
-            mirror_info: MirrorData,
+        self,
+        mirror_info: MirrorData,
     ):
         if mirror_info.status != 'ok':
             return
@@ -308,8 +307,8 @@ class MirrorProcessor:
                 )
 
     async def set_ipv6_support_of_mirror(
-            self,
-            mirror_info: MirrorData,
+        self,
+        mirror_info: MirrorData,
     ):
         self.logger.info(
             'Check that mirror "%s" supports IPv6',
@@ -413,9 +412,9 @@ class MirrorProcessor:
             )
 
     async def is_mirror_expired(
-            self,
-            mirror_info: MirrorData,
-            main_config: MainConfig,
+        self,
+        mirror_info: MirrorData,
+        main_config: MainConfig,
     ):
         mirror_should_updated_at = dateparser.parse(
             f'now-{main_config.allowed_outdate} UTC'
@@ -461,10 +460,9 @@ class MirrorProcessor:
         return mirror_last_updated < mirror_should_updated_at
 
     def get_mirror_iso_uris(
-            self,
-            versions: set[str],
-            arches: dict[str, list[str]],
-            duplicated_versions
+        self,
+        versions: set[str],
+        arches: dict[str, list[str]],
     ) -> list[str]:
         result = []
         for version in versions:
@@ -488,9 +486,9 @@ class MirrorProcessor:
         return result
 
     async def set_mirror_have_full_iso_set(
-            self,
-            mirror_info: MirrorData,
-            mirror_iso_uris: list[str],
+        self,
+        mirror_info: MirrorData,
+        mirror_iso_uris: list[str],
     ):
         error_msg = (
             'ISO artifact by URL "%(url)s" '

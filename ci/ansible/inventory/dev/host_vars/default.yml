@@ -1,0 +1,12 @@
+# true will configure local redis/valkey service and fetch geoip files
+# as necessary for development
+local_dev: true
+deploy_environment: Dev
+sentry_dsn: ""
+# ip address of host to show debug info
+test_ip_address:
+gunicorn_port: 3031
+# IP address of rsyslog server.  If undefined local logs will be used for nginx
+rsyslog_server: ""
+redis_uri: "redis://localhost:6379"
+redis_uri_ro: "redis://localhost:6379"
