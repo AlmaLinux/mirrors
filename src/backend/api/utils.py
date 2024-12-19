@@ -48,7 +48,7 @@ from db.db_engine import (
 from yaml_snippets.data_models import MirrorData
 
 logger = get_logger(__name__)
-cache = FlaskCacheEngine.get_instance(url=REDIS_URI)
+cache = FlaskCacheEngine.get_instance(ro=False)
 
 RANDOMIZE_WITHIN_KM = 500
 
@@ -139,7 +139,7 @@ def get_geo_data_by_ip(
     The function returns continent, country and locations of IP in English
     """
 
-    db = GeoEngine.get_instance(path=GEOIP_DATABASE)
+    db = GeoEngine.get_instance()
     continent = ContinentEngine.get_instance()
     try:
         geoipdb = db.get(ip)

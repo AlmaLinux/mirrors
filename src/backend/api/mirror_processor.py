@@ -107,7 +107,7 @@ class MirrorProcessor:
             retry_options=self.retry_options,
             raise_for_status=True,
         )
-        self.cache = FlaskCacheEngine.get_instance(url=REDIS_URI)
+        self.cache = FlaskCacheEngine.get_instance(ro=False)
 
     async def __aenter__(self):
         return self

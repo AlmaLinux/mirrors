@@ -65,7 +65,7 @@ class GeoEngine:
     __instance = None
 
     @classmethod
-    def get_instance(cls, path: str):
+    def get_instance(cls):
         if not cls.__instance:
             cls.__instance = maxminddb.Reader(GEOIP_DATABASE)
         return cls.__instance
@@ -83,19 +83,30 @@ class AsnEngine:
 
 class FlaskCacheEngine:
     __instance = None
-    CACHE_TYPE = 'RedisCache'
-    CACHE_REDIS_DB = REDIS_DB
+    __instance_ro = None
 
     @classmethod
-    def get_instance(cls, url: str, app: Flask = None):
+    def get_instance(cls, app: Flask = None, ro: bool = False):
         if cls.__instance is None:
             cls.__instance = Cache(
                 config={
-                    'CACHE_TYPE': cls.CACHE_TYPE,
-                    'CACHE_REDIS_URL': url,
-                    'CACHE_REDIS_DB': cls.CACHE_REDIS_DB,
+                    'CACHE_TYPE': 'RedisCache',
+                    'CACHE_REDIS_URL': REDIS_URI,
+                    'CACHE_REDIS_DB': REDIS_DB,
+                }
+            )
+        if cls.__instance_ro is None:
+            cls.__instance_ro = Cache(
+                config={
+                    'CACHE_TYPE': 'RedisCache',
+                    'CACHE_REDIS_URL': REDIS_URI_RO,
+                    'CACHE_REDIS_DB': REDIS_DB,
                 }
             )
         if app is not None:
             cls.__instance.init_app(app)
-        return cls.__instance
+            cls.__instance_ro.init_app(app)
+        if ro:
+            return cls.__instance_ro
+        else:
+            return cls.__instance
