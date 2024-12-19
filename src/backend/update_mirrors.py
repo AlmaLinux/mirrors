@@ -50,7 +50,7 @@ Bootstrap(app)
 logger = get_logger(__name__)
 if os.getenv('SENTRY_DSN'):
     init_sentry_client()
-cache = FlaskCacheEngine.get_instance(url=REDIS_URI, app=app)
+cache = FlaskCacheEngine.get_instance(app=app, ro=False)
 
 
 async def update_mirrors_handler() -> str:

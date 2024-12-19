@@ -38,8 +38,8 @@ from yaml_snippets.utils import (
 )
 
 logger = get_logger(__name__)
-cache = FlaskCacheEngine.get_instance(url=REDIS_URI)
-cache_ro = FlaskCacheEngine.get_instance(url=REDIS_URI_RO)
+cache = FlaskCacheEngine.get_instance(ro=False)
+cache_ro = FlaskCacheEngine.get_instance(ro=True)
 
 
 LENGTH_GEO_MIRRORS_LIST = 10

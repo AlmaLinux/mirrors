@@ -23,7 +23,7 @@ from sqlalchemy.ext.hybrid import hybrid_method
 from sqlalchemy.orm import relationship
 
 from common.sentry import get_logger
-from db.db_engine import GeoEngine, ASN_PATH
+from db.db_engine import GeoEngine, ASN_PATH, AsnEngine
 from yaml_snippets.data_models import (
     MirrorData,
     LocationData,
@@ -269,7 +269,7 @@ def get_asn_by_ip(
     Get ASN by an IP
     """
 
-    db = GeoEngine.get_instance(path=ASN_PATH)
+    db = AsnEngine.get_instance()
     try:
         return str(db.get(ip)['asn']).lstrip('AS')
     except TypeError:
