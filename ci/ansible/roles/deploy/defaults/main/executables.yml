@@ -2,9 +2,7 @@
 systemd_services_path: "/etc/systemd/system"
 scripts_path: "/usr/local/bin"
 
-dbs_update: "almalinux_dbs_update"
 mirror_list_update: "almalinux_mirror_list_update"
 mirror_service: "almalinux_mirror_service"
 mirror_service_git_updater: "{{ mirror_service }}_git_pull"
-utilities_service: "almalinux_mirror_utilities"
 ...
