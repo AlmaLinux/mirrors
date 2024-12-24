@@ -1,6 +1,8 @@
 # coding=utf-8
 import asyncio
 import inspect
+import ipaddress
+import os
 import random
 import time
 from collections import defaultdict
@@ -392,3 +394,44 @@ def get_geo_dict_by_ip(ip: str):
         'latitude': latitude,
         'longitude': longitude,
     }
+
+
+def get_request_ip() -> Optional[str]:
+    test_ip_address = os.getenv('TEST_IP_ADDRESS', None)
+    ip_address = request.headers.get('X-Forwarded-For')
+    result = None
+    if ',' in ip_address:
+        for ip in ip_address.split(','):
+            try:
+                if not ipaddress.ip_address(ip.strip()).is_private:
+                    result = ip.strip()
+                    break
+            except ValueError:
+                logger.warning(
+                    '%s does not appear to be an IPv4 or IPv6 address. '
+                    'IP of a request: %s. Headers of a request: %s',
+                    ip_address,
+                    request.remote_addr,
+                    request.headers,
+                )
+    else:
+        result = ip_address
+    return test_ip_address or result
+
+
+def make_redis_key(
+    ip: Optional[str] = None,
+    protocol: Optional[str] = None,
+    country: Optional[str] = None,
+    module: Optional[str] = None,
+) -> str:
+    if not ip:
+        ip = get_request_ip()
+    cache_key = f'{ip}'
+    if protocol:
+        cache_key = f'{cache_key}_{protocol}'
+    if country:
+        cache_key = f'{cache_key}_{country}'
+    if module:
+        cache_key = f'{cache_key}_{module}'
+    return cache_key
