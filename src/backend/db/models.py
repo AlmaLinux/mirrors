@@ -23,7 +23,7 @@ from sqlalchemy.ext.hybrid import hybrid_method
 from sqlalchemy.orm import relationship
 
 from common.sentry import get_logger
-from db.db_engine import GeoEngine, ASN_PATH, AsnEngine
+from db.db_engine import AsnEngine
 from yaml_snippets.data_models import (
     MirrorData,
     LocationData,

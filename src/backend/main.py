@@ -1,9 +1,7 @@
 # coding=utf-8
-import ipaddress
 import os
 from dataclasses import asdict
 from datetime import datetime, timezone
-from typing import Optional
 
 from flask import (
     Flask,
@@ -38,6 +36,8 @@ from api.utils import (
     error_result,
     jsonify_response,
     get_geo_dict_by_ip,
+    get_request_ip,
+    make_redis_key,
 )
 from common.sentry import (
     init_sentry_client,
@@ -63,47 +63,6 @@ def inject_now_date():
     return {
         'now': datetime.now(timezone.utc),
     }
-
-
-def _get_request_ip() -> Optional[str]:
-    test_ip_address = os.getenv('TEST_IP_ADDRESS', None)
-    ip_address = request.headers.get('X-Forwarded-For')
-    result = None
-    if ',' in ip_address:
-        for ip in ip_address.split(','):
-            try:
-                if not ipaddress.ip_address(ip.strip()).is_private:
-                    result = ip.strip()
-                    break
-            except ValueError:
-                logger.warning(
-                    '%s does not appear to be an IPv4 or IPv6 address. '
-                    'IP of a request: %s. Headers of a request: %s',
-                    ip_address,
-                    request.remote_addr,
-                    request.headers,
-                )
-    else:
-        result = ip_address
-    return test_ip_address or result
-
-
-def make_redis_key(
-    ip: Optional[str] = None,
-    protocol: Optional[str] = None,
-    country: Optional[str] = None,
-    module: Optional[str] = None,
-) -> str:
-    if not ip:
-        ip = _get_request_ip()
-    cache_key = f'{ip}'
-    if protocol:
-        cache_key = f'{cache_key}_{protocol}'
-    if country:
-        cache_key = f'{cache_key}_{country}'
-    if module:
-        cache_key = f'{cache_key}_{module}'
-    return cache_key
 
 
 @app.route(
@@ -181,7 +140,7 @@ def get_mirror_list(
             optional_module_versions=config.optional_module_versions,
         )
     
-    ip_address = _get_request_ip()
+    ip_address = get_request_ip()
 
     mirrors = get_mirrors_list(
         ip_address=ip_address,
@@ -209,7 +168,7 @@ def get_mirror_list(
 )
 @error_result
 def get_debug_mirror_list():
-    ip_address = _get_request_ip()
+    ip_address = get_request_ip()
     result = get_mirrors_list(
         ip_address=ip_address,
         version='8',
@@ -252,7 +211,7 @@ def get_iso_list(
         version: str,
         arch: str,
 ):
-    ip_address = _get_request_ip()
+    ip_address = get_request_ip()
     return get_mirrors_list(
         ip_address=ip_address,
         version=version,
@@ -297,7 +256,7 @@ def isos(
 
         return render_template('isos_main.html', **data)
     else:
-        ip_address = _get_request_ip()
+        ip_address = get_request_ip()
         (
             mirrors_by_countries,
             nearest_mirrors
