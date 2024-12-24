@@ -120,7 +120,7 @@ AIOHTTP_TIMEOUT = 30
 
 
 async def check_tasks(
-        created_tasks: list[asyncio.Task],
+    created_tasks: list[asyncio.Task],
 ) -> tuple[bool, Optional[str]]:
     done_tasks, pending_tasks = await asyncio.wait(
         created_tasks,
@@ -140,15 +140,15 @@ async def check_tasks(
 
 
 async def is_url_available(
-        url: str,
-        http_session: ClientType,
-        logger: Logger,
-        is_get_request: bool,
-        success_msg: Optional[str],
-        success_msg_vars: Optional[dict],
-        error_msg: Optional[str],
-        error_msg_vars: Optional[dict],
-        sem: asyncio.Semaphore = None
+    url: str,
+    http_session: ClientType,
+    logger: Logger,
+    is_get_request: bool,
+    success_msg: Optional[str],
+    success_msg_vars: Optional[dict],
+    error_msg: Optional[str],
+    error_msg_vars: Optional[dict],
+    sem: asyncio.Semaphore = None
 ):
     if not sem:
         sem = asyncio.Semaphore(1)
@@ -185,7 +185,7 @@ async def is_url_available(
 
 
 def load_json_schema(
-        path: str,
+    path: str,
 ) -> dict:
     """
     Load and return JSON schema from a file by path
@@ -195,8 +195,8 @@ def load_json_schema(
 
 
 def config_validation(
-        yaml_data: dict,
-        json_schema: dict,
+    yaml_data: dict,
+    json_schema: dict,
 ) -> tuple[bool, Optional[str]]:
     """
     Validate some YAML content by JSON schema
@@ -312,15 +312,15 @@ def process_main_config(
 
 
 def get_config(
-        logger: Logger,
-        path_to_config: str = os.path.join(
-            os.getenv('CONFIG_ROOT', '.'),
-            'mirrors/updates/config.yml'
-        ),
-        path_to_json_schema: str = os.path.join(
-            os.path.dirname(os.path.realpath(__file__)),
-            'json_schemas/service_config',
-        ),
+    logger: Logger,
+    path_to_config: str = os.path.join(
+        os.getenv('CONFIG_ROOT', '.'),
+        'mirrors/updates/config.yml'
+    ),
+    path_to_json_schema: str = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        'json_schemas/service_config',
+    ),
 ) -> Optional[MainConfig]:
     """
     Read, validate, parse and return main config of the mirrors service
@@ -354,9 +354,9 @@ def get_config(
 
 
 def process_mirror_config(
-        yaml_data: dict,
-        logger: Logger,
-        main_config: MainConfig,
+    yaml_data: dict,
+    logger: Logger,
+    main_config: MainConfig,
 ) -> MirrorData:
     """
     Process data of a mirror config
@@ -428,13 +428,13 @@ def process_mirror_config(
 
 
 def get_mirror_config(
-        logger: Logger,
-        path_to_config: Path,
-        main_config: MainConfig,
-        path_to_json_schema: str = os.path.join(
-            os.path.dirname(os.path.realpath(__file__)),
-            'json_schemas/mirror_config',
-        ),
+    logger: Logger,
+    path_to_config: Path,
+    main_config: MainConfig,
+    path_to_json_schema: str = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        'json_schemas/mirror_config',
+    ),
 ) -> Optional[MirrorData]:
     """
     Read, validate, parse and return config of a mirror
@@ -473,13 +473,13 @@ def get_mirror_config(
 
 
 def get_mirrors_info(
-        mirrors_dir: str,
-        logger: Logger,
-        main_config: MainConfig,
-        path_to_json_schema: str = os.path.join(
-            os.path.dirname(os.path.realpath(__file__)),
-            'json_schemas/service_config',
-        ),
+    mirrors_dir: str,
+    logger: Logger,
+    main_config: MainConfig,
+    path_to_json_schema: str = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        'json_schemas/service_config',
+    ),
 ) -> list[MirrorData]:
     """
     Extract info about all mirrors from yaml files
@@ -505,8 +505,8 @@ def get_mirrors_info(
 
 
 def _get_arches_for_version(
-        repo_arches: list[str],
-        global_arches: list[str],
+    repo_arches: list[str],
+    global_arches: list[str],
 ) -> list[str]:
     """
     Get the available arches for specific version
@@ -563,10 +563,10 @@ def _is_excluded_mirror_by_arch(
 
 
 async def mirror_available(
-        mirror_info: MirrorData,
-        http_session: ClientType,
-        main_config: MainConfig,
-        logger: Logger,
+    mirror_info: MirrorData,
+    http_session: ClientType,
+    main_config: MainConfig,
+    logger: Logger,
 ) -> tuple[bool, Optional[str]]:
     """
     Check mirror availability
@@ -678,11 +678,11 @@ async def mirror_available(
 
 
 async def optional_modules_available(
-        mirror_info: MirrorData,
-        http_session: ClientType,
-        main_config: MainConfig,
-        logger: Logger,
-        module: str
+    mirror_info: MirrorData,
+    http_session: ClientType,
+    main_config: MainConfig,
+    logger: Logger,
+    module: str
 ):
     if not mirror_info.module_urls or not mirror_info.module_urls.get(module):
         return
