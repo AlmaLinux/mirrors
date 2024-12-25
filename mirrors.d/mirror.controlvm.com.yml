@@ -1,0 +1,15 @@
+---
+name: mirror.controlvm.com
+address:
+  http: http://mirror.controlvm.com/almalinux/
+  https: https://mirror.controlvm.com/almalinux/
+geolocation:
+  country: MY
+  state_province: Selangor
+  city: Cyberjaya
+update_frequency: 3h
+sponsor: ControlVM Sdn Bhd
+sponsor_url: https://controlvm.com/
+email: general@controlvm.com
+asn: 133114
+...
