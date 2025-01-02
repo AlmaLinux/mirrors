@@ -9,6 +9,7 @@ address_optional:
     https: https://almalinux-kitten.sg.ssimn.org
 geolocation:
   country: SG
+  state_province:
   city: Tai Seng
 update_frequency: 3h
 sponsor: Starburst Services
