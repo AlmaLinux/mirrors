@@ -1,0 +1,16 @@
+name: mirror.ams.macarne.com
+address:
+  http: http://mirror.ams.macarne.com/almalinux/
+  https: https://mirror.ams.macarne.com/almalinux/
+address_optional:
+  kitten:
+    http: http://mirror.ams.macarne.com/alma-kitten/
+    https: https://mirror.ams.macarne.com/alma-kitten/
+geolocation:
+  country: NL
+  state_province: North Holland
+  city: Amsterdam
+update_frequency: 2h
+sponsor: Macarne Limited
+sponsor_url: https://macarne.com/
+email: noc@macarne.com
