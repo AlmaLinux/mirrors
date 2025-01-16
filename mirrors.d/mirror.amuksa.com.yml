@@ -1,0 +1,21 @@
+name: mirror.amuksa.com
+address:
+  http: http://mirror.amuksa.com/almalinux
+  https: https://mirror.amuksa.com/almalinux
+  rsync: rsync://mirror.amuksa.com/almalinux
+address_optional:
+  kitten:
+    http: http://mirror.amuksa.com/almalinux-kitten
+    https: https://mirror.amuksa.com/almalinux-kitten
+    rsync: rsync://mirror.amuksa.com/almalinux-kitten
+update_frequency: 3h
+sponsor: DAXNET
+sponsor_url: https://mirror.amuksa.com
+email: mirror@mail.daxhub.net
+geolocation:
+  continent: AS
+  country: KR
+  state_province: SEOUL
+  city: SEOUL
+private: false
+monopoly: false
