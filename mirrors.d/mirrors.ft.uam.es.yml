@@ -3,6 +3,10 @@ name: mirrors.ft.uam.es
 address:
   http: http://mirrors.ft.uam.es/almalinux/
   https: https://mirrors.ft.uam.es/almalinux/
+address_optional:
+  kitten:
+    http: http://mirrors.ft.uam.es/almalinux-kitten/
+    https: https://mirrors.ft.uam.es/almalinux-kitten/
 geolocation:
   country: ES
   state_province: Comunidad de Madrid
