@@ -15,4 +15,5 @@ update_frequency: 3h
 sponsor: Starburst Services
 sponsor_url: https://starburstservices.com
 email: sysops@starburstservices.com
+private: true
 ...
