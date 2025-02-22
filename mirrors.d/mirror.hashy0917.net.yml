@@ -3,6 +3,7 @@ name: mirror.hashy0917.net
 address:
   http: http://mirror.hashy0917.net/almalinux/
   https: https://mirror.hashy0917.net/almalinux/
+  rsync: rsync://mirror.hashy0917.net/almalinux/
 geolocation:
   country: JP
   state_province: Tokyo
