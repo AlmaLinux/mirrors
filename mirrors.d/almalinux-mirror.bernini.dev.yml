@@ -12,5 +12,5 @@ geolocation:
   country: DE
   state_province: Berlin
   city: Falkenstein
-private: true
+private: false
 monopoly: false
