@@ -8,9 +8,9 @@ sponsor: Bernini.DEV
 sponsor_url: https://bernini.dev/
 email:  admin@bernini.dev
 geolocation:
-  continent: Europe
+  continent: EU
   country: DE
-  state_province: Berlin
-  city: Falkenstein
+  state_province:
+  city: Berlin
 private: false
 monopoly: false
