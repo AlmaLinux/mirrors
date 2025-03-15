@@ -2,7 +2,7 @@ name: mirror.qdei.co
 address:
   http: http://mirror.qdei.co/almalinux/
   https: https://mirror.qdei.co/almalinux/
-update_frequency: 4h
+update_frequency: 3h
 sponsor: QDEI Cloud
 sponsor_url: https://qdei.co/
 email: malhuda@detnet.id
