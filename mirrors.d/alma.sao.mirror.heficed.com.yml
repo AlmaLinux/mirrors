@@ -1,9 +1,0 @@
----
-name: alma.sao.mirror.heficed.com
-address:
-  http: http://alma.sao.mirror.heficed.com/
-update_frequency: 3h
-sponsor: Heficed
-sponsor_url: https://www.heficed.com/
-email: support@heficed.com
-...

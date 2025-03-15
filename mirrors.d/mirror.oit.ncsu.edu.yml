@@ -1,0 +1,15 @@
+---
+name: mirror.oit.ncsu.edu
+address:
+  http: http://mirror.linux.ncsu.edu/almalinux/
+  https: https://mirror.linux.ncsu.edu/almalinux/
+  rsync: rsync://mirror.linux.ncsu.edu/almalinux/
+update_frequency: 15m
+geolocation:
+  country: US
+  state_province: North Carolina
+  city: Raleigh
+sponsor: North Carolina State University
+sponsor_url: https://linux.ncsu.edu
+email: group-oit-csi@ncsu.edu
+asn: 11442

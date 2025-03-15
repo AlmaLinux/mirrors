@@ -1,0 +1,15 @@
+---
+name: nl.mirror.flokinet.net
+address:
+  http: http://nl.mirror.flokinet.net/almalinux/
+  https: https://nl.mirror.flokinet.net/almalinux/
+  rsync: rsync://nl.mirror.flokinet.net/almalinux
+geolocation:
+  country: NL
+  state_province: North Holland
+  city: Amsterdam
+update_frequency: 3h
+sponsor: FlokiNET
+sponsor_url: https://flokinet.is
+email: noc@flokinet.is
+...

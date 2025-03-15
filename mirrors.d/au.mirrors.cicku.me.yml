@@ -1,0 +1,14 @@
+---
+name: au.mirrors.cicku.me
+address:
+  http: http://au.mirrors.cicku.me/almalinux
+  https: https://au.mirrors.cicku.me/almalinux
+geolocation:
+  country: AU
+  state_province: Victoria
+  city: Melbourne
+update_frequency: 3h
+sponsor: CICKU
+sponsor_url: https://mirror.cicku.me
+email: mirrors@cicku.me
+...

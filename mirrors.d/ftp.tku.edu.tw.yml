@@ -1,0 +1,14 @@
+---
+name: ftp.tku.edu.tw
+address:
+  http: http://ftp.tku.edu.tw/Linux/AlmaLinux/
+  ftp: ftp://ftp.tku.edu.tw/Linux/AlmaLinux/
+update_frequency: 24h
+geolocation:
+  country: TW
+  state_province:
+  city: New Taipei City
+sponsor: Tamkang University
+sponsor_url: https://www.tku.edu.tw/
+email: wisely@mail.tku.edu.tw
+...

@@ -1,0 +1,16 @@
+---
+name: ftp.halifax.rwth-aachen.de
+address:
+  http: http://ftp.halifax.rwth-aachen.de/almalinux/
+  https: https://ftp.halifax.rwth-aachen.de/almalinux/
+  rsync: rsync://ftp.halifax.rwth-aachen.de/almalinux
+  ftp: ftp://ftp.halifax.rwth-aachen.de/almalinux/
+geolocation:
+  country: DE
+  state_province: NW
+  city: Aachen
+update_frequency: 3h
+sponsor: RWTH Aachen University
+sponsor_url: https://rwth-aachen.de
+email: ftp@halifax.rwth-aachen.de
+...

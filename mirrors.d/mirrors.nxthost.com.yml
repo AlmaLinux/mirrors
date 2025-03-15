@@ -1,0 +1,16 @@
+---
+name: mirrors.nxthost.com
+address:
+  http: http://mirrors.nxthost.com/almalinux/
+  https: https://mirrors.nxthost.com/almalinux/
+  rsync: rsync://mirrors.nxthost.com/almalinux/
+update_frequency: 3h
+sponsor: nxtHost
+sponsor_url: https://www.nxthost.com
+email: catalin.chivulescu@nxthost.com
+geolocation:
+  continent: Europe
+  country: RO
+  state_province: Bucharest
+  city: Bucharest
+...

@@ -1,0 +1,13 @@
+name: mirror.server.net
+address:
+  http: http://mirror.server.net/almalinux/
+  https: https://mirror.server.net/almalinux/
+geolocation:
+  country: GB
+  state_province: London
+  city: London
+update_frequency: 3h
+sponsor: Server.net
+sponsor_url: https://www.server.net
+email: ae@server.net
+

@@ -1,0 +1,16 @@
+---
+name: mirror.gotmyhost.com
+address:
+  http: http://mirror.gotmyhost.com/almalinux
+  https: https://mirror.gotmyhost.com/almalinux
+update_frequency: 3h
+sponsor: GOTMYHOST
+sponsor_url: https://gotmyhost.com
+email: support@gotmyhost.com
+geolocation:
+  continent: Asia
+  country: BD
+  state_province: Dhaka
+  city: Dhaka
+private: false
+monopoly: false

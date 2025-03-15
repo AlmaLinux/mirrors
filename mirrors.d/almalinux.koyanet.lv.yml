@@ -1,0 +1,13 @@
+---
+name: almalinux.koyanet.lv
+address:
+  http: http://almalinux.koyanet.lv/almalinux/
+  https: https://almalinux.koyanet.lv/almalinux/
+geolocation:
+  country: LV
+  city: Riga
+update_frequency: 3h
+sponsor: DEAC
+sponsor_url: https://www.deac.eu/
+email: artis@steinbergs.lv
+...

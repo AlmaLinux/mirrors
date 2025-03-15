@@ -1,0 +1,16 @@
+name: almalinux-mirror.bernini.dev
+address:
+  http: http://almalinux-mirror.bernini.dev
+  https: https://almalinux-mirror.bernini.dev
+  rsync: rsync://almalinux-mirror.bernini.dev
+update_frequency: 3h
+sponsor: Bernini.DEV
+sponsor_url: https://bernini.dev/
+email:  admin@bernini.dev
+geolocation:
+  continent: EU
+  country: DE
+  state_province:
+  city: Berlin
+private: false
+monopoly: false

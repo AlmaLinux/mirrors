@@ -1,0 +1,13 @@
+---
+name: almalinux.linux.n0c.ca
+address:
+  http: http://almalinux.linux.n0c.ca/almalinux/
+geolocation:
+  country: CA
+  state_province: QC
+  city: Montreal
+update_frequency: 3h
+sponsor: PlanetHoster
+sponsor_url: https://planethoster.com
+email: staff-infra@planethoster.info
+...

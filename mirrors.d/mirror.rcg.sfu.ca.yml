@@ -1,0 +1,14 @@
+---
+name: mirror.rcg.sfu.ca
+address:
+  http: http://mirror.rcg.sfu.ca/AlmaLinux/
+  https: https://mirror.rcg.sfu.ca/AlmaLinux/
+update_frequency: 3h
+geolocation:
+  country: CA
+  state_province: British Columbia
+  city: Burnaby
+sponsor: Simon Fraser University
+sponsor_url: https://www.sfu.ca/
+email: noc@sfu.ca
+...

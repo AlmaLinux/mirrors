@@ -1,0 +1,22 @@
+---
+name: mirror.bitency.nl
+address:
+  http: http://mirror.bitency.nl/almalinux
+  https: https://mirror.bitency.nl/almalinux
+  rsync: rsync://mirror.bitency.nl/almalinux
+  ftp: ftp://mirror.bitency.nl/almalinux
+address_optional:
+  kitten:
+    http: http://mirror.bitency.nl/almalinux-kitten
+    https: https://mirror.bitency.nl/almalinux-kitten
+    rsync: rsync://mirror.bitency.nl/almalinux-kitten
+    ftp: ftp://mirror.bitency.nl/almalinux-kitten
+geolocation:
+  country: NL
+  state_province: Noord-Holland
+  city: Amsterdam
+update_frequency: 1h
+sponsor: Bitency B.V.
+sponsor_url: https://bitency.nl/
+email: info@bitency.nl
+...

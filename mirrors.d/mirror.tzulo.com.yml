@@ -1,0 +1,17 @@
+---
+name: mirror.tzulo.com  
+address:
+  http: http://mirror.tzulo.com/almalinux/
+  https: https://mirror.tzulo.com/almalinux
+  rsync: rsync://mirror.tzulo.com/almalinux
+geolocation:
+  continent: North America
+  country: US
+  state_province: IL
+  city: Chicago
+update_frequency: 3h
+sponsor: tzulo
+sponsor_url: https://tzulo.com/
+email: mirror@tzulo.com
+asn: 11878
+...

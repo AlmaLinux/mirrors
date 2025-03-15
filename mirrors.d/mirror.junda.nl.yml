@@ -1,0 +1,14 @@
+---
+name: www.junda.nl
+address:
+  http: http://mirror.junda.nl/almalinux/
+update_frequency: 24h
+sponsor: Junda B.V.
+sponsor_url: https://www.junda.nl
+email: daan@junda.nl
+geolocation:
+  continent: EU
+  country: DE
+  state_province: 
+  city: Nuremberg
+private: false
