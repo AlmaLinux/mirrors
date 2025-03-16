@@ -9,7 +9,7 @@ email: malhuda@detnet.id
 geolocation:
   continent: Indonesia
   country: ID
-  state_province:
+  state_province: Jakarta
   city: Jakarta
 private: false
 monopoly: false
