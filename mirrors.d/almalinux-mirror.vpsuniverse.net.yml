@@ -1,0 +1,16 @@
+name: almalinux-mirror.vpsuniverse.net
+address:
+  http: http://almalinux-mirror.vpsuniverse.net
+  https: https://almalinux-mirror.vpsuniverse.net
+  rsync: rsync://almalinux-mirror.vpsuniverse.net
+update_frequency: 3h
+sponsor: VPSUniverse
+sponsor_url: https://vpsuniverse.net/
+email:  admin@vpsuniverse.net
+geolocation:
+  continent: EU
+  country: DE
+  state_province:
+  city: Berlin
+private: false
+monopoly: false
