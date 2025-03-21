@@ -4,6 +4,7 @@ address:
   http: http://atl.mirrors.ezscale.cloud/almalinux
   https: https://atl.mirrors.ezscale.cloud/almalinux
   rsync: rsync://atl.mirrors.ezscale.cloud/almalinux
+  ftp: ftp://atl.mirrors.ezscale.cloud/almalinux
 update_frequency: 3h
 sponsor: EZSCALE Hosting
 sponsor_url: https://ezscale.cloud
