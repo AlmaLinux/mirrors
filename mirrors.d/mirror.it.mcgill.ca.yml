@@ -1,0 +1,20 @@
+---
+name: mirror.it.mcgill.ca
+address:
+  http: http://mirror.it.mcgill.ca/almalinux/
+  https: https://mirror.it.mcgill.ca/almalinux/
+update_frequency: 4h
+sponsor: McGill University
+sponsor_url: https://www.mcgill.ca
+email: mirror.iis@mcgill.ca
+geolocation:
+  country: CA
+  state_province: Quebec
+  city: Montreal
+private: true
+monopoly: true
+subnets:
+  - 132.206.0.0/16
+  - 132.216.0.0/16
+  - 142.157.0.0/16
+...
