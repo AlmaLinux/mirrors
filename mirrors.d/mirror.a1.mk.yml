@@ -3,7 +3,7 @@ name: mirror.a1.mk
 address:
   http: http://mirror.a1.mk/almalinux/
   rsync: rsync://mirror.a1.mk/almalinux/
-update_frequency: 5h
+update_frequency: 3h
 geolocation:
   country: MK
   state_province: Skopje
