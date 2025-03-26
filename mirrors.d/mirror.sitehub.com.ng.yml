@@ -1,0 +1,19 @@
+---
+name: mirror.sitehub.com.ng
+address:
+ http: http://mirror.sitehub.com.ng/almalinux/
+ https: https://mirror.sitehub.com.ng/almalinux
+address_optional:
+ kitten:
+  http: http://mirror.sitehub.com.ng/almalinux/kitten
+  https: https://mirror.sitehub.com.ng/almalinux/kitten
+geolocation:
+ continent: Africa
+ country: NG
+ state_province: Lagos
+ city: Lagos
+update_frequency: 3h
+sponsor: SiteHUB Agency Ltd
+sponsor_url: https://sitehub.net.ng
+email: infra-team@sitehub.agency
+...
