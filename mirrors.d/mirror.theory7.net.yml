@@ -1,0 +1,14 @@
+---
+name: mirror.theory7.net
+address:
+  http: http://mirror.theory7.net/almalinux/
+  https: https://mirror.theory7.net/almalinux/
+geolocation:
+  country: NL
+  state_province: Noord Holland
+  city: Amsterdam
+update_frequency: 1h
+sponsor: Theory7.net
+sponsor_url: https://www.theory7.net
+email: support@theory7.net
+...
