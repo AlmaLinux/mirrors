@@ -1,0 +1,14 @@
+name: mirror.quickhost.uk
+address:
+  http: http://mirror.quickhost.uk/almalinux/
+address_optional:
+  kitten:
+    http: http://mirror.quickhost.uk/almalinux-kitten/
+update_frequency: 6h
+geolocation:
+  country: GB
+  state_province: London 
+  city: London
+sponsor: QuickHost
+sponsor_url: https://www.quickhost.uk/
+email: info@quickhost.uk
