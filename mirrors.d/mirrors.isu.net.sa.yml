@@ -15,7 +15,10 @@ sponsor_url: https://www.maeen.sa
 email: webmaster@maeen.sa
 continent: Asia
 country: SA
-state_province: Riyadh
+state_province: Riyadh Province
 city: Riyadh
+latitude: 24.7135517
+longitude: 46.6752957
 private: false
+monopoly: false
 asn: 8895
