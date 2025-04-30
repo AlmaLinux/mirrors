@@ -7,3 +7,6 @@ update_frequency: 3h
 sponsor: WebHS
 sponsor_url: https://mirrors.webhs.pt/
 email: noc@webhs.pt
+geolocation:
+  country: PT
+  city: Lisbon
