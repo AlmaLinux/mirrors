@@ -8,6 +8,7 @@ address:
 geolocation:
   continent: Europe
   country: UA
+  state_province: Kyiv
   city: Kyiv
 update_frequency: 3h
 sponsor: NetForce Ukraine LLC
