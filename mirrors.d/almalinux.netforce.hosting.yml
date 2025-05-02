@@ -7,6 +7,6 @@ address:
   ftp:  ftp://almalinux.netforce.hosting/almalinux
 update_frequency: 3h
 sponsor: NetForce Ukraine LLC
-sponsor_url: https://www.netforce.ua
+sponsor_url: https://www.netforce.company
 email: mirror@netforce.hosting
 ...
