@@ -5,8 +5,13 @@ address:
   https: https://almalinux.netforce.hosting/almalinux/
   rsync: rsync://almalinux.netforce.hosting/almalinux
   ftp:  ftp://almalinux.netforce.hosting/almalinux
+geolocation:
+  continent: Europe
+  country: UA
+  state_province: Kyiv
+  city: Kyiv
 update_frequency: 3h
 sponsor: NetForce Ukraine LLC
-sponsor_url: https://www.netforce.ua
+sponsor_url: https://www.netforce.company
 email: mirror@netforce.hosting
 ...
