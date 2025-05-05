@@ -3,6 +3,10 @@ name: mirror.spectraip.net
 address:
   http: http://mirror.spectraip.net/almalinux/
   https: https://mirror.spectraip.net/almalinux/
+address_optional:
+  kitten:
+    http: http://mirror.spectraip.net/almalinux-kitten/
+    https: https://mirror.spectraip.net/almalinux-kitten/
 geolocation:
   continent: Europe
   country: NL
