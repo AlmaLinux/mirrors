@@ -8,7 +8,7 @@ geolocation:
   state_province: Tunis
   city: TUNIS
 update_frequency: 3h
-sponsor: AlmaLinux OS Foundation
-sponsor_url: https://www.almalinux.org
+sponsor: ATI
+sponsor_url: https://www.ati.tn
 email: mirror@ati.tn
 ...
