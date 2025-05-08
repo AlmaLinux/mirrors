@@ -1,9 +1,9 @@
 ---
-name: mirror.nodespace.net
+name: mirror.nodespace.com
 address:
-  http: http://mirror.nodespace.net/almalinux/
-  https: https://mirror.nodespace.net/almalinux/
-  rsync: rsync://mirror.nodespace.net/almalinux/
+  http: http://mirror.nodespace.com/almalinux/
+  https: https://mirror.nodespace.com/almalinux/
+  rsync: rsync://mirror.nodespace.com/almalinux/
 geolocation:
   country: US
   state_province: North Carolina
