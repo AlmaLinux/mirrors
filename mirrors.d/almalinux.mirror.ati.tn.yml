@@ -1,0 +1,14 @@
+---
+name: mirror.ati.tn
+address:
+  http: http://mirror.ati.tn/almalinux/
+  https: https://mirror.ati.tn/almalinux/
+geolocation:
+  country: TN
+  state_province: Tunis
+  city: TUNIS
+update_frequency: 3h
+sponsor: ATI
+sponsor_url: https://www.ati.tn
+email: mirror@ati.tn
+...
