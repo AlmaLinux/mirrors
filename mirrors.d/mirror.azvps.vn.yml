@@ -9,4 +9,5 @@ email: contact@azvps.vn
 geolocation:
   continent: Asia
   country: VN
+  state_province:
   city: Hanoi
