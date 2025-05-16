@@ -1,8 +1,8 @@
 ---
 name: mirror.renu.ac.ug
 address:
-  http: http://mirror.renu.ac.ug
-  https: https://mirror.renu.ac.ug
+  http: http://mirror.renu.ac.ug/almalinux
+  https: https://mirror.renu.ac.ug/almalinux
 update_frequency: 3h
 sponsor: RENU
 sponsor_url: https://renu.ac.ug/
