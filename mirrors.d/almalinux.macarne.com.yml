@@ -1,8 +1,7 @@
 ---
-name: almalinux.macarne.com
+name: mirror.ams.macarne.com
 address:
-  http: http://almalinux.macarne.com
-  https: https://almalinux.macarne.com
+  https: https://mirror.ams.macarne.com/almalinux/
 geolocation:
   country: US
   state_province: California
