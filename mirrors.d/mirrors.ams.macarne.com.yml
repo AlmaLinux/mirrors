@@ -3,9 +3,9 @@ name: mirror.ams.macarne.com
 address:
   https: https://mirror.ams.macarne.com/almalinux/
 geolocation:
-  country: US
-  state_province: California
-  city: Santa Clara
+  country: NL
+  state_province: North Holland
+  city: Amsterdam
 update_frequency: 3h
 sponsor: Macarne LLC
 sponsor_url: https://macarne.com/
