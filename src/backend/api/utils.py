@@ -170,7 +170,7 @@ async def get_azure_subnets_json(
 ) -> Optional[dict]:
     url = 'https://www.microsoft.com/en-us/download/confirmation.aspx?id=56519'
     link_attributes = {
-        'data-bi-id': 'downloadretry',
+        'data-m': '{"compnm":"Download center detail page","hn":"Azure IP Ranges and Service Tags – Public Cloud","cN":"Download button","ecn":"Download button","ehn":"Azure IP Ranges and Service Tags – Public Cloud","bhvr":"0","cT":"Button","pa":"Body"}',
     }
     try:
         async with http_session.get(
