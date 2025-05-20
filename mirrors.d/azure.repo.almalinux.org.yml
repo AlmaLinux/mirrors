@@ -20,7 +20,6 @@ cloud_regions:
   - usstagec
   - southcentralus
   - westindia
-
   - centralus
   - canadacentral
   - brazilsouth
@@ -31,4 +30,3 @@ cloud_regions:
   - westus2
   - westus3
   - westus
-...
