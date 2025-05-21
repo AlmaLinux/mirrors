@@ -1,0 +1,78 @@
+---
+name: azure.repo.almalinux.org
+address:
+  http: http://azure.repo.almalinux.org/
+  https: https://azure.repo.almalinux.org/
+update_frequency: 1h
+sponsor: AlmaLinux OS Foundation
+sponsor_url: https://www.almalinux.org
+email: infra-team@almalinux.org
+cloud_type: azure
+cloud_regions:
+  - australiacentral2
+  - australiacentral
+  - australiaeast
+  - australiasoutheast
+  - brazilne
+  - brazilsouth
+  - brazilse
+  - canadacentral
+  - canadaeast
+  - centralindia
+  - centraluseuap
+  - centralus
+  - chilec
+  - eastasia
+  - eastus2euap
+  - eastus2
+  - usstagee
+  - eastus
+  - centralfrance
+  - southfrance
+  - germanyn
+  - germanywc
+  - indonesiacentral
+  - israelcentral
+  - italynorth
+  - japaneast
+  - japanwest
+  - jioindiacentral
+  - jioindiawest
+  - koreacentral
+  - koreasouth
+  - malaysiasouth
+  - malaysiawest
+  - mexicocentral
+  - newzealandnorth
+  - northcentralus
+  - northeurope2
+  - northeurope
+  - norwaye
+  - norwayw
+  - polandcentral
+  - qatarcentral
+  - southafricanorth
+  - southafricawest
+  - southcentralus2
+  - usstagec
+  - southcentralus
+  - southindia
+  - southeastasia
+  - southeastus
+  - spaincentral
+  - swedencentral
+  - swedensouth
+  - switzerlandn
+  - switzerlandw
+  - taiwannorth
+  - taiwannorthwest
+  - uaecentral
+  - uaenorth
+  - uksouth
+  - ukwest
+  - westcentralus
+  - westeurope
+  - westindia
+  - westus2
+  - westus3
+  - westus
