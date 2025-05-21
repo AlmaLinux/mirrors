@@ -72,7 +72,8 @@ class MirrorProcessor:
         'client',
     )
 
-    nominatim_url = 'https://nominatim.openstreetmap.org'
+    # nominatim_url = 'https://nominatim.openstreetmap.org'
+    nominatim_url = 'https://nominatim.geocoding.ai'
 
     def __setattr__(self, key, value):
         if key in self.__class_objects__:
