@@ -97,7 +97,6 @@ repos:
       - "10.0"
     arches:
       - x86_64
-      - x86_64_v2
   - name: rt
     path: RT/$basearch/os/
     versions:
@@ -107,7 +106,6 @@ repos:
       - "10.0"
     arches:
       - x86_64
-      - x86_64_v2
   - name: extras
     path: extras/$basearch/os/
     versions:
@@ -329,7 +327,6 @@ repos:
       - "10.0"
     arches:
       - x86_64
-      - x86_64_v2
   - name: rt-debuginfo
     path: RT/debug/$basearch/
     vault: true
@@ -344,7 +341,6 @@ repos:
       - "10.0"
     arches:
       - x86_64
-      - x86_64_v2
   - name: extras-debuginfo
     path: extras/debug/$basearch/
     vault: true
