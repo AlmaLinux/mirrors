@@ -235,6 +235,9 @@ repos:
   - name: resilientstorage-source
     path: ResilientStorage/Source/
     vault: true
+    versions:
+      - "8.10"
+      - "9.6"
   - name: devel-source
     path: devel/Source/
     vault: true
