@@ -1,5 +1,6 @@
 ---
-name: mirrors.teamcloud.am/mirrors/almalinux/
+name: mirrors.teamcloud.am
+
 address:
   http: http://mirrors.teamcloud.am/mirrors/almalinux/
   https: https://mirrors.teamcloud.am/mirrors/almalinux/
