@@ -1,0 +1,13 @@
+name: vn-mirrors.techhost.vn
+address:
+  http: http://vn-mirrors.techhost.vn/almalinux/
+  https: https://vn-mirrors.techhost.vn/almalinux/
+update_frequency: 3h
+sponsor: TechHost.VN
+sponsor_url: https://www.techhost.vn/
+email: info@techhost.vn
+geolocation:
+  continent: Asia
+  country: VN
+  state_province: NA
+  city: Ho Chi Minh
