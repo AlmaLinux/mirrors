@@ -12,7 +12,3 @@ update_frequency: 6h
 sponsor: University of California, Santa Barbara
 sponsor_url: https://www.ucsb.edu
 email: mtc@ucsb.edu
-# having issues right now
-# we need to contact owner
-# disable for now
-private: true
