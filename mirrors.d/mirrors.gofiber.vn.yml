@@ -2,7 +2,7 @@ name: mirrors.gofiber.vn
 address:
   http: http://mirrors.gofiber.vn/almalinux/
   https: https://mirrors.gofiber.vn/almalinux/
-update_frequency: 8h
+update_frequency: 3h
 sponsor: Gofiber
 sponsor_url: https://gofiber.vn/
 email: info@gofiber.vn
