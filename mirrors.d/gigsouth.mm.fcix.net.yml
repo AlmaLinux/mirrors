@@ -1,0 +1,18 @@
+---
+name: gigsouth.mm.fcix.net
+address:
+  http: http://gigsouth.mm.fcix.net/almalinux/
+  https: https://gigsouth.mm.fcix.net/almalinux/
+  rsync: rsync://gigsouth.mm.fcix.net/almalinux/
+update_frequency: 2h
+sponsor: Fremont Cabal Internet Exchange
+sponsor_url: https://fcix.net/
+email: mirror@fcix.net
+geolocation:
+  continent: North America
+  country: US
+  state_province: Georgia
+  city: Atlanta
+private: false
+monopoly: false
+...
