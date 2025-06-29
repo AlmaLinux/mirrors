@@ -2,12 +2,10 @@ name: mirror.krfoss.org
 address:
   http: http://mirror.krfoss.org/almalinux
   https: https://mirror.krfoss.org/almalinux
-  rsync: rsync://dsync.krfoss.org/almalinux
 address_optional:
   kitten:
     http: http://mirror.krfoss.org/almalinux-kitten
     https: https://mirror.krfoss.org/almalinux-kitten
-    rsync: rsync://dsync.krfoss.org/almalinux-kitten
 update_frequency: 3h
 sponsor: ROKFOSS PROJECT(ROKFOSS 프로젝트)
 sponsor_url: https://krfoss.org
