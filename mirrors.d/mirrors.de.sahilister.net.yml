@@ -1,0 +1,13 @@
+---
+name: mirrors.de.sahilister.net
+address:
+  https: https://mirrors.de.sahilister.net/almalinux/
+geolocation:
+  country: DE
+  state_province: Saxony
+  city: Falkenstein
+update_frequency: 3h
+sponsor: Sahil Dhiman
+sponsor_url: https://sahilister.in/
+email: mirrors@sahilister.in
+...
