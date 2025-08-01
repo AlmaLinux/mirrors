@@ -5,7 +5,7 @@ address:
   https: https://mirror.africloud.com/alma/
   rsync: 
   ftp: 
-update_frequency: 12h
+update_frequency: 3h
 sponsor: TENET South Africa
 sponsor_url: https://africloud.com
 email: mail@africloud.com
