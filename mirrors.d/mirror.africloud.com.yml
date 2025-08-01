@@ -3,8 +3,6 @@ name: alma.mirror.ac.za
 address:
   http: http://mirror.africloud.com/alma/
   https: https://mirror.africloud.com/alma/
-  rsync: 
-  ftp: 
 update_frequency: 3h
 sponsor: TENET South Africa
 sponsor_url: https://africloud.com
