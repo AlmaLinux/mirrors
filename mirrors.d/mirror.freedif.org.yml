@@ -5,9 +5,9 @@ address:
   rsync: rsync://mirror.freedif.org/almalinux/
 address_optional:
   kitten:
- http: http://mirror.freedif.org/almalinux-kitten/
-  https: https://mirror.freedif.org/almalinux-kitten/
-  rsync: rsync://mirror.freedif.org/almalinux-kitten/
+    http: http://mirror.freedif.org/almalinux-kitten/
+    https: https://mirror.freedif.org/almalinux-kitten/
+    rsync: rsync://mirror.freedif.org/almalinux-kitten/
 update_frequency: 1h
 sponsor: Freedif
 sponsor_url: freedif.org
