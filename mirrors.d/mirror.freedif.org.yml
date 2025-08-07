@@ -1,0 +1,14 @@
+name: Freedif
+address:
+  http: http://mirror.freedif.org/almalinux/
+  https: https://mirror.freedif.org/almalinux/
+  rsync: rsync://mirror.freedif.org/almalinux/
+update_frequency: 1h
+sponsor: Freedif
+sponsor_url: freedif.org
+email: karibu@freedif.org
+geolocation:
+  country: SG
+  state_province: Singapore
+  city: Singapore
+private: false
