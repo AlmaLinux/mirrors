@@ -1,0 +1,15 @@
+---
+name: de.mirrors.cicku.me
+address:
+  http: http://de.mirrors.cicku.me/almalinux
+  https: https://de.mirrors.cicku.me/almalinux
+geolocation:
+  country: Germany
+  state_province: Hesse
+  city: Frankfurt
+update_frequency: 3h
+sponsor: CICKU
+sponsor_url: https://mirror.cicku.me
+email: mirrors@cicku.me
+private: true
+...

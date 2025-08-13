@@ -14,4 +14,9 @@ sponsor: Herza Cloud
 sponsor_url: https://herza.id
 email: noc@herza.id
 asn: 140443
+geolocation:
+  continent: South East Asia
+  country: ID
+  state_province: DKI Jakarta
+  city: Jakarta Timur
 ...

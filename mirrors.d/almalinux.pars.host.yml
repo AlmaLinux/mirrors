@@ -1,0 +1,15 @@
+---
+name: almalinux.pars.host
+address:
+  http: http://almalinux.pars.host
+  https: https://almalinux.pars.host
+geolocation:
+  continent: Asia
+  country: IR
+  state_province: Tehran
+  city: Tehran
+update_frequency: 3h
+sponsor: Pars.Host
+sponsor_url: https://pars.host
+email: parhizkary@pars.host
+...

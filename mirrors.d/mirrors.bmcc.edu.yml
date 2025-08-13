@@ -1,0 +1,16 @@
+---
+name: mirrors.bmcc.edu
+address:
+  https: https://mirrors.bmcc.edu/alma
+update_frequency: 1h
+sponsor: Bay Mills Community College
+sponsor_url: bmcc.edu
+email: tpostma@bmcc.edu
+geolocation:
+  continent: North America
+  country: US
+  state_province: MI
+  city: Brimley
+private: false
+monopoly: false
+...

@@ -1,0 +1,14 @@
+---
+name: mirror.hoasted.com
+address:
+  http: http://mirror.hoasted.com/almalinux/
+  https: https://mirror.hoasted.com/almalinux/
+geolocation:
+  country: NL
+  state_province: Noord Holland
+  city: Amsterdam
+update_frequency: 3h
+sponsor: Hoasted
+sponsor_url: https://www.hoasted.com/
+email: support@hoasted.com
+...

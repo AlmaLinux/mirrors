@@ -1,0 +1,20 @@
+---
+name: fr2.rpmfind.net
+address:
+  http: http://fr2.rpmfind.net/linux/almalinux/
+  https: https://fr2.rpmfind.net/linux/almalinux/
+  rsync: rsync://fr2.rpmfind.net/linux/almalinux/
+address_optional:
+  kitten:
+    http: http://fr2.rpmfind.net/linux/almalinux-kitten/
+    https: https://fr2.rpmfind.net/linux/almalinux-kitten/
+    rsync: rsync://fr2.rpmfind.net/linux/almalinux-kitten/
+geolocation:
+  country: FR
+  state_province: Rhone
+  city: Lyon
+update_frequency: 3h
+sponsor: RPMFind
+sponsor_url: https://rpmfind.net
+email: fabrice@bellet.info
+...

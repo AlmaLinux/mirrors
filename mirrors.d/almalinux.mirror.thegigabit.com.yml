@@ -1,0 +1,15 @@
+---
+name: almalinux.mirror.thegigabit.com
+address:
+  http: http://almalinux.mirror.thegigabit.com/
+  https: https://almalinux.mirror.thegigabit.com/
+  rsync: rsync://almalinux.mirror.thegigabit.com/almalinux
+geolocation:
+  country: MY
+  state_province: Kuala Lumpur
+  city: Kuala Lumpur
+update_frequency: 1h
+sponsor: Gigabit Hosting Sdn Bhd
+sponsor_url: https://thegigabit.com/
+email: soc@thegigabit.com
+...

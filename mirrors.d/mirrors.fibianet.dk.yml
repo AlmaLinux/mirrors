@@ -1,0 +1,23 @@
+---
+name: mirrors.fibianet.dk
+address:
+  http: http://mirrors.fibianet.dk/almalinux
+  https: https://mirrors.fibianet.dk/almalinux
+  rsync: rsync://mirrors.fibianet.dk/almalinux
+address_optional:
+  kitten:
+    http: http://mirrors.fibianet.dk/almalinux-kitten
+    https: https://mirrors.fibianet.dk/almalinux-kitten
+    rsync: rsync://mirrors.fibianet.dk/almalinux-kitten
+update_frequency: 2h
+sponsor: Fibia P/S
+sponsor_url: https://fibia.dk
+email: mirror-admin@fibianet.dk
+geolocation:
+  continent: Europe
+  country: DK
+  state_province:
+  city: Copenhagen
+asn:
+  - 44869
+...

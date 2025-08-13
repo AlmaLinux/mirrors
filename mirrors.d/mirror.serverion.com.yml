@@ -1,7 +1,6 @@
 ---
 name: mirror.serverion.com
 address:
-  http: http://mirror.serverion.com/almalinux/
   https: https://mirror.serverion.com/almalinux/
   rsync: rsync://mirror.serverion.com/almalinux/
   ftp: ftp://mirror.serverion.com/almalinux/

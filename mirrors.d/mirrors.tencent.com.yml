@@ -1,0 +1,15 @@
+---
+name: mirrors.tencent.com
+address:
+  http: http://mirrors.tencent.com/almalinux
+  https: https://mirrors.tencent.com/almalinux
+update_frequency: 3h
+sponsor: Tencent
+sponsor_url: https://www.tencent.com/
+email: mirrors@tencent.com
+geolocation:
+  continent: Asia
+  country: CN
+  state_province: Guang Dong
+  city: Guang Zhou
+...

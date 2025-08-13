@@ -1,0 +1,25 @@
+---
+sponsor: Zagrio WebHosting
+email: root@zagrio.com
+name: almalinux.mirrors.zagrio.net
+address:
+  http: http://almalinux.mirrors.zagrio.net/
+  https: https://almalinux.mirrors.zagrio.net/
+  rsync: rsync://mirrors.zagrio.net/almalinux/
+  ftp: ftp://mirrors.zagrio.net/almalinux/
+address_optional:
+    kitten:
+      http: http://kitten.almalinux.mirrors.zagrio.net/
+      https: https://kitten.almalinux.mirrors.zagrio.net/
+      rsync: rsync://mirrors.zagrio.net/almalinux-kitten/
+      ftp: ftp://mirrors.zagrio.net/almalinux-kitten/
+update_frequency: 3h
+geolocation:
+  continent: Asia
+  country: IR
+  state_province: Tehran
+  city: Tehran
+private: false
+monopoly: false
+sponsor_url: https://www.zagrio.com/
+...

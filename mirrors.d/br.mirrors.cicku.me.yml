@@ -1,0 +1,15 @@
+---
+name: br.mirrors.cicku.me
+address:
+  http: http://br.mirrors.cicku.me/almalinux
+  https: https://br.mirrors.cicku.me/almalinux
+geolocation:
+  country: BR
+  state_province: Rio de Janeiro
+  city: Rio de Janeiro
+update_frequency: 3h
+sponsor: CICKU
+sponsor_url: https://mirror.cicku.me
+email: mirrors@cicku.me
+private: true
+...

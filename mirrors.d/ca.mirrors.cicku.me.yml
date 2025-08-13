@@ -1,0 +1,15 @@
+---
+name: ca.mirrors.cicku.me
+address:
+  http: http://ca.mirrors.cicku.me/almalinux
+  https: https://ca.mirrors.cicku.me/almalinux
+geolocation:
+  country: CA
+  state_province: British Columbia
+  city: Vancouver
+update_frequency: 3h
+sponsor: CICKU
+sponsor_url: https://mirror.cicku.me
+email: mirrors@cicku.me
+private: true
+...

@@ -1,0 +1,16 @@
+---
+name: ftp.cixug.es
+address:
+  ftp: ftp://ftp.cixug.es/almalinux/
+  http: http://ftp.cixug.es/almalinux/
+  https: https://ftp.cixug.es/almalinux/
+geolocation:
+  country: ES
+  state_province: Galicia
+  city: A Coruña
+update_frequency: 3h
+sponsor: Consorcio CIXUG and Universidade da Coruña
+sponsor_url: https://www.cixug.gal
+email: osl@cixug.es
+...
+

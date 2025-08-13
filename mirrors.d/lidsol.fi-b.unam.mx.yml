@@ -1,0 +1,18 @@
+---
+name: lidsol.fi-b.unam.mx
+address:
+  http: http://lidsol.fi-b.unam.mx/almalinux/
+  https: https://lidsol.fi-b.unam.mx/almalinux/
+  rsync: rsync://lidsol.fi-b.unam.mx/almalinux
+update_frequency: 1h
+sponsor: LIDSoL UNAM
+sponsor_url: https://lidsol.unam.mx/
+email: lidsol-info@proton.me
+geolocation:
+  continent: North America
+  country: MX
+  state_province: Mexico City
+  city: Mexico City
+private: false
+monopoly: false
+

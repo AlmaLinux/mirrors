@@ -1,0 +1,17 @@
+---
+name: almalinux.mobinhost.com
+address:
+  http: http://almalinux.mobinhost.com
+  https: https://almalinux.mobinhost.com
+  rsync: rsync://almalinux.mobinhost.com/almalinux/
+  ftp: ftp://almalinux.mobinhost.com/almalinux/
+geolocation:
+  continent: Asia
+  country: IR
+  state_province: Tehran
+  city: Tehran
+update_frequency: 3h
+sponsor: MobinHost
+sponsor_url: https://mobinhost.com
+email: aria@mobinhost.net
+...

@@ -1,0 +1,15 @@
+---
+name: mirror.hostiko.network
+address:
+ http: http://mirror.hostiko.network/almalinux/
+ https: https://mirror.hostiko.network/almalinux/
+geolocation:
+ continent: Europe
+ country: UA
+ state_province: Kyiv
+ city: Kyiv
+update_frequency: 3h
+sponsor: Hostiko
+sponsor_url: https://hostiko.com.ua/en/?p=200143
+email: mirror@hostiko.network
+...

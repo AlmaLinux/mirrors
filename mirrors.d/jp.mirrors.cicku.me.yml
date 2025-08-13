@@ -1,0 +1,15 @@
+---
+name: jp.mirrors.cicku.me
+address:
+  http: http://jp.mirrors.cicku.me/almalinux
+  https: https://jp.mirrors.cicku.me/almalinux
+geolocation:
+  country: JP
+  state_province: 
+  city: Osaka
+update_frequency: 3h
+sponsor: CICKU
+sponsor_url: https://mirror.cicku.me
+email: mirrors@cicku.me
+private: true
+...

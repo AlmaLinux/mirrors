@@ -2,6 +2,9 @@
 name: homeserver.zelgray.work
 address:
   http: http://homeserver.zelgray.work/almalinux/
+address_optional:
+  kitten:
+    http: http://homeserver.zelgray.work/almalinux-kitten/
 update_frequency: 1h
 sponsor: homeserver.zelgray.work
 sponsor_url: homeserver.zelgray.work
@@ -14,6 +17,5 @@ geolocation:
 private: true
 monopoly: true
 subnets:
-  - 77.121.201.30/32
-asn: 25229
+  - 77.120.212.30/32
 ...

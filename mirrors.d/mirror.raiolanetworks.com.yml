@@ -1,0 +1,23 @@
+---
+name: mirror.raiolanetworks.com
+address:
+  http: http://mirror.raiolanetworks.com/almalinux/
+  https: https://mirror.raiolanetworks.com/almalinux/
+  rsync: rsync://mirror.raiolanetworks.com/pub/almalinux/
+address_optional:
+  kitten:
+    http: http://mirror.raiolanetworks.com/almalinux-kitten/
+    https: https://mirror.raiolanetworks.com/almalinux-kitten/
+    rsync: rsync://mirror.raiolanetworks.com/pub/almalinux-kitten/
+update_frequency: 1h
+sponsor: Raiola Networks
+sponsor_url: https://raiolanetworks.com/
+email: mirrors@raiolanetworks.es
+geolocation:
+  continent: Europe
+  country: ES
+  state_province: Madrid
+  city: Madrid
+private: false
+monopoly: false
+asn: 56958

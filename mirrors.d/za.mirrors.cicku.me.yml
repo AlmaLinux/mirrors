@@ -1,0 +1,15 @@
+---
+name: za.mirrors.cicku.me
+address:
+  http: http://za.mirrors.cicku.me/almalinux
+  https: https://za.mirrors.cicku.me/almalinux
+geolocation:
+  country: ZA
+  state_province: Gauteng
+  city: Johannesburg
+update_frequency: 3h
+sponsor: CICKU
+sponsor_url: https://mirror.cicku.me
+email: mirrors@cicku.me
+private: true
+...

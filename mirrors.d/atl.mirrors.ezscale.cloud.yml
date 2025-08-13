@@ -1,0 +1,23 @@
+---
+name: atl.mirrors.ezscale.cloud
+address:
+  http: http://atl.mirrors.ezscale.cloud/almalinux
+  https: https://atl.mirrors.ezscale.cloud/almalinux
+  rsync: rsync://atl.mirrors.ezscale.cloud/almalinux
+  ftp: ftp://atl.mirrors.ezscale.cloud/almalinux
+address_optional:
+  kitten:
+    http: http://atl.mirrors.ezscale.cloud/almalinux-kitten
+    https: https://atl.mirrors.ezscale.cloud/almalinux-kitten
+    rsync: rsync://atl.mirrors.ezscale.cloud/almalinux-kitten
+    ftp: ftp://atl.mirrors.ezscale.cloud/almalinux-kitten
+update_frequency: 3h
+sponsor: EZSCALE Hosting
+sponsor_url: https://ezscale.cloud
+email: support@ezscale.cloud
+geolocation:
+  continent: North America
+  country: US
+  state_province: Georgia
+  city: Atlanta
+...

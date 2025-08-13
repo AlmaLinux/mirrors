@@ -1,0 +1,15 @@
+---
+name: gb.mirrors.cicku.me
+address:
+  http: http://gb.mirrors.cicku.me/almalinux
+  https: https://gb.mirrors.cicku.me/almalinux
+geolocation:
+  country: GB
+  state_province: Scotland
+  city: Edinburgh
+update_frequency: 3h
+sponsor: CICKU
+sponsor_url: https://mirror.cicku.me
+email: mirrors@cicku.me
+private: true
+...
