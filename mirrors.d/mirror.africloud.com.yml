@@ -1,10 +1,10 @@
 ---
-name: alma.mirror.ac.za
+name: mirror.africloud.com
 address:
   http: http://mirror.africloud.com/alma/
   https: https://mirror.africloud.com/alma/
 update_frequency: 3h
-sponsor: TENET South Africa
+sponsor: AFRICLOUD
 sponsor_url: https://africloud.com
 email: mail@africloud.com
 geolocation:
