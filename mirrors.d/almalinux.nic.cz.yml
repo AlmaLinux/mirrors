@@ -1,9 +1,9 @@
 ---
-name: mirrors.nic.cz
+name: almalinux.nic.cz
 address:
-  http: http://mirrors.nic.cz/almalinux/
-  https: https://mirrors.nic.cz/almalinux/
-  rsync: rsync://mirrors.nic.cz/almalinux
+  http: http://almalinux.nic.cz/almalinux/
+  https: https://almalinux.nic.cz/almalinux/
+  rsync: rsync://almalinux.nic.cz/almalinux
 geolocation:
   country: CZ
   state_province: Prague
