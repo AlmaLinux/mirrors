@@ -1,4 +1,3 @@
-name: VPSTTT
 site: https://vpsttt.com/
 email: noc@vpsttt.com
 sponsor: VPSTTT
@@ -14,7 +13,7 @@ geolocation:
   state_province: Khanh Hoa
   city: Nha Trang
 
-ipv6: true
-bandwidth: 10 Gbps
-upstream: rsync://rsync.repo.almalinux.org/almalinux/
-update_frequency: 2h
+- ipv6: true
+- bandwidth: 10 Gbps
+- upstream: rsync://rsync.repo.almalinux.org/almalinux/
+- update_frequency: 2h
