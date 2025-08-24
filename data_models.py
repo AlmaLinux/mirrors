@@ -81,6 +81,7 @@ class MirrorData:
     private: bool = False
     mirror_url: Optional[str] = None
     iso_url: Optional[str] = None
+    iso_url_kitten: Optional[str] = None
     location: Optional[LocationData] = None
     geolocation: Optional[GeoLocationData] = None
     name: Optional[str] = None
@@ -109,6 +110,7 @@ class MirrorData:
             private=dct.get('private'),
             mirror_url=dct.get('mirror_url'),
             iso_url=dct.get('iso_url'),
+            iso_url_kitten=dct.get('iso_url_kitten'),
             location=LocationData.load_from_json(
                 dct=dct.get('location') or {},
             ),
