@@ -25,6 +25,7 @@ from api.handlers import (
     get_all_mirrors,
     get_isos_list_by_countries,
     get_main_isos_table,
+    get_main_isos_table_kitten,
     check_optional_version,
     get_optional_module_from_version,
     SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
@@ -283,7 +284,7 @@ def isos(
         version: str = None,
 ):
     data = {
-        'main_title': 'AlmaLinux ISOs links'
+        'main_title': 'AlmaLinux ISO links'
     }
     config = get_config(
         logger=logger,
@@ -303,6 +304,72 @@ def isos(
             nearest_mirrors
         ) = get_isos_list_by_countries(
             ip_address=ip_address,
+        )
+        version = get_allowed_version(
+            versions=config.versions,
+            # ISOs are stored only for active versions (non-vault)
+            vault_versions=[],
+            duplicated_versions=config.duplicated_versions,
+            version=version,
+            optional_module_versions=config.optional_module_versions
+        )
+        arch = get_allowed_arch(
+            arch=arch,
+            version=version,
+            arches=config.arches,
+        )
+        data.update({
+            'arch': arch,
+            'version': version,
+            'mirror_list': mirrors_by_countries,
+            'nearest_mirrors': nearest_mirrors,
+        })
+        return render_template('isos.html', **data)
+
+
+@app.route(
+    '/kitten/isos',
+    methods=('GET',),
+)
+@app.route(
+    '/kitten/isos.html',
+    methods=('GET',),
+)
+@app.route(
+    '/kitten/isos/<arch>/<version>',
+    methods=('GET',),
+)
+@app.route(
+    '/kitten/isos/<arch>/<version>.html',
+    methods=('GET',),
+)
+def kitten_isos(
+        arch: str = None,
+        version: str = None,
+):
+    data = {
+        'main_title': 'AlmaLinux Kitten ISO links',
+        'kitten': True
+    }
+    config = get_config(
+        logger=logger,
+        path_to_config=SERVICE_CONFIG_PATH,
+        path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
+    )
+    if arch is None or version is None:
+        data.update({
+            'isos_list': get_main_isos_table_kitten(config=config),
+        })
+
+        return render_template('isos_main.html', **data)
+    else:
+        ip_address = _get_request_ip()
+        (
+            mirrors_by_countries,
+            nearest_mirrors
+        ) = get_isos_list_by_countries(
+            ip_address=ip_address,
+            module='kitten'
         )
         version = get_allowed_version(
             versions=config.versions,
@@ -362,6 +429,7 @@ def mirrors_table(all_mirrors: bool = False):
             get_without_cloud_mirrors=True,
         )
     data = {
+        'module': None,
         'column_names': [
             'Name',
             'Sponsor',
@@ -374,6 +442,40 @@ def mirrors_table(all_mirrors: bool = False):
         'url_types': url_types,
         'mirror_list': mirrors,
         'main_title': 'AlmaLinux Mirrors',
+    }
+    return render_template('mirrors.html', **data)
+
+
+@app.route(
+    '/kitten',
+    methods=('GET',),
+)
+def mirrors_table_kitten(all_mirrors: bool = False):
+    url_types = sorted(get_url_types())
+    if all_mirrors:
+        mirrors = get_all_mirrors(request_module='kitten')
+    else:
+        mirrors = get_all_mirrors(
+            get_working_mirrors=True,
+            get_expired_mirrors=True,
+            get_without_private_mirrors=True,
+            get_without_cloud_mirrors=True,
+            request_module='kitten'
+        )
+    data = {
+        'module': 'kitten',
+        'column_names': [
+            'Name',
+            'Sponsor',
+            'Status',
+            'Continent',
+            'Region',
+            *(item.upper() for item in url_types),
+            'IPv6'
+        ],
+        'url_types': url_types,
+        'mirror_list': mirrors,
+        'main_title': 'AlmaLinux Kitten Mirrors',
     }
     return render_template('mirrors.html', **data)
 

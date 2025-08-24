@@ -183,6 +183,19 @@ class MirrorProcessor:
             mirror_info.mirror_url + '/',
             '%s/isos/%s',
             )
+        
+    async def set_iso_url_kitten(
+        self,
+        mirror_info: MirrorData,
+    ):
+        if not mirror_info.module_urls.get('kitten'):
+            mirror_info.iso_url_kitten = ''
+            return
+        self.logger.info('Set kitten iso URL for "%s"', mirror_info.name)
+        mirror_info.iso_url_kitten = urljoin(
+            mirror_info.module_urls['kitten'].get('http', mirror_info.module_urls['kitten'].get('https', '')) + '/',
+            '%s/isos/%s',
+            )
 
     async def set_geo_and_location_data_from_db(
         self,
