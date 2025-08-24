@@ -2,7 +2,7 @@
 
 {% block text_1 %}
     {{ super() }}
-    You can find the list of available AlmaLinux architectures and versions below.
+    You can find the list of available AlmaLinux {%if kitten %}Kitten {% endif %}architectures and versions below.
     <br>
     Also you can use a BitTorrent file for downloading ISOs. It might be faster than direct downloading from the mirrors.
     <br>
@@ -25,7 +25,7 @@
                 <td>{{ arch }}</td>
                 <td>
                     {% for version in versions %}
-                        <a href="{{ url_for('.isos', arch=arch, version=version) }}"
+                        <a href="{{ url_for('.kitten_isos' if kitten else '.isos', arch=arch, version=version) }}"
                            class="link-success text-decoration-none">
                             {{ version }}
                         </a>

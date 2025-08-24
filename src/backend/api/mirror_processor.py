@@ -183,6 +183,19 @@ class MirrorProcessor:
             mirror_info.mirror_url + '/',
             '%s/isos/%s',
             )
+        
+    async def set_iso_url_kitten(
+        self,
+        mirror_info: MirrorData,
+    ):
+        if not mirror_info.module_urls.get('kitten'):
+            mirror_info.iso_url_kitten = ''
+            return
+        self.logger.info('Set kitten iso URL for "%s"', mirror_info.name)
+        mirror_info.iso_url_kitten = urljoin(
+            mirror_info.module_urls['kitten'].get('http', mirror_info.module_urls['kitten'].get('https', '')) + '/',
+            '%s/isos/%s',
+            )
 
     async def set_geo_and_location_data_from_db(
         self,
@@ -334,6 +347,10 @@ class MirrorProcessor:
         redis_key = f'mirror_offline_{mirror_info.name}'
         if (redis_value := self.cache.get(key=redis_key)) is not None:
             mirror_info.status = redis_value
+            self.logger.info(
+                'Mirror "%s" is marked as offline in Redis cache',
+                mirror_info.name
+            )
             return False
         if mirror_info.private or mirror_info.name in WHITELIST_MIRRORS:
             self.logger.info(
@@ -404,6 +421,20 @@ class MirrorProcessor:
         mirror_info.status = 'ok'
         
         for module in main_config.optional_module_versions.keys():
+            # check if the module is expired
+            # this first if condition is repetitive but that's ok
+            if not mirror_info.module_urls or not mirror_info.module_urls.get(module):
+                continue
+            if await self.is_mirror_expired(
+                    mirror_info=mirror_info,
+                    main_config=main_config,
+                    module=module
+            ):
+                self.logger.info(
+                    f'Mirror {mirror_info.name} module {module} is expired'
+                )
+                continue
+
             await optional_modules_available(
                 mirror_info=mirror_info,
                 http_session=self.client,
@@ -416,6 +447,7 @@ class MirrorProcessor:
         self,
         mirror_info: MirrorData,
         main_config: MainConfig,
+        module: Optional[str] = None
     ):
         mirror_should_updated_at = dateparser.parse(
             f'now-{main_config.allowed_outdate} UTC'
@@ -424,6 +456,7 @@ class MirrorProcessor:
             get_mirror_url(
                 main_config=main_config,
                 mirror_info=mirror_info,
+                module=module
             ) + '/',
             'TIME',
             )

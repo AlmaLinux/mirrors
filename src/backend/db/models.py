@@ -165,6 +165,7 @@ class Mirror(Base):
     sponsor_name = Column(String, nullable=False)
     mirror_url = Column(String, nullable=False)
     iso_url = Column(String, nullable=False)
+    iso_url_kitten = Column(String, nullable=False)
     sponsor_url = Column(String, nullable=False)
     email = Column(String, nullable=False)
     asn = Column(String, nullable=True)
@@ -254,6 +255,7 @@ class Mirror(Base):
             ipv6=self.ipv6,
             mirror_url=self.mirror_url,
             iso_url=self.iso_url,
+            iso_url_kitten=self.iso_url_kitten,
             has_full_iso_set=self.has_full_iso_set,
             has_optional_modules=self.has_optional_modules
         )

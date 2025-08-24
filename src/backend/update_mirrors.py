@@ -144,6 +144,7 @@ async def update_mirrors_handler() -> str:
                     sponsor_name=mirror_info.sponsor_name,
                     mirror_url=mirror_info.mirror_url,
                     iso_url=mirror_info.iso_url,
+                    iso_url_kitten=mirror_info.iso_url_kitten,
                     sponsor_url=mirror_info.sponsor_url,
                     email=mirror_info.email,
                     cloud_type=mirror_info.cloud_type,
@@ -220,6 +221,9 @@ async def check_mirror(mirror_check_sem, mirror_info, main_config, mirror_iso_ur
                     mirror_info=mirror_info,
                 )
             await mirror_processor.set_iso_url(
+                mirror_info=mirror_info
+            )
+            await mirror_processor.set_iso_url_kitten(
                 mirror_info=mirror_info
             )
             if mirror_info.status in ('ok', 'expired') and mirror_info.ip not in ('Unknown', None):

@@ -575,6 +575,7 @@ def get_mirrors_list(
 
 def get_isos_list_by_countries(
     ip_address: Optional[str],
+    module: Optional[str] = None
 ) -> tuple[dict[str, list[MirrorData]], list[MirrorData]]:
     mirrors_by_countries = defaultdict(list)
     for mirror_info in get_all_mirrors(
@@ -582,6 +583,8 @@ def get_isos_list_by_countries(
             get_mirrors_with_full_set_of_isos=True,
             get_without_cloud_mirrors=True,
             get_working_mirrors=True,
+            request_module=module,
+            get_expired_mirrors=False
     ):
         mirrors_by_countries[
             mirror_info.geolocation.country
@@ -593,6 +596,7 @@ def get_isos_list_by_countries(
         get_without_cloud_mirrors=True,
         get_working_mirrors=True,
         get_expired_mirrors=False,
+        request_module=module
     )
     return mirrors_by_countries, nearest_mirrors
 
@@ -608,5 +612,22 @@ def get_main_isos_table(config: MainConfig) -> dict[str, list[str]]:
                 if not result.get(arch):
                     result[arch] = []
                 result[arch].append(config.duplicated_versions[version])
+
+    return result
+
+# this is pretty different because we don't use duplicated versions
+# and we filter only by versions with kitten module
+def get_main_isos_table_kitten(config: MainConfig) -> dict[str, list[str]]:
+    result = defaultdict(list)
+    for version, arches in config.arches.items():
+        if 'kitten' not in version:
+            continue
+        for arch in arches:
+            if (
+                arch in config.arches[version]
+            ):
+                if not result.get(arch):
+                    result[arch] = []
+                result[arch].append(version)
 
     return result
