@@ -535,7 +535,13 @@ def _is_permitted_arch_for_this_version_and_repo(
 def get_mirror_url(
         main_config: MainConfig,
         mirror_info: MirrorData,
+        module: Optional[str] = None
 ):
+    if module:
+        return next(
+            url for url_type, url in mirror_info.module_urls[module].items()
+            if url_type in main_config.required_protocols
+        )
     return next(
         url for url_type, url in mirror_info.urls.items()
         if url_type in main_config.required_protocols
@@ -684,6 +690,8 @@ async def optional_modules_available(
     logger: Logger,
     module: str
 ):
+    # this check is not really needed, it's covered it the method that calls this one
+    # but just in case
     if not mirror_info.module_urls or not mirror_info.module_urls.get(module):
         return
     
@@ -698,6 +706,7 @@ async def optional_modules_available(
             mirror_name,
         )
         return True
+
     urls_for_checking = {}
     
     for ver in main_config.optional_module_versions[module]:
