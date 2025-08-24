@@ -83,7 +83,7 @@ If you want to set up a public mirror, please read
        class="link-success text-decoration-none">membership opportunities here.</a> {% include "snipets/link_icon.html" %}
 <br><br>
 You can find the list of links to ISOs for all mirrors at
-<a href="{{ url_for('.isos') }}"
+<a href="{{ url_for('.kitten_isos') if module == 'kitten' else url_for('.isos') }}"
    target="_self"
    class="link-success text-decoration-none">this link</a>.
 
@@ -121,7 +121,8 @@ You can find the list of links to ISOs for all mirrors at
         </td>
         {% for url_type in url_types %}
         <td>
-            {% if mirror.urls.get(url_type) %}
+            {# This is for the non-module version of the page #}
+            {% if not module and mirror.urls.get(url_type) %}
             <a href="{{ mirror.urls.get(url_type, '') }}"
                target="_blank"
                class="link-success text-decoration-none">
@@ -135,6 +136,22 @@ You can find the list of links to ISOs for all mirrors at
             {% include "snipets/link_icon.html" %}
             {% endif %}
             {% endif %}
+            {# This is for the module version of the page #}
+            {% if module and mirror.module_urls[module].get(url_type) %}
+            <a href="{{ mirror.module_urls[module].get(url_type, '') }}"
+               target="_blank"
+               class="link-success text-decoration-none">
+                {% if url_type in ['http','https'] %}
+                Mirror
+                {% else %}
+                Link
+                {% endif %}
+            </a>
+            {% if url_type == 'http' or url_type == 'https' %}
+            {% include "snipets/link_icon.html" %}
+            {% endif %}
+            {% endif %}
+            {# End of module version #}
         </td>
         {% endfor %}
         <td>
