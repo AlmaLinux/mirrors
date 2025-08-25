@@ -1,5 +1,6 @@
 # coding=utf-8
 import json
+import pickle
 from typing import Union
 
 from flask_caching import Cache
@@ -15,6 +16,34 @@ FLAPPED_EXPIRED_TIME = 60 * 60  # 1 hour
 MIRRORS_LIST_EXPIRED_TIME = 60 * 60  # 1 hour
 URL_TYPES_LIST_EXPIRED_TIME = 60 * 60 * 24  # 24 hours
 CLOUDS_SUBNETS_EXPIRED_TIME = 60 * 60 * 24  # 24 hours
+
+
+def get_app_config_from_cache(
+    key: str,
+    cache
+) -> dict:
+    """
+    Get app config from cache
+    """
+    app_config = cache.get(key)
+    if app_config is not None:
+        return app_config
+
+
+def set_app_config_to_cache(
+    key: str,
+    cache: Cache,
+    app_config: dict
+) -> None:
+    """
+    Save app config to cache
+    """
+    cache.set(
+        key,
+        app_config,
+        # long cache time becaause we will overwrite it on every mirror status check anyway
+        24 * 60 * 60,  # 24 hours
+    )
 
 
 async def get_subnets_from_cache(

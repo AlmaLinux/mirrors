@@ -19,16 +19,16 @@ from sqlalchemy import insert
 
 from api.handlers import (
     get_all_mirrors_db,
-    SERVICE_CONFIG_PATH,
-    MIRROR_CONFIG_JSON_SCHEMA_DIR_PATH,
-    SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
 )
 from api.mirror_processor import MirrorProcessor
 from api.utils import (
+    MIRROR_CONFIG_JSON_SCHEMA_DIR_PATH,
     get_aws_subnets,
     get_azure_subnets,
     get_gcp_subnets,
-    get_oci_subnets
+    get_oci_subnets,
+    update_config_cache,
+    get_config
 )
 from common.sentry import get_logger, init_sentry_client
 from db.db_engine import FlaskCacheEngine, REDIS_URI
@@ -42,7 +42,6 @@ from db.models import (
 )
 from db.utils import session_scope
 from yaml_snippets.utils import (
-    get_config,
     get_mirrors_info,
 )
 
@@ -56,11 +55,8 @@ cache = FlaskCacheEngine.get_instance(app=app, ro=False)
 
 
 async def update_mirrors_handler() -> str:
-    main_config = get_config(
-        logger=logger,
-        path_to_config=SERVICE_CONFIG_PATH,
-        path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
-    )
+    update_config_cache()
+    main_config = get_config()
     mirrors_dir = os.path.join(
         os.getenv('CONFIG_ROOT'),
         'mirrors/updates',

@@ -16,25 +16,25 @@ dnf_packages:
   - bash-completion
   - setools-console
 python_packages:
-  - aiodns==3.2.0
-  - aiohttp-retry==2.8.3
-  - alembic==1.13.2
-  - beautifulsoup4==4.12.3
-  - dateparser==1.2.0
+  - aiodns==3.5.0
+  - aiohttp-retry==2.9.1
+  - alembic==1.16.4
+  - beautifulsoup4==4.13.5
+  - dateparser==1.2.2
   - Flask-BS4==5.3.1.0
-  - flask[async]==3.0.3
+  - flask[async]==3.1.2
   - git+https://github.com/flask-api/flask-api/
-  - flask-caching==2.3.0
+  - flask-caching==2.3.1
   - geopy==2.4.1
   - gunicorn[gthread]==23.0.0
-  - haversine==2.8.1
-  - jsonschema==4.23.0
-  - lxml==5.3.0
-  - maxminddb==2.6.2
+  - haversine==2.9.0
+  - jsonschema==4.25.1
+  - lxml==6.0.1
+  - maxminddb==2.8.2
   - pycountry==24.6.1
   - pyyaml==6.0.2
-  - redis==5.0.8
-  - requests==2.32.3
-  - sentry-sdk[flask]==2.13.0
-  - sqlalchemy==2.0.32
-  - geoip2==4.8.0
+  - redis==6.4.0
+  - requests==2.32.5
+  - sentry-sdk[flask]==2.35.0
+  - sqlalchemy==2.0.43
+  - geoip2==5.1.0

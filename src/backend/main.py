@@ -28,8 +28,6 @@ from api.handlers import (
     get_main_isos_table_kitten,
     check_optional_version,
     get_optional_module_from_version,
-    SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
-    SERVICE_CONFIG_PATH,
     get_allowed_version,
     get_allowed_arch,
 )
@@ -39,6 +37,7 @@ from api.utils import (
     error_result,
     jsonify_response,
     get_geo_dict_by_ip,
+    get_config
 )
 from common.sentry import (
     init_sentry_client,
@@ -47,9 +46,16 @@ from common.sentry import (
 from db.db_engine import FlaskCacheEngine, REDIS_URI, REDIS_URI_RO
 from db.models import Url
 from db.utils import session_scope
-from yaml_snippets.utils import get_config
 
 app = Flask('app')
+# for profiling, comment when not profiling
+# from werkzeug.middleware.profiler import ProfilerMiddleware
+# app.wsgi_app = ProfilerMiddleware(
+#     app.wsgi_app,
+#     profile_dir='/home/mirror-service/profiles/',  # Directory to store profiling results
+#     sort_by=('cumulative',)    # Sort output by cumulative time
+# )
+# end for profiling
 app.url_map.strict_slashes = False
 Bootstrap(app)
 logger = get_logger(__name__)
@@ -141,11 +147,7 @@ def get_mirror_list(
         version: str,
         repository: str
 ):
-    config = get_config(
-        logger=logger,
-        path_to_config=SERVICE_CONFIG_PATH,
-        path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
-    )
+    config = get_config()
     
     # protocol get arg
     request_protocol = request.args.get('protocol')
@@ -286,11 +288,7 @@ def isos(
     data = {
         'main_title': 'AlmaLinux ISO links'
     }
-    config = get_config(
-        logger=logger,
-        path_to_config=SERVICE_CONFIG_PATH,
-        path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
-    )
+    config = get_config()
     if arch is None or version is None:
         data.update({
             'isos_list': get_main_isos_table(config=config),
@@ -351,11 +349,7 @@ def kitten_isos(
         'main_title': 'AlmaLinux Kitten ISO links',
         'kitten': True
     }
-    config = get_config(
-        logger=logger,
-        path_to_config=SERVICE_CONFIG_PATH,
-        path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
-    )
+    config = get_config()
     if arch is None or version is None:
         data.update({
             'isos_list': get_main_isos_table_kitten(config=config),
@@ -519,8 +513,6 @@ def handle_unknown_repository_or_version(
 
 
 if __name__ == '__main__':
-    # from werkzeug.middleware.profiler import ProfilerMiddleware
-    # app.wsgi_app = ProfilerMiddleware(app.wsgi_app)
     app.run(
         debug=True,
         host='0.0.0.0',
