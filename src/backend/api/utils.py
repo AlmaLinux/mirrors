@@ -235,6 +235,44 @@ async def get_aws_subnets_json(http_session: ClientSession) -> Optional[dict]:
     return response_json
 
 
+async def get_gcp_subnets_json(http_session: ClientSession) -> Optional[dict]:
+    url = 'https://www.gstatic.com/ipranges/cloud.json'
+    try:
+        async with http_session.get(
+                url,
+                timeout=AIOHTTP_TIMEOUT,
+                raise_for_status=True
+        ) as resp:
+            response_json = await resp.json()
+    except (ClientError, TimeoutError) as err:
+        logger.error(
+            'Cannot get json with GCP subnets by url "%s" because "%s"',
+            url,
+            err,
+        )
+        return
+    return response_json
+
+
+async def get_oci_subnets_json(http_session: ClientSession) -> Optional[dict]:
+    url = 'https://docs.oracle.com/en-us/iaas/tools/public_ip_ranges.json'
+    try:
+        async with http_session.get(
+                url,
+                timeout=AIOHTTP_TIMEOUT,
+                raise_for_status=True
+        ) as resp:
+            response_json = await resp.json()
+    except (ClientError, TimeoutError) as err:
+        logger.error(
+            'Cannot get json with OCI subnets by url "%s" because "%s"',
+            url,
+            err,
+        )
+        return
+    return response_json
+
+
 async def get_azure_subnets(http_session: ClientType):
     subnets = await get_subnets_from_cache(
         key='azure_subnets',
@@ -288,22 +326,58 @@ async def get_aws_subnets(http_session: ClientType):
     return subnets
 
 
-def set_subnets_for_hyper_cloud_mirror(
-    subnets: dict[str, list[str]],
-    mirror_info: MirrorData,
-):
-    cloud_regions = mirror_info.cloud_region.lower().split(',')
-    cloud_type = mirror_info.cloud_type.lower()
-
+async def get_gcp_subnets(http_session: ClientType):
+    subnets = await get_subnets_from_cache(
+        key='gcp_subnets',
+        cache=cache,
+    )
     if subnets is not None:
-        if cloud_type == 'aws' and len(cloud_regions) and \
-                cloud_regions[0] in subnets:
-            mirror_info.subnets = subnets[cloud_regions[0]]
-        elif cloud_type == 'azure':
-            total_subnets = []
-            for cloud_region in cloud_regions:
-                total_subnets.extend(subnets.get(cloud_region, []))
-            mirror_info.subnets = total_subnets
+        return subnets
+    data_json = await get_gcp_subnets_json(http_session=http_session)
+    subnets = defaultdict(list)
+    if data_json is None:
+        return subnets
+    for prefix in data_json['prefixes']:
+        if 'ipv4Prefix' in prefix:
+            ip_prefix = prefix['ipv4Prefix']
+        elif 'ipv6Prefix' in prefix:
+            ip_prefix = prefix['ipv6Prefix']
+        else:
+            continue
+        region = prefix['scope'].lower()
+        if ip_prefix not in subnets[region]:
+            subnets[region].append(ip_prefix)
+    await set_subnets_to_cache(
+        key='gcp_subnets',
+        cache=cache,
+        subnets=subnets,
+    )
+    return subnets
+
+
+async def get_oci_subnets(http_session: ClientType):
+    subnets = await get_subnets_from_cache(
+        key='oci_subnets',
+        cache=cache,
+    )
+    if subnets is not None:
+        return subnets
+    data_json = await get_oci_subnets_json(http_session=http_session)
+    subnets = defaultdict(list)
+    if data_json is None:
+        return subnets
+    for prefix in data_json['regions']:
+        region = prefix['region'].lower()
+        for cidr in prefix['cidrs']:
+            ip_prefix = cidr['cidr']
+            if ip_prefix not in subnets[region]:
+                subnets[region].append(ip_prefix)
+    await set_subnets_to_cache(
+        key='oci_subnets',
+        cache=cache,
+        subnets=subnets,
+    )
+    return subnets
 
 
 def get_distance_in_km(

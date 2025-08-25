@@ -27,6 +27,8 @@ from api.mirror_processor import MirrorProcessor
 from api.utils import (
     get_aws_subnets,
     get_azure_subnets,
+    get_gcp_subnets,
+    get_oci_subnets
 )
 from common.sentry import get_logger, init_sentry_client
 from db.db_engine import FlaskCacheEngine, REDIS_URI
@@ -88,6 +90,16 @@ async def update_mirrors_handler() -> str:
             )
             subnets = await get_aws_subnets(
                 http_session=mirror_processor.client
+            )
+            subnets.update(
+                await get_gcp_subnets(
+                    http_session=mirror_processor.client
+                ),
+            )
+            subnets.update(
+                await get_oci_subnets(
+                    http_session=mirror_processor.client
+                ),
             )
             subnets.update(
                 await get_azure_subnets(
