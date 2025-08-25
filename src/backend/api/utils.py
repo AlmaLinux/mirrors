@@ -1,4 +1,5 @@
 # coding=utf-8
+import os
 import asyncio
 import inspect
 import random
@@ -34,6 +35,8 @@ from api.exceptions import (
 from api.redis import (
     get_subnets_from_cache,
     set_subnets_to_cache,
+    get_app_config_from_cache,
+    set_app_config_to_cache,
 )
 from common.sentry import (
     get_logger,
@@ -46,6 +49,7 @@ from db.db_engine import (
     REDIS_URI,
 )
 from yaml_snippets.data_models import MirrorData
+from yaml_snippets.utils import get_config as get_config_from_yaml
 
 logger = get_logger(__name__)
 cache = FlaskCacheEngine.get_instance(ro=False)
@@ -54,6 +58,19 @@ RANDOMIZE_WITHIN_KM = 500
 
 AIOHTTP_TIMEOUT = 30
 
+SERVICE_CONFIG_PATH = os.path.join(
+    os.environ['CONFIG_ROOT'],
+    'mirrors/updates/config.yml'
+)
+SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH = os.path.join(
+    os.environ['SOURCE_PATH'],
+    'src/backend/yaml_snippets/json_schemas/service_config'
+)
+
+MIRROR_CONFIG_JSON_SCHEMA_DIR_PATH = os.path.join(
+    os.environ['SOURCE_PATH'],
+    'src/backend/yaml_snippets/json_schemas/mirror_config'
+)
 
 def jsonify_response(
     status: str,
@@ -378,6 +395,35 @@ async def get_oci_subnets(http_session: ClientType):
         subnets=subnets,
     )
     return subnets
+
+
+def update_config_cache():
+    logger.info('Updating config cache')
+    config = get_config_from_yaml(
+        logger=logger,
+        path_to_config=SERVICE_CONFIG_PATH,
+        path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
+    )
+    set_app_config_to_cache(
+        key='app_config',
+        cache=cache,
+        app_config=config,
+    )
+
+
+def get_config():
+    config = get_app_config_from_cache(
+        key='app_config',
+        cache=cache,
+    )
+    if config is not None:
+        return config
+    config = get_config_from_yaml(
+        logger=logger,
+        path_to_config=SERVICE_CONFIG_PATH,
+        path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
+    )
+    return config
 
 
 def get_distance_in_km(

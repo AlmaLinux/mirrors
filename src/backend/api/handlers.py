@@ -33,9 +33,7 @@ from yaml_snippets.data_models import (
     MainConfig,
     MirrorData,
 )
-from yaml_snippets.utils import (
-    get_config,
-)
+from api.utils import get_config
 
 logger = get_logger(__name__)
 cache = FlaskCacheEngine.get_instance(ro=False)
@@ -51,10 +49,6 @@ SERVICE_CONFIG_PATH = os.path.join(
 SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH = os.path.join(
     os.environ['SOURCE_PATH'],
     'src/backend/yaml_snippets/json_schemas/service_config'
-)
-MIRROR_CONFIG_JSON_SCHEMA_DIR_PATH = os.path.join(
-    os.environ['SOURCE_PATH'],
-    'src/backend/yaml_snippets/json_schemas/mirror_config'
 )
 
 
@@ -108,14 +102,16 @@ def _get_nearest_mirrors_by_network_data(
     for mirror in mirrors:
         if mirror.status != "ok":
             continue
-        if (asn is not None and asn in mirror.asn) or is_ip_in_any_subnet(
-                ip_address=ip_address,
-                subnets_int=mirror.subnets_int,
-        ):
-            if mirror.monopoly:
-                return [mirror]
-            else:
-                suitable_mirrors.append(mirror)
+        if (asn is not None and asn in mirror.asn) \
+                or (mirror.subnets_int and is_ip_in_any_subnet(
+                    ip_address=ip_address,
+                    subnets_int=mirror.subnets_int,
+                )
+            ):
+                if mirror.monopoly:
+                    return [mirror]
+                else:
+                    suitable_mirrors.append(mirror)
     if 1 <= len(suitable_mirrors) < LENGTH_CLOUD_MIRRORS_LIST \
             and match is not None:
         continent, country, _, _, latitude, longitude = match
@@ -282,20 +278,12 @@ def get_all_mirrors(
         get_mirrors_with_full_set_of_isos=get_mirrors_with_full_set_of_isos
     )
     random.shuffle(mirrors)
-    if request_protocol:
-        for mirror in mirrors[:]:
-            try:
-                mirror.urls[request_protocol]
-            except KeyError:
-                mirrors.remove(mirror)
-    if request_country:
-        for mirror in mirrors[:]:
-            if mirror.geolocation.country.lower() != request_country.lower():
-                mirrors.remove(mirror)
-    if request_module:
-        for mirror in mirrors[:]:
-            if not mirror.has_optional_modules or request_module not in mirror.has_optional_modules.split(','):
-                mirrors.remove(mirror)
+    mirrors = [
+        m for m in mirrors
+        if (not request_protocol or request_protocol in m.urls)
+        and (not request_country or m.geolocation.country.lower() == request_country.lower())
+        and (not request_module or (m.has_optional_modules and request_module in m.has_optional_modules.split(',')))
+    ]
     return mirrors
 
 
@@ -480,11 +468,7 @@ def get_mirrors_list(
     module: Optional[str] = None
 ) -> Union[list[str], dict]:
     mirrors_list = []
-    config = get_config(
-        logger=logger,
-        path_to_config=SERVICE_CONFIG_PATH,
-        path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
-    )
+    config = get_config()
     versions = config.versions
     duplicated_versions = config.duplicated_versions
     vault_versions = config.vault_versions
