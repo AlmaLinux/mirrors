@@ -1,0 +1,17 @@
+---
+name: gcp.repo.almalinux.org
+address:
+  http: http://gcp.repo.almalinux.org/
+  https: https://gcp.repo.almalinux.org/
+update_frequency: 1h
+geolocation:
+  country: US
+  state_province: Iowa
+  city: Council Bluffs
+sponsor: Google Cloud
+sponsor_url: https://cloud.google.com/?hl=en
+email: infra-team@almalinux.org
+cloud_type: gcp
+cloud_regions:
+  - us-central1
+...
