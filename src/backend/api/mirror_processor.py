@@ -150,12 +150,16 @@ class MirrorProcessor:
         )
         cloud_regions = mirror_info.cloud_region.lower().split(',')
         cloud_type = mirror_info.cloud_type
-        if not cloud_regions or cloud_type not in ('aws', 'azure'):
+        if not cloud_regions or cloud_type not in ('aws', 'azure', 'gcp', 'oci'):
             return
-        mirror_info.subnets = [
-            subnet for cloud_region in cloud_regions if cloud_region in subnets
-            for subnet in subnets[cloud_region]
-        ]
+        print(cloud_regions)
+        if 'all' in cloud_regions:
+            mirror_info.subnets = [subnet for region in subnets for subnet in subnets[region]]
+        else:
+            mirror_info.subnets = [
+                subnet for cloud_region in cloud_regions if cloud_region in subnets
+                for subnet in subnets[cloud_region]
+            ]
 
     async def set_ip_for_mirror(
         self,
