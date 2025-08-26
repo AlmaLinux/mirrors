@@ -11,8 +11,5 @@ update_frequency: 2h
 sponsor: elhacker.NET
 sponsor_url: https://www.elhacker.net
 email: webmaster@elhacker.net
-geolocation:
-  country: ES
-  city: Barcelona
 private: false
 ...
