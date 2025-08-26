@@ -13,5 +13,5 @@ sponsor_url: https://cloud.google.com/
 email: infra-team@almalinux.org
 cloud_type: gcp
 cloud_regions:
-  - us-central1
+  - all
 ...
