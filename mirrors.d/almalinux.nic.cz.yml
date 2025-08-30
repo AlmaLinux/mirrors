@@ -1,0 +1,15 @@
+---
+name: almalinux.nic.cz
+address:
+  http: http://almalinux.nic.cz/almalinux/
+  https: https://almalinux.nic.cz/almalinux/
+  rsync: rsync://almalinux.nic.cz/almalinux
+geolocation:
+  country: CZ
+  state_province: Prague
+  city: Prague
+update_frequency: 3h
+sponsor: CZ.NIC, z.s.p.o.
+sponsor_url: https://www.nic.cz/
+email: nic-admins@nic.cz
+...

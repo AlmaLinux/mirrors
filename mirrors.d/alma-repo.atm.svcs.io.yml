@@ -10,4 +10,5 @@ email: support@cloudlinux.com
 private: true
 subnets:
   - 77.79.198.14/32
+  - 206.252.237.0/29
 ...

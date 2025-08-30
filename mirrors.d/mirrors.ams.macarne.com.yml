@@ -1,0 +1,13 @@
+---
+name: mirror.ams.macarne.com
+address:
+  https: https://mirror.ams.macarne.com/almalinux/
+geolocation:
+  country: NL
+  state_province: North Holland
+  city: Amsterdam
+update_frequency: 3h
+sponsor: Macarne LLC
+sponsor_url: https://macarne.com/
+email: noc@macarne.com
+...
