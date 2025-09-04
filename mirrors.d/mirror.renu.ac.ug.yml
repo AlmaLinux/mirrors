@@ -1,0 +1,17 @@
+---
+name: mirror.renu.ac.ug
+address:
+  http: http://mirror.renu.ac.ug/almalinux
+  https: https://mirror.renu.ac.ug/almalinux
+update_frequency: 3h
+sponsor: RENU
+sponsor_url: https://renu.ac.ug/
+email: systems@renu.ac.ug
+geolocation:
+  continent: AF
+  country: UG
+  state_province: Central Region
+  city: Kampala
+asn:
+  - 327687
+...
