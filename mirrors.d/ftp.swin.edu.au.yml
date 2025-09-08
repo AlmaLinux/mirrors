@@ -7,7 +7,7 @@ geolocation:
   country: AU
   state_province: Victoria
   city: Melbourne
-update_frequency: 6h
+update_frequency: 3h
 sponsor: Swinburne University of Technology
 sponsor_url: https://www.swinburne.edu.au/
 email: systems@swin.edu.au
