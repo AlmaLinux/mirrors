@@ -1,4 +1,3 @@
-site: https://vpsttt.com/
 email: noc@vpsttt.com
 sponsor: VPSTTT
 sponsor_url: https://vpsttt.com/
