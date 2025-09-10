@@ -5,9 +5,9 @@ address:
   https: https://mirror.yuki.net.uk/almalinux/
   rsync: rsync://rsync.yuki.net.uk/almalinux/
 geolocation:
-  country: KR
-  state_province: Seoul
-  city: Seoul
+  country: US
+  state_province: Missouri
+  city: Kansas City
 update_frequency: 6h
 sponsor: Yuki Network LTD
 sponsor_url: https://yuki.net.uk/
