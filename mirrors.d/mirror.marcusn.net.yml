@@ -13,3 +13,5 @@ sponsor: Marcus Naw, Mirror
 sponsor_url: https://marcusn.net
 email: MirrorService@marcusn.net
 private: false
+asn:
+  - 206987
