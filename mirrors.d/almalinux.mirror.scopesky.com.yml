@@ -8,7 +8,7 @@ address:
     https: https://almalinux.mirror.scopesky.com/Almalinux-kitten
 geolocation:
   country: IQ
-  state_province: BGD
+  state_province:
   city: Baghdad
 update_frequency: 3h
 sponsor: ScopeSky LLC
