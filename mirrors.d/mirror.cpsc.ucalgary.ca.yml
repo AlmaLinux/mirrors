@@ -1,0 +1,23 @@
+---
+name: mirror.cpsc.ucalgary.ca
+address:
+  http: http://mirror.cpsc.ucalgary.ca/mirror/almalinux/
+  https: https://mirror.cpsc.ucalgary.ca/mirror/almalinux/
+  rsync: rsync://mirror.cpsc.ucalgary.ca/almalinux
+address_optional:
+  kitten:
+    http: http://mirror.cpsc.ucalgary.ca/mirror/almalinux-kitten/
+    https: https://mirror.cpsc.ucalgary.ca/mirror/almalinux-kitten/
+    rsync: rsync://mirror.cpsc.ucalgary.ca/almalinux-kitten
+geolocation:
+  country: CA
+  state_province: Alberta
+  city: Calgary
+update_frequency: 3h
+sponsor: University of Calgary, Department of Computer Science
+sponsor_url: https://ucalgary.ca
+email: cpsc.uls@ucalgary.ca
+subnets:
+  - 136.159.0.0/16
+asn: 33091
+...
