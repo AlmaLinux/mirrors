@@ -9,10 +9,6 @@ address_optional:
     http: http://almalinux.mirror.shastacoe.net/almalinux-kitten/
     https: https://almalinux.mirror.shastacoe.net/almalinux-kitten/
     rsync: rsync://almalinux.mirror.shastacoe.net/almalinux-kitten/
-  vault:
-    http: http://almalinux.mirror.shastacoe.net/almalinux-vault/
-    https: https://almalinux.mirror.shastacoe.net/almalinux-vault/
-    rsync: rsync://almalinux.mirror.shastacoe.net/almalinux-vault/
 update_frequency: 3h
 sponsor: Shasta County Office of Education
 sponsor_url: https://www.shastacoe.org/
