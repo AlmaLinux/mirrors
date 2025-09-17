@@ -3,6 +3,7 @@ name: almalinux.mirror.scopesky.com
 address:
   http: http://almalinux.mirror.scopesky.com/Almalinux/
   https: https://almalinux.mirror.scopesky.com/Almalinux/
+address_optional:
   kitten:
     http: http://almalinux.mirror.scopesky.com/Almalinux-kitten
     https: https://almalinux.mirror.scopesky.com/Almalinux-kitten
