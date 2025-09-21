@@ -9,6 +9,6 @@ geolocation:
   city: Philadelphia
 update_frequency: 3h
 sponsor: CICKU
-sponsor_url: https://mirror.cicku.me
+sponsor_url: https://mirrors.cicku.me
 email: mirrors@cicku.me
 ...
