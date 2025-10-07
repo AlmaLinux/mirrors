@@ -4,7 +4,6 @@ address:
   http: http://mirror.cloudpropeller.com/almalinux/
   https: https://mirror.cloudpropeller.com/almalinux/
 geolocation:
-  continent: North America
   country: US
   state_province: Ohio
   city: Columbus

@@ -9,7 +9,7 @@ address_optional:
     rsync: rsync://mirror.karneval.cz/almalinux-kitten/
 geolocation:
   country: CZ
-  state_province:
+  state_province: Prague
   city: Prague
 update_frequency: 2h
 sponsor: Vodafone.cz

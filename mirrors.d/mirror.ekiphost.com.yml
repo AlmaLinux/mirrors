@@ -5,7 +5,7 @@ address:
   https: https://mirror.ekiphost.com/almalinux/
 geolocation:
   country: TR
-  state_province:
+  state_province: Istanbul
   city: Istanbul
 update_frequency: 3h
 sponsor: Ekiphost

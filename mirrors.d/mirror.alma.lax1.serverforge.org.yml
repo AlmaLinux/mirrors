@@ -8,7 +8,6 @@ sponsor: ServerForge
 sponsor_url: https://serverforge.org/
 email: noc@serverforge.org
 geolocation:
-  continent: North America
   country: US
   state_province: california
   city: los angeles

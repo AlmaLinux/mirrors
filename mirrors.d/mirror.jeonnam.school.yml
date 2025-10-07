@@ -6,8 +6,8 @@ address:
   rsync: rsync://mirror.jeonnam.school/almalinux
 geolocation:
   country: KR
-  state_province: 
-  city: Gwangju Metropolitan City
+  state_province: Gwangju
+  city: Gwangju
 update_frequency: 2h
 sponsor: Jeonnam High School
 sponsor_url: https://wwww.jeonnam.school/

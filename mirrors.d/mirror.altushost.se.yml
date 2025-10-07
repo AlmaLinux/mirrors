@@ -5,6 +5,8 @@ address:
   https: https://mirror.se.altushost.com/almalinux/
 geolocation:
   country: SE
+  state_province: Stockholm County
+  city: Stockholm
 update_frequency: 4h
 sponsor: AltusHost B.V.
 sponsor_url: https://www.altushost.com/

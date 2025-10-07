@@ -4,7 +4,6 @@ address:
   https: https://mirrors.magcast.co/Linux/AlmaLinux/
 update_frequency: 3h
 geolocation:
-  continent: Europe
   country: DE
   state_province: Saxony
   city: Falkenstein
