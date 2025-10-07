@@ -6,7 +6,6 @@ address:
   rsync: rsync://ir.almalinux.sindad.cloud/almalinux
 update_frequency: 3h
 geolocation:
-  continent: Asia
   country: IR
   state_province: Tehran
   city: Tehran

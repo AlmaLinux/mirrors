@@ -5,7 +5,6 @@ address:
   https: https://mirror.tzulo.com/almalinux
   rsync: rsync://mirror.tzulo.com/almalinux
 geolocation:
-  continent: North America
   country: US
   state_province: IL
   city: Chicago

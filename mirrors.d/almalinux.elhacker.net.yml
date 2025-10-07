@@ -6,7 +6,7 @@ address:
   rsync: rsync://rsync.elhacker.net/almalinux
 geolocation:
   country: ES
-  state_province:
+  state_province: Catalonia
   city: Barcelona
 update_frequency: 2h
 sponsor: elhacker.NET

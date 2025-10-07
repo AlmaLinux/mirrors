@@ -9,8 +9,8 @@ sponsor: Serverion
 sponsor_url: https://www.serverion.com
 email: mirror@serverion.com
 geolocation:
-  continent: Europe
   country: NL
-  city: Zodetermeer
+  state_province: South Holland
+  city: Zoetermeer
 asn: 213035
 ...

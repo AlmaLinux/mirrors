@@ -7,7 +7,7 @@ address:
   ftp: ftp://mirror.dk.team.blue/almalinux
 geolocation:
   country: DK
-  state: Skanderborg Municipality
+  state_province: Skanderborg Municipality
   city: Skanderborg
 update_frequency: 1h
 sponsor: team.blue Denmark

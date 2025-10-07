@@ -7,7 +7,7 @@ address:
   rsync: rsync://ftp.linux.cz/pub/linux/almalinux/
 geolocation:
   country: CZ
-  state_province:
+  state_province: South Moravian Region
   city: Brno
 update_frequency: 2h
 sponsor: Faculty of Informatics, Masaryk University

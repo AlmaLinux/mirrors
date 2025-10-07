@@ -7,7 +7,7 @@ address:
 update_frequency: 6h
 geolocation:
   country: RS
-  state_province:
+  state_province: City of Belgrade
   city: Belgrade
 sponsor: Open eXchange
 sponsor_url: https://www.sox.rs
