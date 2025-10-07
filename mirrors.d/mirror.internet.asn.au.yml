@@ -5,7 +5,6 @@ address:
   https: https://mirror.internet.asn.au/pub/almalinux
   rsync: rsync://mirror.internet.asn.au/almalinux
 geolocation:
-  continent: Australia
   country: AU
   state_province: New South Wales
   city: Sydney

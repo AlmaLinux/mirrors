@@ -9,7 +9,6 @@ address_optional:
     http: http://mirror.almalinux.peralex.com/almalinux-kitten
     https: https://mirror.almalinux.peralex.com/almalinux-kitten
 geolocation:
-  continent: Africa
   country: ZA
   state_province: Western Cape
   city: Cape Town

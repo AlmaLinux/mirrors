@@ -3,10 +3,9 @@ name: almalinux.ourhome.kiwi
 address:
   https: https://almalinux.ourhome.kiwi
 geolocation:
-  continent: Oceania
   country: NZ
-  state_province:
-  city:
+  state_province: Auckland
+  city: Auckland
 update_frequency: 3h
 sponsor: Federation of Aotearoa Migrants (FAM)
 sponsor_url: https://fam.org.nz

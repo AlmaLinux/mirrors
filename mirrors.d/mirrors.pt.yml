@@ -6,6 +6,7 @@ address:
   rsync: rsync://mirrors.pt/almalinux
 geolocation:
   country: PT
+  state_province: Lisbon
   city: Porto Salvo
 update_frequency: 3h
 sponsor: Edgoo Networks

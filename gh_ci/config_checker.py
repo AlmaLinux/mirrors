@@ -131,9 +131,10 @@ def do_mirrors_have_valid_geo_data(
                 )
             else:
                 logger.error(
-                    'Mirror "%s" has invalid geodata. '
+                    'Mirror "%s" has invalid geodata (params=%s). '
                     'Please check your data on "%s"',
                     mirror.name,
+                    params,
                     ui_url,
                 )
                 ret_code = 1

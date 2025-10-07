@@ -5,7 +5,7 @@ address:
   https: https://jp.mirrors.cicku.me/almalinux
 geolocation:
   country: JP
-  state_province: 
+  state_province: Osaka
   city: Osaka
 update_frequency: 3h
 sponsor: CICKU
