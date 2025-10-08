@@ -4,8 +4,8 @@ address:
   https: https://sg-mirrors.vhost.vn/almalinux/
 geolocation:
   country: SG
-  city: Singapore City
-  state_province:
+  city: Singapore
+  state_province: Singapore
 update_frequency: 3h
 sponsor: VHOST.VN
 sponsor_url: https://vhost.vn/

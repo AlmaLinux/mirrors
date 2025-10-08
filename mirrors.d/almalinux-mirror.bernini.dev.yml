@@ -8,9 +8,8 @@ sponsor: Bernini.DEV
 sponsor_url: https://bernini.dev/
 email:  admin@bernini.dev
 geolocation:
-  continent: EU
   country: DE
-  state_province:
+  state_province: Berlin
   city: Berlin
 private: false
 monopoly: false

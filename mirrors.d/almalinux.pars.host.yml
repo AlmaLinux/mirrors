@@ -4,7 +4,6 @@ address:
   http: http://almalinux.pars.host
   https: https://almalinux.pars.host
 geolocation:
-  continent: Asia
   country: IR
   state_province: Tehran
   city: Tehran

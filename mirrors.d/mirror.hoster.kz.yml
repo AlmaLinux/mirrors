@@ -5,7 +5,7 @@ address:
  rsync: rsync://mirror.hoster.kz/almalinux/
 geolocation:
  country: KZ
- state_province:
+ state_province: Almaty
  city: Almaty
 update_frequency: 3h
 sponsor: Hoster.KZ

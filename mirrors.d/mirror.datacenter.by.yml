@@ -7,7 +7,6 @@ address:
   rsync: rsync://mirror.datacenter.by/almalinux
 update_frequency: 3h
 geolocation:
-  continent: Europe
   city: Minsk
   state_province: Minsk
   country: BY

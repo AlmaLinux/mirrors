@@ -5,8 +5,8 @@ address:
  rsync: rsync://kar.hoster.kz/almalinux/
 geolocation:
  country: KZ
- state_province:
- city: Karaganda 
+ state_province: Karaganda Region
+ city: Karagandy
 update_frequency: 3h
 sponsor: Hoster.KZ
 sponsor_url: https://hoster.kz/

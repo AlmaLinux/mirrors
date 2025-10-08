@@ -7,7 +7,7 @@ update_frequency: 24h
 geolocation:
   country: TW
   state_province:
-  city: New Taipei City
+  city: New Taipei
 sponsor: Tamkang University
 sponsor_url: https://www.tku.edu.tw/
 email: wisely@mail.tku.edu.tw

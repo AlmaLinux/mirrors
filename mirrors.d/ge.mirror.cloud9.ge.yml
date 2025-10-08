@@ -2,11 +2,13 @@
 name: ge.mirror.cloud9.ge
 address:
   http: http://ge.mirror.cloud9.ge/almalinux/
-  https: http://ge.mirror.cloud9.ge/almalinux/  
+  https: http://ge.mirror.cloud9.ge/almalinux/
 update_frequency: 6h
 sponsor: Cloud9
 sponsor_url: https://www.cloud9.ge
 email: konstantine.karosanidze@gmail.com
 geolocation:
   country: GE
+  state_province: Tbilisi
+  city: Tbilisi
 ...
