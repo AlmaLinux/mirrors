@@ -6,7 +6,7 @@ address_optional:
   kitten:
     http: http://mirrors.binaryracks.com/almalinux-kitten
 geolocation:
-  country: GB
+  country: UK
   state_province: London
   city: London
 update_frequency: 1h
