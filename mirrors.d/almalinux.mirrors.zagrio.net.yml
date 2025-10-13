@@ -15,7 +15,6 @@ address_optional:
       ftp: ftp://mirrors.zagrio.net/almalinux-kitten/
 update_frequency: 3h
 geolocation:
-  continent: Asia
   country: IR
   state_province: Tehran
   city: Tehran

@@ -3,7 +3,8 @@ name: eu.edge.kernel.org
 address:
   https: https://eu.edge.kernel.org/almalinux
 geolocation:
-  country: Netherlands
+  country: NL
+  state_province: North Holland
   city: Amsterdam
 update_frequency: 3h
 sponsor: Linux Kernel Archives

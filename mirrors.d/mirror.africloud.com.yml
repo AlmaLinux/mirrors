@@ -8,7 +8,6 @@ sponsor: AFRICLOUD
 sponsor_url: https://africloud.com
 email: mail@africloud.com
 geolocation:
-  continent: Africa
   country: ZA
   state_province: Gauteng
   city: Johannesburg

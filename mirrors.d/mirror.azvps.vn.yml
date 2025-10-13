@@ -7,7 +7,6 @@ sponsor: AZVPS
 sponsor_url: https://azvps.vn/
 email: contact@azvps.vn
 geolocation:
-  continent: Asia
   country: VN
-  state_province:
+  state_province: Hanoi
   city: Hanoi

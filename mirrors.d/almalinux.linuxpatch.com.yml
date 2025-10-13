@@ -4,7 +4,6 @@ address:
   http: http://almalinux.linuxpatch.com/
   https: https://almalinux.linuxpatch.com/
 geolocation:
-  continent: Europe
   country: UK
   state_province: Greater London
   city: London
