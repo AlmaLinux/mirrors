@@ -12,3 +12,6 @@ update_frequency: 1h
 sponsor: Init7 (Schweiz) AG
 sponsor_url: https://www.init7.net
 email: mirror@init7.net
+asn:
+  - 13030
+...

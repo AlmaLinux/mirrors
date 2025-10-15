@@ -1,0 +1,14 @@
+---
+name: mirror.kernel.ir
+address:
+  http: http://mirror.kernel.ir/almalinux
+  https: https://mirror.kernel.ir/almalinux
+update_frequency: 3h
+geolocation:
+  country: IR
+  state_province: Tehran
+  city: Tehran
+sponsor: Kernel.ir
+sponsor_url: https://kernel.ir
+email: linuxmaster14@gmail.com
+...

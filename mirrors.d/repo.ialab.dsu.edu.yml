@@ -1,0 +1,14 @@
+---
+name: repo.ialab.dsu.edu
+address:
+  http: http://repo.ialab.dsu.edu/almalinux/
+  https: https://repo.ialab.dsu.edu/almalinux/
+update_frequency: 3h
+geolocation:
+  country: US
+  state_province: South Dakota
+  city: Madison
+sponsor: Dakota State University
+sponsor_url: https://dsu.edu
+email: dsu-repo.ialab@dsu.edu
+...
