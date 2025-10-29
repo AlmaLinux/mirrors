@@ -8,7 +8,6 @@ address_optional:
     http: http://mirror.spectraip.net/almalinux-kitten/
     https: https://mirror.spectraip.net/almalinux-kitten/
 geolocation:
-  continent: Europe
   country: NL
   state_province: North Holland
   city: Amsterdam

@@ -3,7 +3,6 @@ name: mirrors.rda.poa.br
 address:
   https: https://mirrors.rda.poa.br/almalinux/
 geolocation:
-  continent: South America
   country: BR
   state_province: Rio Grande do Sul
   city: Porto Alegre

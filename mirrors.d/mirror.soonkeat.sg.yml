@@ -4,7 +4,7 @@ address:
   http: http://mirror.soonkeat.sg/almalinux/
 geolocation:
   country: SG
-  state_province:
+  state_province: Singapore
   city: Singapore
 update_frequency: 4h
 sponsor: Neo Soon Keat

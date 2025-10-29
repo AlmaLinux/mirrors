@@ -6,6 +6,7 @@ address:
   rsync: rsync://almalinux.web.trex.fi/almalinux
 geolocation:
   country: FI
+  state_province: Pirkanmaa
   city: Tampere
 update_frequency: 9h
 sponsor: TREX Regional Exchanges Oy
