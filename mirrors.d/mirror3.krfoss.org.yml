@@ -14,6 +14,6 @@ geolocation:
   continent: AS
   country: KR
   state_province: SEOUL
-  city: SEOUL
+  city: Seoul
 private: false
 monopoly: false
