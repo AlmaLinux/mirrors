@@ -6,7 +6,7 @@ address:
   rsync: rsync://mirrors.layerbridge.com/almalinux/
 geolocation:
   country: RO
-  state_province: 
+  state_province: Bucharest
   city: Bucharest
 update_frequency: 4h
 sponsor: LayerBridge

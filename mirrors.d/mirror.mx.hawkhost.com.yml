@@ -4,7 +4,6 @@ address:
   http: http://mirror.mx.hawkhost.com/almalinux
   https: https://mirror.mx.hawkhost.com/almalinux
 geolocation:
-  continent: North America
   country: MX
   state_province: Querétaro
   city: El Colorado

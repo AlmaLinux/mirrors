@@ -8,7 +8,7 @@ sponsor: StorPool Storage
 sponsor_url: https://storpool.com/
 email: mirrors@storpool.com
 geolocation:
-  continent: Europe
   country: BG
+  state_province: Sofia City
   city: Sofia
 ...
