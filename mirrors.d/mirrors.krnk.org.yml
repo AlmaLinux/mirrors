@@ -1,0 +1,10 @@
+---
+name: mirrors.krnk.org
+address:
+  http: http://mirrors.krnk.org/almalinux/
+  https: https://mirrors.krnk.org/almalinux/
+update_frequency: 3h
+sponsor: KuronekoServer
+sponsor_url: https://krnk.org/
+email: admin@krnk.org
+...
