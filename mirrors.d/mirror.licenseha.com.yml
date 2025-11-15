@@ -1,0 +1,14 @@
+---
+name: mirror.licenseha.com
+address:
+  http: http://mirror.licenseha.com/almalinux
+  https: https://mirror.licenseha.com/almalinux
+update_frequency: 3h
+sponsor: Licenseha
+sponsor_url: https://licenseha.com
+email: admin@licenseha.com
+geolocation:
+  country: IR
+  state_province: Tehran
+  city: Tehran
+...
