@@ -6,7 +6,6 @@ versions:
   - "8"
   - "8.10"
   - "9"
-  - "9.6"
   - "9.7"
   - "10"
   - "10.0"
@@ -39,6 +38,7 @@ vault_versions:
   - "9.3"
   - "9.4"
   - "9.5"
+  - "9.6"
   - "9.1-beta"
   - "9.2-beta"
   - "9.3-beta"
@@ -89,7 +89,6 @@ repos:
   - name: crb
     path: CRB/$basearch/os/
     versions:
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -97,7 +96,6 @@ repos:
     path: NFV/$basearch/os/
     versions:
       - "8.10"
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -107,7 +105,6 @@ repos:
     path: RT/$basearch/os/
     versions:
       - "8.10"
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -117,7 +114,6 @@ repos:
     path: extras/$basearch/os/
     versions:
       - "8.10"
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -132,7 +128,6 @@ repos:
   - name: highavailability
     path: HighAvailability/$basearch/os/
     versions:
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -140,7 +135,6 @@ repos:
     path: SAP/$basearch/os/
     versions:
       - "8.10"
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -148,7 +142,6 @@ repos:
     path: SAPHANA/$basearch/os/
     versions:
       - "8.10"
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -160,13 +153,11 @@ repos:
       - s390x
     versions:
       - "8.10"
-      - "9.6"
       - "9.7"
   - name: devel
     path: devel/$basearch/os/
     versions:
       - "8.10"
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -177,7 +168,6 @@ repos:
     path: plus/$basearch/os/
     versions:
       - "8.10"
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -185,7 +175,6 @@ repos:
     path: synergy/$basearch/os/
     versions:
       - "8.10"
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -194,7 +183,6 @@ repos:
     versions:
       - "10.0"
       - "10.1"
-      - "9.6"
       - "9.7"
     arches:
       - x86_64
@@ -216,7 +204,6 @@ repos:
     path: CRB/Source/
     vault: true
     versions:
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -225,7 +212,6 @@ repos:
     vault: true
     versions:
       - "8.10"
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -234,7 +220,6 @@ repos:
     vault: true
     versions:
       - "8.10"
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -243,7 +228,6 @@ repos:
     vault: true
     versions:
       - "8.10"
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -261,7 +245,6 @@ repos:
     path: HighAvailability/Source/
     vault: true
     versions:
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -270,7 +253,6 @@ repos:
     vault: true
     versions:
       - "8.10"
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -284,14 +266,12 @@ repos:
     vault: true
     versions:
       - "8.10"
-      - "9.6"
       - "9.7"
   - name: devel-source
     path: devel/Source/
     vault: true
     versions:
       - "8.10"
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -300,7 +280,6 @@ repos:
     vault: true
     versions:
       - "8.10"
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -309,7 +288,6 @@ repos:
     vault: true
     versions:
       - "8.10"
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -324,7 +302,6 @@ repos:
     path: BaseOS/debug/$basearch/
     vault: true
     versions:
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -337,7 +314,6 @@ repos:
     path: AppStream/debug/$basearch/
     vault: true
     versions:
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -350,7 +326,6 @@ repos:
     path: CRB/debug/$basearch/
     vault: true
     versions:
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -363,7 +338,6 @@ repos:
     path: NFV/debug/$basearch/
     vault: true
     versions:
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -378,7 +352,6 @@ repos:
     path: RT/debug/$basearch/
     vault: true
     versions:
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -393,7 +366,6 @@ repos:
     path: extras/debug/$basearch/
     vault: true
     versions:
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -411,7 +383,6 @@ repos:
     path: HighAvailability/debug/$basearch/
     vault: true
     versions:
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -419,7 +390,6 @@ repos:
     path: SAP/debug/$basearch/
     vault: true
     versions:
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -427,7 +397,6 @@ repos:
     path: SAPHANA/debug/$basearch/
     vault: true
     versions:
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -454,7 +423,6 @@ repos:
       - ppc64le
       - s390x
     versions:
-      - "9.6"
       - "9.7"
   - name: devel-debuginfo
     path: devel/debug/$basearch/
@@ -468,7 +436,6 @@ repos:
     path: devel/debug/$basearch/
     vault: true
     versions:
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -481,7 +448,6 @@ repos:
     path: plus/debug/$basearch/
     vault: true
     versions:
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
@@ -490,7 +456,6 @@ repos:
     vault: true
     versions:
       - "8.10"
-      - "9.6"
       - "9.7"
       - "10.0"
       - "10.1"
