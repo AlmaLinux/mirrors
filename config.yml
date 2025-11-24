@@ -20,7 +20,7 @@ optional_module_versions:
 duplicated_versions:
   "8": "8.10"
   "9": "9.7"
-  "10": "10.0"
+  "10": "10.1"
 vault_versions:
   - "8.3"
   - "8.4"
