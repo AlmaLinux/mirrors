@@ -6,8 +6,8 @@ address:
 geolocation:
   continent: Asia
   country: JP
-  state_province: Osaka
-  city: Osaka
+  state_province: Tokyo
+  city: Tokyo
 update_frequency: 3h
 sponsor: KuronekoServer
 sponsor_url: https://krnk.org/
