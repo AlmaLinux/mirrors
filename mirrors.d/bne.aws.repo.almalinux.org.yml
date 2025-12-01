@@ -1,8 +1,8 @@
 ---
 name: bne.aws.repo.almalinux.org
 address:
-  http: http://bne.aws.repo.almalinux.org/
-  https: https://bne.aws.repo.almalinux.org/
+  http: http://bne.aws.repo.almalinux.org/almalinux/
+  https: https://bne.aws.repo.almalinux.org/almalinux/
 update_frequency: 1h
 geolocation:
   country: AU
