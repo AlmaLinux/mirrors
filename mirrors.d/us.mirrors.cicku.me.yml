@@ -1,7 +1,6 @@
 ---
 name: us.mirrors.cicku.me
 address:
-  http: http://us.mirrors.cicku.me/almalinux
   https: https://us.mirrors.cicku.me/almalinux
 geolocation:
   country: US
