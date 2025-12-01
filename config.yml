@@ -6,9 +6,10 @@ versions:
   - "8"
   - "8.10"
   - "9"
-  - "9.6"
+  - "9.7"
   - "10"
   - "10.0"
+  - "10.1"
 # requires full version in arches, no base version inheritance
 optional_module_versions:
   kitten:
@@ -17,8 +18,8 @@ optional_module_versions:
 # if a client requests only major version
 duplicated_versions:
   "8": "8.10"
-  "9": "9.6"
-  "10": "10.0"
+  "9": "9.7"
+  "10": "10.1"
 vault_versions:
   - "8.3"
   - "8.4"
@@ -37,6 +38,7 @@ vault_versions:
   - "9.3"
   - "9.4"
   - "9.5"
+  - "9.6"
   - "9.1-beta"
   - "9.2-beta"
   - "9.3-beta"
@@ -87,30 +89,34 @@ repos:
   - name: crb
     path: CRB/$basearch/os/
     versions:
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: nfv
     path: NFV/$basearch/os/
     versions:
       - "8.10"
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
     arches:
       - x86_64
   - name: rt
     path: RT/$basearch/os/
     versions:
       - "8.10"
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
     arches:
       - x86_64
   - name: extras
     path: extras/$basearch/os/
     versions:
       - "8.10"
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: extras-common
     path: extras-common/$basearch/os/
     versions:
@@ -122,20 +128,23 @@ repos:
   - name: highavailability
     path: HighAvailability/$basearch/os/
     versions:
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: sap
     path: SAP/$basearch/os/
     versions:
       - "8.10"
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: saphana
     path: SAPHANA/$basearch/os/
     versions:
       - "8.10"
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: resilientstorage
     path: ResilientStorage/$basearch/os/
     arches:
@@ -144,13 +153,14 @@ repos:
       - s390x
     versions:
       - "8.10"
-      - "9.6"
+      - "9.7"
   - name: devel
     path: devel/$basearch/os/
     versions:
       - "8.10"
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
     arches:
       - x86_64
       - aarch64
@@ -158,19 +168,22 @@ repos:
     path: plus/$basearch/os/
     versions:
       - "8.10"
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: synergy
     path: synergy/$basearch/os/
     versions:
       - "8.10"
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: nvidia
     path: nvidia/$basearch/os/
     versions:
       - "10.0"
-      - "9.6"
+      - "10.1"
+      - "9.7"
     arches:
       - x86_64
       - aarch64
@@ -191,29 +204,33 @@ repos:
     path: CRB/Source/
     vault: true
     versions:
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: nfv-source
     path: NFV/Source/
     vault: true
     versions:
       - "8.10"
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: rt-source
     path: RT/Source/
     vault: true
     versions:
       - "8.10"
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: extras-source
     path: extras/Source/
     vault: true
     versions:
       - "8.10"
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: extras-common-source
     path: extras-common/Source/
     vault: true
@@ -228,15 +245,17 @@ repos:
     path: HighAvailability/Source/
     vault: true
     versions:
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: sap-source
     path: SAP/Source/
     vault: true
     versions:
       - "8.10"
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: saphana-source
     path: SAPHANA/Source/
     vault: true
@@ -247,28 +266,31 @@ repos:
     vault: true
     versions:
       - "8.10"
-      - "9.6"
+      - "9.7"
   - name: devel-source
     path: devel/Source/
     vault: true
     versions:
       - "8.10"
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: plus-source
     path: plus/Source/
     vault: true
     versions:
       - "8.10"
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: synergy-source
     path: synergy/Source/
     vault: true
     versions:
       - "8.10"
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
 
   # debug repos
   - name: baseos-debuginfo
@@ -280,8 +302,9 @@ repos:
     path: BaseOS/debug/$basearch/
     vault: true
     versions:
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: appstream-debuginfo
     path: AppStream/debug/$basearch/
     vault: true
@@ -291,8 +314,9 @@ repos:
     path: AppStream/debug/$basearch/
     vault: true
     versions:
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: powertools-debuginfo
     path: PowerTools/debug/$basearch/
     vault: true
@@ -302,8 +326,9 @@ repos:
     path: CRB/debug/$basearch/
     vault: true
     versions:
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: nfv-debuginfo
     path: NFV/debug/$basearch/
     vault: true
@@ -313,8 +338,9 @@ repos:
     path: NFV/debug/$basearch/
     vault: true
     versions:
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
     arches:
       - x86_64
   - name: rt-debuginfo
@@ -326,8 +352,9 @@ repos:
     path: RT/debug/$basearch/
     vault: true
     versions:
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
     arches:
       - x86_64
   - name: extras-debuginfo
@@ -339,8 +366,9 @@ repos:
     path: extras/debug/$basearch/
     vault: true
     versions:
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: extras-common-debug
     path: extras-common/debug/$basearch/
     vault: true
@@ -355,20 +383,23 @@ repos:
     path: HighAvailability/debug/$basearch/
     vault: true
     versions:
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: sap-debug
     path: SAP/debug/$basearch/
     vault: true
     versions:
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: saphana-debug
     path: SAPHANA/debug/$basearch/
     vault: true
     versions:
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: sap-debuginfo
     path: SAP/debug/$basearch/
     vault: true
@@ -392,7 +423,7 @@ repos:
       - ppc64le
       - s390x
     versions:
-      - "9.6"
+      - "9.7"
   - name: devel-debuginfo
     path: devel/debug/$basearch/
     vault: true
@@ -405,8 +436,9 @@ repos:
     path: devel/debug/$basearch/
     vault: true
     versions:
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: plus-debuginfo
     path: plus/debug/$basearch/
     vault: true
@@ -416,15 +448,17 @@ repos:
     path: plus/debug/$basearch/
     vault: true
     versions:
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
   - name: synergy-debuginfo
     path: synergy/debug/$basearch/
     vault: true
     versions:
       - "8.10"
-      - "9.6"
+      - "9.7"
       - "10.0"
+      - "10.1"
 
   ## raspberry pi repos
   - name: raspberrypi
