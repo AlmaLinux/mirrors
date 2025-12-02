@@ -3,6 +3,10 @@ name: mirror.netzwerge.de
 address:
   http: http://mirror.netzwerge.de/almalinux/
   https: https://mirror.netzwerge.de/almalinux/
+address_optional:
+  kitten:
+    http: http://mirror.netzwerge.de/almalinux-kitten/
+    https: https://mirror.netzwerge.de/almalinux-kitten/
 update_frequency: 6h
 sponsor: Netzwerge GmbH
 sponsor_url: https://www.netzwerge.de
