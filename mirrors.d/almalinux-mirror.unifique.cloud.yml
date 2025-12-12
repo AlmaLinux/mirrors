@@ -11,7 +11,7 @@ geolocation:
   country: BR
   state_province: SC
   city: Timbo
-update_frequency: 12h
+update_frequency: 6h
 sponsor: Unifique
 sponsor_url: https://unifique.com.br
 # Please do not use an email piped to a helpdesk or similar.
