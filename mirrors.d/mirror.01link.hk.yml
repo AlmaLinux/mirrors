@@ -3,6 +3,10 @@ name: mirror.01link.hk
 address:
   http: http://mirror.01link.hk/almalinux/
   https: https://mirror.01link.hk/almalinux/ 
+geolocation:
+  country: HK
+  state_province: NT
+  city: Tsuen Wan
 update_frequency: 3h
 sponsor: 01Link Network Services Limited
 sponsor_url: https://www.01link.net
