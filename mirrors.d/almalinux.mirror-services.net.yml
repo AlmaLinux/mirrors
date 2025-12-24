@@ -4,10 +4,6 @@ address:
   http: http://almalinux.mirror-services.net/pub/
   https: https://almalinux.mirror-services.net/pub/
   rsync: rsync://mirror-services.net/almalinux/
-address_optional:
-  kitten:
-    http:
-    https:
 geolocation:
   country: BE
   state_province: Vlaams-Brabant
