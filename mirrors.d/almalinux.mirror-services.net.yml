@@ -13,8 +13,8 @@ geolocation:
   state_province: Vlaams-Brabant
   city: Leuven
 update_frequency: 1h
-sponsor: AlmaLinux OS Foundation
-sponsor_url: https://www.almalinux.org
+sponsor: BOINC Team Belgium
+sponsor_url: https://boinc.teambelgium.net
 # Please do not use an email piped to a helpdesk or similar.
 # Use an address or alias that goes directly to those responsible for
 # mirror management.
