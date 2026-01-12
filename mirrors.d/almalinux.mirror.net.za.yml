@@ -1,0 +1,13 @@
+---
+name: almalinux.mirror.net.za
+address:
+  http: http://almalinux.mirror.net.za/
+  https: https://almalinux.mirror.net.za/
+update_frequency: 3h
+sponsor: South African Mirror Project
+sponsor_url: https://mirror.net.za
+email: support@mirror.net.za
+geolocation:
+  country: ZA
+  state_province: Gauteng
+  city: Johannesburg

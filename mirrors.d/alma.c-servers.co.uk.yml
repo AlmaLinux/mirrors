@@ -1,0 +1,16 @@
+---
+name: alma.c-servers.co.uk
+address:
+  http: http://alma.c-servers.co.uk/
+  https: https://alma.c-servers.co.uk/
+  rsync: rsync://alma.c-servers.co.uk/alma
+  ftp: ftp://alma.c-servers.co.uk
+update_frequency: 3h
+sponsor: C-Servers by Centerfield Ltd
+sponsor_url: c-servers.co.uk
+email: company@c-servers.co.uk
+geolocation:
+  country: CA
+  state_province: QC
+  city: Montreal
+...

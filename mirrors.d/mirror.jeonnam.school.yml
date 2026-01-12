@@ -1,0 +1,15 @@
+---
+name: mirror.jeonnam.school
+address:
+  http: http://mirror.jeonnam.school/almalinux/
+  https: https://mirror.jeonnam.school/almalinux/
+  rsync: rsync://mirror.jeonnam.school/almalinux
+geolocation:
+  country: KR
+  state_province: Gwangju
+  city: Gwangju
+update_frequency: 2h
+sponsor: Jeonnam High School
+sponsor_url: https://wwww.jeonnam.school/
+email: wonchan@wonchan.net
+...

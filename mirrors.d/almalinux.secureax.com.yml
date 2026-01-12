@@ -4,7 +4,7 @@ address:
   http: http://almalinux.secureax.com/
 geolocation:
   country: SG
-  state_province:
+  state_province: Singapore
   city: Singapore
 update_frequency: 1h
 sponsor: SecureAX Pte Ltd

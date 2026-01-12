@@ -4,7 +4,6 @@ address:
   http: http://almalinux.mirrors.itworxx.de/
   https: https://almalinux.mirrors.itworxx.de/
 geolocation:
-  continent: Europe
   country: DE
   state_province: Bavaria
   city: Heldenstein

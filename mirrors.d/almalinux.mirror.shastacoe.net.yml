@@ -4,12 +4,16 @@ address:
   http: http://almalinux.mirror.shastacoe.net/almalinux/
   https: https://almalinux.mirror.shastacoe.net/almalinux/
   rsync: rsync://almalinux.mirror.shastacoe.net/almalinux/
-update_frequency: 2h
+address_optional:
+  kitten:
+    http: http://almalinux.mirror.shastacoe.net/almalinux-kitten/
+    https: https://almalinux.mirror.shastacoe.net/almalinux-kitten/
+    rsync: rsync://almalinux.mirror.shastacoe.net/almalinux-kitten/
+update_frequency: 3h
 sponsor: Shasta County Office of Education
 sponsor_url: https://www.shastacoe.org/
 email: mirror@shastacoe.org
 geolocation:
-  continent: North America
   country: US
   state_province: California
   city: Redding

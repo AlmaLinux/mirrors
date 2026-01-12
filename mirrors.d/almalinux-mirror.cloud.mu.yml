@@ -5,6 +5,7 @@ address:
   https: https://almalinux-mirror.cloud.mu
 geolocation:
   country: MU
+  state_province: Plaines Wilhems
   city: Ebène
 update_frequency: 3h
 sponsor: cloud.mu

@@ -1,0 +1,13 @@
+---
+name: mirrors.rda.poa.br
+address:
+  https: https://mirrors.rda.poa.br/almalinux/
+geolocation:
+  country: BR
+  state_province: Rio Grande do Sul
+  city: Porto Alegre
+update_frequency: 1h
+sponsor: Rodrigo de Avila
+sponsor_url: https://rda.run
+email: mirrors@rda.run
+...

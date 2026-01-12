@@ -1,0 +1,20 @@
+name: stygian.failzero.net
+address:
+  https: https://stygian.failzero.net/mirror/alma 
+  rsync: rsync://stygian.failzero.net/alma
+
+address_optional:
+  kitten:
+    https: https://stygian.failzero.net/mirror/almakitten
+    rsync: rsync://stygian.failzero.net/almakitten
+update_frequency: 3h
+sponsor: FailZero Infrastructure Group
+sponsor_url: failzero.net
+email: ops@failzero.net
+geolocation:
+  country: CA 
+  state_province: Quebec
+  city: Montreal
+private: no
+monopoly: false
+...

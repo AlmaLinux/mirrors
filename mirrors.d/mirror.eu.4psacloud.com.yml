@@ -5,7 +5,7 @@ address:
   https: https://mirror.eu.4psacloud.com/almalinux/
 geolocation:
   country: RO
-  state_province:
+  state_province: Bucharest
   city: Bucharest
 update_frequency: 3h
 sponsor: 4PSA
