@@ -13,8 +13,9 @@ geolocation:
   country: NL
   state_province: Zuid-Holland
   city: Zoetermeer
-update_frequency: 6h
+update_frequency: 3h
 sponsor: ColoCenter B.V.
 sponsor_url: https://colocenter.nl/
 email: info@colocenter.nl
+
 ...
