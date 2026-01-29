@@ -16,7 +16,7 @@ dnf_packages:
   - bash-completion
   - setools-console
 python_packages:
-  - aiodns==3.5.0
+  - aiodns==4.0.0
   - aiohttp-retry==2.9.1
   - alembic==1.16.4
   - beautifulsoup4==4.13.5

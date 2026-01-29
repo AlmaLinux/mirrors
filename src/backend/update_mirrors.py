@@ -84,24 +84,20 @@ async def update_mirrors_handler() -> str:
                 ),
                 arches=main_config.arches,
             )
-            subnets = await get_aws_subnets(
-                http_session=mirror_processor.client
-            )
-            subnets.update(
-                await get_gcp_subnets(
+            subnets = {
+                'aws': await get_aws_subnets(
                     http_session=mirror_processor.client
                 ),
-            )
-            subnets.update(
-                await get_oci_subnets(
+                'gcp': await get_gcp_subnets(
                     http_session=mirror_processor.client
                 ),
-            )
-            subnets.update(
-                await get_azure_subnets(
+                'oci': await get_oci_subnets(
                     http_session=mirror_processor.client
                 ),
-            )
+                'azure': await get_azure_subnets(
+                    http_session=mirror_processor.client
+                ),
+            }
             tasks = [
                 check_mirror(
                     mirror_check_sem=mirror_check_sem,

@@ -141,7 +141,7 @@ class MirrorProcessor:
 
     async def set_subnets_for_cloud_mirror(
         self,
-        subnets: dict[str, list[str]],
+        subnets: dict[str, dict[str, list[str]]],
         mirror_info: MirrorData,
     ):
         self.logger.info(
@@ -152,13 +152,19 @@ class MirrorProcessor:
         cloud_type = mirror_info.cloud_type
         if not cloud_regions or cloud_type not in ('aws', 'azure', 'gcp', 'oci'):
             return
-        print(cloud_regions)
+        cloud_subnets = subnets.get(cloud_type)
+        if not cloud_subnets:
+            return
         if 'all' in cloud_regions:
-            mirror_info.subnets = [subnet for region in subnets for subnet in subnets[region]]
+            mirror_info.subnets = [
+                subnet
+                for region in cloud_subnets
+                for subnet in cloud_subnets[region]
+            ]
         else:
             mirror_info.subnets = [
-                subnet for cloud_region in cloud_regions if cloud_region in subnets
-                for subnet in subnets[cloud_region]
+                subnet for cloud_region in cloud_regions if cloud_region in cloud_subnets
+                for subnet in cloud_subnets[cloud_region]
             ]
 
     async def set_ip_for_mirror(
@@ -167,6 +173,10 @@ class MirrorProcessor:
     ):
         self.logger.info('Set IPs for mirror "%s"', mirror_info.name)
         ip = 'Unknown'
+        # if the mirror is private, set the ip to "Private" and skip the DNS lookup
+        if mirror_info.private:
+            mirror_info.ip = 'Private'
+            return
         try:
             dns = await self.dns_resolver.query(mirror_info.name, 'A')
             ip = ','.join(str(record.host) for record in dns)
