@@ -173,6 +173,10 @@ class MirrorProcessor:
     ):
         self.logger.info('Set IPs for mirror "%s"', mirror_info.name)
         ip = 'Unknown'
+        # if the mirror is private, set the ip to "Private" and skip the DNS lookup
+        if mirror_info.private:
+            mirror_info.ip = 'Private'
+            return
         try:
             dns = await self.dns_resolver.query(mirror_info.name, 'A')
             ip = ','.join(str(record.host) for record in dns)
