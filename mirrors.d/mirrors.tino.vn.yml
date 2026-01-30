@@ -1,0 +1,12 @@
+name: mirrors.tino.vn
+address:
+  http: http://mirrors.tino.vn/almalinux/
+  https: https://mirrors.tino.vn/almalinux/
+update_frequency: 3h
+sponsor: TINO GROUP
+sponsor_url: https://tino.vn/
+email: info@tino.org
+geolocation:
+  continent: Asia
+  country: VN
+  city: Ho Chi Minh
