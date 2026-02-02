@@ -18,8 +18,8 @@ dnf_packages:
 python_packages:
   - aiodns==4.0.0
   - aiohttp-retry==2.9.1
-  - alembic==1.16.4
-  - beautifulsoup4==4.13.5
+  - alembic==1.18.3
+  - beautifulsoup4==4.14.3
   - dateparser==1.2.2
   - Flask-BS4==5.3.1.0
   - flask[async]==3.1.2
@@ -28,13 +28,13 @@ python_packages:
   - geopy==2.4.1
   - gunicorn[gthread]==23.0.0
   - haversine==2.9.0
-  - jsonschema==4.25.1
-  - lxml==6.0.1
-  - maxminddb==2.8.2
+  - jsonschema==4.26.0
+  - lxml==6.0.2
+  - maxminddb==3.0.0
   - pycountry==24.6.1
-  - pyyaml==6.0.2
-  - redis==6.4.0
+  - pyyaml==6.0.3
+  - redis==7.1.0
   - requests==2.32.5
-  - sentry-sdk[flask]==2.35.0
-  - sqlalchemy==2.0.43
-  - geoip2==5.1.0
+  - sentry-sdk[flask]==2.51.0
+  - sqlalchemy==2.0.46
+  - geoip2==5.2.0
