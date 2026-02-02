@@ -50,7 +50,7 @@ def init_sentry_client(dsn: Optional[str] = None) -> None:
         return
     # sentry performance monitoring
     if deploy_env_name == 'Production':
-        traces_sample_rate = 0.01
+        traces_sample_rate = 0.0001
     else:
         traces_sample_rate = 1.0
     sentry_sdk.init(
