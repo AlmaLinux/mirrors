@@ -1,3 +1,4 @@
+import os
 import asyncio
 from asyncio import CancelledError
 from asyncio.exceptions import TimeoutError
@@ -73,7 +74,11 @@ class MirrorProcessor:
     )
 
     # nominatim_url = 'https://nominatim.openstreetmap.org'
-    nominatim_url = 'https://nominatim.geocoding.ai'
+    nominatim_url = 'https://us1.locationiq.com/v1/search'
+
+    _geo_request_lock = asyncio.Lock()
+    _geo_last_request_at = 0.0
+    _geo_request_interval_seconds = 1.0
 
     def __setattr__(self, key, value):
         if key in self.__class_objects__:
@@ -138,6 +143,16 @@ class MirrorProcessor:
             headers=headers,
             **kwargs,
         )
+
+    async def _rate_limit_geo_request(self):
+        cls = type(self)
+        async with cls._geo_request_lock:
+            now = asyncio.get_running_loop().time()
+            elapsed = now - cls._geo_last_request_at
+            wait_for = cls._geo_request_interval_seconds - elapsed
+            if wait_for > 0:
+                await asyncio.sleep(wait_for)
+            cls._geo_last_request_at = asyncio.get_running_loop().time()
 
     async def set_subnets_for_cloud_mirror(
         self,
@@ -294,6 +309,7 @@ class MirrorProcessor:
             )
             return
         params = {
+            'key': os.getenv('LOCATIONIQ_KEY'),
             'city': mirror_info.geolocation.city,
             'state': mirror_info.geolocation.state_province,
             'country': mirror_info.geolocation.country,
@@ -301,9 +317,10 @@ class MirrorProcessor:
             'limit': 1,
         }
         try:
+            await self._rate_limit_geo_request()
             result = await (await self.request(
                 method='get',
-                url=f'{self.nominatim_url}/search',
+                url=f'{self.nominatim_url}',
                 params=params,
                 headers=HEADERS,
             )).json()

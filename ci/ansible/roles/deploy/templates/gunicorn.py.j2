@@ -15,6 +15,7 @@ raw_env = [
 {% if sentry_dsn is defined %}
     'SENTRY_DSN={{ sentry_dsn }}',
 {% endif %}
+    'LOCATIONIQ_KEY={{ locationiq_key }}',
     'PYTHONPATH={{ source_path }}/src/backend/',
     'CONFIG_ROOT={{ config_root }}',
     'SOURCE_PATH={{ source_path }}',
