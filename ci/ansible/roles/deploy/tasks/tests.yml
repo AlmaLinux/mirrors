@@ -1,11 +1,4 @@
 ---
-
-- name: Wait for update the mirrors list before run test
-  wait_for:
-    path: "/var/run/{{ mirror_list_update }}.pid"
-    state: absent
-
-
 - name: Check some mirrors in a request (MirrorList)
   uri:
     url: "http://localhost/mirrorlist/8/baseos"
@@ -18,16 +11,9 @@
   loop: "{{ mirrors | dict2items }}"
   vars:
     mirrors:
-      # Azure mirrors
-      eastus.azure.repo.almalinux.org: "13.67.153.16"
-      germanywestcentral.azure.repo.almalinux.org: "13.104.156.0"
-      southeastasia.azure.repo.almalinux.org: "13.105.99.64"
-      westus2.azure.repo.almalinux.org: "13.67.128.0"
-      # CL private mirror
-      centos.corp.cloudlinux.com: "77.79.198.14"
       # some public mirror
-      mirror.vsys.host: "77.121.201.30"
-      almalinux.netforce.hosting: "77.121.201.30"
+      atl.mirrors.knownhost.com: "67.222.0.49"
+      mirror.fcix.net: "23.152.160.16"
 
 - name: Check vault versions
   uri:
@@ -35,10 +21,12 @@
     method: GET
     return_content: yes
   register: result
-  failed_when: "result.content != 'http://repo.almalinux.org/vault/{{ item }}/BaseOS/$basearch/os/'"
+  failed_when: "'http://vault.almalinux.org/' ~ item ~ '/BaseOS/$basearch/os/' not in (result.content | trim)"
   with_items:
     - "8.3"
     - "8.4"
+    - "9.5"
+    - "10.0"
 
 - name: Check ISOs page
   uri:
@@ -46,7 +34,7 @@
     method: GET
     return_content: yes
   register: result
-  failed_when: "'AlmaLinux ISOs links' not in result.content"
+  failed_when: "'AlmaLinux ISO links' not in result.content"
 
 - name: Check arch/version ISOs page
   uri:
@@ -54,11 +42,11 @@
     method: GET
     return_content: yes
   register: result
-  failed_when: "'AlmaLinux ISOs links' not in result.content"
+  failed_when: "'AlmaLinux ISO links' not in result.content"
 
 - name: Check some mirrors in a request (ISOList)
   uri:
-    url: "http://localhost/isolist/8/x86_64"
+    url: "http://localhost/isos/x86_64/8"
     headers:
       X-Forwarded-For: "{{ item.value }}"
     method: GET
@@ -69,4 +57,4 @@
   vars:
     mirrors:
       # some public mirror
-      mirrors.hostico.ro: "77.121.201.30"
+      mirrors.storpool.com: "185.117.80.53"
