@@ -390,6 +390,12 @@ def get_allowed_arch(
     version: str,
     arches: dict[str, list[str]],
 ) -> str:
+    if not arches:
+        raise UnknownRepoAttribute(
+            'Unknown architecture "%s". Allowed list of arches "%s"',
+            arch,
+            arches,
+        )
     version = next(
         (
             i for i in arches
@@ -397,7 +403,14 @@ def get_allowed_arch(
         ),
         version,
     )
-    if arch not in arches[version]:
+    allowed_arches = arches.get(version)
+    if allowed_arches is None:
+        raise UnknownRepoAttribute(
+            'Unknown version "%s". Allowed list of versions "%s"',
+            version,
+            ', '.join(arches.keys()),
+        )
+    if arch not in allowed_arches:
         raise UnknownRepoAttribute(
             'Unknown architecture "%s". Allowed list of arches "%s"',
             arch,
