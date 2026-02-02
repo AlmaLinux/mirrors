@@ -33,5 +33,6 @@ export DEPLOY_ENVIRONMENT={{ config_root }}/deploy_environment.var
 export TEST_IP_ADDRESS={{ test_ip_address }}
 export REDIS_URI={{ redis_uri }}
 export REDIS_URI_RO={{ redis_uri_ro }}
+export LOCATIONIQ_KEY={{ locationiq_key }}
 
 {{ source_path }}/venv/bin/python -u {{ source_path }}/src/backend/update_mirrors.py

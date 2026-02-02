@@ -30,3 +30,8 @@ redis_uri_ro: "{{
   'kv/data/infra/mirror_service:redis_uri_ro',
   token=lookup('env', 'VAULT_TOKEN'), url=secrets_url)
 }}"
+locationiq_key: "{{
+  lookup('community.hashi_vault.hashi_vault',
+  'kv/data/infra/mirror_service:locationiq_key',
+  token=lookup('env', 'VAULT_TOKEN'), url=secrets_url)
+}}"
