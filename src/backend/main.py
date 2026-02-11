@@ -41,6 +41,7 @@ from api.utils import (
 )
 from common.sentry import (
     init_sentry_client,
+    get_deploy_environment_name,
     get_logger,
 )
 from db.db_engine import FlaskCacheEngine, REDIS_URI, REDIS_URI_RO
@@ -63,6 +64,18 @@ if os.getenv('SENTRY_DSN'):
     init_sentry_client()
 cache = FlaskCacheEngine.get_instance(app=app, ro=False)
 cache_ro = FlaskCacheEngine.get_instance(app=app, ro=True)
+_is_dev_environment = get_deploy_environment_name().lower() not in (
+    'production', 'staging',
+)
+
+
+def _get_bypass_cache() -> bool:
+    """Check if bypass_cache was requested and is allowed (dev only)."""
+    if not _is_dev_environment:
+        return False
+    return request.args.get('bypass_cache', '').lower() in (
+        '1', 'true', 'yes',
+    )
 
 
 @app.context_processor
@@ -190,6 +203,8 @@ def get_mirror_list(
                 'Invalid arch/version combination requested, '
                 f'valid options are {config.arches}'
             )
+    # bypass_cache get arg (dev only)
+    bypass_cache = _get_bypass_cache()
     
     # check if optional module
     module = None
@@ -218,7 +233,8 @@ def get_mirror_list(
             country=request_country,
             module=module,
         ),
-        module=module
+        module=module,
+        bypass_cache=bypass_cache,
     )
 
     return '\n'.join(mirrors)
@@ -273,6 +289,7 @@ def get_iso_list(
         version: str,
         arch: str,
 ):
+    bypass_cache = _get_bypass_cache()
     ip_address = _get_request_ip()
     return get_mirrors_list(
         ip_address=ip_address,
@@ -280,6 +297,7 @@ def get_iso_list(
         arch=arch,
         repository=None,
         iso_list=True,
+        bypass_cache=bypass_cache,
     )
 
 
