@@ -95,6 +95,24 @@ def _get_request_ip() -> Optional[str]:
     return test_ip_address or result
 
 
+def _ip_to_network_prefix(ip: str) -> str:
+    """
+    Convert an IP address to its network prefix for cache grouping.
+    IPv4 addresses are grouped by /24, IPv6 by /64.
+    This improves cache hit rates by sharing cached mirror lists
+    across all IPs within the same network block.
+    """
+    try:
+        addr = ipaddress.ip_address(ip.strip())
+        if isinstance(addr, ipaddress.IPv4Address):
+            network = ipaddress.ip_network(f'{addr}/24', strict=False)
+        else:
+            network = ipaddress.ip_network(f'{addr}/64', strict=False)
+        return str(network.network_address)
+    except ValueError:
+        return ip
+
+
 def make_redis_key(
     ip: Optional[str] = None,
     protocol: Optional[str] = None,
@@ -103,7 +121,7 @@ def make_redis_key(
 ) -> str:
     if not ip:
         ip = _get_request_ip()
-    cache_key = f'{ip}'
+    cache_key = _ip_to_network_prefix(ip)
     if protocol:
         cache_key = f'{cache_key}_{protocol}'
     if country:
