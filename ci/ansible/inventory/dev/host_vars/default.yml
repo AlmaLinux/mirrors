@@ -10,3 +10,4 @@ gunicorn_port: 3031
 rsyslog_server: ""
 redis_uri: "redis://localhost:6379"
 redis_uri_ro: "redis://localhost:6379"
+locationiq_key: ""
