@@ -461,10 +461,33 @@ def sort_mirrors_by_distance_and_country(
     return mirrors
 
 
+def _shuffle_with_asn_priority(
+    mirrors: list[MirrorData],
+    request_asn: Optional[str] = None,
+) -> list[MirrorData]:
+    """
+    Shuffle mirrors, but if request_asn is provided, place mirrors
+    whose IP is on the same ASN as the requesting IP at the front
+    (shuffled among themselves), followed by the remaining mirrors
+    (also shuffled). Each mirror's ASN is pre-resolved and cached
+    in mirror.ip_asn at data load time.
+    """
+    if request_asn:
+        same_asn = [m for m in mirrors if m.ip_asn == request_asn]
+        diff_asn = [m for m in mirrors if m.ip_asn != request_asn]
+        random.shuffle(same_asn)
+        random.shuffle(diff_asn)
+        return same_asn + diff_asn
+    else:
+        random.shuffle(mirrors)
+        return mirrors
+
+
 def randomize_mirrors_within_distance(
     mirrors: list[dict[str, Union[int, MirrorData]]],
     country: str,
     shuffle_distance: int = RANDOMIZE_WITHIN_KM,
+    request_asn: Optional[str] = None,
 ):
     mirrors_in_country_shuffled = [
         mirror['mirror'] for mirror in mirrors if
@@ -486,8 +509,12 @@ def randomize_mirrors_within_distance(
         mirror['distance'] > shuffle_distance and
         mirror['mirror'].geolocation.country != country
     ]
-    random.shuffle(mirrors_in_country_shuffled)
-    random.shuffle(other_mirrors_shuffled)
+    mirrors_in_country_shuffled = _shuffle_with_asn_priority(
+        mirrors_in_country_shuffled, request_asn,
+    )
+    other_mirrors_shuffled = _shuffle_with_asn_priority(
+        other_mirrors_shuffled, request_asn,
+    )
     return mirrors_in_country_shuffled + \
         mirrors_in_country + \
         other_mirrors_shuffled + \

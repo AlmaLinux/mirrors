@@ -1,6 +1,7 @@
 # coding=utf-8
 from collections import defaultdict
 from ipaddress import (
+    ip_address,
     ip_network,
     IPv4Network,
     IPv6Network,
@@ -239,6 +240,7 @@ class Mirror(Base):
             sponsor_url=self.sponsor_url,
             email=self.email,
             asn=(self.asn or '').split(','),
+            ip_asn=get_asn_by_ip(self.ip.split(',')[0]) if _is_valid_ip(self.ip.split(',')[0]) else None,
             urls={
                 url.type: url.url for url in self.urls
             },
@@ -262,6 +264,17 @@ class Mirror(Base):
 
     def get_subnets(self) -> list[str]:
         return [subnet.subnet for subnet in self.subnets]
+
+
+def _is_valid_ip(ip: Optional[str]) -> bool:
+    """Check whether a string is a valid IPv4 or IPv6 address."""
+    if not ip:
+        return False
+    try:
+        ip_address(ip.strip())
+        return True
+    except ValueError:
+        return False
 
 
 def get_asn_by_ip(

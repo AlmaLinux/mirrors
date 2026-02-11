@@ -129,6 +129,7 @@ def _get_nearest_mirrors_by_network_data(
         randomized_additional_mirrors = randomize_mirrors_within_distance(
             mirrors=sorted_additional_mirrors,
             country=country,
+            request_asn=asn,
         )[:LENGTH_CLOUD_MIRRORS_LIST - len(suitable_mirrors)]
         suitable_mirrors.extend(randomized_additional_mirrors)
     return suitable_mirrors
@@ -169,6 +170,7 @@ def _get_nearest_mirrors_by_geo_data(
     # sort mirrors by distance and randomize those within specified distance
     # to avoid the same mirrors handling the majority of traffic especially
     # within larger cities
+    asn = get_asn_by_ip(ip_address)
     if city or state or country:
         sorted_mirrors = sort_mirrors_by_distance_and_country(
             request_geo_data=(latitude, longitude),
@@ -178,6 +180,7 @@ def _get_nearest_mirrors_by_geo_data(
         mirrors = randomize_mirrors_within_distance(
             mirrors=sorted_mirrors,
             country=country,
+            request_asn=asn,
         )
     # if we don't have city, country or state data for a requesting IP
     # then geoip isn't very accurate anyway so let's give it a random mirror
