@@ -13,6 +13,7 @@ logger = get_logger(__name__)
 
 CACHE_EXPIRED_TIME = 60 * 60  # 1 hour
 FLAPPED_EXPIRED_TIME = 60 * 60  # 1 hour
+GEOLOCATION_EXPIRED_TIME = 60 * 60 * 24 * 30  # 30 days
 MIRRORS_LIST_EXPIRED_TIME = 60 * 60  # 1 hour
 URL_TYPES_LIST_EXPIRED_TIME = 60 * 60 * 24  # 24 hours
 CLOUDS_SUBNETS_EXPIRED_TIME = 60 * 60 * 24  # 24 hours
@@ -106,7 +107,7 @@ def set_geolocation_to_cache(
             'latitude': latitude,
             'longitude': longitude,
         }),
-        timeout=CACHE_EXPIRED_TIME,
+        timeout=GEOLOCATION_EXPIRED_TIME,
     )
 
 
