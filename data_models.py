@@ -93,6 +93,7 @@ class MirrorData:
     ipv6: Optional[bool] = None
     isos_link: Optional[str] = None
     asn: list[str] = None
+    ip_asn: Optional[str] = None
     monopoly: bool = False
     urls: dict[str, str] = field(default_factory=dict)
     module_urls: dict[str, dict] = field(default_factory=dict)
@@ -126,6 +127,7 @@ class MirrorData:
             ipv6=dct.get('ipv6'),
             isos_link=dct.get('isos_link'),
             asn=dct.get('asn'),
+            ip_asn=dct.get('ip_asn'),
             urls=dct.get('urls'),
             module_urls=dct.get('module_urls'),
             subnets=dct.get('subnets'),
