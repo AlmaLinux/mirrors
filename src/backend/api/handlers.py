@@ -481,7 +481,8 @@ def get_mirrors_list(
     iso_list: bool = False,
     debug_info: bool = False,
     redis_key: Optional[str] = None,
-    module: Optional[str] = None
+    module: Optional[str] = None,
+    bypass_cache: bool = False,
 ) -> Union[list[str], dict]:
     mirrors_list = []
     config = get_config()
@@ -529,12 +530,12 @@ def get_mirrors_list(
             repo_path,
         )]
 
-    if redis_key:
+    from_cache = False
+    if redis_key and not bypass_cache:
         nearest_mirrors = cache_ro.get(redis_key)
-        from_cache = True
-        if not nearest_mirrors:
-            from_cache = False
-    if not redis_key or not nearest_mirrors:
+        if nearest_mirrors:
+            from_cache = True
+    if not redis_key or bypass_cache or not nearest_mirrors:
         nearest_mirrors = _get_nearest_mirrors(
             ip_address=ip_address,
             get_mirrors_with_full_set_of_isos=iso_list,
