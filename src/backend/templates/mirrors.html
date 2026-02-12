@@ -6,18 +6,30 @@ Mirrors are extremely important to provide a fast and reliable infrastructure,
 and we are very grateful to people and organizations that are helping us with this.
 <br><br>
 AlmaLinux would like to personally thank
-<a href="https://www.hivelocity.net/"
+<a href="https://www.knownhost.com/"
    target="_blank"
    class="link-success text-decoration-none"
->HiVelocity</a>, {% include "snipets/link_icon.html" %}
+>KnownHost</a> for the master mirror (repo.almalinux.org) hardware and bandwidth,
+<a href="https://www.fastly.com/"
+   target="_blank"
+   class="link-success text-decoration-none"
+>Fastly</a> for the CDN that sits in front of it,
+<a href="https://www.anywair.com/"
+   target="_blank"
+   class="link-success text-decoration-none"
+>anywAIR</a>,
 <a href="https://ziplyfiber.com/"
    target="_blank"
    class="link-success text-decoration-none"
->Ziply Fiber</a>, and
+>Ziply Fiber</a>,
 <a href="https://macarne.com/"
    target="_blank"
    class="link-success text-decoration-none"
->Macarne</a> for
+>Macarne</a>, and
+<a href="https://www.hivelocity.net/"
+   target="_blank"
+   class="link-success text-decoration-none"
+>HiVelocity</a> for
 their sponsorship of the AlmaLinux OS Foundation and sponsorship of our primary
 rsync mirrors and bandwidth, as well as
 <a href="https://ipinfo.io"
@@ -26,14 +38,31 @@ rsync mirrors and bandwidth, as well as
 >IPinfo</a> for IP address data. Please support those who support the community.
 {% endblock text_1 %}
 {% block sponsor_link %}
-<a href="https://www.hivelocity.net/"
+<a href="https://www.knownhost.com/"
    target="_blank"
    class="link-success text-decoration-none"
 >
-    <img src="{{ url_for('static', filename='images/hivelocity.svg') }}"
-         alt="HiVelocity logo"
-         height="67"
-         class="d-inline-block align-text-top">
+    <img src="{{ url_for('static', filename='images/kh-full.svg') }}"
+         alt="KnownHost logo"
+         class="d-inline-block sponsor-logo">
+</a>
+&nbsp;&nbsp;&nbsp;
+<a href="https://www.fastly.com/"
+   target="_blank"
+   class="link-success text-decoration-none"
+>
+    <img src="{{ url_for('static', filename='images/fastly.svg') }}"
+         alt="Fastly logo"
+         class="d-inline-block sponsor-logo">
+</a>
+&nbsp;&nbsp;&nbsp;
+<a href="https://www.anywair.com/"
+   target="_blank"
+   class="link-success text-decoration-none"
+>
+    <img src="{{ url_for('static', filename='images/anywair.png') }}"
+         alt="anywAIR logo"
+         class="d-inline-block sponsor-logo">
 </a>
 &nbsp;&nbsp;&nbsp;
 <a href="https://ziplyfiber.com/"
@@ -42,8 +71,7 @@ rsync mirrors and bandwidth, as well as
 >
     <img src="{{ url_for('static', filename='images/ziply.png') }}"
          alt="Ziply Fiber logo"
-         height="67"
-         class="d-inline-block align-text-top">
+         class="d-inline-block sponsor-logo">
 </a>
 &nbsp;&nbsp;&nbsp;
 <a href="https://macarne.com/"
@@ -52,8 +80,16 @@ rsync mirrors and bandwidth, as well as
 >
     <img src="{{ url_for('static', filename='images/macarne.svg') }}"
          alt="Macarne logo"
-         height="67"
-         class="d-inline-block align-text-top">
+         class="d-inline-block sponsor-logo">
+</a>
+&nbsp;&nbsp;&nbsp;
+<a href="https://www.hivelocity.net/"
+   target="_blank"
+   class="link-success text-decoration-none"
+>
+    <img src="{{ url_for('static', filename='images/hivelocity.svg') }}"
+         alt="HiVelocity logo"
+         class="d-inline-block sponsor-logo">
 </a>
 &nbsp;&nbsp;&nbsp;
 <a href="https://ipinfo.io"
@@ -62,8 +98,7 @@ rsync mirrors and bandwidth, as well as
 >
     <img src="{{ url_for('static', filename='images/ipinfo.svg') }}"
          alt="IPinfo logo"
-         height="67"
-         class="d-inline-block align-text-top">
+         class="d-inline-block sponsor-logo">
 </a>
 {% endblock sponsor_link %}
 {% block text_2 %}
