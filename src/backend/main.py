@@ -330,7 +330,7 @@ def isos(
             'isos_list': get_main_isos_table(config=config),
         })
 
-        return render_template('isos_main.html', **data)
+        return render_template('isos_main.html', title='AlmaLinux ISOs', **data)
     else:
         ip_address = _get_request_ip()
         (
@@ -358,7 +358,7 @@ def isos(
             'mirror_list': mirrors_by_countries,
             'nearest_mirrors': nearest_mirrors,
         })
-        return render_template('isos.html', **data)
+        return render_template('isos.html', title='AlmaLinux ISOs', **data)
 
 
 @app.route(
@@ -391,7 +391,7 @@ def kitten_isos(
             'isos_list': get_main_isos_table_kitten(config=config),
         })
 
-        return render_template('isos_main.html', **data)
+        return render_template('isos_main.html', title='AlmaLinux Kitten ISOs', **data)
     else:
         ip_address = _get_request_ip()
         (
@@ -420,7 +420,7 @@ def kitten_isos(
             'mirror_list': mirrors_by_countries,
             'nearest_mirrors': nearest_mirrors,
         })
-        return render_template('isos.html', **data)
+        return render_template('isos.html', title='AlmaLinux Kitten ISOs', **data)
 
 
 @cache.cached(
@@ -473,7 +473,7 @@ def mirrors_table(all_mirrors: bool = False):
         'mirror_list': mirrors,
         'main_title': 'AlmaLinux Mirrors',
     }
-    return render_template('mirrors.html', **data)
+    return render_template('mirrors.html', title='AlmaLinux Mirrors', **data)
 
 
 @app.route(
@@ -507,7 +507,7 @@ def mirrors_table_kitten(all_mirrors: bool = False):
         'mirror_list': mirrors,
         'main_title': 'AlmaLinux Kitten Mirrors',
     }
-    return render_template('mirrors.html', **data)
+    return render_template('mirrors.html', title='AlmaLinux Kitten Mirrors', **data)
 
 
 @app.errorhandler(AuthException)
