@@ -37,3 +37,11 @@
       src: "{{ mirror_service_git_updater }}.timer.j2"
       setype: systemd_unit_file_t
       seuser: system_u
+
+- name: Enable git updater systemd timer
+  systemd:
+    name: "{{ mirror_service_git_updater }}.timer"
+    state: started
+    enabled: true
+    masked: false
+    daemon_reload: true
