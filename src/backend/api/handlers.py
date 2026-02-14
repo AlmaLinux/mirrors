@@ -568,7 +568,7 @@ def get_mirrors_list(
         if arch:
             full_mirror_path = full_mirror_path.replace('$basearch', arch)
         mirrors_list.append(full_mirror_path)
-    if not from_cache:
+    if not from_cache and redis_key:
         cache.set(redis_key, nearest_mirrors, CACHE_EXPIRED_TIME)
 
     return mirrors_list

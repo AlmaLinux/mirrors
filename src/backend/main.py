@@ -89,7 +89,7 @@ def _get_request_ip() -> Optional[str]:
     test_ip_address = os.getenv('TEST_IP_ADDRESS', None)
     ip_address = request.headers.get('X-Forwarded-For')
     result = None
-    if ',' in ip_address:
+    if ip_address and ',' in ip_address:
         for ip in ip_address.split(','):
             try:
                 if not ipaddress.ip_address(ip.strip()).is_private:
@@ -103,9 +103,24 @@ def _get_request_ip() -> Optional[str]:
                     request.remote_addr,
                     request.headers,
                 )
-    else:
+    elif ip_address:
         result = ip_address
-    return test_ip_address or result
+    resolved = test_ip_address or result or request.remote_addr
+    # Validate the resolved IP; return None if unparseable so that
+    # downstream callers fall back to returning the full mirror list.
+    if resolved:
+        try:
+            ipaddress.ip_address(resolved.strip())
+            return resolved.strip()
+        except ValueError:
+            logger.warning(
+                'Could not parse a valid IP address from request. '
+                'Resolved value: %s, X-Forwarded-For: %s, remote_addr: %s',
+                resolved,
+                ip_address,
+                request.remote_addr,
+            )
+    return None
 
 
 def _ip_to_network_prefix(ip: str) -> str:
@@ -131,9 +146,11 @@ def make_redis_key(
     protocol: Optional[str] = None,
     country: Optional[str] = None,
     module: Optional[str] = None,
-) -> str:
+) -> Optional[str]:
     if not ip:
         ip = _get_request_ip()
+    if not ip:
+        return None
     cache_key = _ip_to_network_prefix(ip)
     if protocol:
         cache_key = f'{cache_key}_{protocol}'
