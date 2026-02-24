@@ -440,6 +440,9 @@ def kitten_isos(
         return render_template('isos.html', title='AlmaLinux Kitten ISOs', **data)
 
 
+DEFAULT_URL_TYPES = ['ftp', 'http', 'https', 'rsync']
+
+
 @cache.cached(
     timeout=URL_TYPES_LIST_EXPIRED_TIME,
     key_prefix='url_types',
@@ -449,7 +452,7 @@ def get_url_types() -> list[str]:
         url_types = sorted(value[0] for value in session.query(
             Url.type
         ).distinct())
-        return url_types
+        return url_types or DEFAULT_URL_TYPES
 
 
 @app.route(
