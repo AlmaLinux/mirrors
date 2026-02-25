@@ -411,18 +411,30 @@ def update_config_cache():
     )
 
 
+_cached_config = None
+_cached_config_at = 0
+_CONFIG_TTL = 60  # seconds; each gunicorn worker refreshes from Redis at most this often
+
+
 def get_config():
+    global _cached_config, _cached_config_at
+    now = time.monotonic()
+    if _cached_config is not None and (now - _cached_config_at) < _CONFIG_TTL:
+        return _cached_config
+
     config = get_app_config_from_cache(
         key='app_config',
         cache=cache,
     )
+    if config is None:
+        config = get_config_from_yaml(
+            logger=logger,
+            path_to_config=SERVICE_CONFIG_PATH,
+            path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
+        )
     if config is not None:
-        return config
-    config = get_config_from_yaml(
-        logger=logger,
-        path_to_config=SERVICE_CONFIG_PATH,
-        path_to_json_schema=SERVICE_CONFIG_JSON_SCHEMA_DIR_PATH,
-    )
+        _cached_config = config
+        _cached_config_at = now
     return config
 
 
