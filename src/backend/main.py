@@ -31,7 +31,6 @@ from api.handlers import (
     get_allowed_version,
     get_allowed_arch,
 )
-from api.redis import URL_TYPES_LIST_EXPIRED_TIME
 from api.utils import (
     success_result,
     error_result,
@@ -44,9 +43,7 @@ from common.sentry import (
     get_deploy_environment_name,
     get_logger,
 )
-from db.db_engine import FlaskCacheEngine, REDIS_URI, REDIS_URI_RO
-from db.models import Url
-from db.utils import session_scope
+from db.db_engine import FlaskCacheEngine
 
 app = Flask('app')
 # for profiling, comment when not profiling
@@ -63,7 +60,6 @@ logger = get_logger(__name__)
 if os.getenv('SENTRY_DSN'):
     init_sentry_client()
 cache = FlaskCacheEngine.get_instance(app=app, ro=False)
-cache_ro = FlaskCacheEngine.get_instance(app=app, ro=True)
 _is_dev_environment = get_deploy_environment_name().lower() not in (
     'production', 'staging',
 )
@@ -440,19 +436,7 @@ def kitten_isos(
         return render_template('isos.html', title='AlmaLinux Kitten ISOs', **data)
 
 
-DEFAULT_URL_TYPES = ['ftp', 'http', 'https', 'rsync']
-
-
-@cache.cached(
-    timeout=URL_TYPES_LIST_EXPIRED_TIME,
-    key_prefix='url_types',
-)
-def get_url_types() -> list[str]:
-    with session_scope() as session:
-        url_types = sorted(value[0] for value in session.query(
-            Url.type
-        ).distinct())
-        return url_types or DEFAULT_URL_TYPES
+URL_TYPES = ['http', 'https', 'rsync']
 
 
 @app.route(
@@ -468,7 +452,6 @@ def mirrors_all_table():
     methods=('GET',),
 )
 def mirrors_table(all_mirrors: bool = False):
-    url_types = sorted(get_url_types())
     if all_mirrors:
         mirrors = get_all_mirrors()
     else:
@@ -486,10 +469,10 @@ def mirrors_table(all_mirrors: bool = False):
             'Status',
             'Continent',
             'Region',
-            *(item.upper() for item in url_types),
+            *(item.upper() for item in URL_TYPES),
             'IPv6'
         ],
-        'url_types': url_types,
+        'url_types': URL_TYPES,
         'mirror_list': mirrors,
         'main_title': 'AlmaLinux Mirrors',
     }
@@ -501,7 +484,6 @@ def mirrors_table(all_mirrors: bool = False):
     methods=('GET',),
 )
 def mirrors_table_kitten(all_mirrors: bool = False):
-    url_types = sorted(get_url_types())
     if all_mirrors:
         mirrors = get_all_mirrors(request_module='kitten')
     else:
@@ -520,10 +502,10 @@ def mirrors_table_kitten(all_mirrors: bool = False):
             'Status',
             'Continent',
             'Region',
-            *(item.upper() for item in url_types),
+            *(item.upper() for item in URL_TYPES),
             'IPv6'
         ],
-        'url_types': url_types,
+        'url_types': URL_TYPES,
         'mirror_list': mirrors,
         'main_title': 'AlmaLinux Kitten Mirrors',
     }

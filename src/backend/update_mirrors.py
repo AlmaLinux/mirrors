@@ -197,9 +197,6 @@ async def update_mirrors_handler() -> str:
 
         db_session.commit()
 
-        # invalidate url_types cache so the web UI picks up any changes
-        cache.delete('url_types')
-
         # update all mirrors lists in the Redis cache
         for args in itertools.product(
                 (True, False),
