@@ -1,0 +1,18 @@
+---
+name: Rabisu
+website: https://www.mirror.rabisu.com/
+sponsor:
+  name: Rabisu
+  url: https://www.rabisu.com/
+location:
+  country: DE
+  city: Falkenstein
+urls:
+  http: http://mirror.rabisu.com/mirrors/almalinux/
+  https: https://mirror.rabisu.com/mirrors/almalinux/
+  rsync: rsync://mirror.rabisu.com/mirrors/almalinux/
+protocols:
+  - http
+  - https
+  - rsync
+bandwidth: 1Gbps
