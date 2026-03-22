@@ -1,0 +1,16 @@
+---
+name: mirror.xcobean.co.ke
+address:
+  http: https://mirror.xcobean.co.ke/almalinux/
+  https: https://mirror.xcobean.co.ke/almalinux/
+  rsync: rsync://mirror.xcobean.co.ke/almalinux/
+update_frequency: 6h
+sponsor: XcoBean Ltd
+sponsor_url: https://xcobean.co.ke
+email: admin@xcobean.co.ke
+geolocation:
+  country: KE
+  state_province: Nairobi
+  city: Nairobi
+private: false
+monopoly: false
