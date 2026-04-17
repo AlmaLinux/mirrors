@@ -168,14 +168,6 @@ repos:
       - "8.10"
       - "9.7"
       - "10.1"
-  - name: nvidia
-    path: nvidia/$basearch/os/
-    versions:
-      - "10.1"
-      - "9.7"
-    arches:
-      - x86_64
-      - aarch64
 
   # sources repos
   - name: baseos-source
