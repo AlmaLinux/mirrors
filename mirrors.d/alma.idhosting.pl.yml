@@ -1,0 +1,14 @@
+---
+name: alma.idhosting.pl
+address:
+  http: http://alma.idhosting.pl
+  https: https://alma.idhosting.pl
+geolocation:
+  country: PL
+  state_province: slaskie
+  city: Czestochowa
+update_frequency: 3h
+sponsor: IDHosting Sp. z o. o.
+sponsor_url: https://idhosting.pl
+email: admin@integradesign.pl
+...
