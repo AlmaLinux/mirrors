@@ -50,7 +50,7 @@ app.url_map.strict_slashes = False
 Bootstrap(app)
 logger = get_logger(__name__)
 if os.getenv('SENTRY_DSN'):
-    init_sentry_client()
+    init_sentry_client(traces_sample_rate=0.0)
 cache = FlaskCacheEngine.get_instance(app=app, ro=False)
 
 
