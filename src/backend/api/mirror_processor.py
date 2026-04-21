@@ -93,7 +93,8 @@ class MirrorProcessor:
         self.tcp_connector = TCPConnector(
             limit=10000,
             limit_per_host=20,
-            force_close=True,
+            keepalive_timeout=60,
+            ttl_dns_cache=300,
         )
         self.retry_options = ExponentialRetry(
             attempts=2,
