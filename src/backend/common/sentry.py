@@ -34,10 +34,15 @@ def get_aws_instance_api() -> str:
         return 'ItIsNotAWSInstance'
 
 
-def init_sentry_client(dsn: Optional[str] = None) -> None:
+def init_sentry_client(
+    dsn: Optional[str] = None,
+    traces_sample_rate: Optional[float] = None,
+) -> None:
     """
     Initialize sentry client with default options
     :param dsn: project auth key
+    :param traces_sample_rate: override the default per-environment rate
+        (e.g. pass 0.0 from batch jobs to disable per-request span overhead)
     """
     deploy_env_name = get_deploy_environment_name()
     logging.basicConfig(level=logging.INFO)
@@ -48,11 +53,11 @@ def init_sentry_client(dsn: Optional[str] = None) -> None:
         dsn = os.getenv('SENTRY_DSN')
     if dsn is None or not dsn:
         return
-    # sentry performance monitoring
-    if deploy_env_name == 'Production':
-        traces_sample_rate = 0.0001
-    else:
-        traces_sample_rate = 1.0
+    if traces_sample_rate is None:
+        if deploy_env_name == 'Production':
+            traces_sample_rate = 0.0001
+        else:
+            traces_sample_rate = 1.0
     sentry_sdk.init(
         dsn=dsn,
         environment=deploy_env_name,
