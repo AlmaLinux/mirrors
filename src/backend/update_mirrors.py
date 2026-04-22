@@ -2,6 +2,7 @@
 import asyncio
 import itertools
 import os
+import resource
 import time
 from datetime import datetime, timezone
 from inspect import signature
@@ -45,6 +46,11 @@ from db.utils import session_scope
 from yaml_snippets.utils import (
     get_mirrors_info,
 )
+
+# Raise the soft FD limit to the hard ceiling so high-concurrency mirror
+# checks don't hit the default per-process 1024 cap when run outside systemd.
+_, _fd_hard = resource.getrlimit(resource.RLIMIT_NOFILE)
+resource.setrlimit(resource.RLIMIT_NOFILE, (_fd_hard, _fd_hard))
 
 app = Flask('app')
 app.url_map.strict_slashes = False
