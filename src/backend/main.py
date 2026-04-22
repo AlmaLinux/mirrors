@@ -74,10 +74,33 @@ def _get_bypass_cache() -> bool:
     )
 
 
+def _format_refresh_ago(seconds: float) -> str:
+    if seconds < 60:
+        return 'less than a minute ago'
+    minutes = int(seconds // 60)
+    if minutes < 60:
+        return f'{minutes} minute{"s" if minutes != 1 else ""} ago'
+    hours = minutes // 60
+    return f'{hours} hour{"s" if hours != 1 else ""} ago'
+
+
 @app.context_processor
 def inject_now_date():
+    now = datetime.now(timezone.utc)
+    last_refresh_ts = cache.get('mirrors_last_refresh')
+    if last_refresh_ts is not None:
+        last_refresh = datetime.fromtimestamp(last_refresh_ts, tz=timezone.utc)
+        last_refresh_utc = last_refresh.strftime('%Y-%m-%d %H:%M UTC')
+        last_refresh_ago = _format_refresh_ago(
+            (now - last_refresh).total_seconds(),
+        )
+    else:
+        last_refresh_utc = None
+        last_refresh_ago = None
     return {
-        'now': datetime.now(timezone.utc),
+        'now': now,
+        'last_refresh_utc': last_refresh_utc,
+        'last_refresh_ago': last_refresh_ago,
     }
 
 

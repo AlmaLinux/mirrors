@@ -3,6 +3,7 @@ import asyncio
 import itertools
 import os
 import time
+from datetime import datetime, timezone
 from inspect import signature
 from ipaddress import (
     ip_network,
@@ -203,6 +204,12 @@ async def update_mirrors_handler() -> str:
                 repeat=len(signature(get_all_mirrors_db).parameters)-1,
         ):
             get_all_mirrors_db(bypass_cache=True, *args)
+
+        cache.set(
+            'mirrors_last_refresh',
+            datetime.now(timezone.utc).timestamp(),
+            timeout=0,
+        )
     finally:
         logger.info(
             'Update of the mirrors list is finished at "%s"',
