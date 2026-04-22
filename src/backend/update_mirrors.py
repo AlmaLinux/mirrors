@@ -1,11 +1,9 @@
 # coding=utf-8
 import asyncio
-import itertools
 import os
 import resource
 import time
 from datetime import datetime, timezone
-from inspect import signature
 from ipaddress import (
     ip_network,
     IPv4Network,
@@ -20,7 +18,7 @@ from flask_bs4 import Bootstrap
 from sqlalchemy import insert
 
 from api.handlers import (
-    get_all_mirrors_db,
+    warm_all_mirrors_cache,
 )
 from api.mirror_processor import MirrorProcessor
 from api.utils import (
@@ -204,12 +202,7 @@ async def update_mirrors_handler() -> str:
 
         db_session.commit()
 
-        # update all mirrors lists in the Redis cache
-        for args in itertools.product(
-                (True, False),
-                repeat=len(signature(get_all_mirrors_db).parameters)-1,
-        ):
-            get_all_mirrors_db(bypass_cache=True, *args)
+        warm_all_mirrors_cache()
 
         cache.set(
             'mirrors_last_refresh',
