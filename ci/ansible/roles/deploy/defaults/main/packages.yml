@@ -10,6 +10,7 @@ dnf_packages:
   - gcc
   - epel-release
   - nfs-utils
+  - tzdata
   # for testing purposes
   - checkpolicy
   - sqlite

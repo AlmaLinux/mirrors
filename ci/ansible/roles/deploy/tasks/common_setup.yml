@@ -13,6 +13,10 @@
   tags:
     - update_packages
 
+- name: Set system timezone to UTC
+  community.general.timezone:
+    name: Etc/UTC
+
 - name: Set SELinux option for right working of nginx + Gunicorn
   seboolean:
     state: yes
