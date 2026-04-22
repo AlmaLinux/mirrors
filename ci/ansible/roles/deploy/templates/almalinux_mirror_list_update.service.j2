@@ -9,3 +9,4 @@ Group={{ service_user }}
 Type=oneshot
 ExecStart={{ scripts_path }}/{{ mirror_list_update }}.sh
 TimeoutStartSec=10min
+LimitNOFILE=65536
