@@ -225,10 +225,10 @@ async def update_mirrors_handler() -> str:
 
 
 async def check_mirror(mirror_check_sem, mirror_info, main_config, mirror_iso_uris, subnets):
-    async with mirror_check_sem:
-        async with MirrorProcessor(
-                logger=logger,
-        ) as mirror_processor:
+    async with MirrorProcessor(
+            logger=logger,
+    ) as mirror_processor:
+        async with mirror_check_sem:
             await mirror_processor.set_ip_for_mirror(
                 mirror_info=mirror_info
             )
@@ -260,9 +260,12 @@ async def check_mirror(mirror_check_sem, mirror_info, main_config, mirror_iso_ur
                         mirror_info=mirror_info,
                         mirror_iso_uris=mirror_iso_uris
                     )
-                await mirror_processor.set_location_data_from_online_service(
-                    mirror_info=mirror_info
-                )
+        # Online geocoding runs outside the check semaphore: holding a slot while
+        # waiting on the class-level 1 req/s LocationIQ lock starves newcomers.
+        if mirror_info.status in ('ok', 'expired') and mirror_info.ip not in ('Unknown', None):
+            await mirror_processor.set_location_data_from_online_service(
+                mirror_info=mirror_info
+            )
 
 
 async def update_mirrors():
