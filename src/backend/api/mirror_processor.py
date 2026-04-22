@@ -130,6 +130,7 @@ class MirrorProcessor:
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         await self.client.close()
+        self.dns_resolver.cancel()
 
     async def request(
         self,
