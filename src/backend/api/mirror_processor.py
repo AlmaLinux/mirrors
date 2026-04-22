@@ -309,8 +309,11 @@ class MirrorProcessor:
                 longitude=cached_longitude,
             )
             return
+        locationiq_key = os.getenv('LOCATIONIQ_KEY')
+        if not locationiq_key:
+            return
         params = {
-            'key': os.getenv('LOCATIONIQ_KEY'),
+            'key': locationiq_key,
             'city': mirror_info.geolocation.city,
             'state': mirror_info.geolocation.state_province,
             'country': mirror_info.geolocation.country,
