@@ -1,4 +1,5 @@
 # coding=utf-8
+import itertools
 import os
 import random
 from collections import defaultdict
@@ -6,7 +7,7 @@ from dataclasses import asdict
 from typing import Optional, Union
 from urllib.parse import urljoin
 
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, selectinload
 from sqlalchemy.sql.expression import or_
 
 from api.exceptions import UnknownRepoAttribute
@@ -367,6 +368,65 @@ def get_all_mirrors_db(
 
     cache.set(cache_key, mirrors_list, 86400)
     return mirrors_list
+
+
+def _apply_mirror_filters(
+    mirrors: list[MirrorData],
+    get_working_mirrors: bool,
+    get_expired_mirrors: bool,
+    get_without_cloud_mirrors: bool,
+    get_without_private_mirrors: bool,
+    get_mirrors_with_full_set_of_isos: bool,
+) -> list[MirrorData]:
+    allowed_statuses = set()
+    if get_expired_mirrors:
+        allowed_statuses.add('expired')
+    if get_working_mirrors:
+        allowed_statuses.add('ok')
+    result = []
+    for m in mirrors:
+        if get_without_private_mirrors and m.private:
+            continue
+        if get_mirrors_with_full_set_of_isos and not m.has_full_iso_set:
+            continue
+        if allowed_statuses and m.status not in allowed_statuses:
+            continue
+        if get_without_cloud_mirrors and m.cloud_type != '':
+            continue
+        result.append(m)
+    return result
+
+
+def warm_all_mirrors_cache() -> None:
+    # Pull every mirror once with relationships eager-loaded, convert to
+    # MirrorData, then filter in Python for each flag combination and MSET
+    # the whole batch. Replaces 32 sequential DB queries + 32 Redis round-trips.
+    with session_scope() as session:
+        all_orm = session.query(Mirror).options(
+            selectinload(Mirror.urls),
+            selectinload(Mirror.module_urls),
+            selectinload(Mirror.subnets),
+            selectinload(Mirror.subnets_int),
+        ).order_by(
+            Mirror.continent,
+            Mirror.country,
+        ).all()
+        all_mirrors = [m.to_dataclass() for m in all_orm]
+
+    flag_names = (
+        'get_working_mirrors',
+        'get_expired_mirrors',
+        'get_without_cloud_mirrors',
+        'get_without_private_mirrors',
+        'get_mirrors_with_full_set_of_isos',
+    )
+    batch = {}
+    for values in itertools.product((True, False), repeat=len(flag_names)):
+        flags = dict(zip(flag_names, values))
+        cache_key = _generate_redis_key_for_the_mirrors_list(**flags)
+        batch[cache_key] = _apply_mirror_filters(all_mirrors, **flags)
+
+    cache.set_many(batch, timeout=86400)
 
 
 def _is_vault_repo(
