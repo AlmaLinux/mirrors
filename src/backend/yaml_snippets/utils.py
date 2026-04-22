@@ -131,6 +131,10 @@ async def check_tasks(
         if not result:
             for pending_task in pending_tasks:
                 pending_task.cancel()
+            # Wait for cancellations to land so callers (e.g. MirrorProcessor.__aexit__)
+            # don't close the ClientSession out from under a still-live task.
+            if pending_tasks:
+                await asyncio.gather(*pending_tasks, return_exceptions=True)
             return False, reason
     if not pending_tasks:
         return True, None
