@@ -591,6 +591,7 @@ async def mirror_available(
         )
         return True, None
     urls_for_checking = {}
+    mirror_base = mirror_info.mirror_url.rstrip('/')
     for version in main_config.versions:
         # cloud mirrors (Azure/AWS) don't store beta versions
         if mirror_info.cloud_type and 'beta' in version:
@@ -633,15 +634,9 @@ async def mirror_available(
                 ):
                     continue
                 repo_path = repo_data.path.replace('$basearch', arch)
-                url_for_check = urljoin(
-                    urljoin(
-                        urljoin(
-                            mirror_info.mirror_url + '/',
-                            str(version),
-                        ) + '/',
-                        repo_path,
-                    ) + '/',
-                    'repodata/repomd.xml',
+                url_for_check = (
+                    f"{mirror_base}/{version}/"
+                    f"{repo_path.strip('/')}/repodata/repomd.xml"
                 )
                 urls_for_checking[url_for_check] = {
                     'version': version,

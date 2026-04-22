@@ -2,6 +2,8 @@ import os
 import asyncio
 from asyncio import CancelledError
 from asyncio.exceptions import TimeoutError
+from datetime import datetime, timezone
+from functools import lru_cache
 from logging import Logger
 from typing import Optional, Union
 from urllib.parse import urljoin
@@ -47,6 +49,13 @@ from yaml_snippets.utils import (
     check_tasks,
     get_mirror_url,
 )
+
+
+@lru_cache(maxsize=8)
+def _allowed_outdate_seconds(outdate: str) -> float:
+    # dateparser is too slow to call per-mirror; cache the interval in seconds.
+    now = datetime.now(timezone.utc).timestamp()
+    return now - dateparser.parse(f'now-{outdate} UTC').timestamp()
 
 
 class MirrorProcessor:
@@ -484,9 +493,10 @@ class MirrorProcessor:
         main_config: MainConfig,
         module: Optional[str] = None
     ):
-        mirror_should_updated_at = dateparser.parse(
-            f'now-{main_config.allowed_outdate} UTC'
-        ).timestamp()
+        mirror_should_updated_at = (
+            datetime.now(timezone.utc).timestamp()
+            - _allowed_outdate_seconds(main_config.allowed_outdate)
+        )
         timestamp_url = urljoin(
             get_mirror_url(
                 main_config=main_config,
