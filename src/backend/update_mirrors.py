@@ -1,8 +1,10 @@
 # coding=utf-8
 import asyncio
+import multiprocessing
 import os
 import resource
 import time
+from concurrent.futures import ProcessPoolExecutor
 from datetime import datetime, timezone
 from ipaddress import (
     ip_network,
@@ -78,8 +80,7 @@ async def update_mirrors_handler() -> str:
     message = 'Update of the mirrors list is finished at "%s"'
     try:
         logger.info('Update of the mirrors list is started')
-        mirror_check_sem = asyncio.Semaphore(100)
-        async with mirror_check_sem, MirrorProcessor(
+        async with MirrorProcessor(
                 logger=logger,
         ) as mirror_processor:  # type: MirrorProcessor
             mirror_iso_uris = mirror_processor.get_mirror_iso_uris(
@@ -103,17 +104,29 @@ async def update_mirrors_handler() -> str:
                     http_session=mirror_processor.client
                 ),
             }
-            tasks = [
-                check_mirror(
-                    mirror_check_sem=mirror_check_sem,
-                    mirror_info=mirror_info,
-                    main_config=main_config,
-                    mirror_iso_uris=mirror_iso_uris,
-                    subnets=subnets
+
+        chunks = [all_mirrors[i::WORKER_COUNT] for i in range(WORKER_COUNT)]
+        ctx = multiprocessing.get_context('spawn')
+        event_loop = asyncio.get_running_loop()
+        with ProcessPoolExecutor(max_workers=WORKER_COUNT, mp_context=ctx) as pool:
+            results = await asyncio.gather(*(
+                event_loop.run_in_executor(
+                    pool,
+                    _run_mirror_checks_in_worker,
+                    chunk, main_config, mirror_iso_uris, subnets,
                 )
-                for mirror_info in all_mirrors
-            ]
-        await asyncio.gather(*tasks)
+                for chunk in chunks
+            ))
+        all_mirrors = [m for chunk_result in results for m in chunk_result]
+
+        # Serial online-geo pass, main process only, so the class-level 1 req/s
+        # LocationIQ lock enforces <=1 req/s globally across all workers.
+        async with MirrorProcessor(logger=logger) as geo_processor:
+            for mirror_info in all_mirrors:
+                if mirror_info.status in ('ok', 'expired') and mirror_info.ip not in ('Unknown', None):
+                    await geo_processor.set_location_data_from_online_service(
+                        mirror_info=mirror_info
+                    )
 
         with session_scope() as db_session:
             db_session.query(Mirror).delete()
@@ -218,6 +231,9 @@ async def update_mirrors_handler() -> str:
 
 
 async def check_mirror(mirror_check_sem, mirror_info, main_config, mirror_iso_uris, subnets):
+    # Online geocoding is intentionally absent here — it runs in a single serial
+    # pass in the main process to keep LocationIQ at <= 1 req/s globally across
+    # worker processes.
     async with MirrorProcessor(
             logger=logger,
     ) as mirror_processor:
@@ -253,12 +269,26 @@ async def check_mirror(mirror_check_sem, mirror_info, main_config, mirror_iso_ur
                         mirror_info=mirror_info,
                         mirror_iso_uris=mirror_iso_uris
                     )
-        # Online geocoding runs outside the check semaphore: holding a slot while
-        # waiting on the class-level 1 req/s LocationIQ lock starves newcomers.
-        if mirror_info.status in ('ok', 'expired') and mirror_info.ip not in ('Unknown', None):
-            await mirror_processor.set_location_data_from_online_service(
-                mirror_info=mirror_info
-            )
+
+
+WORKER_COUNT = 6
+WORKER_SEMAPHORE = 50
+
+
+async def _run_chunk(chunk, main_config, mirror_iso_uris, subnets):
+    sem = asyncio.Semaphore(WORKER_SEMAPHORE)
+    await asyncio.gather(*(
+        check_mirror(sem, m, main_config, mirror_iso_uris, subnets)
+        for m in chunk
+    ))
+
+
+def _run_mirror_checks_in_worker(chunk, main_config, mirror_iso_uris, subnets):
+    # Drop any DB handles inherited from module-level import before running.
+    from db.db_engine import Engine
+    Engine.get_instance().dispose()
+    asyncio.run(_run_chunk(chunk, main_config, mirror_iso_uris, subnets))
+    return chunk
 
 
 async def update_mirrors():
@@ -266,5 +296,6 @@ async def update_mirrors():
     await task
 
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(update_mirrors())
+if __name__ == '__main__':
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(update_mirrors())
