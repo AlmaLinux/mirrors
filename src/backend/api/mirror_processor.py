@@ -299,10 +299,6 @@ class MirrorProcessor:
                 mirror_info.geolocation.state_province,
             )
             return
-        self.logger.info(
-            'Set geodata for mirror "%s" from online DB',
-            mirror_info.name,
-        )
         redis_key = (
             f'nominatim_{mirror_info.geolocation.country}_'
             f'{mirror_info.geolocation.state_province}_'
@@ -321,6 +317,10 @@ class MirrorProcessor:
         locationiq_key = os.getenv('LOCATIONIQ_KEY')
         if not locationiq_key:
             return
+        self.logger.info(
+            'Set geodata for mirror "%s" from online DB',
+            mirror_info.name,
+        )
         params = {
             'key': locationiq_key,
             'city': mirror_info.geolocation.city,
