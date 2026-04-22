@@ -1,0 +1,14 @@
+---
+name: repo.mirror.famaserver.com
+address:
+  https: https://repo.mirror.famaserver.com/almalinux/
+update_frequency: 3h
+sponsor: FamaServer
+sponsor_url: https://famaserver.com
+email: info@famaserver.com
+geolocation:
+  country: IR
+  state_province: Tehran
+  city: Tehran
+private: false
+monopoly: false

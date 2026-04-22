@@ -1,9 +1,8 @@
 ---
 name: ftp.ucsb.edu
 address:
-  ftp: ftp://ftp.ucsb.edu/pub/mirrors/linux/almalinux/
-  http: http://ftp.ucsb.edu/pub/mirrors/linux/almalinux/
-  https: https://ftp.ucsb.edu/pub/mirrors/linux/almalinux/
+  http: http://ftp.ucsb.edu/almalinux/
+  https: https://ftp.ucsb.edu/almalinux/
 geolocation:
   country: US
   state_province: California

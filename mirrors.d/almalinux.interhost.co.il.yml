@@ -5,7 +5,7 @@ address:
   https: https://almalinux.interhost.co.il/
 geolocation:
   country: IL
-  state_province:
+  state_province: Tel Aviv District
   city: Tel Aviv
 update_frequency: 3h
 sponsor: Interhost Networks Ltd

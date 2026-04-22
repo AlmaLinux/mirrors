@@ -14,9 +14,8 @@ sponsor: Fibia P/S
 sponsor_url: https://fibia.dk
 email: mirror-admin@fibianet.dk
 geolocation:
-  continent: Europe
   country: DK
-  state_province:
+  state_province: Capital Region of Denmark
   city: Copenhagen
 asn:
   - 44869

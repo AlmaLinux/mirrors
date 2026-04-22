@@ -1,0 +1,16 @@
+---
+name: ftp.lysator.liu.se
+address:
+  ftp: ftp://ftp.lysator.liu.se/pub/almalinux/
+  http: http://ftp.lysator.liu.se/pub/almalinux/
+  https: https://ftp.lysator.liu.se/pub/almalinux/
+  rsync: rsync://ftp.lysator.liu.se/pub/almalinux/
+geolocation:
+  country: SE
+  state_province: Östergötland
+  city: Linköping
+update_frequency: 3h
+sponsor: Lysator ACS
+sponsor_url: https://www.lysator.liu.se
+email: ftp-master@lysator.liu.se
+...

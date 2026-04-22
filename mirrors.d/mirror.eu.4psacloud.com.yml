@@ -1,0 +1,15 @@
+---
+name: mirror.eu.4psacloud.com
+address:
+  http: http://mirror.eu.4psacloud.com/almalinux/
+  https: https://mirror.eu.4psacloud.com/almalinux/
+geolocation:
+  country: RO
+  state_province: Bucharest
+  city: Bucharest
+update_frequency: 3h
+sponsor: 4PSA
+sponsor_url: https://www.4psa.com
+email: inf@4psa.com
+asn: 34740
+...

@@ -4,7 +4,6 @@ address:
  http: http://mirror.hostiko.network/almalinux/
  https: https://mirror.hostiko.network/almalinux/
 geolocation:
- continent: Europe
  country: UA
  state_province: Kyiv
  city: Kyiv

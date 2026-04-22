@@ -1,0 +1,18 @@
+---
+name: almalinux.mirror.globo.tech
+address:
+  https: https://almalinux.mirror.globo.tech
+  rsync: rsync://almalinux.mirror.globo.tech/almalinux
+address_optional:
+  kitten:
+    https: https://almalinux-kitten.mirror.globo.tech
+    rsync: rsync://almalinux-kitten.mirror.globo.tech/almalinux-kitten
+geolocation:
+  country: CA
+  state_province: QC
+  city: Montreal
+update_frequency: 3h
+sponsor: GloboTech Communications
+sponsor_url: https://globo.tech
+email: infrastructure@globo.tech
+...

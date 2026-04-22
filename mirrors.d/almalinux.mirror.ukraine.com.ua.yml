@@ -1,0 +1,20 @@
+---
+name: almalinux.mirror.ukraine.com.ua
+address:
+  http: http://almalinux.mirror.ukraine.com.ua/
+  https: https://almalinux.mirror.ukraine.com.ua/
+address_optional:
+  kitten:
+    http: http://almalinux-kitten.mirror.ukraine.com.ua/
+    https: https://almalinux-kitten.mirror.ukraine.com.ua/
+geolocation:
+  country: UA
+  state_province: Kyiv
+  city: Kyiv
+update_frequency: 3h
+sponsor: Hosting Ukraine LLC
+sponsor_url: https://www.ukraine.com.ua/
+email: mirrors@abuse.team
+private: false
+asn: 200000
+...

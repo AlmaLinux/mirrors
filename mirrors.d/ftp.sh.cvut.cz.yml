@@ -10,8 +10,8 @@ sponsor: Silicon Hill
 sponsor_url: https://siliconhill.cz/
 email: ftp@sh.cvut.cz
 geolocation:
-  continent: Europe
   country: CZ
+  state_province: Prague
   city: Prague
 private: false
 monopoly: false

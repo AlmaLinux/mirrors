@@ -1,8 +1,8 @@
 ---
 name: mnl.aws.repo.almalinux.org
 address:
-  http: http://mnl.aws.repo.almalinux.org/
-  https: https://mnl.aws.repo.almalinux.org/
+  http: http://mnl.aws.repo.almalinux.org/almalinux/
+  https: https://mnl.aws.repo.almalinux.org/almalinux/
 update_frequency: 1h
 geolocation:
   country: PH

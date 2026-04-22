@@ -1,0 +1,15 @@
+---
+name: almalinux.mirror.archettitechnology.it
+address:
+  http: http://almalinux.mirror.archettitechnology.it
+  https: https://almalinux.mirror.archettitechnology.it
+update_frequency: "3h"
+sponsor: Archetti Technology
+sponsor_url: https://www.archettitechnology.it
+email: info@archettitechnology.it
+geolocation:
+  country: IT
+  state_province: Vicenza
+  city: Vicenza
+private: false
+monopoly: false

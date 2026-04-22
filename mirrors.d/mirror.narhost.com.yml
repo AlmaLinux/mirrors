@@ -1,0 +1,16 @@
+name: mirror.narhost.com
+address:
+  http: http://mirror.narhost.com/almalinux
+  https: https://mirror.narhost.com/almalinux
+  rsync: rsync://mirror.narhost.com/almalinux
+geolocation:
+  country: TR
+  state_province: Dudullu
+  city: Istanbul
+update_frequency: 3h
+sponsor: Narhost
+sponsor_url: https://narhost.com
+email: tech@pixoof.com
+private: false
+asn:
+  - 51722

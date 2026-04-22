@@ -1,8 +1,8 @@
 ---
 name: aws.repo.almalinux.org
 address:
-  http: http://aws.repo.almalinux.org/
-  https: https://aws.repo.almalinux.org/
+  http: http://aws.repo.almalinux.org/almalinux/
+  https: https://aws.repo.almalinux.org/almalinux/
 update_frequency: 1h
 geolocation:
   country: US
@@ -13,32 +13,5 @@ sponsor_url: https://www.almalinux.org
 email: infra-team@almalinux.org
 cloud_type: aws
 cloud_regions:
-  - us-east-1
-  - us-east-2
-  - us-west-1
-  - us-west-2
-  - af-south-1
-  - ap-east-1
-  - ap-south-2
-  - ap-southeast-3
-  - ap-southeast-4
-  - ap-south-1
-  - ap-northeast-3
-  - ap-northeast-2
-  - ap-southeast-1
-  - ap-southeast-2
-  - ap-northeast-1
-  - ca-central-1
-  - eu-central-1
-  - eu-west-1
-  - eu-west-2
-  - eu-south-1
-  - eu-west-3
-  - eu-south-2
-  - eu-north-1
-  - eu-central-2
-  - il-central-1
-  - me-south-1
-  - me-central-1
-  - sa-east-1
+  - all
 ...

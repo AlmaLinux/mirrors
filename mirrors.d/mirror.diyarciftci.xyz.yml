@@ -1,0 +1,20 @@
+---
+name: mirror.diyarciftci.xyz
+address:
+  http: http://mirror.diyarciftci.xyz/almalinux/
+  https: https://mirror.diyarciftci.xyz/almalinux/
+  rsync: rsync://mirror.diyarciftci.xyz/almalinux/
+address_optional:
+  kitten:
+    http: http://mirror.diyarciftci.xyz/almalinux-kitten/
+    https: https://mirror.diyarciftci.xyz/almalinux-kitten/
+    rsync: rsync://mirror.diyarciftci.xyz/almalinux-kitten/
+geolocation:
+  country: DE
+  state_province: Saxony
+  city: Falkenstein
+update_frequency: 3h
+sponsor: Diyar Ciftci
+sponsor_url: https://diyarciftci.xyz
+email: diyarciftci@protonmail.com
+...

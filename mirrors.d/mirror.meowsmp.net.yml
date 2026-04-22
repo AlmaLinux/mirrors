@@ -1,0 +1,13 @@
+name: mirror.meowsmp.net
+address:
+  http: http://mirror.meowsmp.net/almalinux/
+  https: https://mirror.meowsmp.net/almalinux/
+  rsync: rsync://mirror.meowsmp.net/almalinux/
+update_frequency: 1h
+sponsor: The MeowSMP.net Open Source Mirror Project
+sponsor_url: https://www.meowsmp.net
+email: meowice@meowsmp.net
+geolocation:
+  country: VN
+  state_province: Hanoi
+  city: Hanoi

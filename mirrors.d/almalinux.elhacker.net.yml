@@ -1,0 +1,16 @@
+---
+name: almalinux.elhacker.net
+address:
+  http: http://almalinux.elhacker.net/
+  https: https://almalinux.elhacker.net/
+  rsync: rsync://rsync.elhacker.net/almalinux
+geolocation:
+  country: ES
+  state_province: Catalonia
+  city: Barcelona
+update_frequency: 2h
+sponsor: elhacker.NET
+sponsor_url: https://www.elhacker.net
+email: webmaster@elhacker.net
+private: false
+...

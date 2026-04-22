@@ -1,0 +1,13 @@
+name: mirror.veritescil.com.tr
+address:
+  http: http://mirror.veritescil.com.tr/almalinux/
+  https: https://mirror.veritescil.com.tr/almalinux/
+  rsync: rsync://mirror.veritescil.com.tr/almalinux
+geolocation:
+  country: TR
+  state_province: Ankara
+  city: Ankara
+update_frequency: 1h
+sponsor: UPCELL ANKARA DATACENTER
+sponsor_url: https://www.veritescil.com.tr
+email: destek@veritescil.com.tr
