@@ -1,0 +1,17 @@
+---
+name: almalinux.mirror.blowfish.network
+address:
+  https: https://almalinux.mirror.blowfish.network
+  rsync: rsync://almalinux.mirror.blowfish.network/almalinux
+update_frequency: 6h
+sponsor: Blowfish Technology
+sponsor_url: https://blowfishtechnology.com
+email: graham.p@blowfish.network
+geolocation:
+  country: GB
+  state_province:  Greater Manchester
+  city: Manchester
+private: false
+monopoly: false
+asn: 61323
+...
