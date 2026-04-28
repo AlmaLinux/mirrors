@@ -1,0 +1,15 @@
+---
+name: mirror.rabisu.com
+address:
+  http:  http://mirror.rabisu.com/mirrors/almalinux/
+  https: https://mirror.rabisu.com/mirrors/almalinux/
+  rsync: rsync://mirror.rabisu.com/mirrors/almalinux/
+geolocation:
+  country: DE
+  state_province: SN
+  city: Falkenstein
+update_frequency: Twice A Day
+sponsor: Rabisu Hosting
+sponsor_url: https://www.rabisu.com
+email: mirror@rabisu.com
+---
