@@ -2,8 +2,8 @@
 name: mirror.tzulo.com  
 address:
   http: http://mirror.tzulo.com/almalinux/
-  https: https://mirror.tzulo.com/almalinux
-  rsync: rsync://mirror.tzulo.com/almalinux
+  https: https://mirror.tzulo.com/almalinux/
+  rsync: rsync://mirror.tzulo.com/almalinux/
 geolocation:
   country: US
   state_province: IL
