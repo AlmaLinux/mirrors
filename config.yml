@@ -1,6 +1,6 @@
 ---
 config_version: 3
-allowed_outdate: 12h
+allowed_outdate: 2h
 mirrors_dir: mirrors.d
 versions:
   - "8"
