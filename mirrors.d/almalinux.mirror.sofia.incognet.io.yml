@@ -1,12 +1,12 @@
 ---
 name: almalinux.mirror.sofia.incognet.io
 address:
-  http: http:/almalinux.mirror.sofia.incognet.io/almalinux
+  http: http://almalinux.mirror.sofia.incognet.io/almalinux
   https: https://almalinux.mirror.sofia.incognet.io/almalinux
   rsync: rsync://almalinux.mirror.sofia.incognet.io/almalinux
 address_options:
   kitten:
-    http: http:/almalinux.mirror.sofia.incognet.io/almalinux-kitten
+    http: http://almalinux.mirror.sofia.incognet.io/almalinux-kitten
     https: https://almalinux.mirror.sofia.incognet.io/almalinux-kitten
     rsync: rsync://almalinux.mirror.sofia.incognet.io/almalinux-kitten
 update_frequency: 1h
