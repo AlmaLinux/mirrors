@@ -1,0 +1,15 @@
+---
+name: www.maple-hosting.com
+address:
+  http: http://www.maple-hosting.com/mirror/almalinux
+  https: https://www.maple-hosting.com/mirror/almalinux
+update_frequency: 3h
+sponsor: Maple-Hosting
+sponsor_url: https://www.maple-hosting.com
+email: partners@maple-hosting.com
+geolocation:
+  country: NL
+  state_province: Flevoland
+  city: Lelystad
+private: false
+...
