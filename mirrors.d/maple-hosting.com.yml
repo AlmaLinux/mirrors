@@ -1,8 +1,8 @@
 ---
 name: www.maple-hosting.com
 address:
-  http: http://www.maple-hosting.com/mirror/almalinux
-  https: https://www.maple-hosting.com/mirror/almalinux
+  http: http://mirror.maple-hosting.com/almalinux
+  https: https://mirror.maple-hosting.com/almalinux
 update_frequency: 3h
 sponsor: Maple-Hosting
 sponsor_url: https://www.maple-hosting.com
