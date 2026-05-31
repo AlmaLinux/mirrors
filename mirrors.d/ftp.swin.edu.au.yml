@@ -1,0 +1,14 @@
+---
+name: ftp.swin.edu.au
+address:
+  http: http://ftp.swin.edu.au/almalinux/
+  https: https://ftp.swin.edu.au/almalinux/
+geolocation:
+  country: AU
+  state_province: Victoria
+  city: Melbourne
+update_frequency: 3h
+sponsor: Swinburne University of Technology
+sponsor_url: https://www.swinburne.edu.au/
+email: systems@swin.edu.au
+...

@@ -1,8 +1,8 @@
 ---
 name: for.aws.repo.almalinux.org
 address:
-  http: http://for.aws.repo.almalinux.org/
-  https: https://for.aws.repo.almalinux.org/
+  http: http://for.aws.repo.almalinux.org/almalinux/
+  https: https://for.aws.repo.almalinux.org/almalinux/
 update_frequency: 1h
 geolocation:
   country: BR

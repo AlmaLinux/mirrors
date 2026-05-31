@@ -5,7 +5,7 @@ address:
   https: https://mirrors.hosterion.ro/almalinux/
 geolocation:
   country: RO
-  state_province:
+  state_province: Bucharest
   city: Bucharest
 address_optional:
   kitten:

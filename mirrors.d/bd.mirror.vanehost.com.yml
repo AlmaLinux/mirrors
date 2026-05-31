@@ -5,7 +5,6 @@ address:
   https: https://bd.mirror.vanehost.com/AlmaLinux/
   rsync: rsync://rsyncbd.mirror.vanehost.com/AlmaLinux
 geolocation:
-  continent: Asia
   country: BD
   state_province: Dhaka
   city: Dhaka

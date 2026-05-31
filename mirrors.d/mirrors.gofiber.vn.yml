@@ -7,6 +7,6 @@ sponsor: Gofiber
 sponsor_url: https://gofiber.vn/
 email: info@gofiber.vn
 geolocation:
-  state_province:
   country: VN
+  state_province: Ho Chi Minh
   city: Ho Chi Minh

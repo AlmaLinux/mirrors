@@ -1,0 +1,13 @@
+---
+name: mirrors.asnet.am
+address:
+  http: http://mirrors.asnet.am/almalinux/
+update_frequency: 3h
+geolocation:
+  country: AM
+  state_province: Yerevan
+  city: Yerevan
+sponsor: ASNET-AM
+sponsor_url: https://asnet.am/
+email: arthur@sci.am
+...

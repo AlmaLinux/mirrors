@@ -11,7 +11,6 @@ sponsor: ROKFOSS PROJECT(ROKFOSS 프로젝트)
 sponsor_url: https://krfoss.org
 email: krfoss@krfoss.org
 geolocation:
-  continent: AS
   country: KR
   state_province: SEOUL
   city: SEOUL

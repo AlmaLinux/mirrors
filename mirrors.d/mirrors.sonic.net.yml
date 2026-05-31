@@ -18,7 +18,6 @@ address_optional:
 #      ftp: ftp://mirrors.sonic.net/almalinux-elevate/
 #      rsync: rsync://mirrors.sonic.net/almalinux-elavate/
 geolocation:
-   continent: North America
    country: US
    state_province: California
    city: Santa Rosa

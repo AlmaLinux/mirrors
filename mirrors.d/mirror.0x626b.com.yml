@@ -10,7 +10,6 @@ address_optional:
     https: https://mirror.0x626b.com/almalinux-kitten/
     rsync: rsync://mirror.0x626b.com/almalinux-kitten
 geolocation:
-  continent: North America
   country: US
   state_province: OR
   city: Hillsboro

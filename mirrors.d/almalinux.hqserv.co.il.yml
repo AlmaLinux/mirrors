@@ -3,7 +3,7 @@ address:
   http: http://almalinux.hqserv.co.il
 geolocation:
   country: IL
-  state_province: Hadarom
+  state_province: Southern District
   city: Ashdod
 update_frequency: 3h
 sponsor: HQSERV NETWORKS

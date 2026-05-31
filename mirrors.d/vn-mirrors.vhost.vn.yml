@@ -5,7 +5,7 @@ address:
 geolocation:
   country: VN
   city: Ho Chi Minh City
-  state_province:
+  state_province: Ho Chi Minh
 update_frequency: 3h
 sponsor: VHOST.VN
 sponsor_url: https://vhost.vn/

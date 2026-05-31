@@ -4,7 +4,7 @@ address:
   http: http://ftp.lug.ro/almalinux/
 geolocation:
   country: RO
-  state_province:
+  state_province: Bucharest
   city: Bucharest
 update_frequency: 2h
 sponsor: lug.ro

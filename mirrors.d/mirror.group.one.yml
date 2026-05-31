@@ -8,10 +8,9 @@ sponsor: group.one
 sponsor_url: https://www.group.one/
 email: mirror@group.one
 geolocation:
-  continent: Europe
   country: DK
   city: Copenhagen
-  state_province:
+  state_province: Capital Region of Denmark
 private: false
 monopoly: false
 asn: 51468

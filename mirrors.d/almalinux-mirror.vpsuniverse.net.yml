@@ -8,9 +8,8 @@ sponsor: VPSUniverse
 sponsor_url: https://vpsuniverse.net/
 email:  admin@vpsuniverse.net
 geolocation:
-  continent: EU
   country: DE
-  state_province:
-  city: Falkstein
+  state_province: Saxony
+  city: Falkenstein
 private: false
 monopoly: false

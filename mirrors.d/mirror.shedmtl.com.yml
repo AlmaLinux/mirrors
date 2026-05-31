@@ -1,0 +1,20 @@
+---
+name: mirror.shedmtl.com
+address:
+  http: http://mirror.shedmtl.com/almalinux
+  https: https://mirror.shedmtl.com/almalinux
+address_optional:
+  kitten:
+    http: http://mirror.shedmtl.com/almalinux-kitten
+    https: https://mirror.shedmtl.com/almalinux-kitten
+update_frequency: 1h
+sponsor: SHED Inc.
+sponsor_url: https://shedmtl.com
+email: infra-team@almalinux.org
+geolocation:
+  country: CA
+  state_province: QC
+  city: Montreal
+subnets:
+  - 216.46.2.34/32
+...

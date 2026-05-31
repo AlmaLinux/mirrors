@@ -5,7 +5,6 @@ address:
   https: https://mirror.limda.net/almalinux
   rsync: rsync://mirror.limda.net/almalinux
 geolocation:
-  continent: Asia
   country: BD
   state_province: Dhaka
   city: Dhaka

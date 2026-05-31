@@ -1,4 +1,4 @@
-name: Freedif
+name: mirror.freedif.org
 address:
   http: http://mirror.freedif.org/almalinux/
   https: https://mirror.freedif.org/almalinux/

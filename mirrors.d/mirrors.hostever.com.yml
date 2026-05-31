@@ -8,9 +8,9 @@ address_optional:
     http: http://mirrors.hostever.com/almalinux-kitten/
     https: https://mirrors.hostever.com/almalinux-kitten/
 geolocation:
-   country: BD
-   state_province:
-   city: Dhaka
+  country: BD
+  state_province: Dhaka Division
+  city: Dhaka
 asn: 140068
 update_frequency: 3h
 sponsor: CodeforHost Inc

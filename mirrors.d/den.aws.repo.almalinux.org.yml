@@ -1,8 +1,8 @@
 ---
 name: den.aws.repo.almalinux.org
 address:
-  http: http://den.aws.repo.almalinux.org
-  https: https://den.aws.repo.almalinux.org
+  http: http://den.aws.repo.almalinux.org/almalinux/
+  https: https://den.aws.repo.almalinux.org/almalinux/
 update_frequency: 1h
 geolocation:
   country: US
