@@ -1,7 +1,7 @@
 name: mirrors.krnk.org
 address:
   http: http://mirrors.krnk.org/almalinux/
-  https: http://mirrors.krnk.org/almalinux/
+  https: https://mirrors.krnk.org/almalinux/
 geolocation:
   country: JP
   state_province: Tokyo
