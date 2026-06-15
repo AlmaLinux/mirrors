@@ -1,0 +1,15 @@
+---
+name: mirror.hashy0917.net
+address:
+  http: http://mirror.hashy0917.net/almalinux/
+  https: https://mirror.hashy0917.net/almalinux/
+  rsync: rsync://mirror.hashy0917.net/almalinux/
+geolocation:
+  country: JP
+  state_province: Tokyo
+  city: Shinagawa
+update_frequency: 3h
+sponsor: hashy0917
+sponsor_url: https://www.hashy0917.net/
+email: mail@hashy0917.net
+...

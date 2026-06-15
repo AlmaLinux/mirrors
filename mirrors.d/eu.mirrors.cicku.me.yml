@@ -4,11 +4,12 @@ address:
   http: http://eu.mirrors.cicku.me/almalinux
   https: https://eu.mirrors.cicku.me/almalinux
 geolocation:
-  country: BG
-  state_province: 
+  country: BE
+  state_province: Brussels-Capital Region
   city: Brussels
 update_frequency: 3h
 sponsor: CICKU
 sponsor_url: https://mirror.cicku.me
 email: mirrors@cicku.me
+private: true
 ...

@@ -1,0 +1,13 @@
+---
+name: mirror.randhost.com
+address:
+  http: http://mirror.randhost.com/alma/
+  https: https://mirror.randhost.com/alma/
+update_frequency: 3h
+sponsor: Randhost
+sponsor_url: https://randhost.com
+email: mail@randhost.com
+geolocation:
+  country: PT
+  state_province: Lisbon
+  city: Lisbon

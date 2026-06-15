@@ -1,0 +1,15 @@
+---
+name: mirror.nodespace.com
+address:
+  http: http://mirror.nodespace.com/almalinux/
+  https: https://mirror.nodespace.com/almalinux/
+  rsync: rsync://mirror.nodespace.com/almalinux/
+geolocation:
+  country: US
+  state_province: North Carolina
+  city: Lenoir
+update_frequency: 3h
+sponsor: NodeSpace Hosting
+sponsor_url: https://www.nodespace.com/
+email: mirror@nodespace.com
+...

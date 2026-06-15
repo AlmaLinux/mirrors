@@ -3,7 +3,7 @@ name: almalinux.mirror.thegigabit.com
 address:
   http: http://almalinux.mirror.thegigabit.com/
   https: https://almalinux.mirror.thegigabit.com/
-  rsync: rsync://almalinux.mirror.thegigabit.com/
+  rsync: rsync://almalinux.mirror.thegigabit.com/almalinux
 geolocation:
   country: MY
   state_province: Kuala Lumpur

@@ -1,0 +1,18 @@
+---
+name: mirror.rootlicense.com
+address:
+  http: http://mirror.rootlicense.com/almalinux
+  https: https://mirror.rootlicense.com/almalinux
+address_optional:
+  kitten:
+    http: http://mirror.rootlicense.com/almalinux-kitten
+    https: https://mirror.rootlicense.com/almalinux-kitten
+update_frequency: 3h
+sponsor: Root License
+sponsor_url: https://rootlicense.com
+email: info@rootlicense.com
+geolocation:
+  country: IR
+  state_province: Isfahan
+  city: Isfahan
+...

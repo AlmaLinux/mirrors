@@ -1,0 +1,14 @@
+---
+name: mirror.flo.c-f.ro
+address:
+  http: http://mirror.flo.c-f.ro/almalinux/
+  https: https://mirror.flo.c-f.ro/almalinux/
+geolocation:
+  country: RO
+  state_province: Bucharest
+  city: Bucharest
+update_frequency: 3h
+sponsor: CYBER_FOLKS
+sponsor_url: https://www.cyberfolks.ro
+email: suport@cyberfolks.ro
+...

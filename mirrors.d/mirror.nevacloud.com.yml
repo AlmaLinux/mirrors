@@ -10,4 +10,6 @@ sponsor_url: https://nevacloud.com
 email: noc@nevacloud.com
 geolocation:
   country: ID
+  city: Jakarta
+  state_province: Jakarta
 ...

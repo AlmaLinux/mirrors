@@ -1,0 +1,18 @@
+name: mirror.krfoss.org
+address:
+  http: http://mirror.krfoss.org/almalinux
+  https: https://mirror.krfoss.org/almalinux
+address_optional:
+  kitten:
+    http: http://mirror.krfoss.org/almalinux-kitten
+    https: https://mirror.krfoss.org/almalinux-kitten
+update_frequency: 3h
+sponsor: ROKFOSS PROJECT(ROKFOSS 프로젝트)
+sponsor_url: https://krfoss.org
+email: krfoss@krfoss.org
+geolocation:
+  country: KR
+  state_province: SEOUL
+  city: SEOUL
+private: false
+monopoly: false

@@ -1,0 +1,15 @@
+---
+name: mirror.wonchan.net
+address:
+  http: http://mirror.wonchan.net/almalinux/
+  https: https://mirror.wonchan.net/almalinux/
+  rsync: rsync://mirror.wonchan.net/almalinux
+geolocation:
+  country: KR
+  state_province: Gwangju
+  city: Gwangju
+update_frequency: 2h
+sponsor: Lee, Wonchan
+sponsor_url: https://wwww.wonchan.net/
+email: wonchan@wonchan.net
+...

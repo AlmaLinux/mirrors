@@ -5,6 +5,7 @@ address:
   https: https://ftp.psnc.pl/linux/almalinux/
 geolocation:
   country: PL
+  state_province: Greater Poland Voivodeship
   city: Poznan
 update_frequency: 3h
 sponsor: Poznan Supercomputing and Networking Center

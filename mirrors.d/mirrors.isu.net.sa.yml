@@ -1,15 +1,22 @@
 ---
-name: mirrors.isu.net.sa
+name: mirror.maeen.sa
 address:
-  https: https://mirrors.isu.net.sa/almalinuxos-mirror/
-  http: http://mirrors.isu.net.sa/almalinuxos-mirror/
-  rsync: rsync://mirror.isu.net.sa/almalinuxos/
+  http: http://mirror.maeen.sa/almalinuxos-mirror
+  https: https://mirror.maeen.sa/almalinuxos-mirror
+  rsync: rsync://mirror.maeen.sa/almalinuxos-mirror
+address_optional:
+  kitten:
+    http: http://mirror.maeen.sa/almalinux-kitten-mirror
+    https: https://mirror.maeen.sa/almalinux-kitten-mirror
+    rsync: rsync://mirror.maeen.sa/almalinux-kitten-mirror
+update_frequency: 3h
+sponsor: Maeen Network
+sponsor_url: https://www.maeen.sa
+email: webmaster@maeen.sa
 geolocation:
   country: SA
   state_province: Riyadh
   city: Riyadh
-update_frequency: 1h
-sponsor: Maeen Network
-sponsor_url: https://maeen.sa/
-email: mirrors@isu.net.sa
-...
+private: false
+monopoly: false
+asn: 8895

@@ -1,0 +1,20 @@
+name: mirrors.hostiserver.com
+address:
+  http: http://mirrors.hostiserver.com/almalinux/
+  https: https://mirrors.hostiserver.com/almalinux/
+  rsync: rsync://mirrors.hostiserver.com/almalinux/
+  ftp: ftp://mirrors.hostiserver.com/almalinux/
+address_optional:
+  kitten:
+    http: http://mirrors.hostiserver.com/almalinux-kitten/
+    https: https://mirrors.hostiserver.com/almalinux-kitten/
+    rsync: rsync://mirrors.hostiserver.com/almalinux-kitten/
+update_frequency: 3h
+sponsor: IT Services Company s.r.o.
+sponsor_url: https://www.hostiserver.com
+email: mirrors-admins@hostiserver.com
+geolocation:
+  country: NL
+  state_province: Amsterdam
+  city: Amsterdam
+...

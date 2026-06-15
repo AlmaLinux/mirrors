@@ -5,8 +5,12 @@ address:
   https: https://mirrors.hosterion.ro/almalinux/
 geolocation:
   country: RO
-  state_province:
+  state_province: Bucharest
   city: Bucharest
+address_optional:
+  kitten:
+    http: http://mirrors.hosterion.ro/almalinux-kitten/
+    https: https://mirrors.hosterion.ro/almalinux-kitten/
 update_frequency: 3h
 sponsor: Hosterion
 sponsor_url: https://hosterion.ro

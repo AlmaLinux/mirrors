@@ -5,8 +5,19 @@ address:
    http: http://mirrors.sonic.net/almalinux/
    ftp: ftp://mirrors.sonic.net/almalinux/
    rsync: rsync://mirrors.sonic.net/almalinux/
+address_optional:
+   kitten:
+      https: https://mirrors.sonic.net/almalinux-kitten/
+      http: http://mirrors.sonic.net/almalinux-kitten/
+      ftp: ftp://mirrors.sonic.net/almalinux-kitten/
+      rsync: rsync://mirrors.sonic.net/almalinux-kitten/
+# Also mirroring Elevate, but not sure if that's supported in these configs.
+#   elevate:
+#      https: https://mirrors.sonic.net/almalinux-elevate/
+#      http: http://mirrors.sonic.net/almalinux-elevate/
+#      ftp: ftp://mirrors.sonic.net/almalinux-elevate/
+#      rsync: rsync://mirrors.sonic.net/almalinux-elavate/
 geolocation:
-   continent: North America
    country: US
    state_province: California
    city: Santa Rosa

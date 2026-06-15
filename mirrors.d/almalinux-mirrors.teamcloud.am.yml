@@ -1,0 +1,15 @@
+---
+name: mirrors.teamcloud.am
+
+address:
+  http: http://mirrors.teamcloud.am/mirrors/almalinux/
+  https: https://mirrors.teamcloud.am/mirrors/almalinux/
+update_frequency: 3h
+geolocation:
+  country: AM
+  state_province: Yerevan
+  city: Yerevan
+sponsor: Team TelecomArmenia
+sponsor_url: https://www.telecomarmenia.am/en/
+email: levon.israyelyan@telecomarmenia.am
+...

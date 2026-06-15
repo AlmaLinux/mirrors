@@ -5,10 +5,11 @@ address:
   https: https://es.mirrors.cicku.me/almalinux
 geolocation:
   country: ES
-  state_province:
+  state_province: Comunidad de Madrid
   city: Madrid
 update_frequency: 3h
 sponsor: CICKU
 sponsor_url: https://mirror.cicku.me
 email: mirrors@cicku.me
+private: true
 ...

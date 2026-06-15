@@ -1,7 +1,6 @@
 ---
 name: mirror.nyist.edu.cn
 address:
-  http: http://mirror.nyist.edu.cn/almalinux/
   https: https://mirror.nyist.edu.cn/almalinux/
   rsync: rsync://mirror.nyist.edu.cn/almalinux/
 geolocation:

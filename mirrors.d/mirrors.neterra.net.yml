@@ -6,7 +6,7 @@ address:
   rsync: rsync://mirrors.neterra.net/almalinux
 geolocation:
   country: BG
-  state_province: 
+  state_province: Sofia City
   city: Sofia
 update_frequency: 1h
 sponsor: Neterra

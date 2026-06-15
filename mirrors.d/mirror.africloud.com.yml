@@ -1,0 +1,13 @@
+---
+name: mirror.africloud.com
+address:
+  http: http://mirror.africloud.com/alma/
+  https: https://mirror.africloud.com/alma/
+update_frequency: 3h
+sponsor: AFRICLOUD
+sponsor_url: https://africloud.com
+email: mail@africloud.com
+geolocation:
+  country: ZA
+  state_province: Gauteng
+  city: Johannesburg

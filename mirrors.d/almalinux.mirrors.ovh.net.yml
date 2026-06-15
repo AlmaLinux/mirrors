@@ -4,7 +4,6 @@ address:
   http: http://almalinux.mirrors.ovh.net/
   https: https://almalinux.mirrors.ovh.net/
 geolocation:
-  continent: Europe
   country: FR
   state_province: Hauts-de-France
   city: Roubaix

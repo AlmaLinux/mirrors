@@ -5,6 +5,7 @@ address:
   https: https://almalinux.koyanet.lv/almalinux/
 geolocation:
   country: LV
+  state_province: Riga
   city: Riga
 update_frequency: 3h
 sponsor: DEAC

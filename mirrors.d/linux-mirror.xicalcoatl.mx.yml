@@ -1,0 +1,16 @@
+---
+name: linux-mirror.xicalcoatl.mx
+address:
+  http: http://linux-mirror.xicalcoatl.mx/almalinux/
+  https: https://linux-mirror.xicalcoatl.mx/almalinux/
+update_frequency: 3h
+sponsor: maidlinux01
+sponsor_url: https://github.com/maidlinux01
+email: info@xicalcoatl.mx
+geolocation:
+  country: MX
+  state_province: Oaxaca
+  city: Oaxaca
+private: false
+monopoly: false
+

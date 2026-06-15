@@ -1,0 +1,14 @@
+---
+name: mirror.ekiphost.com
+address:
+  http: http://mirror.ekiphost.com/almalinux/
+  https: https://mirror.ekiphost.com/almalinux/
+geolocation:
+  country: TR
+  state_province: Istanbul
+  city: Istanbul
+update_frequency: 3h
+sponsor: Ekiphost
+sponsor_url: https://ekiphost.com
+email: info@ekiphost.com
+...

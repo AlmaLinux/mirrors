@@ -1,0 +1,13 @@
+name: almalinux.vpsttt.com
+address:
+  http: http://almalinux.vpsttt.com/
+  https: https://almalinux.vpsttt.com/
+  rsync: rsync://almalinux.vpsttt.com/almalinux/
+update_frequency: 3h
+sponsor: VPSTTT Group
+sponsor_url: https://vpsttt.com/
+email: lienhe@vpsttt.com
+geolocation:
+  country: VN
+  state_province: Hanoi
+  city: Hanoi

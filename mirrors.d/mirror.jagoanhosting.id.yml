@@ -1,0 +1,13 @@
+---
+name: mirror.jagoanhosting.id
+address:
+  http: http://mirror.jagoanhosting.id/almalinux/
+  https: https://mirror.jagoanhosting.id/almalinux/
+update_frequency: 3h
+sponsor: Jagoan Hosting Indonesia
+sponsor_url: http://jagoanhosting.com
+email: hansip@jagoanhosting.com
+geolocation:
+  country: ID
+  city: Malang
+  state_province: East Java

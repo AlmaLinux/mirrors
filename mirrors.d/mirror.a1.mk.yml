@@ -1,0 +1,14 @@
+---
+name: mirror.a1.mk
+address:
+  http: http://mirror.a1.mk/almalinux/
+  rsync: rsync://mirror.a1.mk/almalinux/
+update_frequency: 3h
+geolocation:
+  country: MK
+  state_province: Skopje
+  city: Skopje
+sponsor: A1 Makedonija
+sponsor_url: https://a1.mk
+email: linux-mirror@a1.mk
+...

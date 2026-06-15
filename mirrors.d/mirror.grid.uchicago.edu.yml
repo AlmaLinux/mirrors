@@ -4,6 +4,11 @@ address:
   http: http://mirror.grid.uchicago.edu/pub/linux/alma/
   https: https://mirror.grid.uchicago.edu/pub/linux/alma/
   rsync: rsync://mirror.grid.uchicago.edu/alma
+address_optional:
+  kitten:
+    http: http://mirror.grid.uchicago.edu/pub/linux/almalinux-kitten
+    https: http://mirror.grid.uchicago.edu/pub/linux/almalinux-kitten
+    rsync: rsync://mirror.grid.uchicago.edu/almalinux-kitten
 geolocation:
   country: US
   state_province: IL

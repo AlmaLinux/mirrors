@@ -1,0 +1,13 @@
+name: mirrors.webhs.pt
+address:
+  http: http://mirrors.webhs.pt/almalinux/
+  https: https://mirrors.webhs.pt/almalinux/
+  rsync: rsync://mirrors.webhs.pt/almalinux/
+update_frequency: 3h
+sponsor: WebHS
+sponsor_url: https://mirrors.webhs.pt/
+email: noc@webhs.pt
+geolocation:
+  country: PT
+  state_province: Lisbon
+  city: Lisbon

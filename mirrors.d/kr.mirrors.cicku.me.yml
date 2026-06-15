@@ -5,10 +5,11 @@ address:
   https: https://kr.mirrors.cicku.me/almalinux
 geolocation:
   country: KR
-  state_province: 
+  state_province: Seoul
   city: Seoul
 update_frequency: 3h
 sponsor: CICKU
 sponsor_url: https://mirror.cicku.me
 email: mirrors@cicku.me
+private: true
 ...

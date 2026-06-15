@@ -1,0 +1,15 @@
+---
+name: mirrors.cloudforest.co.th
+address:
+  http: http://mirrors.cloudforest.co.th/almalinux/
+  https: https://mirrors.cloudforest.co.th/almalinux/
+update_frequency: 3h
+sponsor: CLOUDFOREST CO., LTD.
+sponsor_url: https://cloudforest.co.th
+email: noppawan@cloudforest.co.th
+geolocation:
+  country: TH
+  state_province: Bangkok
+  city: Bangkok
+asn: 142299
+...

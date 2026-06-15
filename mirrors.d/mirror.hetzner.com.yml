@@ -1,0 +1,16 @@
+---
+name: mirror.hetzner.com
+address:
+  http: http://mirror.hetzner.com/almalinux/
+  https: https://mirror.hetzner.com/almalinux/
+update_frequency: 12h
+sponsor: Hetzner
+sponsor_url: https://www.hetzner.com/
+email: eric.esch@hetzner.com
+private: true
+asn:
+  - 24940
+  - 213230
+  - 212317
+  - 215859
+...

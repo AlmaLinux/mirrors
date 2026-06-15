@@ -1,0 +1,12 @@
+name: mirror.azvps.vn
+address:
+  http: http://mirror.azvps.vn/almalinux/
+  https: https://mirror.azvps.vn/almalinux/
+update_frequency: 1h
+sponsor: AZVPS
+sponsor_url: https://azvps.vn/
+email: contact@azvps.vn
+geolocation:
+  country: VN
+  state_province: Hanoi
+  city: Hanoi

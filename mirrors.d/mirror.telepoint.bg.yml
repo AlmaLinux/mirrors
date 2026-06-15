@@ -1,0 +1,25 @@
+---
+name: mirror.telepoint.bg
+address:
+  http: http://mirror.telepoint.bg/almalinux/
+  https: https://mirror.telepoint.bg/almalinux/
+  rsync: rsync://mirror.telepoint.bg/almalinux/
+  ftp: ftp://mirror.telepoint.bg/almalinux/
+address_optional:
+  kitten:
+    http: http://mirror.telepoint.bg/almalinux-kitten/
+    https: https://mirror.telepoint.bg/almalinux-kitten/
+    rsync: rsync://mirror.telepoint.bg/almalinux-kitten/
+    ftp: ftp://mirror.telepoint.bg/almalinux-kitten/
+update_frequency: 3h
+sponsor: Telepoint Ltd.
+sponsor_url: https://telepoint.bg
+email: mirror@telepoint.bg
+geolocation:
+  country: BG
+  state_province: Sofia
+  city: Sofia
+asn:
+  - 31083
+  - 57344
+...

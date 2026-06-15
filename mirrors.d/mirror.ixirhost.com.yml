@@ -1,0 +1,14 @@
+---
+name: mirror.ixirhost.com
+address:
+  http: http://mirror.ixirhost.com/almalinux/
+  https: https://mirror.ixirhost.com/almalinux/
+update_frequency: 2h
+sponsor: ixirhost.com
+sponsor_url: https://ixirhost.com
+email: destek@ixirhost.com
+geolocation:
+  country: TR
+  state_province: Istanbul
+  city: Istanbul
+...
