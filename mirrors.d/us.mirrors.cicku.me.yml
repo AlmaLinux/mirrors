@@ -1,7 +1,6 @@
 ---
 name: us.mirrors.cicku.me
 address:
-  http: http://us.mirrors.cicku.me/almalinux
   https: https://us.mirrors.cicku.me/almalinux
 geolocation:
   country: US
@@ -9,7 +8,6 @@ geolocation:
   city: Philadelphia
 update_frequency: 3h
 sponsor: CICKU
-sponsor_url: https://mirror.cicku.me
+sponsor_url: https://mirrors.cicku.me
 email: mirrors@cicku.me
-private: true
 ...
