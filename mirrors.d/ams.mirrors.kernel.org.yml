@@ -1,7 +1,7 @@
 ---
-name: eu.edge.kernel.org
+name: ams.mirrors.kernel.org
 address:
-  https: https://eu.edge.kernel.org/almalinux
+  https: https://ams.mirrors.kernel.org/almalinux
 geolocation:
   country: NL
   state_province: North Holland
@@ -10,4 +10,5 @@ update_frequency: 3h
 sponsor: Linux Kernel Archives
 sponsor_url: https://kernel.org
 email: ftpadmin@kernel.org
+private: True
 ...

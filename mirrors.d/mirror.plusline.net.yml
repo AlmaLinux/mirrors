@@ -1,0 +1,15 @@
+---
+name: mirror.plusline.net
+address:
+  http: http://mirror.plusline.net/almalinux/
+  https: https://mirror.plusline.net/almalinux/
+  rsync: rsync://mirror.plusline.net/almalinux
+geolocation:
+  country: DE
+  state_province: Hesse
+  city: Frankfurt am Main
+update_frequency: 4h
+sponsor: Plus.line AG
+sponsor_url: https://www.plusline.net
+email: ftp@plusline.net
+...
