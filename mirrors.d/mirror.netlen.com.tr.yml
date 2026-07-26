@@ -1,0 +1,15 @@
+---
+name: mirror.netlen.com.tr
+address:
+  http: http://mirror.netlen.com.tr/almalinux/
+  https: https://mirror.netlen.com.tr/almalinux/
+  rsync: rsync://mirror.netlen.com.tr/almalinux/
+geolocation:
+  country: TR
+  state_province: Istanbul
+  city: Istanbul
+update_frequency: 3h
+sponsor: Netlen Internet Hizmetleri
+sponsor_url: https://www.netlen.com.tr
+email: bilgi@netlen.com.tr
+...
