@@ -1,7 +1,7 @@
 ---
 name: homeserver.zelgray.work
 address:
-  http: https://portal.zelgray.cherkasy.ua/almalinux/
+  https: https://portal.zelgray.cherkasy.ua/almalinux/
 update_frequency: 1h
 sponsor: zelgray.work
 sponsor_url: https://zelgray.work
