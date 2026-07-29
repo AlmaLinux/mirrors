@@ -1,0 +1,13 @@
+---
+name: mirror.stinner-it.com
+address:
+  https: https://mirror.stinner-it.com/almalinux/
+geolocation:
+  country: AT
+  state_province: Styria
+  city: Graz
+update_frequency: 3h
+sponsor: Stinner IT-Solutions e.U.
+sponsor_url: https://www.stinner-it.com/
+email: Thomas.Stinner@stinner-it.com
+...
