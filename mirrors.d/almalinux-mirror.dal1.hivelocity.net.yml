@@ -12,4 +12,6 @@ update_frequency: 3h
 sponsor: Hivelocity Hosting
 sponsor_url: https://hivelocity.net/
 email: devops@hivelocity.net
+# temporarily disabled due to performance issues
+private: True
 ...

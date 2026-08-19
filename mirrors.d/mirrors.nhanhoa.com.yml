@@ -1,0 +1,20 @@
+---
+name: mirrors.nhanhoa.com
+
+address:
+  http: http://mirrors.nhanhoa.com/almalinux
+  https: https://mirrors.nhanhoa.com/almalinux
+
+update_frequency: 2h
+
+sponsor: NhanHoa Company
+sponsor_url: https://nhanhoa.com
+email: dunght@nhanhoa.com.vn
+
+geolocation:
+  country: VN
+  state_province: Hanoi
+  city: Hanoi
+
+private: false
+monopoly: false

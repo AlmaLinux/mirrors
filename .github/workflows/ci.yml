@@ -23,11 +23,20 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-        with:
-          submodules: recursive
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v2
+      - name: Fetch yaml_snippets from mirrors_service branch
+        uses: actions/checkout@v4
+        with:
+          ref: mirrors_service
+          path: _mirrors_service
+          sparse-checkout: src/backend/yaml_snippets
+          sparse-checkout-cone-mode: false
+
+      - name: Stage yaml_snippets for config_checker
+        run: mv _mirrors_service/src/backend/yaml_snippets gh_ci/yaml_snippets
+
+      - uses: actions/setup-python@v4
         with:
           python-version: 3.9
 

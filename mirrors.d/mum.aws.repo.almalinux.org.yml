@@ -1,0 +1,14 @@
+---
+name: mum.aws.repo.almalinux.org
+address:
+  http: http://mum.aws.repo.almalinux.org/almalinux/
+  https: https://mum.aws.repo.almalinux.org/almalinux/
+update_frequency: 1h
+geolocation:
+  country: IN
+  state_province: Maharashtra
+  city: Mumbai
+sponsor: AlmaLinux OS Foundation
+sponsor_url: https://www.almalinux.org
+email: infra-team@almalinux.org
+...
