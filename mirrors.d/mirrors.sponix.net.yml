@@ -2,7 +2,7 @@
 name: mirrors.sponix.net
 
 address:
-  https: https://mirrors.sponix.net/mirrors/almalinux/
+  https: https://mirrors.sponix.net/almalinux/
 update_frequency: 3h
 geolocation:
   country: US
