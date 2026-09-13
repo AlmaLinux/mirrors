@@ -1,0 +1,16 @@
+---
+name: bhs.almalinux.mirrors.ovh.net
+address:
+  http: http://almalinux.mirrors.ovh.net/
+  https: https://almalinux.mirrors.ovh.net/
+geolocation:
+  continent: North America
+  country: CA
+  state_province: Quebec
+  city: Beauharnois
+update_frequency: 12h
+sponsor: OVHcloud
+sponsor_url: https://www.ovhcloud.com/
+email: mirror@ovh.net
+asn: 16276
+...
