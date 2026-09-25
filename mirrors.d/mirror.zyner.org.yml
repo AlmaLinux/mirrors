@@ -1,0 +1,21 @@
+---
+name: mirror.zyner.org
+address:
+  http: http://mirror.zyner.org/almalinux
+  https: https://mirror.zyner.org/almalinux
+  rsync: rsync://mirror.zyner.org/almalinux
+address_optional:
+  kitten:
+    http: http://mirror.zyner.org/almalinux-kitten
+    https: https://mirror.zyner.org/almalinux-kitten
+    rsync: rsync://mirror.zyner.org/almalinux-kitten
+update_frequency: 1h
+sponsor: Zyner
+sponsor_url: https://zyner.org
+email: ops+mirror@zyner.org
+geolocation:
+  country: SE
+  state_province: Skåne
+  city: Lund
+private: false
+asn: 199656
