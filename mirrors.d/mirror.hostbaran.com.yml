@@ -3,10 +3,7 @@ name: mirror.hostbaran.com
 address:
   http: http://mirror.hostbaran.com/almalinux
   https: https://mirror.hostbaran.com/almalinux
-address_optional:
-  kitten:
-    http: http://mirror.hostbaran.com/almalinux-kitten
-    https: https://mirror.hostbaran.com/almalinux-kitten
+  rsync: rsync://mirror.hostbaran.com/almalinux
 update_frequency: 1h
 sponsor: Host Baran
 sponsor_url: https://hostbaran.com
