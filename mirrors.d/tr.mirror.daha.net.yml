@@ -1,0 +1,11 @@
+name: mirror.daha.net
+address:
+  https: https://mirror.daha.net/almalinux
+geolocation:
+  country: TR
+  state_province: Istanbul
+  city: Istanbul
+update_frequency: 3h
+sponsor: daha.net
+sponsor_url: https://www.daha.net
+email: admin@daha.net
