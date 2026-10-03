@@ -1,0 +1,17 @@
+---
+name: mirror.manutech.at
+address:
+  http: http://mirror.manutech.at/almalinux/
+  https: https://mirror.manutech.at/almalinux/
+address_optional:
+  kitten:
+    http: http://mirror.manutech.at/almalinux-kitten/
+    https: https://mirror.manutech.at/almalinux-kitten/
+geolocation:
+  country: FI
+  state_province: Uusimaa
+  city: Helsinki
+update_frequency: 3h
+sponsor: ManuTech-AT
+sponsor_url: https://manutech.at
+email: manuel@manutech.at
