@@ -1,0 +1,15 @@
+---
+name: mirror.techrich.hk
+address:
+  http: http://mirror.techrich.hk/almalinux/
+  https: https://mirror.techrich.hk/almalinux/
+geolocation:
+  country: US
+  state_province: Illinois
+  city: Chicago
+update_frequency: 3h
+sponsor: Techrich
+sponsor_url: https://techrich.hk
+email: domain-ops@techrich.hk
+private: false
+...
