@@ -3,12 +3,13 @@ name: mirror.isoc.org.il
 address:
   http: http://mirror.isoc.org.il/pub/almalinux
   https: https://mirror.isoc.org.il/pub/almalinux
+  rsync: rsync://mirror.isoc.org.il/almalinux/
 geolocation:
   country: IL
   state_province: Center District
   city: Petah Tikva
 update_frequency: 3h
 sponsor: Israel Internet Association
-sponsor_url: https://www.isoc.org.il
+sponsor_url: https://en.isoc.org.il
 email: mirrormaster@isoc.org.il
 ...
