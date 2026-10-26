@@ -1,0 +1,15 @@
+---
+name: mirror.cloudbt.com
+address:
+  http: http://mirror.cloudbt.com/almalinux/
+  https: https://mirror.cloudbt.com/almalinux/
+  rsync: rsync://mirror.cloudbt.com/almalinux/
+geolocation:
+  country: TR
+  state_province: Istanbul
+  city: Istanbul
+update_frequency: 3h
+sponsor: CloudBT
+sponsor_url: https://cloudbt.com
+email: info@cloudbt.com
+...
