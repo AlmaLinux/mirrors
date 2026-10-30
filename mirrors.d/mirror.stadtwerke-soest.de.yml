@@ -7,7 +7,7 @@ address:
 geolocation:
   country: DE
   state_province: North Rhine-Westphalia
-  city: Düsseldorf
+  city: Soest
 update_frequency: 3h
 sponsor: Stadtwerke Soest GmbH
 sponsor_url: https://www.stadtwerke-soest.de
