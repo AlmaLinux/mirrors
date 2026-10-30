@@ -1,0 +1,14 @@
+---
+name: mirror.stadtwerke-soest.de
+address:
+  http: http://mirror.stadtwerke-soest.de/almalinux/
+  https: https://mirror.stadtwerke-soest.de/almalinux/
+  rsync: rsync://mirror.stadtwerke-soest.de/almalinux/
+geolocation:
+  country: DE
+  state_province: North Rhine-Westphalia
+  city: Soest
+update_frequency: 3h
+sponsor: Stadtwerke Soest GmbH
+sponsor_url: https://www.stadtwerke-soest.de
+email: k.stollwerk@stadtwerke-soest.de
