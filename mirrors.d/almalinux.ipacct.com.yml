@@ -12,4 +12,5 @@ update_frequency: 3h
 sponsor: IPACCT Ltd.
 sponsor_url: http://ipacct.com
 email: bbonev@ipacct.com
+private: true
 ...
