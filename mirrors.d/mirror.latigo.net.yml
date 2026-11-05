@@ -1,0 +1,12 @@
+name: mirror.latigo.net
+address:
+  http: http://mirror.latigo.net/almalinux
+  https: https://mirror.latigo.net/almalinux
+update_frequency: 6h
+geolocation:
+  country: US
+  state_province: Alabama
+  city: Tuscaloosa
+sponsor: Latigo LLC
+sponsor_url: https://latigo.net
+email: cory@latigo.net
