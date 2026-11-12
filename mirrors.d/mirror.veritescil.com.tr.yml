@@ -11,3 +11,16 @@ update_frequency: 1h
 sponsor: UPCELL ANKARA DATACENTER
 sponsor_url: https://www.veritescil.com.tr
 email: destek@veritescil.com.tr
+private: false
+monopoly: false
+asn:
+  - 218391
+  - 271907
+subnets:
+  - 45.195.231.0/24
+  - 154.193.0.0/24
+  - 45.143.98.0/24
+  - 156.229.60.0/24
+  - 45.10.151.0/24
+  - 185.148.240.0/24
+  - 45.194.8.0/24
