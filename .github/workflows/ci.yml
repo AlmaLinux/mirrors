@@ -36,12 +36,12 @@ jobs:
       - name: Stage yaml_snippets for config_checker
         run: mv _mirrors_service/src/backend/yaml_snippets gh_ci/yaml_snippets
 
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v6
         with:
-          python-version: 3.9
+          python-version: '3.12'
 
       - name: Install Python packages into venv
-        run: python3.9 -m pip install -r gh_ci/req.txt
+        run: python -m pip install -r gh_ci/req.txt
 
       - id: files
         uses: jitterbit/get-changed-files@v1
@@ -53,7 +53,7 @@ jobs:
           modified_files="${{ steps.files.outputs.added_modified }} ${{steps.files.outputs.renamed}}"
           if ! echo "${modified_files}" | grep -E "${mirror_regexp}" &> /dev/null; then
             # we check only the main config if PR doesn't contain any new or modified mirror config
-            python3.9 gh_ci/config_checker.py -sc config.yml
+            python gh_ci/config_checker.py -sc config.yml
           else
             changed_files=""
             for changed_file in ${modified_files}; do
@@ -64,5 +64,5 @@ jobs:
                 exit 1
               fi
             done
-            python3.9 gh_ci/config_checker.py -sc config.yml -mc ${changed_files}
+            python gh_ci/config_checker.py -sc config.yml -mc ${changed_files}
           fi
