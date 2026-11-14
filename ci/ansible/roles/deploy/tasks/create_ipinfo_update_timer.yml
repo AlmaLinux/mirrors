@@ -1,0 +1,37 @@
+---
+# The IPinfo refresh timer is installed on every host but never enabled here.
+# Exactly one host should run it: staging and production mount the same EFS
+# volume. On that host, deploy with -e ipinfo_updater=true (read-write mount +
+# token), then enable it by hand:
+#   systemctl enable --now almalinux_ipinfo_update.timer
+
+- name: Install IPinfo token for the database updater
+  template:
+    src: ipinfo_update.env.j2
+    dest: "{{ config_root }}/ipinfo_update.env"
+    owner: root
+    group: root
+    mode: '0600'
+  diff: false
+  when: ipinfo_updater | bool
+
+- name: Prepare IPinfo updater systemd units
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ systemd_services_path }}/{{ item }}"
+    owner: root
+    group: root
+    mode: '0644'
+    setype: systemd_unit_file_t
+    seuser: system_u
+  loop:
+    - "{{ ipinfo_update }}.service"
+    - "{{ ipinfo_update }}.timer"
+  register: ipinfo_update_units
+
+# Deliberately does not touch enabled/started state, so a timer enabled by
+# hand on the updater host stays enabled across deploys.
+- name: Reload systemd for IPinfo updater units
+  systemd:
+    daemon_reload: true
+  when: ipinfo_update_units is changed

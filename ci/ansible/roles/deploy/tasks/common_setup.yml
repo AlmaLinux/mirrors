@@ -50,12 +50,24 @@
 - name: Mount ipinfo path
   ansible.posix.mount:
     src: "{{ ipinfo_nfs }}"
-    opts: ro,nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport
+    # Read-write only on the host that refreshes the databases
+    opts: "{{ 'rw' if ipinfo_updater | bool else 'ro' }},nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport"
     state: mounted
     fstype: nfs
     boot: true
     path: "{{ ipinfo_path }}"
   when: local_dev is not defined or not local_dev
+
+# update_ipinfo.py creates versions/ and swaps symlinks in this directory.
+# Other hosts only need read access, which 0755 keeps.
+- name: Let the service user write the ipinfo share on the updater host
+  file:
+    path: "{{ ipinfo_path }}"
+    state: directory
+    owner: "{{ service_user }}"
+    group: "{{ service_user }}"
+    mode: '0755'
+  when: ipinfo_updater | bool
 
 - name: Check if sample databases already exist
   ansible.builtin.stat:

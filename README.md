@@ -234,6 +234,19 @@ Ansible playbook, target server **AlmaLinux 10**.
 - **Systemd timers** — `update-mirrors.timer` runs the health check job; `mirror-service-git-updater.timer` pulls fresh mirror configs from git.
 - **SQLite** — mirror database at `$SQLITE_PATH`.
 - **IPInfo geolocation + ASN databases** — mounted from a shared NFS location (see `ci/ansible/roles/deploy/tasks/common_setup.yml`); sample databases are pulled from IPInfo's public sample repo for dev.
+- **`almalinux_ipinfo_update.timer`** — daily refresh of those databases. Installed everywhere, **never enabled by Ansible**; see below.
+
+### Refreshing the IPInfo databases
+
+`src/backend/update_ipinfo.py` downloads `standard_location.mmdb` and `asn.mmdb` from IPInfo, verifies each against IPInfo's sha256 checksum, checks it has the fields the app reads, and only then swaps it in. Checksums are compared first, so unchanged databases aren't re-downloaded (IPInfo allows 10 downloads per day).
+
+Every web host reads the databases over NFS, so files are never overwritten in place. Each download is stored as `/var/ipinfo/versions/<name>.<sha256>.mmdb`, and `/var/ipinfo/<name>.mmdb` is an atomically swapped symlink to the current one. Old versions are kept for 7 days so workers that still have them open don't hit stale file handles.
+
+Staging and production share the EFS volume, so run the updater on **one** host:
+
+1. Put the IPInfo token in Vault at `kv/data/infra/mirror_service:ipinfo_token` (or the `stg/` path for staging).
+2. Deploy that host with `-e ipinfo_updater=true`. This mounts the share read-write, gives `/var/ipinfo` to that host's `mirror-service` user, and writes the token to `/etc/mirror_service/ipinfo_update.env`. Every deploy of that host needs the flag; without it the share goes back to read-only.
+3. `systemctl start almalinux_ipinfo_update.service` and check `journalctl -u almalinux_ipinfo_update`, then `systemctl enable --now almalinux_ipinfo_update.timer`.
 
 ---
 

@@ -1,0 +1,20 @@
+[Unit]
+Description=Refresh IPinfo geolocation and ASN databases
+Wants=network-online.target
+After=network.target network-online.target
+RequiresMountsFor={{ ipinfo_path }}
+
+[Service]
+User={{ service_user }}
+Group={{ service_user }}
+Type=oneshot
+# IPINFO_TOKEN; only present when deployed with ipinfo_updater=true
+EnvironmentFile=-{{ config_root }}/ipinfo_update.env
+Environment=GEOIP_PATH={{ ipinfo_path }}/standard_location.mmdb
+Environment=ASN_PATH={{ ipinfo_path }}/asn.mmdb
+ExecStart={{ source_path }}/venv/bin/python -u {{ source_path }}/src/backend/update_ipinfo.py
+TimeoutStartSec=1h
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectHome=yes
+ProtectSystem=full

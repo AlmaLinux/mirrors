@@ -20,6 +20,9 @@
         - import_tasks: create_mirror_systemd_timer.yml
           tags:
             - update_list_timer
+        - import_tasks: create_ipinfo_update_timer.yml
+          tags:
+            - ipinfo_update_timer
         - import_tasks: backend_installation.yml
           tags:
             - backend

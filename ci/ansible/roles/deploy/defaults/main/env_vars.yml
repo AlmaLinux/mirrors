@@ -3,3 +3,9 @@ source_path: "/opt/mirror_service"
 sentry_environments:
   - "Production"
   - "Staging"
+# Set true (e.g. -e ipinfo_updater=true) only when deploying the one host that
+# refreshes the IPinfo databases: it mounts the shared EFS volume read-write
+# and installs the IPinfo token. The refresh timer still has to be enabled by
+# hand there; see create_ipinfo_update_timer.yml.
+ipinfo_updater: false
+ipinfo_token: ""

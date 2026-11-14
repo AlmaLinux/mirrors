@@ -35,3 +35,9 @@ locationiq_key: "{{
   'kv/data/infra/mirror_service:locationiq_key',
   token=lookup('env', 'VAULT_TOKEN'), url=secrets_url)
 }}"
+# Only looked up when deploying with ipinfo_updater=true
+ipinfo_token: "{{
+  lookup('community.hashi_vault.hashi_vault',
+  'kv/data/infra/mirror_service:ipinfo_token',
+  token=lookup('env', 'VAULT_TOKEN'), url=secrets_url)
+}}"

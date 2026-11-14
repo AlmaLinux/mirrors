@@ -5,4 +5,5 @@ scripts_path: "/usr/local/bin"
 mirror_list_update: "almalinux_mirror_list_update"
 mirror_service: "almalinux_mirror_service"
 mirror_service_git_updater: "{{ mirror_service }}_git_pull"
+ipinfo_update: "almalinux_ipinfo_update"
 ...
