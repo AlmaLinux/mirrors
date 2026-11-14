@@ -33,6 +33,8 @@
 - name: Set ipinfo path
   set_fact:
     ipinfo_path: "/var/ipinfo/"
+  tags:
+    - always
 
 - name: Set ipinfo NFS
   set_fact:
