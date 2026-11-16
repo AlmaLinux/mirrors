@@ -15,7 +15,6 @@ address_optional:
 #      http: http://mirrors.sonic.net/almalinux-elevate/
 #      ftp: ftp://mirrors.sonic.net/almalinux-elevate/
 geolocation:
-   continent: North America
    country: US
    state_province: California
    city: Santa Rosa

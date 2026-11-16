@@ -3,7 +3,7 @@ name: mirror.01link.hk
 address:
   http: http://mirror.01link.hk/almalinux/
   https: https://mirror.01link.hk/almalinux/ 
-update_frequency: 3h
+update_frequency: 1h
 sponsor: 01Link Network Services Limited
 sponsor_url: https://www.01link.net
 email: support@01link.net

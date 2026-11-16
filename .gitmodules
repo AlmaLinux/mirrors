@@ -1,4 +1,0 @@
-[submodule "gh_ci/yaml_snippets"]
-	path = gh_ci/yaml_snippets
-	url = https://github.com/AlmaLinux/mirrors.git
-	branch = yaml_snippets

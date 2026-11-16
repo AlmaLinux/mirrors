@@ -3,8 +3,18 @@ name: mirror.netzwerge.de
 address:
   http: http://mirror.netzwerge.de/almalinux/
   https: https://mirror.netzwerge.de/almalinux/
-update_frequency: 6h
+  rsync: rsync://mirror.netzwerge.de/almalinux
+address_optional:
+  kitten:
+    http: http://mirror.netzwerge.de/almalinux-kitten/
+    https: https://mirror.netzwerge.de/almalinux-kitten/
+    rsync: rsync://mirror.netzwerge.de/almalinux-kitten
+update_frequency: 3h
 sponsor: Netzwerge GmbH
 sponsor_url: https://www.netzwerge.de
 email: mirror@netzwerge.de
+geolocation:
+  country: DE
+  state_province: Hamburg
+  city: Hamburg
 ...

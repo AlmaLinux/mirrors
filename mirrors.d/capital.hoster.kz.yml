@@ -5,8 +5,8 @@ address:
  rsync: rsync://capital.hoster.kz/almalinux/
 geolocation:
  country: KZ
- state_province:
- city: Nur-Sultan
+ state_province: Astana
+ city: Astana
 update_frequency: 3h
 sponsor: Hoster.KZ
 sponsor_url: https://hoster.kz/

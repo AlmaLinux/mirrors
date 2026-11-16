@@ -6,7 +6,6 @@ address:
   rsync: rsync://almalinux.netforce.hosting/almalinux
   ftp:  ftp://almalinux.netforce.hosting/almalinux
 geolocation:
-  continent: Europe
   country: UA
   state_province: Kyiv
   city: Kyiv

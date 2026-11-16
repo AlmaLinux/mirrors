@@ -1,0 +1,21 @@
+---
+name: mirror.colocenter.nl
+address:
+  http: http://mirror.colocenter.nl/almalinux
+  rsync: rsync://mirror.colocenter.nl/almalinux
+# address_optional:
+#   kitten:
+#     http: http://mirror.colocenter.nl/almalinux-kitten
+#     https: https://mirror.colocenter.nl/almalinux-kitten
+#     rsync: rsync://mirror.colocenter.nl/almalinux-kitten
+#     ftp: ftp://mirror.colocenter.nl/almalinux-kitten
+geolocation:
+  country: NL
+  state_province: Zuid-Holland
+  city: Zoetermeer
+update_frequency: 3h
+sponsor: ColoCenter B.V.
+sponsor_url: https://colocenter.nl/
+email: info@colocenter.nl
+
+...

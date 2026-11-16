@@ -6,7 +6,7 @@ address:
   rsync: rsync://mirror.siwoo.org/almalinux
 geolocation:
   country: KR
-  state_province: 
+  state_province: Gwangju
   city: Gwangju
 update_frequency: 2h
 sponsor: Archive of Siwoo

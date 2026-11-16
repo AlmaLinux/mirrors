@@ -1,0 +1,15 @@
+---
+name: mirrors.qlu.edu.cn
+address:
+  http: http://mirrors.qlu.edu.cn/almalinux/
+  https: https://mirrors.qlu.edu.cn/almalinux/
+  rsync: rsync://mirrors.qlu.edu.cn/almalinux/
+update_frequency: 2h
+sponsor: Qilu University of Technology
+sponsor_url: https://www.qlu.edu.cn
+email: mirrors@qlu.edu.cn
+geolocation:
+  country: CN
+  state_province: Shandong
+  city: Jinan
+...

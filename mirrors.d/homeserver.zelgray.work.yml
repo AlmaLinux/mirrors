@@ -1,16 +1,12 @@
 ---
 name: homeserver.zelgray.work
 address:
-  http: http://homeserver.zelgray.work/almalinux/
-address_optional:
-  kitten:
-    http: http://homeserver.zelgray.work/almalinux-kitten/
+  https: https://portal.zelgray.cherkasy.ua/almalinux/
 update_frequency: 1h
-sponsor: homeserver.zelgray.work
-sponsor_url: homeserver.zelgray.work
+sponsor: zelgray.work
+sponsor_url: https://zelgray.work
 email: zel.gray@gmail.com
 geolocation:
-  continent: Europe
   country: UA
   state_province: Cherkasy
   city: Cherkasy

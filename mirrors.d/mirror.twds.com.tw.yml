@@ -14,9 +14,8 @@ sponsor: Taiwan Digital Streaming Co.
 sponsor_url: https://www.twds.com.tw
 email: mirror@twds.tw
 geolocation:
-  continent: Asia
   country: TW
-  state_province:
+  state_province: Taipei City
   city: Taipei
 private: false
 monopoly: false

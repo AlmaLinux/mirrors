@@ -1,0 +1,20 @@
+---
+name: mirror.mephi.ru
+address:
+  http: http://mirror.mephi.ru/almalinux
+  rsync: rsync://mirror.mephi.ru/almalinux
+  ftp: ftp://mirror.mephi.ru/almalinux
+address_optional:
+  kitten:
+    http: http://mirror.mephi.ru/almalinux-kitten
+    rsync: rsync://mirror.mephi.ru/almalinux-kitten
+    ftp: ftp://mirror.mephi.ru/almalinux-kitten
+update_frequency: 3h
+sponsor: NRNU MEPhI
+sponsor_url: https://eng.mephi.ru/
+email: mirror-private@ut.mephi.ru
+geolocation:
+  country: RU
+  state_province: Moscow
+  city: Moscow
+...

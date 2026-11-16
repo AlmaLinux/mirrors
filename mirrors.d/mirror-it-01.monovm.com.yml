@@ -1,0 +1,21 @@
+---
+name: mirror-it-01.monovm.com
+
+address:
+  http: http://mirror-it-01.monovm.com/almalinux/
+  https: https://mirror-it-01.monovm.com/almalinux/
+
+update_frequency: 3h
+
+sponsor: MonoVM
+sponsor_url: https://monovm.com/
+email: NOC@monovm.com
+
+geolocation:
+  country: IT
+  state_province: Lombardia
+  city: Milan
+
+private: false
+monopoly: false
+...

@@ -1,8 +1,8 @@
 ---
 name: blr.aws.repo.almalinux.org
 address:
-  http: http://blr.aws.repo.almalinux.org/
-  https: https://blr.aws.repo.almalinux.org/
+  http: http://blr.aws.repo.almalinux.org/almalinux/
+  https: https://blr.aws.repo.almalinux.org/almalinux/
 update_frequency: 1h
 geolocation:
   country: IN

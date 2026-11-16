@@ -1,0 +1,13 @@
+---
+name: mirror.tech.africa
+update_frequency: 3h
+sponsor: tech.africa
+sponsor_url: https://tech.africa
+email: mail@tech.africa
+address:
+  http: http://mirror.tech.africa/almalinux
+  https: https://mirror.tech.africa/almalinux
+geolocation:
+  country: NG
+  state_province: Lagos
+  city: Lagos

@@ -1,0 +1,18 @@
+---
+name: mirror.gozunga.com
+address:
+  http: http://mirror.gozunga.com/almalinux
+  https: https://mirror.gozunga.com/almalinux
+  rsync: rsync://mirror.gozunga.com/almalinux
+update_frequency: 4h
+sponsor: Gozunga Cloud
+sponsor_url: https://gozunga.com
+email: ops@gozunga.com
+geolocation:
+  country: US
+  state_province: South Dakota
+  city: Sioux Falls
+private: false
+monopoly: false
+asn: 17034
+...

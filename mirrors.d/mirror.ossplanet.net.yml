@@ -10,10 +10,9 @@ sponsor: OSSPlanet OpenSource Hosting Service
 sponsor_url: https://ossplanet.net/
 email: apply@ossplanet.net
 geolocation:
-  continent: Asia
   country: TW
-  state_province: Taiwan
+  state_province: Nantou County
   city: Nantou
-  private: false
-  monopoly: false
+private: false
+monopoly: false
 ...

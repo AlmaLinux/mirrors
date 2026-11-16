@@ -2,7 +2,7 @@ name: mirror.virtarix.com
 address:
   https: https://mirror.virtarix.com/almalinux/
 geolocation:
-  country: Germany
+  country: DE
   city: Frankfurt
   state_province: Hesse
 update_frequency: 3h

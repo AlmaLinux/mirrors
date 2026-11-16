@@ -9,8 +9,8 @@ sponsor: Liquid Intelligent Technologies
 sponsor_url: https://www.liquid.tech
 email: mirror@liquid.tech
 geolocation:
-  continent: Africa
   country: KE
+  state_province: Nairobi County
   city: Nairobi
 asn: [30844, 30969, 37006, 36937]
 ...

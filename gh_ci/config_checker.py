@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.9
+#!/usr/bin/env python3
 import argparse
 import logging
 import os.path
@@ -131,9 +131,10 @@ def do_mirrors_have_valid_geo_data(
                 )
             else:
                 logger.error(
-                    'Mirror "%s" has invalid geodata. '
+                    'Mirror "%s" has invalid geodata (params=%s). '
                     'Please check your data on "%s"',
                     mirror.name,
+                    params,
                     ui_url,
                 )
                 ret_code = 1

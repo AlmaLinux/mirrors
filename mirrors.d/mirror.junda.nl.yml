@@ -7,8 +7,7 @@ sponsor: Junda B.V.
 sponsor_url: https://www.junda.nl
 email: daan@junda.nl
 geolocation:
-  continent: EU
   country: DE
-  state_province: 
+  state_province: Bavaria
   city: Nuremberg
 private: false

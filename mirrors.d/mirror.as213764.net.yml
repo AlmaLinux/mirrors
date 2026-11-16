@@ -1,0 +1,18 @@
+---
+name: mirror.as213764.net
+address:
+  http: http://mirror.as213764.net/almalinux/
+  https: https://mirror.as213764.net/almalinux/
+  rsync: rsync://mirror.as213764.net/almalinux/
+update_frequency: 3h
+sponsor: AS213764
+sponsor_url: https://mirror.as213764.net
+email: mirror@as213764.net
+geolocation:
+  country: NL
+  state_province: Limburg
+  city: Eygelshoven
+private: false
+monopoly: false
+asn: 213764
+...

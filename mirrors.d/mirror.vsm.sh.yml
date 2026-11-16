@@ -1,0 +1,25 @@
+---
+name: mirror.vsm.sh
+
+address:
+  http: http://mirror.vsm.sh/almalinux/
+  https: https://mirror.vsm.sh/almalinux/
+  rsync: rsync://mirror.vsm.sh/almalinux/
+  ftp: ftp://mirror.vsm.sh/almalinux/
+
+update_frequency: 3h
+
+sponsor: Vereinigte Stadtwerke Media GmbH
+sponsor_url: https://www.vereinigte-stadtwerke.de/
+email: hostmaster@vsm.sh
+
+geolocation:
+  country: DE
+  state_province: Schleswig-Holstein
+  city: Bad Oldesloe
+
+private: false
+monopoly: false
+
+asn: 198930
+...

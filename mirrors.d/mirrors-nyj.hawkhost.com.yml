@@ -5,7 +5,6 @@ address:
   https: https://mirrors-nyj.hawkhost.com/almalinux
   rsync: rsync://rsync@mirrors-nyj.hawkhost.com:/almalinux
 geolocation:
-  continent: North America
   country: US
   state_province: New Jersey
   city: Newark

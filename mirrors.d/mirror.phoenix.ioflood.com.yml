@@ -1,0 +1,15 @@
+---
+name: mirror.phoenix.ioflood.com
+address:
+  http: http://mirror.phoenix.ioflood.com/almalinux/
+  https: https://mirror.phoenix.ioflood.com/almalinux/
+  rsync: rsync://mirror.phoenix.ioflood.com/almalinux
+geolocation:
+  country: US
+  state_province: Arizona
+  city: Phoenix
+update_frequency: 3h
+sponsor: IOFlood
+sponsor_url: https://ioflood.com/
+email: support@ioflood.com
+...

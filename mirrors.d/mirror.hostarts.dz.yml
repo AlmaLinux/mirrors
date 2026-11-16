@@ -1,0 +1,14 @@
+name: mirror.hostarts.dz
+address:
+  http: http://mirror.hostarts.dz/almalinux/
+  https: https://mirror.hostarts.dz/almalinux/
+  rsync: rsync://mirror.hostarts.dz/almalinux
+update_frequency: 3h
+sponsor: HOSTARTS
+sponsor_url: https://hostarts.dz
+email: h.chergui@hostarts.com
+geolocation:
+  country: DZ
+  state_province: DZ-16
+  city: Algiers
+...

@@ -1,0 +1,15 @@
+---
+name: distrohub.kyiv.ua
+address:
+  http: http://distrohub.kyiv.ua/almalinux
+  https: https://distrohub.kyiv.ua/almalinux
+  rsync: rsync://distrohub.kyiv.ua/almalinux
+update_frequency: 4h
+sponsor: Ivan Barabash
+sponsor_url: https://distrohub.kyiv.ua
+email: admin@distrohub.kyiv.ua
+geolocation:
+  country: UA
+  state_province: Kyiv
+  city: Kyiv
+...

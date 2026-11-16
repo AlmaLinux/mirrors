@@ -3,9 +3,8 @@ name: mirrors.bytes.ua
 address:
   http: http://mirrors.bytes.ua/almalinux/
 geolocation:
-  continent: Europe
   country: UA
-  state_province:
+  state_province: Vinnytsia Oblast
   city: Vinnytsia
 update_frequency: 3h
 sponsor: bytes.ua

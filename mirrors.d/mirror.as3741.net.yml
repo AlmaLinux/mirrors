@@ -1,0 +1,14 @@
+---
+name: mirror.as3741.net
+address:
+  https: https://alma.as3741.net/
+  rsync: rsync://alma.as3741.net/mirror/almalinux.org/
+  ftp: ftp://alma.as3741.net/mirror/almalinux.org/
+update_frequency: 3h
+sponsor: AS3741
+sponsor_url: https://mirror.as3741.net/
+email: mirror@as3741.net
+geolocation:
+  country: ZA
+  state_province: Gauteng
+  city: Johannesburg

@@ -1,0 +1,17 @@
+---
+name: mirror.marcusn.net
+address:
+  http: http://mirror.marcusn.net/almalinux
+  https: https://mirror.marcusn.net/almalinux
+  rsync: rsync://mirror.marcusn.net/almalinux
+geolocation:
+  country: UK
+  state_province: Newcastle Upon Tyne
+  city: Newcastle
+update_frequency: 3h
+sponsor: Marcus Naw, Mirror
+sponsor_url: https://marcusn.net
+email: MirrorService@marcusn.net
+private: false
+asn:
+  - 206987
