@@ -1,0 +1,22 @@
+---
+name: alma.grid.wayne.edu
+address:
+  http: http://alma.grid.wayne.edu/
+  https: https://alma.grid.wayne.edu/
+  rsync: rsync://alma.grid.wayne.edu/almalinux
+address_optional:
+  kitten:
+    http: http://kitten.alma.grid.wayne.edu/
+    https: https://kitten.alma.grid.wayne.edu/
+    rsync: rsync://alma.grid.wayne.edu/kitten
+update_frequency: 3h
+sponsor: Wayne State University
+sponsor_url: https://wayne.edu
+email: Michael@wayne.edu
+geolocation:
+  country: US
+  state_province: Michigan
+  city: Detroit
+private: false
+monopoly: false
+...
