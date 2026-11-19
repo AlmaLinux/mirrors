@@ -1,0 +1,18 @@
+---
+name: mirror.olfe.tr
+address:
+  http: http://mirror.olfe.tr/almalinux/
+  https: https://mirror.olfe.tr/almalinux/
+  rsync: rsync://mirror.olfe.tr/almalinux/
+geolocation:
+  country: TR
+  state_province: Izmir
+  city: Izmir
+update_frequency: 3h
+sponsor: Olfe Veri Merkezi A.S.
+sponsor_url: https://olfe.tr
+email: mirror@olfe.tr
+asn:
+  - 214466
+  - 200010
+...
