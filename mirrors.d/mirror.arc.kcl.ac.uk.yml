@@ -1,0 +1,14 @@
+---
+name: mirror.arc.kcl.ac.uk
+address:
+  https: https://mirror.arc.kcl.ac.uk/repo.almalinux.org/almalinux/
+geolocation:
+  country: GB
+  state_province: London
+  city: London
+asn: 786
+update_frequency: 3h
+sponsor: King's College London, Advanced Research Computing
+sponsor_url: https://arc.kcl.ac.uk/
+email: mirror-admin@lists.er.kcl.ac.uk
+...
