@@ -12,4 +12,5 @@ update_frequency: 6h
 sponsor: Yuki Network LTD
 sponsor_url: https://yuki.net.uk/
 email: noc@yuki.net.uk
+private: true
 ...
