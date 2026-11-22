@@ -1,0 +1,22 @@
+name: :mirror.optik.net.ua
+address:
+  http: http://mirror.optik.net.ua/almalinux/
+  https: https://mirror.optik.net.ua/almalinux/
+geolocation:
+  country: UA
+  state_province: Kharkiv Oblast
+  city: Kharkiv
+asn:
+  - 20709
+  - 21500
+  - 21437
+  - 24618
+  - 30790
+  - 31598
+  - 34379
+  - 199263
+  - 209651
+update_frequency: 3h
+sponsor: OptikNet
+sponsor_url: https://optik.net.ua
+email: alma@optik.net.ua
