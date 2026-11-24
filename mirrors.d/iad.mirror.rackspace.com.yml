@@ -12,4 +12,5 @@ update_frequency: 4h
 sponsor: Rackspace Technology
 sponsor_url: https://www.rackspace.com
 email: mirroradmin@rackspace.com
+private: true
 ...
