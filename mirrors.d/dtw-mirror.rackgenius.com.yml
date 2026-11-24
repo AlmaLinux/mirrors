@@ -1,0 +1,19 @@
+---
+name: dtw-mirror.rackgenius.com
+address:
+  http: http://dtw-mirror.rackgenius.com/almalinux/
+  https: https://dtw-mirror.rackgenius.com/almalinux/
+  rsync: rsync://dtw-mirror.rackgenius.com/almalinux/
+  ftp: ftp://dtw-mirror.rackgenius.com/almalinux/
+update_frequency: 3h
+sponsor: RackGenius
+sponsor_url: https://rackgenius.com
+email: noc@rackgenius.com
+geolocation:
+  country: US
+  state_province: Michigan
+  city: Detroit
+private: false
+monopoly: false
+asn: 32002
+...
