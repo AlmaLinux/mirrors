@@ -50,6 +50,14 @@
                         "type": "string"
                     }
                 },
+                "repomd_check_types": {
+                    "description": "Metadata types in repomd.xml whose files are checked on every repo of every mirror in every run. Default: [primary]. \"*\" means all of them. The other files are checked on 1/8 of the repos per run.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "uniqueItems": true
+                },
                 "arches": {
                     "type": "object",
                     "items": {

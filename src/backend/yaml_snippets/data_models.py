@@ -11,6 +11,11 @@ from dataclasses import (
 from json import JSONEncoder
 from typing import Optional
 
+# Metadata types in repomd.xml whose files are checked on every repo in every
+# run, unless the main config sets repomd_check_types ("*" means all of them).
+# The other files are checked on a rotating share of the repos.
+DEFAULT_REPOMD_CHECK_TYPES = ('primary',)
+
 
 class DataClassesJSONEncoder(JSONEncoder):
     """
@@ -164,3 +169,6 @@ class MainConfig:
     vault_versions: list[str] = field(default_factory=list)
     required_protocols: list[str] = field(default_factory=list)
     repos: list[RepoData] = field(default_factory=list)
+    repomd_check_types: list[str] = field(
+        default_factory=lambda: list(DEFAULT_REPOMD_CHECK_TYPES)
+    )

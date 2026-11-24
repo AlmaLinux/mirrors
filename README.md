@@ -184,13 +184,22 @@ address_optional:
 
 1. Resolves DNS (A + AAAA; AAAA presence sets the `ipv6` flag).
 2. Resolves the mirror's ASN from its IP (IPInfo ASN DB) — this is the **auto ASN** used for on-net matching.
-3. Fetches `<mirror>/<version>/<repo>/repodata/repomd.xml` for each configured version/repo/arch.
-4. Reads `<mirror>/<version>/TIME` and compares to `allowed_outdate` (e.g. "25 hours"); an old timestamp marks the mirror as `expired`.
+3. Reads `<mirror>/TIME` and compares it to `allowed_outdate` (e.g. "12h"); an old timestamp marks the mirror as `expired`.
+4. Checks the repodata of each configured version/repo/arch the way DNF uses it:
+   - Fetches `<mirror>/<version>/<repo>/repodata/repomd.xml` without `Accept-Encoding`, as DNF does. A mirror that sends it with a `Content-Encoding` anyway fails, because DNF can't parse a compressed `repomd.xml`.
+   - Parses `repomd.xml` and HEAD-checks the files it lists. The types in `repomd_check_types` (main config, default `[primary]`) are checked on every repo in every run. Every other listed file is checked on one in eight repos per run, in rotation, so each file of each repo is checked every 2 hours; checking all of them every run would make a run longer than its 10-minute limit. A file returning 403/404/410, or a size different from the one in `repomd.xml`, fails the mirror. The repo is checked a second time 30 seconds later first, in case the mirror was in the middle of a sync. A timeout, rate limit or server error on one of these HEADs doesn't fail the mirror; it's logged, and files aren't checked on that mirror for the rest of the run.
 5. HEAD-checks all published ISOs + checksums; if everything is present, sets `has_full_iso_set`.
 6. For cloud mirrors, refreshes published provider IP ranges and repopulates `subnets`.
 7. Resolves geo coordinates (offline IPInfo DB, falling back to LocationIQ if configured).
 
 Failing mirrors are cached as offline in Valkey for 1 hour to avoid constantly re-probing them.
+
+A fresh `TIME` doesn't guarantee fresh repodata, so after all mirrors are checked, their `repomd.xml` revisions are compared with `repo.almalinux.org`:
+
+- Every run records the revision upstream serves for each repo and when it was first seen (Valkey key `flask_cache_upstream_repomd_history`). Upstream gets 60 seconds to answer; repos it doesn't answer for in time keep their history.
+- A mirror whose repo is older than the newest upstream revision first seen more than `allowed_outdate` ago is marked `expired`. For an optional module such as kitten, the module is dropped from the mirror's `has_optional_modules` instead.
+- If more than half of the otherwise healthy mirrors would be marked (and at least 10 were compared), the upstream data is assumed to be wrong and nothing is marked.
+- Right after the first deploy there is no history, so this starts flagging mirrors only once `allowed_outdate` has passed.
 
 After all mirrors are checked, the DB is rewritten and common mirrorlist variants are pre-warmed into Valkey.
 

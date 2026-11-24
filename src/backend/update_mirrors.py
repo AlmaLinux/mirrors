@@ -22,7 +22,14 @@ from sqlalchemy import insert
 from api.handlers import (
     warm_all_mirrors_cache,
 )
-from api.mirror_processor import MirrorProcessor
+from api.mirror_processor import (
+    MirrorProcessor,
+    _allowed_outdate_seconds,
+)
+from api.repodata_staleness import (
+    get_reference_revisions,
+    mark_stale_mirrors,
+)
 from api.utils import (
     MIRROR_CONFIG_JSON_SCHEMA_DIR_PATH,
     get_aws_subnets,
@@ -104,6 +111,24 @@ async def update_mirrors_handler() -> str:
                     http_session=mirror_processor.client
                 ),
             }
+            try:
+                reference_revisions = await get_reference_revisions(
+                    mirrors=all_mirrors,
+                    main_config=main_config,
+                    http_session=mirror_processor.client,
+                    cache=cache,
+                    logger=logger,
+                    outdate_seconds=_allowed_outdate_seconds(
+                        main_config.allowed_outdate,
+                    ),
+                )
+            except Exception:
+                # Comparing with upstream is extra: don't let it stop the update
+                logger.exception(
+                    'Cannot get upstream repodata revisions, so repodata '
+                    'of mirrors is not compared with upstream'
+                )
+                reference_revisions = {}
 
         chunks = [all_mirrors[i::WORKER_COUNT] for i in range(WORKER_COUNT)]
         ctx = multiprocessing.get_context('spawn')
@@ -117,7 +142,26 @@ async def update_mirrors_handler() -> str:
                 )
                 for chunk in chunks
             ))
-        all_mirrors = [m for chunk_result in results for m in chunk_result]
+        checked_mirrors = [
+            (mirror_info, repomd_revisions)
+            for chunk_result, chunk_revisions in results
+            for mirror_info, repomd_revisions in zip(
+                chunk_result,
+                chunk_revisions,
+            )
+        ]
+        all_mirrors = [mirror_info for mirror_info, _ in checked_mirrors]
+        try:
+            mark_stale_mirrors(
+                checked_mirrors=checked_mirrors,
+                reference=reference_revisions,
+                main_config=main_config,
+                logger=logger,
+            )
+        except Exception:
+            logger.exception(
+                'Cannot compare repodata of mirrors with upstream'
+            )
 
         # Serial online-geo pass, main process only, so the class-level 1 req/s
         # LocationIQ lock enforces <=1 req/s globally across all workers.
@@ -230,7 +274,7 @@ async def update_mirrors_handler() -> str:
     return message % (time.time() - time1)
 
 
-async def check_mirror(mirror_check_sem, mirror_info, main_config, mirror_iso_uris, subnets):
+async def check_mirror(mirror_check_sem, mirror_info, main_config, mirror_iso_uris, subnets, repomd_revisions):
     # Online geocoding is intentionally absent here — it runs in a single serial
     # pass in the main process to keep LocationIQ at <= 1 req/s globally across
     # worker processes.
@@ -245,6 +289,7 @@ async def check_mirror(mirror_check_sem, mirror_info, main_config, mirror_iso_ur
                 await mirror_processor.set_status_of_mirror(
                     main_config=main_config,
                     mirror_info=mirror_info,
+                    repomd_revisions=repomd_revisions,
                 )
             await mirror_processor.set_iso_url(
                 mirror_info=mirror_info
@@ -277,18 +322,23 @@ WORKER_SEMAPHORE = 50
 
 async def _run_chunk(chunk, main_config, mirror_iso_uris, subnets):
     sem = asyncio.Semaphore(WORKER_SEMAPHORE)
+    # repo key -> repomd.xml revision, per mirror in chunk order
+    repomd_revisions = [{} for _ in chunk]
     await asyncio.gather(*(
-        check_mirror(sem, m, main_config, mirror_iso_uris, subnets)
-        for m in chunk
+        check_mirror(sem, m, main_config, mirror_iso_uris, subnets, revisions)
+        for m, revisions in zip(chunk, repomd_revisions)
     ))
+    return repomd_revisions
 
 
 def _run_mirror_checks_in_worker(chunk, main_config, mirror_iso_uris, subnets):
     # Drop any DB handles inherited from module-level import before running.
     from db.db_engine import Engine
     Engine.get_instance().dispose()
-    asyncio.run(_run_chunk(chunk, main_config, mirror_iso_uris, subnets))
-    return chunk
+    repomd_revisions = asyncio.run(
+        _run_chunk(chunk, main_config, mirror_iso_uris, subnets)
+    )
+    return chunk, repomd_revisions
 
 
 async def update_mirrors():

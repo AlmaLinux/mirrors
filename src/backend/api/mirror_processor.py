@@ -384,7 +384,13 @@ class MirrorProcessor:
             self,
             mirror_info: MirrorData,
             main_config: MainConfig,
+            repomd_revisions: Optional[dict[str, str]] = None,
     ):
+        """
+        :param repomd_revisions: if given, gets the repomd.xml revision of
+                                 every repo that passed the checks, so it can
+                                 be compared with upstream afterwards
+        """
         self.logger.info(
             'Set status for mirror "%s"',
             mirror_info.name,
@@ -446,6 +452,7 @@ class MirrorProcessor:
             http_session=self.client,
             main_config=main_config,
             logger=self.logger,
+            revisions=repomd_revisions,
         )
         if not result:
             self.logger.info(
@@ -485,7 +492,8 @@ class MirrorProcessor:
                 http_session=self.client,
                 main_config=main_config,
                 logger=self.logger,
-                module=module
+                module=module,
+                revisions=repomd_revisions,
             )
 
     async def is_mirror_expired(
