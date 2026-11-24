@@ -12,4 +12,3 @@ geolocation:
   city: Woodinville
 private: false
 monopoly: false
-asn: AS17017, AS17036, AS11404, AS20055
