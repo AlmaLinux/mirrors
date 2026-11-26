@@ -1,0 +1,16 @@
+---
+name: mirror.freethought.uk
+address:
+  http: http://mirror.freethought.uk/almalinux/
+  https: https://mirror.freethought.uk/almalinux/
+  rsync: rsync://mirror.freethought.uk/almalinux/
+geolocation:
+  country: GB
+  state_province: England
+  city: London
+update_frequency: 1h
+sponsor: Freethought Internet
+sponsor_url: https://www.freethought.uk
+email: noc@freethought.uk
+asn: 41000
+...
